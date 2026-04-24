@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../models/goal.dart';
 import '../models/planner_task.dart';
+import '../widgets/add_task_dialog.dart';
+import '../widgets/goal_header.dart';
 import '../widgets/placeholder_screen.dart';
 import '../widgets/task_card.dart';
 
@@ -73,10 +75,10 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
   }
 
   Future<void> _showAddTaskDialog() async {
-    final result = await showDialog<_TaskDraft>(
+    final result = await showDialog<TaskDraft>(
       context: context,
       builder: (context) {
-        return const _AddTaskDialog();
+        return const AddTaskDialog();
       },
     );
 
@@ -112,7 +114,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _GoalHeader(
+          GoalHeader(
             goal: widget.goal,
             totalTasks: goalTasks.length,
             completedTasks: completedTasks,
@@ -142,141 +144,6 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             ),
           const SizedBox(height: 80),
         ],
-      ),
-    );
-  }
-}
-
-class _AddTaskDialog extends StatefulWidget {
-  const _AddTaskDialog();
-
-  @override
-  State<_AddTaskDialog> createState() => _AddTaskDialogState();
-}
-
-class _AddTaskDialogState extends State<_AddTaskDialog> {
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
-
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _descriptionController.dispose();
-    super.dispose();
-  }
-
-  void _submit() {
-    final title = _titleController.text.trim();
-    final description = _descriptionController.text.trim();
-
-    if (title.isEmpty) {
-      return;
-    }
-
-    Navigator.of(context).pop(
-      _TaskDraft(
-        title: title,
-        description: description,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Add task'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: _titleController,
-            autofocus: true,
-            decoration: const InputDecoration(
-              labelText: 'Title',
-              hintText: 'e.g. Write post outline',
-            ),
-            textInputAction: TextInputAction.next,
-            onSubmitted: (_) => _submit(),
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _descriptionController,
-            decoration: const InputDecoration(
-              labelText: 'Description',
-              hintText: 'Optional',
-            ),
-            minLines: 1,
-            maxLines: 3,
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('Cancel'),
-        ),
-        FilledButton(
-          onPressed: _submit,
-          child: const Text('Add'),
-        ),
-      ],
-    );
-  }
-}
-
-class _TaskDraft {
-  const _TaskDraft({
-    required this.title,
-    required this.description,
-  });
-
-  final String title;
-  final String description;
-}
-
-class _GoalHeader extends StatelessWidget {
-  const _GoalHeader({
-    required this.goal,
-    required this.totalTasks,
-    required this.completedTasks,
-  });
-
-  final Goal goal;
-  final int totalTasks;
-  final int completedTasks;
-
-  @override
-  Widget build(BuildContext context) {
-    final progressText = totalTasks == 0
-        ? 'No tasks yet'
-        : '$completedTasks / $totalTasks tasks completed';
-
-    final progressValue = totalTasks == 0 ? 0.0 : completedTasks / totalTasks;
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(goal.title, style: Theme.of(context).textTheme.headlineSmall),
-            const SizedBox(height: 8),
-            if (goal.description.isNotEmpty)
-              Text(
-                goal.description,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            const SizedBox(height: 16),
-            LinearProgressIndicator(value: progressValue),
-            const SizedBox(height: 8),
-            Text(
-              progressText,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ],
-        ),
       ),
     );
   }
