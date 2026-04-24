@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../data/sample_data.dart';
 import '../models/goal.dart';
-import '../models/planner_task.dart';
 import '../screens/calendar_screen.dart';
 import '../screens/goal_details_screen.dart';
 import '../screens/goals_screen.dart';
 import '../screens/more_screen.dart';
 import '../screens/today_screen.dart';
+import '../state/planner_store.dart';
 import '../widgets/add_goal_dialog.dart';
 
 class AppShell extends StatefulWidget {
@@ -18,10 +17,9 @@ class AppShell extends StatefulWidget {
 }
 
 class _AppShellState extends State<AppShell> {
-  int _selectedIndex = 0;
+  final PlannerStore _store = PlannerStore();
 
-  late List<Goal> _goals;
-  late List<PlannerTask> _tasks;
+  int _selectedIndex = 0;
 
   static const List<String> _titles = [
     'Today',
@@ -33,67 +31,23 @@ class _AppShellState extends State<AppShell> {
   @override
   void initState() {
     super.initState();
-    _goals = List.of(sampleGoals);
-    _tasks = List.of(sampleTasks);
+    _store.addListener(_onStoreChanged);
+  }
+
+  @override
+  void dispose() {
+    _store.removeListener(_onStoreChanged);
+    _store.dispose();
+    super.dispose();
+  }
+
+  void _onStoreChanged() {
+    setState(() {});
   }
 
   void _onDestinationSelected(int index) {
     setState(() {
       _selectedIndex = index;
-    });
-  }
-
-  void _toggleTaskCompleted(String taskId) {
-    setState(() {
-      _tasks = _tasks.map((task) {
-        if (task.id != taskId) {
-          return task;
-        }
-
-        final nextCompletedState = !task.isCompleted;
-
-        return task.copyWith(
-          isCompleted: nextCompletedState,
-          completedAt: nextCompletedState ? DateTime.now() : null,
-        );
-      }).toList();
-    });
-  }
-
-  void _addTask(PlannerTask task) {
-    setState(() {
-      _tasks = [..._tasks, task];
-    });
-  }
-
-  void _scheduleTaskForToday(String taskId) {
-    setState(() {
-      _tasks = _tasks.map((task) {
-        if (task.id != taskId) {
-          return task;
-        }
-
-        return task.scheduledToday();
-      }).toList();
-    });
-  }
-
-  void _addGoal({
-    required String title,
-    required String description,
-  }) {
-    final now = DateTime.now();
-
-    final goal = Goal(
-      id: 'goal_${now.microsecondsSinceEpoch}',
-      title: title,
-      description: description,
-      status: GoalStatus.active,
-      createdAt: now,
-    );
-
-    setState(() {
-      _goals = [..._goals, goal];
     });
   }
 
@@ -109,7 +63,7 @@ class _AppShellState extends State<AppShell> {
       return;
     }
 
-    _addGoal(
+    _store.addGoal(
       title: result.title,
       description: result.description,
     );
@@ -121,10 +75,10 @@ class _AppShellState extends State<AppShell> {
         builder: (context) {
           return GoalDetailsScreen(
             goal: goal,
-            tasks: _tasks,
-            onToggleTaskCompleted: _toggleTaskCompleted,
-            onTaskCreated: _addTask,
-            onScheduleTaskForToday: _scheduleTaskForToday,
+            tasks: _store.tasks,
+            onToggleTaskCompleted: _store.toggleTaskCompleted,
+            onTaskCreated: _store.addTask,
+            onScheduleTaskForToday: _store.scheduleTaskForToday,
           );
         },
       ),
@@ -135,13 +89,13 @@ class _AppShellState extends State<AppShell> {
   Widget build(BuildContext context) {
     final screens = [
       TodayScreen(
-        goals: _goals,
-        tasks: _tasks,
-        onToggleTaskCompleted: _toggleTaskCompleted,
+        goals: _store.goals,
+        tasks: _store.tasks,
+        onToggleTaskCompleted: _store.toggleTaskCompleted,
       ),
       GoalsScreen(
-        goals: _goals,
-        tasks: _tasks,
+        goals: _store.goals,
+        tasks: _store.tasks,
         onGoalSelected: _openGoalDetails,
         onAddGoal: _showAddGoalDialog,
       ),

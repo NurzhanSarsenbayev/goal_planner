@@ -31,6 +31,15 @@ class PlannerTask {
         scheduledDate!.day == now.day;
   }
 
+  PlannerTask toggleCompleted() {
+    final nextCompletedState = !isCompleted;
+
+    return copyWith(
+      isCompleted: nextCompletedState,
+      completedAt: nextCompletedState ? DateTime.now() : null,
+    );
+  }
+
   PlannerTask scheduledToday() {
     final now = DateTime.now();
 

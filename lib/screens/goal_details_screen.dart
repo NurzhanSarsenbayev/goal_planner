@@ -43,12 +43,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
           return task;
         }
 
-        final nextCompletedState = !task.isCompleted;
-
-        return task.copyWith(
-          isCompleted: nextCompletedState,
-          completedAt: nextCompletedState ? DateTime.now() : null,
-        );
+        return task.toggleCompleted();
       }).toList();
     });
 
