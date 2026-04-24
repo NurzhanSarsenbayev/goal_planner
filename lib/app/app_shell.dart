@@ -8,6 +8,7 @@ import '../screens/more_screen.dart';
 import '../screens/today_screen.dart';
 import '../state/planner_store.dart';
 import '../widgets/add_goal_dialog.dart';
+import '../widgets/add_task_dialog.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -69,6 +70,24 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
+  Future<void> _showAddStandaloneTaskDialog() async {
+    final result = await showDialog<TaskDraft>(
+      context: context,
+      builder: (context) {
+        return const AddTaskDialog();
+      },
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    _store.addStandaloneTaskForToday(
+      title: result.title,
+      description: result.description,
+    );
+  }
+
   void _openGoalDetails(Goal goal) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -94,6 +113,7 @@ class _AppShellState extends State<AppShell> {
         goals: _store.goals,
         tasks: _store.tasks,
         onToggleTaskCompleted: _store.toggleTaskCompleted,
+        onAddStandaloneTask: _showAddStandaloneTaskDialog,
       ),
       GoalsScreen(
         goals: _store.goals,

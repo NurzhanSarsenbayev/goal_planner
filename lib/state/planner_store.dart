@@ -61,6 +61,24 @@ class PlannerStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addStandaloneTaskForToday({
+    required String title,
+    required String description,
+  }) {
+    final now = DateTime.now();
+
+    final task = PlannerTask(
+      id: 'task_${now.microsecondsSinceEpoch}',
+      title: title,
+      description: description,
+      scheduledDate: DateTime(now.year, now.month, now.day),
+      createdAt: now,
+    );
+
+    _tasks = [..._tasks, task];
+    notifyListeners();
+  }
+
   void toggleTaskCompleted(String taskId) {
     _tasks = _tasks.map((task) {
       if (task.id != taskId) {

@@ -11,11 +11,13 @@ class TodayScreen extends StatelessWidget {
     required this.goals,
     required this.tasks,
     required this.onToggleTaskCompleted,
+    required this.onAddStandaloneTask,
   });
 
   final List<Goal> goals;
   final List<PlannerTask> tasks;
   final void Function(String taskId) onToggleTaskCompleted;
+  final VoidCallback onAddStandaloneTask;
 
   @override
   Widget build(BuildContext context) {
@@ -23,28 +25,40 @@ class TodayScreen extends StatelessWidget {
         .where((task) => task.isScheduledForToday)
         .toList();
 
-    if (todayTasks.isEmpty) {
-      return const PlaceholderScreen(
-        title: 'Today',
-        description: 'No tasks scheduled for today yet.',
-        icon: Icons.today,
-      );
-    }
+    return Stack(
+      children: [
+        if (todayTasks.isEmpty)
+          const PlaceholderScreen(
+            title: 'Today',
+            description: 'No tasks scheduled for today yet.',
+            icon: Icons.today,
+          )
+        else
+          ListView.separated(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
+            itemCount: todayTasks.length,
+            separatorBuilder: (_, _) => const SizedBox(height: 8),
+            itemBuilder: (context, index) {
+              final task = todayTasks[index];
+              final goal = _findGoalById(task.goalId);
 
-    return ListView.separated(
-      padding: const EdgeInsets.all(16),
-      itemCount: todayTasks.length,
-      separatorBuilder: (_, _) => const SizedBox(height: 8),
-      itemBuilder: (context, index) {
-        final task = todayTasks[index];
-        final goal = _findGoalById(task.goalId);
-
-        return TaskCard(
-          task: task,
-          goal: goal,
-          onToggleCompleted: () => onToggleTaskCompleted(task.id),
-        );
-      },
+              return TaskCard(
+                task: task,
+                goal: goal,
+                onToggleCompleted: () => onToggleTaskCompleted(task.id),
+              );
+            },
+          ),
+        Positioned(
+          right: 16,
+          bottom: 16,
+          child: FloatingActionButton.extended(
+            onPressed: onAddStandaloneTask,
+            icon: const Icon(Icons.add),
+            label: const Text('Add task'),
+          ),
+        ),
+      ],
     );
   }
 
