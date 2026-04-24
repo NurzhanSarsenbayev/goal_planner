@@ -10,10 +10,12 @@ class GoalsScreen extends StatelessWidget {
     super.key,
     required this.goals,
     required this.tasks,
+    required this.onGoalSelected,
   });
 
   final List<Goal> goals;
   final List<PlannerTask> tasks;
+  final void Function(Goal goal) onGoalSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -31,18 +33,16 @@ class GoalsScreen extends StatelessWidget {
       separatorBuilder: (_, _) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
         final goal = goals[index];
-        final goalTasks = tasks
-            .where((task) => task.goalId == goal.id)
-            .toList();
+        final goalTasks = tasks.where((task) => task.goalId == goal.id).toList();
 
-        final completedTasks = goalTasks
-            .where((task) => task.isCompleted)
-            .length;
+        final completedTasks =
+            goalTasks.where((task) => task.isCompleted).length;
 
         return GoalCard(
           goal: goal,
           totalTasks: goalTasks.length,
           completedTasks: completedTasks,
+          onTap: () => onGoalSelected(goal),
         );
       },
     );

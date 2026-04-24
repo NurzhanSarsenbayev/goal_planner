@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../data/sample_data.dart';
+import '../models/goal.dart';
 import '../models/planner_task.dart';
 import '../screens/calendar_screen.dart';
+import '../screens/goal_details_screen.dart';
 import '../screens/goals_screen.dart';
 import '../screens/more_screen.dart';
 import '../screens/today_screen.dart';
@@ -55,6 +57,20 @@ class _AppShellState extends State<AppShell> {
     });
   }
 
+  void _openGoalDetails(Goal goal) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return GoalDetailsScreen(
+            goal: goal,
+            tasks: _tasks,
+            onToggleTaskCompleted: _toggleTaskCompleted,
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screens = [
@@ -66,6 +82,7 @@ class _AppShellState extends State<AppShell> {
       GoalsScreen(
         goals: sampleGoals,
         tasks: _tasks,
+        onGoalSelected: _openGoalDetails,
       ),
       const CalendarScreen(),
       const MoreScreen(),

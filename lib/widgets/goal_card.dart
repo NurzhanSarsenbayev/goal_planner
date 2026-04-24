@@ -8,11 +8,13 @@ class GoalCard extends StatelessWidget {
     required this.goal,
     required this.totalTasks,
     required this.completedTasks,
+    required this.onTap,
   });
 
   final Goal goal;
   final int totalTasks;
   final int completedTasks;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +22,19 @@ class GoalCard extends StatelessWidget {
         ? 'No tasks yet'
         : '$completedTasks / $totalTasks tasks completed';
 
+    final progressValue = totalTasks == 0 ? 0.0 : completedTasks / totalTasks;
+
     return Card(
       child: ListTile(
+        onTap: onTap,
         leading: const Icon(Icons.flag_outlined),
         title: Text(goal.title),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (goal.description.isNotEmpty) Text(goal.description),
+            const SizedBox(height: 8),
+            LinearProgressIndicator(value: progressValue),
             const SizedBox(height: 4),
             Text(
               progressText,
@@ -35,6 +42,7 @@ class GoalCard extends StatelessWidget {
             ),
           ],
         ),
+        trailing: const Icon(Icons.chevron_right),
       ),
     );
   }
