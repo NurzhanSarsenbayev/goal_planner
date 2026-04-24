@@ -8,6 +8,7 @@ import '../screens/goal_details_screen.dart';
 import '../screens/goals_screen.dart';
 import '../screens/more_screen.dart';
 import '../screens/today_screen.dart';
+import '../widgets/add_goal_dialog.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -19,6 +20,7 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   int _selectedIndex = 0;
 
+  late List<Goal> _goals;
   late List<PlannerTask> _tasks;
 
   static const List<String> _titles = [
@@ -31,6 +33,7 @@ class _AppShellState extends State<AppShell> {
   @override
   void initState() {
     super.initState();
+    _goals = List.of(sampleGoals);
     _tasks = List.of(sampleTasks);
   }
 
@@ -75,6 +78,43 @@ class _AppShellState extends State<AppShell> {
     });
   }
 
+  void _addGoal({
+    required String title,
+    required String description,
+  }) {
+    final now = DateTime.now();
+
+    final goal = Goal(
+      id: 'goal_${now.microsecondsSinceEpoch}',
+      title: title,
+      description: description,
+      status: GoalStatus.active,
+      createdAt: now,
+    );
+
+    setState(() {
+      _goals = [..._goals, goal];
+    });
+  }
+
+  Future<void> _showAddGoalDialog() async {
+    final result = await showDialog<GoalDraft>(
+      context: context,
+      builder: (context) {
+        return const AddGoalDialog();
+      },
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    _addGoal(
+      title: result.title,
+      description: result.description,
+    );
+  }
+
   void _openGoalDetails(Goal goal) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -95,14 +135,15 @@ class _AppShellState extends State<AppShell> {
   Widget build(BuildContext context) {
     final screens = [
       TodayScreen(
-        goals: sampleGoals,
+        goals: _goals,
         tasks: _tasks,
         onToggleTaskCompleted: _toggleTaskCompleted,
       ),
       GoalsScreen(
-        goals: sampleGoals,
+        goals: _goals,
         tasks: _tasks,
         onGoalSelected: _openGoalDetails,
+        onAddGoal: _showAddGoalDialog,
       ),
       const CalendarScreen(),
       const MoreScreen(),
