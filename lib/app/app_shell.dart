@@ -63,6 +63,18 @@ class _AppShellState extends State<AppShell> {
     });
   }
 
+  void _scheduleTaskForToday(String taskId) {
+    setState(() {
+      _tasks = _tasks.map((task) {
+        if (task.id != taskId) {
+          return task;
+        }
+
+        return task.scheduledToday();
+      }).toList();
+    });
+  }
+
   void _openGoalDetails(Goal goal) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -72,6 +84,7 @@ class _AppShellState extends State<AppShell> {
             tasks: _tasks,
             onToggleTaskCompleted: _toggleTaskCompleted,
             onTaskCreated: _addTask,
+            onScheduleTaskForToday: _scheduleTaskForToday,
           );
         },
       ),

@@ -31,6 +31,15 @@ class PlannerTask {
         scheduledDate!.day == now.day;
   }
 
+  PlannerTask scheduledToday() {
+    final now = DateTime.now();
+
+    return copyWith(
+      scheduledDate: DateTime(now.year, now.month, now.day),
+      completedAt: completedAt,
+    );
+  }
+
   PlannerTask copyWith({
     String? id,
     String? title,

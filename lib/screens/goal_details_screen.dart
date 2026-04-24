@@ -14,12 +14,14 @@ class GoalDetailsScreen extends StatefulWidget {
     required this.tasks,
     required this.onToggleTaskCompleted,
     required this.onTaskCreated,
+    required this.onScheduleTaskForToday,
   });
 
   final Goal goal;
   final List<PlannerTask> tasks;
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function(PlannerTask task) onTaskCreated;
+  final void Function(String taskId) onScheduleTaskForToday;
 
   @override
   State<GoalDetailsScreen> createState() => _GoalDetailsScreenState();
@@ -51,6 +53,20 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
     });
 
     widget.onToggleTaskCompleted(taskId);
+  }
+
+  void _scheduleTaskForToday(String taskId) {
+    setState(() {
+      _tasks = _tasks.map((task) {
+        if (task.id != taskId) {
+          return task;
+        }
+
+        return task.scheduledToday();
+      }).toList();
+    });
+
+    widget.onScheduleTaskForToday(taskId);
   }
 
   void _createTask({
@@ -139,6 +155,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
                   task: task,
                   goal: widget.goal,
                   onToggleCompleted: () => _toggleTaskCompleted(task.id),
+                  onScheduleForToday: () => _scheduleTaskForToday(task.id),
                 ),
               ),
             ),

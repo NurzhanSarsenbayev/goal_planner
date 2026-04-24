@@ -9,14 +9,19 @@ class TaskCard extends StatelessWidget {
     required this.task,
     required this.goal,
     required this.onToggleCompleted,
+    this.onScheduleForToday,
   });
 
   final PlannerTask task;
   final Goal? goal;
   final VoidCallback onToggleCompleted;
+  final VoidCallback? onScheduleForToday;
 
   @override
   Widget build(BuildContext context) {
+    final shouldShowScheduleButton =
+        onScheduleForToday != null && !task.isScheduledForToday;
+
     return Card(
       child: ListTile(
         onTap: onToggleCompleted,
@@ -41,6 +46,26 @@ class TaskCard extends StatelessWidget {
                 child: Text(
                   'Goal: ${goal!.title}',
                   style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
+            if (task.isScheduledForToday)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  'Planned for today',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
+            if (shouldShowScheduleButton)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton.icon(
+                    onPressed: onScheduleForToday,
+                    icon: const Icon(Icons.today),
+                    label: const Text('Plan today'),
+                  ),
                 ),
               ),
           ],
