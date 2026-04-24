@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/goal.dart';
+import '../models/planner_task.dart';
 import '../screens/calendar_screen.dart';
 import '../screens/goal_details_screen.dart';
 import '../screens/goals_screen.dart';
@@ -75,9 +76,11 @@ class _AppShellState extends State<AppShell> {
         builder: (context) {
           return GoalDetailsScreen(
             goal: goal,
+            milestones: _store.milestones,
             tasks: _store.tasks,
             onToggleTaskCompleted: _store.toggleTaskCompleted,
             onTaskCreated: _store.addTask,
+            onMilestoneCreated: _store.addMilestone,
             onScheduleTaskForToday: _store.scheduleTaskForToday,
           );
         },

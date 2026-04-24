@@ -5,6 +5,7 @@ class PlannerTask {
     required this.description,
     required this.createdAt,
     this.goalId,
+    this.milestoneId,
     this.scheduledDate,
     this.isCompleted = false,
     this.completedAt,
@@ -15,6 +16,7 @@ class PlannerTask {
   final String description;
   final DateTime createdAt;
   final String? goalId;
+  final String? milestoneId;
   final DateTime? scheduledDate;
   final bool isCompleted;
   final DateTime? completedAt;
@@ -55,6 +57,7 @@ class PlannerTask {
     String? description,
     DateTime? createdAt,
     String? goalId,
+    String? milestoneId,
     DateTime? scheduledDate,
     bool? isCompleted,
     DateTime? completedAt,
@@ -65,6 +68,7 @@ class PlannerTask {
       description: description ?? this.description,
       createdAt: createdAt ?? this.createdAt,
       goalId: goalId ?? this.goalId,
+      milestoneId: milestoneId ?? this.milestoneId,
       scheduledDate: scheduledDate ?? this.scheduledDate,
       isCompleted: isCompleted ?? this.isCompleted,
       completedAt: completedAt,
