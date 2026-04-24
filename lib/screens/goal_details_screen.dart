@@ -7,7 +7,7 @@ import '../widgets/add_milestone_dialog.dart';
 import '../widgets/add_task_dialog.dart';
 import '../widgets/goal_header.dart';
 import '../widgets/milestones_section.dart';
-import '../widgets/ungrouped_tasks_section.dart';
+import '../widgets/direct_goal_tasks_section.dart';
 
 class GoalDetailsScreen extends StatefulWidget {
   const GoalDetailsScreen({
@@ -163,7 +163,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
 
     final milestoneIds = goalMilestones.map((milestone) => milestone.id).toSet();
 
-    final ungroupedTasks = goalTasks
+    final directGoalTasks = goalTasks
         .where(
           (task) =>
               task.milestoneId == null ||
@@ -198,9 +198,9 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             onScheduleTaskForToday: _scheduleTaskForToday,
           ),
           const SizedBox(height: 16),
-          UngroupedTasksSection(
+          DirectGoalTasksSection(
             goal: widget.goal,
-            tasks: ungroupedTasks,
+            tasks: directGoalTasks,
             onAddTask: _showAddTaskDialog,
             onToggleTaskCompleted: _toggleTaskCompleted,
             onScheduleTaskForToday: _scheduleTaskForToday,
