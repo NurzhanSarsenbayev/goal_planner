@@ -57,6 +57,12 @@ class _AppShellState extends State<AppShell> {
     });
   }
 
+  void _addTask(PlannerTask task) {
+    setState(() {
+      _tasks = [..._tasks, task];
+    });
+  }
+
   void _openGoalDetails(Goal goal) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -65,6 +71,7 @@ class _AppShellState extends State<AppShell> {
             goal: goal,
             tasks: _tasks,
             onToggleTaskCompleted: _toggleTaskCompleted,
+            onTaskCreated: _addTask,
           );
         },
       ),
