@@ -30,4 +30,26 @@ class PlannerTask {
         scheduledDate!.month == now.month &&
         scheduledDate!.day == now.day;
   }
+
+  PlannerTask copyWith({
+    String? id,
+    String? title,
+    String? description,
+    DateTime? createdAt,
+    String? goalId,
+    DateTime? scheduledDate,
+    bool? isCompleted,
+    DateTime? completedAt,
+  }) {
+    return PlannerTask(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      createdAt: createdAt ?? this.createdAt,
+      goalId: goalId ?? this.goalId,
+      scheduledDate: scheduledDate ?? this.scheduledDate,
+      isCompleted: isCompleted ?? this.isCompleted,
+      completedAt: completedAt,
+    );
+  }
 }

@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 
-import '../data/sample_data.dart';
 import '../models/goal.dart';
+import '../models/planner_task.dart';
 import '../widgets/placeholder_screen.dart';
 import '../widgets/task_card.dart';
 
 class TodayScreen extends StatelessWidget {
-  const TodayScreen({super.key});
+  const TodayScreen({
+    super.key,
+    required this.goals,
+    required this.tasks,
+    required this.onToggleTaskCompleted,
+  });
+
+  final List<Goal> goals;
+  final List<PlannerTask> tasks;
+  final void Function(String taskId) onToggleTaskCompleted;
 
   @override
   Widget build(BuildContext context) {
-    final todayTasks = sampleTasks
+    final todayTasks = tasks
         .where((task) => task.isScheduledForToday)
         .toList();
 
@@ -33,6 +42,7 @@ class TodayScreen extends StatelessWidget {
         return TaskCard(
           task: task,
           goal: goal,
+          onToggleCompleted: () => onToggleTaskCompleted(task.id),
         );
       },
     );
@@ -43,7 +53,7 @@ class TodayScreen extends StatelessWidget {
       return null;
     }
 
-    for (final goal in sampleGoals) {
+    for (final goal in goals) {
       if (goal.id == goalId) {
         return goal;
       }

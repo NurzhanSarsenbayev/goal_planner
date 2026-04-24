@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 
-import '../data/sample_data.dart';
+import '../models/goal.dart';
+import '../models/planner_task.dart';
 import '../widgets/goal_card.dart';
 import '../widgets/placeholder_screen.dart';
 
 class GoalsScreen extends StatelessWidget {
-  const GoalsScreen({super.key});
+  const GoalsScreen({
+    super.key,
+    required this.goals,
+    required this.tasks,
+  });
+
+  final List<Goal> goals;
+  final List<PlannerTask> tasks;
 
   @override
   Widget build(BuildContext context) {
-    if (sampleGoals.isEmpty) {
+    if (goals.isEmpty) {
       return const PlaceholderScreen(
         title: 'Goals',
         description: 'No goals yet. Create your first long-term goal.',
@@ -19,11 +27,11 @@ class GoalsScreen extends StatelessWidget {
 
     return ListView.separated(
       padding: const EdgeInsets.all(16),
-      itemCount: sampleGoals.length,
+      itemCount: goals.length,
       separatorBuilder: (_, _) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
-        final goal = sampleGoals[index];
-        final goalTasks = sampleTasks
+        final goal = goals[index];
+        final goalTasks = tasks
             .where((task) => task.goalId == goal.id)
             .toList();
 
