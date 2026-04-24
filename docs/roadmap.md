@@ -125,3 +125,23 @@ Backend responsibilities:
 - sync;
 - AI endpoint later;
 - subscription later.
+
+## Current checkpoint
+
+Implemented:
+
+- app shell with bottom navigation;
+- in-memory goals and tasks;
+- goal details screen;
+- task completion;
+- goal progress;
+- task creation inside goal;
+- task scheduling for today;
+- goal creation;
+- milestones inside goals;
+- direct goal tasks;
+- standalone task creation from Today.
+
+Current limitation:
+
+- data is in-memory only and is lost after app restart.
