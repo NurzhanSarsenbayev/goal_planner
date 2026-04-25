@@ -9,6 +9,7 @@ class TaskCard extends StatelessWidget {
     required this.task,
     required this.goal,
     required this.onToggleCompleted,
+    required this.onEdit,
     required this.onDelete,
     this.onScheduleForToday,
   });
@@ -16,6 +17,7 @@ class TaskCard extends StatelessWidget {
   final PlannerTask task;
   final Goal? goal;
   final VoidCallback onToggleCompleted;
+  final VoidCallback onEdit;
   final VoidCallback onDelete;
   final VoidCallback? onScheduleForToday;
 
@@ -75,12 +77,18 @@ class TaskCard extends StatelessWidget {
         trailing: PopupMenuButton<_TaskAction>(
           onSelected: (action) {
             switch (action) {
+              case _TaskAction.edit:
+                onEdit();
               case _TaskAction.delete:
                 onDelete();
             }
           },
           itemBuilder: (context) {
             return const [
+              PopupMenuItem(
+                value: _TaskAction.edit,
+                child: Text('Edit'),
+              ),
               PopupMenuItem(
                 value: _TaskAction.delete,
                 child: Text('Delete'),
@@ -94,5 +102,6 @@ class TaskCard extends StatelessWidget {
 }
 
 enum _TaskAction {
+  edit,
   delete,
 }

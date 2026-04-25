@@ -94,6 +94,33 @@ class PlannerStore extends ChangeNotifier {
     _persist(_repository.deleteTask(taskId));
   }
 
+  void updateTask({
+    required String taskId,
+    required String title,
+    required String description,
+  }) {
+    PlannerTask? updatedTask;
+
+    _tasks = _tasks.map((task) {
+      if (task.id != taskId) {
+        return task;
+      }
+
+      updatedTask = task.copyWith(
+        title: title,
+        description: description,
+      );
+
+      return updatedTask!;
+    }).toList();
+
+    notifyListeners();
+
+    if (updatedTask != null) {
+      _persist(_repository.saveTask(updatedTask!));
+    }
+  }
+
   void addStandaloneTaskForToday({
     required String title,
     required String description,

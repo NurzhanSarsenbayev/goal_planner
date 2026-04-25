@@ -18,6 +18,7 @@ class GoalDetailsScreen extends StatefulWidget {
     required this.onToggleTaskCompleted,
     required this.onTaskCreated,
     required this.onDeleteTask,
+    required this.onTaskUpdated,
     required this.onMilestoneCreated,
     required this.onScheduleTaskForToday,
   });
@@ -28,6 +29,11 @@ class GoalDetailsScreen extends StatefulWidget {
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function(PlannerTask task) onTaskCreated;
   final void Function(String taskId) onDeleteTask;
+  final void Function({
+    required String taskId,
+    required String title,
+    required String description,
+  }) onTaskUpdated;
   final void Function(Milestone milestone) onMilestoneCreated;
   final void Function(String taskId) onScheduleTaskForToday;
 
@@ -66,6 +72,31 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
     });
 
     widget.onDeleteTask(taskId);
+  }
+
+  void _updateTask({
+    required String taskId,
+    required String title,
+    required String description,
+  }) {
+    setState(() {
+      _tasks = _tasks.map((task) {
+        if (task.id != taskId) {
+          return task;
+        }
+
+        return task.copyWith(
+          title: title,
+          description: description,
+        );
+      }).toList();
+    });
+
+    widget.onTaskUpdated(
+      taskId: taskId,
+      title: title,
+      description: description,
+    );
   }
 
   void _scheduleTaskForToday(String taskId) {
@@ -121,6 +152,30 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       title: result.title,
       description: result.description,
       milestoneId: milestoneId,
+    );
+  }
+
+  Future<void> _showEditTaskDialog(PlannerTask task) async {
+    final result = await showDialog<TaskDraft>(
+      context: context,
+      builder: (context) {
+        return TaskDialog(
+          initialTitle: task.title,
+          initialDescription: task.description,
+          title: 'Edit task',
+          submitLabel: 'Save',
+        );
+      },
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    _updateTask(
+      taskId: task.id,
+      title: result.title,
+      description: result.description,
     );
   }
 
@@ -199,6 +254,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             onToggleTaskCompleted: _toggleTaskCompleted,
             onScheduleTaskForToday: _scheduleTaskForToday,
             onDeleteTask: _deleteTask,
+            onEditTask: _showEditTaskDialog,
           ),
           const SizedBox(height: 16),
           DirectGoalTasksSection(
@@ -208,6 +264,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             onToggleTaskCompleted: _toggleTaskCompleted,
             onScheduleTaskForToday: _scheduleTaskForToday,
             onDeleteTask: _deleteTask,
+            onEditTask: _showEditTaskDialog,
           ),
           const SizedBox(height: 80),
         ],

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../data/local/app_database.dart' as local;
 import '../data/repositories/planner_repository.dart';
 import '../models/goal.dart';
+import '../models/planner_task.dart';
 import '../screens/calendar_screen.dart';
 import '../screens/goal_details_screen.dart';
 import '../screens/goals_screen.dart';
@@ -102,6 +103,30 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
+  Future<void> _showEditTaskDialog(PlannerTask task) async {
+    final result = await showDialog<TaskDraft>(
+      context: context,
+      builder: (context) {
+        return TaskDialog(
+          initialTitle: task.title,
+          initialDescription: task.description,
+          title: 'Edit task',
+          submitLabel: 'Save',
+        );
+      },
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    _store.updateTask(
+      taskId: task.id,
+      title: result.title,
+      description: result.description,
+    );
+  }
+
   void _openGoalDetails(Goal goal) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -115,6 +140,7 @@ class _AppShellState extends State<AppShell> {
             onMilestoneCreated: _store.addMilestone,
             onScheduleTaskForToday: _store.scheduleTaskForToday,
             onDeleteTask: _store.deleteTask,
+            onTaskUpdated: _store.updateTask,
           );
         },
       ),
@@ -130,6 +156,7 @@ class _AppShellState extends State<AppShell> {
         onToggleTaskCompleted: _store.toggleTaskCompleted,
         onAddStandaloneTask: _showAddStandaloneTaskDialog,
         onDeleteTask: _store.deleteTask,
+        onEditTask: _showEditTaskDialog,
       ),
       GoalsScreen(
         goals: _store.goals,
