@@ -78,29 +78,13 @@ class PlannerStore extends ChangeNotifier {
     required String title,
     required String description,
   }) {
-    Goal? updatedGoal;
-
-    _goals = _goals.map((goal) {
-      if (goal.id != goalId) {
-        return goal;
-      }
-
-      updatedGoal = Goal(
-        id: goal.id,
+    _updateGoalById(
+      goalId,
+          (goal) => goal.copyWith(
         title: title,
         description: description,
-        status: goal.status,
-        createdAt: goal.createdAt,
-      );
-
-      return updatedGoal!;
-    }).toList();
-
-    notifyListeners();
-
-    if (updatedGoal != null) {
-      _persist(_repository.saveGoal(updatedGoal!));
-    }
+      ),
+    );
   }
 
   void addMilestone(Milestone milestone) {
@@ -115,29 +99,13 @@ class PlannerStore extends ChangeNotifier {
     required String title,
     required String description,
   }) {
-    Milestone? updatedMilestone;
-
-    _milestones = _milestones.map((milestone) {
-      if (milestone.id != milestoneId) {
-        return milestone;
-      }
-
-      updatedMilestone = Milestone(
-        id: milestone.id,
-        goalId: milestone.goalId,
+    _updateMilestoneById(
+      milestoneId,
+          (milestone) => milestone.copyWith(
         title: title,
         description: description,
-        createdAt: milestone.createdAt,
-      );
-
-      return updatedMilestone!;
-    }).toList();
-
-    notifyListeners();
-
-    if (updatedMilestone != null) {
-      _persist(_repository.saveMilestone(updatedMilestone!));
-    }
+      ),
+    );
   }
 
   void deleteMilestoneAndMoveTasksToDirect(String milestoneId) {
@@ -163,9 +131,7 @@ class PlannerStore extends ChangeNotifier {
         .where((milestone) => milestone.id != milestoneId)
         .toList();
 
-    _tasks = _tasks
-        .where((task) => task.milestoneId != milestoneId)
-        .toList();
+    _tasks = _tasks.where((task) => task.milestoneId != milestoneId).toList();
 
     notifyListeners();
 
@@ -177,40 +143,6 @@ class PlannerStore extends ChangeNotifier {
     notifyListeners();
 
     _persist(_repository.saveTask(task));
-  }
-
-  void deleteTask(String taskId) {
-    _tasks = _tasks.where((task) => task.id != taskId).toList();
-    notifyListeners();
-
-    _persist(_repository.deleteTask(taskId));
-  }
-
-  void updateTask({
-    required String taskId,
-    required String title,
-    required String description,
-  }) {
-    PlannerTask? updatedTask;
-
-    _tasks = _tasks.map((task) {
-      if (task.id != taskId) {
-        return task;
-      }
-
-      updatedTask = task.copyWith(
-        title: title,
-        description: description,
-      );
-
-      return updatedTask!;
-    }).toList();
-
-    notifyListeners();
-
-    if (updatedTask != null) {
-      _persist(_repository.saveTask(updatedTask!));
-    }
   }
 
   void addTaskForToday({
@@ -231,10 +163,28 @@ class PlannerStore extends ChangeNotifier {
       createdAt: now,
     );
 
-    _tasks = [..._tasks, task];
+    addTask(task);
+  }
+
+  void deleteTask(String taskId) {
+    _tasks = _tasks.where((task) => task.id != taskId).toList();
     notifyListeners();
 
-    _persist(_repository.saveTask(task));
+    _persist(_repository.deleteTask(taskId));
+  }
+
+  void updateTask({
+    required String taskId,
+    required String title,
+    required String description,
+  }) {
+    _updateTaskById(
+      taskId,
+          (task) => task.copyWith(
+        title: title,
+        description: description,
+      ),
+    );
   }
 
   void attachTaskToGoal({
@@ -242,110 +192,103 @@ class PlannerStore extends ChangeNotifier {
     required String goalId,
     String? milestoneId,
   }) {
-    PlannerTask? updatedTask;
-
-    _tasks = _tasks.map((task) {
-      if (task.id != taskId) {
-        return task;
-      }
-
-      updatedTask = milestoneId == null
+    _updateTaskById(
+      taskId,
+          (task) => milestoneId == null
           ? task.assignToGoal(goalId)
           : task.assignToGoalMilestone(
         goalId: goalId,
         milestoneId: milestoneId,
-      );
-
-      return updatedTask!;
-    }).toList();
-
-    notifyListeners();
-
-    if (updatedTask != null) {
-      _persist(_repository.saveTask(updatedTask!));
-    }
+      ),
+    );
   }
 
   void detachTaskFromGoal(String taskId) {
-    PlannerTask? updatedTask;
-
-    _tasks = _tasks.map((task) {
-      if (task.id != taskId) {
-        return task;
-      }
-
-      updatedTask = task.detachFromGoal();
-      return updatedTask!;
-    }).toList();
-
-    notifyListeners();
-
-    if (updatedTask != null) {
-      _persist(_repository.saveTask(updatedTask!));
-    }
+    _updateTaskById(
+      taskId,
+          (task) => task.detachFromGoal(),
+    );
   }
 
   void toggleTaskCompleted(String taskId) {
-    PlannerTask? updatedTask;
-
-    _tasks = _tasks.map((task) {
-      if (task.id != taskId) {
-        return task;
-      }
-
-      updatedTask = task.toggleCompleted();
-      return updatedTask!;
-    }).toList();
-
-    notifyListeners();
-
-    if (updatedTask != null) {
-      _persist(_repository.saveTask(updatedTask!));
-    }
+    _updateTaskById(
+      taskId,
+          (task) => task.toggleCompleted(),
+    );
   }
 
   void scheduleTaskForToday(String taskId) {
-    PlannerTask? updatedTask;
-
-    _tasks = _tasks.map((task) {
-      if (task.id != taskId) {
-        return task;
-      }
-
-      updatedTask = task.scheduledToday();
-      return updatedTask!;
-    }).toList();
-
-    notifyListeners();
-
-    if (updatedTask != null) {
-      _persist(_repository.saveTask(updatedTask!));
-    }
+    _updateTaskById(
+      taskId,
+          (task) => task.scheduledToday(),
+    );
   }
 
   void moveTaskToDirectGoal(String taskId) {
-    PlannerTask? updatedTask;
-
-    _tasks = _tasks.map((task) {
-      if (task.id != taskId) {
-        return task;
-      }
-
-      updatedTask = task.moveToDirectGoal();
-      return updatedTask!;
-    }).toList();
-
-    notifyListeners();
-
-    if (updatedTask != null) {
-      _persist(_repository.saveTask(updatedTask!));
-    }
+    _updateTaskById(
+      taskId,
+          (task) => task.moveToDirectGoal(),
+    );
   }
 
   void assignTaskToMilestone({
     required String taskId,
     required String milestoneId,
   }) {
+    _updateTaskById(
+      taskId,
+          (task) => task.assignToMilestone(milestoneId),
+    );
+  }
+
+  void _updateGoalById(
+      String goalId,
+      Goal Function(Goal goal) update,
+      ) {
+    Goal? updatedGoal;
+
+    _goals = _goals.map((goal) {
+      if (goal.id != goalId) {
+        return goal;
+      }
+
+      updatedGoal = update(goal);
+      return updatedGoal!;
+    }).toList();
+
+    notifyListeners();
+
+    if (updatedGoal != null) {
+      _persist(_repository.saveGoal(updatedGoal!));
+    }
+  }
+
+  void _updateMilestoneById(
+      String milestoneId,
+      Milestone Function(Milestone milestone) update,
+      ) {
+    Milestone? updatedMilestone;
+
+    _milestones = _milestones.map((milestone) {
+      if (milestone.id != milestoneId) {
+        return milestone;
+      }
+
+      updatedMilestone = update(milestone);
+      return updatedMilestone!;
+    }).toList();
+
+    notifyListeners();
+
+    if (updatedMilestone != null) {
+      _persist(_repository.saveMilestone(updatedMilestone!));
+    }
+  }
+
+  void _updateTaskById(
+      String taskId,
+      PlannerTask Function(PlannerTask task) update,
+      ) {
     PlannerTask? updatedTask;
 
     _tasks = _tasks.map((task) {
@@ -353,7 +296,7 @@ class PlannerStore extends ChangeNotifier {
         return task;
       }
 
-      updatedTask = task.assignToMilestone(milestoneId);
+      updatedTask = update(task);
       return updatedTask!;
     }).toList();
 
