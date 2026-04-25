@@ -140,6 +140,38 @@ class PlannerStore extends ChangeNotifier {
     }
   }
 
+  void deleteMilestoneAndMoveTasksToDirect(String milestoneId) {
+    _milestones = _milestones
+        .where((milestone) => milestone.id != milestoneId)
+        .toList();
+
+    _tasks = _tasks.map((task) {
+      if (task.milestoneId != milestoneId) {
+        return task;
+      }
+
+      return task.moveToDirectGoal();
+    }).toList();
+
+    notifyListeners();
+
+    _persist(_repository.deleteMilestoneAndMoveTasksToDirect(milestoneId));
+  }
+
+  void deleteMilestoneWithTasks(String milestoneId) {
+    _milestones = _milestones
+        .where((milestone) => milestone.id != milestoneId)
+        .toList();
+
+    _tasks = _tasks
+        .where((task) => task.milestoneId != milestoneId)
+        .toList();
+
+    notifyListeners();
+
+    _persist(_repository.deleteMilestoneWithTasks(milestoneId));
+  }
+
   void addTask(PlannerTask task) {
     _tasks = [..._tasks, task];
     notifyListeners();

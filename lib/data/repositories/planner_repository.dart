@@ -53,6 +53,34 @@ class PlannerRepository {
         );
   }
 
+  Future<void> deleteMilestoneAndMoveTasksToDirect(String milestoneId) async {
+    await _database.transaction(() async {
+      await (_database.update(_database.tasks)
+        ..where((table) => table.milestoneId.equals(milestoneId)))
+          .write(
+        const local.TasksCompanion(
+          milestoneId: drift.Value(null),
+        ),
+      );
+
+      await (_database.delete(_database.milestones)
+        ..where((table) => table.id.equals(milestoneId)))
+          .go();
+    });
+  }
+
+  Future<void> deleteMilestoneWithTasks(String milestoneId) async {
+    await _database.transaction(() async {
+      await (_database.delete(_database.tasks)
+        ..where((table) => table.milestoneId.equals(milestoneId)))
+          .go();
+
+      await (_database.delete(_database.milestones)
+        ..where((table) => table.id.equals(milestoneId)))
+          .go();
+    });
+  }
+
   Future<void> saveTask(domain.PlannerTask task) async {
     await _database.into(_database.tasks).insertOnConflictUpdate(
           local.TasksCompanion.insert(

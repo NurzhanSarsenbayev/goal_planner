@@ -13,6 +13,7 @@ class MilestoneCard extends StatelessWidget {
     required this.tasks,
     required this.onAddTask,
     required this.onEditMilestone,
+    required this.onDeleteMilestone,
     required this.onToggleTaskCompleted,
     required this.onEditTask,
     required this.onScheduleTaskForToday,
@@ -24,6 +25,7 @@ class MilestoneCard extends StatelessWidget {
   final List<PlannerTask> tasks;
   final VoidCallback onAddTask;
   final VoidCallback onEditMilestone;
+  final VoidCallback onDeleteMilestone;
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function(PlannerTask task) onEditTask;
   final void Function(String taskId) onScheduleTaskForToday;
@@ -56,6 +58,8 @@ class MilestoneCard extends StatelessWidget {
             switch (action) {
               case _MilestoneAction.edit:
                 onEditMilestone();
+              case _MilestoneAction.delete:
+                onDeleteMilestone();
             }
           },
           itemBuilder: (context) {
@@ -63,6 +67,10 @@ class MilestoneCard extends StatelessWidget {
               PopupMenuItem(
                 value: _MilestoneAction.edit,
                 child: Text('Edit'),
+              ),
+              PopupMenuItem(
+                value: _MilestoneAction.delete,
+                child: Text('Delete'),
               ),
             ];
           },
@@ -112,4 +120,5 @@ class MilestoneCard extends StatelessWidget {
 
 enum _MilestoneAction {
   edit,
+  delete,
 }

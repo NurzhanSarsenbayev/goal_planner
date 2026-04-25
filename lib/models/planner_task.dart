@@ -51,6 +51,20 @@ class PlannerTask {
     );
   }
 
+  PlannerTask moveToDirectGoal() {
+    return PlannerTask(
+      id: id,
+      title: title,
+      description: description,
+      createdAt: createdAt,
+      goalId: goalId,
+      milestoneId: null,
+      scheduledDate: scheduledDate,
+      isCompleted: isCompleted,
+      completedAt: completedAt,
+    );
+  }
+
   PlannerTask copyWith({
     String? id,
     String? title,

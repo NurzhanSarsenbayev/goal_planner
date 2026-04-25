@@ -7,6 +7,7 @@ import '../widgets/milestone_dialog.dart';
 import '../widgets/task_dialog.dart';
 import '../widgets/goal_header.dart';
 import '../widgets/milestones_section.dart';
+import '../widgets/delete_milestone_dialog.dart';
 import '../widgets/direct_goal_tasks_section.dart';
 
 class GoalDetailsScreen extends StatefulWidget {
@@ -21,6 +22,8 @@ class GoalDetailsScreen extends StatefulWidget {
     required this.onTaskUpdated,
     required this.onMilestoneCreated,
     required this.onMilestoneUpdated,
+    required this.onMilestoneDeletedAndTasksMovedToDirect,
+    required this.onMilestoneDeletedWithTasks,
     required this.onScheduleTaskForToday,
   });
 
@@ -41,6 +44,8 @@ class GoalDetailsScreen extends StatefulWidget {
   required String title,
   required String description,
   }) onMilestoneUpdated;
+  final void Function(String milestoneId) onMilestoneDeletedAndTasksMovedToDirect;
+  final void Function(String milestoneId) onMilestoneDeletedWithTasks;
   final void Function(String taskId) onScheduleTaskForToday;
 
   @override
@@ -265,6 +270,66 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       description: result.description,
     );
   }
+
+  void _deleteMilestoneAndMoveTasksToDirect(String milestoneId) {
+    setState(() {
+      _milestones = _milestones
+          .where((milestone) => milestone.id != milestoneId)
+          .toList();
+
+      _tasks = _tasks.map((task) {
+        if (task.milestoneId != milestoneId) {
+          return task;
+        }
+
+        return task.moveToDirectGoal();
+      }).toList();
+    });
+
+    widget.onMilestoneDeletedAndTasksMovedToDirect(milestoneId);
+  }
+
+  void _deleteMilestoneWithTasks(String milestoneId) {
+    setState(() {
+      _milestones = _milestones
+          .where((milestone) => milestone.id != milestoneId)
+          .toList();
+
+      _tasks = _tasks
+          .where((task) => task.milestoneId != milestoneId)
+          .toList();
+    });
+
+    widget.onMilestoneDeletedWithTasks(milestoneId);
+  }
+
+  Future<void> _showDeleteMilestoneDialog(Milestone milestone) async {
+    final milestoneTasks = _tasks
+        .where((task) => task.milestoneId == milestone.id)
+        .toList();
+
+    final result = await showDialog<DeleteMilestoneAction>(
+      context: context,
+      builder: (context) {
+        return DeleteMilestoneDialog(
+          milestoneTitle: milestone.title,
+          taskCount: milestoneTasks.length,
+        );
+      },
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    switch (result) {
+      case DeleteMilestoneAction.moveTasksToDirect:
+        _deleteMilestoneAndMoveTasksToDirect(milestone.id);
+      case DeleteMilestoneAction.deleteTasks:
+        _deleteMilestoneWithTasks(milestone.id);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final goalTasks = _tasks
@@ -306,13 +371,14 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             goalTasks: goalTasks,
             onAddMilestone: _showAddMilestoneDialog,
             onEditMilestone: _showEditMilestoneDialog,
+            onDeleteMilestone: _showDeleteMilestoneDialog,
             onAddTaskToMilestone: (milestoneId) {
               _showAddTaskDialog(milestoneId: milestoneId);
             },
             onToggleTaskCompleted: _toggleTaskCompleted,
+            onEditTask: _showEditTaskDialog,
             onScheduleTaskForToday: _scheduleTaskForToday,
             onDeleteTask: _deleteTask,
-            onEditTask: _showEditTaskDialog,
           ),
           const SizedBox(height: 16),
           DirectGoalTasksSection(
