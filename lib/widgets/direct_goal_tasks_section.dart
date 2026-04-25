@@ -13,6 +13,7 @@ class DirectGoalTasksSection extends StatelessWidget {
     required this.onAddTask,
     required this.onToggleTaskCompleted,
     required this.onScheduleTaskForToday,
+    required this.onDeleteTask,
   });
 
   final Goal goal;
@@ -20,6 +21,7 @@ class DirectGoalTasksSection extends StatelessWidget {
   final VoidCallback onAddTask;
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function(String taskId) onScheduleTaskForToday;
+  final void Function(String taskId) onDeleteTask;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,7 @@ class DirectGoalTasksSection extends StatelessWidget {
                 goal: goal,
                 onToggleCompleted: () => onToggleTaskCompleted(task.id),
                 onScheduleForToday: () => onScheduleTaskForToday(task.id),
+                onDelete: () => onDeleteTask(task.id),
               ),
             ),
           ),

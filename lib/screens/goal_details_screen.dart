@@ -17,6 +17,7 @@ class GoalDetailsScreen extends StatefulWidget {
     required this.tasks,
     required this.onToggleTaskCompleted,
     required this.onTaskCreated,
+    required this.onDeleteTask,
     required this.onMilestoneCreated,
     required this.onScheduleTaskForToday,
   });
@@ -26,6 +27,7 @@ class GoalDetailsScreen extends StatefulWidget {
   final List<PlannerTask> tasks;
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function(PlannerTask task) onTaskCreated;
+  final void Function(String taskId) onDeleteTask;
   final void Function(Milestone milestone) onMilestoneCreated;
   final void Function(String taskId) onScheduleTaskForToday;
 
@@ -56,6 +58,14 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
     });
 
     widget.onToggleTaskCompleted(taskId);
+  }
+
+  void _deleteTask(String taskId) {
+    setState(() {
+      _tasks = _tasks.where((task) => task.id != taskId).toList();
+    });
+
+    widget.onDeleteTask(taskId);
   }
 
   void _scheduleTaskForToday(String taskId) {
@@ -188,6 +198,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             },
             onToggleTaskCompleted: _toggleTaskCompleted,
             onScheduleTaskForToday: _scheduleTaskForToday,
+            onDeleteTask: _deleteTask,
           ),
           const SizedBox(height: 16),
           DirectGoalTasksSection(
@@ -196,6 +207,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             onAddTask: _showAddTaskDialog,
             onToggleTaskCompleted: _toggleTaskCompleted,
             onScheduleTaskForToday: _scheduleTaskForToday,
+            onDeleteTask: _deleteTask,
           ),
           const SizedBox(height: 80),
         ],

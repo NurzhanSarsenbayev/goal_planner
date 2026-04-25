@@ -114,6 +114,7 @@ class _AppShellState extends State<AppShell> {
             onTaskCreated: _store.addTask,
             onMilestoneCreated: _store.addMilestone,
             onScheduleTaskForToday: _store.scheduleTaskForToday,
+            onDeleteTask: _store.deleteTask,
           );
         },
       ),
@@ -128,6 +129,7 @@ class _AppShellState extends State<AppShell> {
         tasks: _store.tasks,
         onToggleTaskCompleted: _store.toggleTaskCompleted,
         onAddStandaloneTask: _showAddStandaloneTaskDialog,
+        onDeleteTask: _store.deleteTask,
       ),
       GoalsScreen(
         goals: _store.goals,

@@ -69,6 +69,12 @@ class PlannerRepository {
         );
   }
 
+  Future<void> deleteTask(String taskId) async {
+    await (_database.delete(_database.tasks)
+          ..where((table) => table.id.equals(taskId)))
+        .go();
+  }
+
   Future<void> updateTask(domain.PlannerTask task) async {
     await (_database.update(_database.tasks)
           ..where((table) => table.id.equals(task.id)))

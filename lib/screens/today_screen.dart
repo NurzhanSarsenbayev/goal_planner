@@ -11,19 +11,19 @@ class TodayScreen extends StatelessWidget {
     required this.goals,
     required this.tasks,
     required this.onToggleTaskCompleted,
+    required this.onDeleteTask,
     required this.onAddStandaloneTask,
   });
 
   final List<Goal> goals;
   final List<PlannerTask> tasks;
   final void Function(String taskId) onToggleTaskCompleted;
+  final void Function(String taskId) onDeleteTask;
   final VoidCallback onAddStandaloneTask;
 
   @override
   Widget build(BuildContext context) {
-    final todayTasks = tasks
-        .where((task) => task.isScheduledForToday)
-        .toList();
+    final todayTasks = tasks.where((task) => task.isScheduledForToday).toList();
 
     return Stack(
       children: [
@@ -46,6 +46,7 @@ class TodayScreen extends StatelessWidget {
                 task: task,
                 goal: goal,
                 onToggleCompleted: () => onToggleTaskCompleted(task.id),
+                onDelete: () => onDeleteTask(task.id),
               );
             },
           ),

@@ -87,6 +87,13 @@ class PlannerStore extends ChangeNotifier {
     _persist(_repository.saveTask(task));
   }
 
+  void deleteTask(String taskId) {
+    _tasks = _tasks.where((task) => task.id != taskId).toList();
+    notifyListeners();
+
+    _persist(_repository.deleteTask(taskId));
+  }
+
   void addStandaloneTaskForToday({
     required String title,
     required String description,
