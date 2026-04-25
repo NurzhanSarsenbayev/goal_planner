@@ -213,9 +213,11 @@ class PlannerStore extends ChangeNotifier {
     }
   }
 
-  void addStandaloneTaskForToday({
+  void addTaskForToday({
     required String title,
     required String description,
+    String? goalId,
+    String? milestoneId,
   }) {
     final now = DateTime.now();
 
@@ -223,6 +225,8 @@ class PlannerStore extends ChangeNotifier {
       id: 'task_${now.microsecondsSinceEpoch}',
       title: title,
       description: description,
+      goalId: goalId,
+      milestoneId: milestoneId,
       scheduledDate: DateTime(now.year, now.month, now.day),
       createdAt: now,
     );

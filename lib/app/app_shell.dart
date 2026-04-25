@@ -14,6 +14,7 @@ import '../screens/today_screen.dart';
 import '../state/planner_store.dart';
 import '../widgets/goal_dialog.dart';
 import '../widgets/task_dialog.dart';
+import '../widgets/today_task_dialog.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -109,11 +110,14 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
-  Future<void> _showAddStandaloneTaskDialog() async {
-    final result = await showDialog<TaskDraft>(
+  Future<void> _showAddTodayTaskDialog() async {
+    final result = await showDialog<TodayTaskDraft>(
       context: context,
       builder: (context) {
-        return const TaskDialog();
+        return TodayTaskDialog(
+          goals: _store.goals,
+          milestones: _store.milestones,
+        );
       },
     );
 
@@ -121,9 +125,11 @@ class _AppShellState extends State<AppShell> {
       return;
     }
 
-    _store.addStandaloneTaskForToday(
+    _store.addTaskForToday(
       title: result.title,
       description: result.description,
+      goalId: result.goalId,
+      milestoneId: result.milestoneId,
     );
   }
 
@@ -184,7 +190,7 @@ class _AppShellState extends State<AppShell> {
         goals: _store.goals,
         tasks: _store.tasks,
         onToggleTaskCompleted: _store.toggleTaskCompleted,
-        onAddStandaloneTask: _showAddStandaloneTaskDialog,
+        onAddTask: _showAddTodayTaskDialog,
         onDeleteTask: _store.deleteTask,
         onEditTask: _showEditTaskDialog,
       ),

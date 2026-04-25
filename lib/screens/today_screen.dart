@@ -13,7 +13,7 @@ class TodayScreen extends StatelessWidget {
     required this.onToggleTaskCompleted,
     required this.onEditTask,
     required this.onDeleteTask,
-    required this.onAddStandaloneTask,
+    required this.onAddTask,
   });
 
   final List<Goal> goals;
@@ -21,7 +21,7 @@ class TodayScreen extends StatelessWidget {
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function(PlannerTask task) onEditTask;
   final void Function(String taskId) onDeleteTask;
-  final VoidCallback onAddStandaloneTask;
+  final VoidCallback onAddTask;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class TodayScreen extends StatelessWidget {
           right: 16,
           bottom: 16,
           child: FloatingActionButton.extended(
-            onPressed: onAddStandaloneTask,
+            onPressed: onAddTask,
             icon: const Icon(Icons.add),
             label: const Text('Add task'),
           ),
