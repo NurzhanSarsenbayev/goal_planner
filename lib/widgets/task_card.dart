@@ -11,6 +11,8 @@ class TaskCard extends StatelessWidget {
     required this.onToggleCompleted,
     required this.onEdit,
     required this.onDelete,
+    this.onMoveToMilestone,
+    this.onMoveToDirectGoal,
     this.onScheduleForToday,
   });
 
@@ -19,12 +21,17 @@ class TaskCard extends StatelessWidget {
   final VoidCallback onToggleCompleted;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+  final VoidCallback? onMoveToMilestone;
+  final VoidCallback? onMoveToDirectGoal;
   final VoidCallback? onScheduleForToday;
 
   @override
   Widget build(BuildContext context) {
     final shouldShowScheduleButton =
         onScheduleForToday != null && !task.isScheduledForToday;
+
+    final shouldShowMoveToMilestone = onMoveToMilestone != null;
+    final shouldShowMoveToDirectGoal = onMoveToDirectGoal != null;
 
     return Card(
       child: ListTile(
@@ -79,17 +86,31 @@ class TaskCard extends StatelessWidget {
             switch (action) {
               case _TaskAction.edit:
                 onEdit();
+              case _TaskAction.moveToMilestone:
+                onMoveToMilestone?.call();
+              case _TaskAction.moveToDirectGoal:
+                onMoveToDirectGoal?.call();
               case _TaskAction.delete:
                 onDelete();
             }
           },
           itemBuilder: (context) {
-            return const [
-              PopupMenuItem(
+            return [
+              const PopupMenuItem(
                 value: _TaskAction.edit,
                 child: Text('Edit'),
               ),
-              PopupMenuItem(
+              if (shouldShowMoveToMilestone)
+                const PopupMenuItem(
+                  value: _TaskAction.moveToMilestone,
+                  child: Text('Move to milestone'),
+                ),
+              if (shouldShowMoveToDirectGoal)
+                const PopupMenuItem(
+                  value: _TaskAction.moveToDirectGoal,
+                  child: Text('Move to Direct tasks'),
+                ),
+              const PopupMenuItem(
                 value: _TaskAction.delete,
                 child: Text('Delete'),
               ),
@@ -103,5 +124,7 @@ class TaskCard extends StatelessWidget {
 
 enum _TaskAction {
   edit,
+  moveToMilestone,
+  moveToDirectGoal,
   delete,
 }

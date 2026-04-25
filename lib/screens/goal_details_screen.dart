@@ -5,6 +5,7 @@ import '../models/milestone.dart';
 import '../models/planner_task.dart';
 import '../widgets/milestone_dialog.dart';
 import '../widgets/task_dialog.dart';
+import '../widgets/move_task_to_milestone_dialog.dart';
 import '../widgets/goal_header.dart';
 import '../widgets/milestones_section.dart';
 import '../widgets/delete_milestone_dialog.dart';
@@ -20,6 +21,8 @@ class GoalDetailsScreen extends StatefulWidget {
     required this.onTaskCreated,
     required this.onDeleteTask,
     required this.onTaskUpdated,
+    required this.onTaskMovedToDirectGoal,
+    required this.onTaskAssignedToMilestone,
     required this.onMilestoneCreated,
     required this.onMilestoneUpdated,
     required this.onMilestoneDeletedAndTasksMovedToDirect,
@@ -38,6 +41,11 @@ class GoalDetailsScreen extends StatefulWidget {
     required String title,
     required String description,
   }) onTaskUpdated;
+  final void Function(String taskId) onTaskMovedToDirectGoal;
+  final void Function({
+  required String taskId,
+  required String milestoneId,
+  }) onTaskAssignedToMilestone;
   final void Function(Milestone milestone) onMilestoneCreated;
   final void Function({
   required String milestoneId,
@@ -145,6 +153,64 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
     });
 
     widget.onTaskCreated(task);
+  }
+
+  void _moveTaskToDirectGoal(String taskId) {
+    setState(() {
+      _tasks = _tasks.map((task) {
+        if (task.id != taskId) {
+          return task;
+        }
+
+        return task.moveToDirectGoal();
+      }).toList();
+    });
+
+    widget.onTaskMovedToDirectGoal(taskId);
+  }
+
+  void _assignTaskToMilestone({
+    required String taskId,
+    required String milestoneId,
+  }) {
+    setState(() {
+      _tasks = _tasks.map((task) {
+        if (task.id != taskId) {
+          return task;
+        }
+
+        return task.assignToMilestone(milestoneId);
+      }).toList();
+    });
+
+    widget.onTaskAssignedToMilestone(
+      taskId: taskId,
+      milestoneId: milestoneId,
+    );
+  }
+
+  Future<void> _showMoveTaskToMilestoneDialog(PlannerTask task) async {
+    final goalMilestones = _milestones
+        .where((milestone) => milestone.goalId == widget.goal.id)
+        .toList();
+
+    final result = await showDialog<Milestone>(
+      context: context,
+      builder: (context) {
+        return MoveTaskToMilestoneDialog(
+          milestones: goalMilestones,
+        );
+      },
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    _assignTaskToMilestone(
+      taskId: task.id,
+      milestoneId: result.id,
+    );
   }
 
   void _updateMilestone({
@@ -377,6 +443,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             },
             onToggleTaskCompleted: _toggleTaskCompleted,
             onEditTask: _showEditTaskDialog,
+            onMoveTaskToDirectGoal: _moveTaskToDirectGoal,
             onScheduleTaskForToday: _scheduleTaskForToday,
             onDeleteTask: _deleteTask,
           ),
@@ -386,9 +453,10 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             tasks: directGoalTasks,
             onAddTask: _showAddTaskDialog,
             onToggleTaskCompleted: _toggleTaskCompleted,
+            onEditTask: _showEditTaskDialog,
+            onMoveTaskToMilestone: _showMoveTaskToMilestoneDialog,
             onScheduleTaskForToday: _scheduleTaskForToday,
             onDeleteTask: _deleteTask,
-            onEditTask: _showEditTaskDialog,
           ),
           const SizedBox(height: 80),
         ],

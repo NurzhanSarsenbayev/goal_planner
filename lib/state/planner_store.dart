@@ -271,6 +271,47 @@ class PlannerStore extends ChangeNotifier {
     }
   }
 
+  void moveTaskToDirectGoal(String taskId) {
+    PlannerTask? updatedTask;
+
+    _tasks = _tasks.map((task) {
+      if (task.id != taskId) {
+        return task;
+      }
+
+      updatedTask = task.moveToDirectGoal();
+      return updatedTask!;
+    }).toList();
+
+    notifyListeners();
+
+    if (updatedTask != null) {
+      _persist(_repository.saveTask(updatedTask!));
+    }
+  }
+
+  void assignTaskToMilestone({
+    required String taskId,
+    required String milestoneId,
+  }) {
+    PlannerTask? updatedTask;
+
+    _tasks = _tasks.map((task) {
+      if (task.id != taskId) {
+        return task;
+      }
+
+      updatedTask = task.assignToMilestone(milestoneId);
+      return updatedTask!;
+    }).toList();
+
+    notifyListeners();
+
+    if (updatedTask != null) {
+      _persist(_repository.saveTask(updatedTask!));
+    }
+  }
+
   void _persist(Future<void> operation) {
     operation.catchError((Object error, StackTrace stackTrace) {
       debugPrint('Persistence error: $error');

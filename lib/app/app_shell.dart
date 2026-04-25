@@ -163,10 +163,12 @@ class _AppShellState extends State<AppShell> {
             onDeleteTask: _store.deleteTask,
             onTaskCreated: _store.addTask,
             onTaskUpdated: _store.updateTask,
+            onTaskMovedToDirectGoal: _store.moveTaskToDirectGoal,
+            onTaskAssignedToMilestone: _store.assignTaskToMilestone,
             onMilestoneCreated: _store.addMilestone,
             onMilestoneUpdated: _store.updateMilestone,
             onMilestoneDeletedAndTasksMovedToDirect:
-                _store.deleteMilestoneAndMoveTasksToDirect,
+            _store.deleteMilestoneAndMoveTasksToDirect,
             onMilestoneDeletedWithTasks: _store.deleteMilestoneWithTasks,
             onScheduleTaskForToday: _store.scheduleTaskForToday,
           );

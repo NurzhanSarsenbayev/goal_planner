@@ -13,6 +13,7 @@ class DirectGoalTasksSection extends StatelessWidget {
     required this.onAddTask,
     required this.onToggleTaskCompleted,
     required this.onEditTask,
+    required this.onMoveTaskToMilestone,
     required this.onScheduleTaskForToday,
     required this.onDeleteTask,
   });
@@ -22,6 +23,7 @@ class DirectGoalTasksSection extends StatelessWidget {
   final VoidCallback onAddTask;
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function(PlannerTask task) onEditTask;
+  final void Function(PlannerTask task) onMoveTaskToMilestone;
   final void Function(String taskId) onScheduleTaskForToday;
   final void Function(String taskId) onDeleteTask;
 
@@ -43,13 +45,14 @@ class DirectGoalTasksSection extends StatelessWidget {
           )
         else
           ...tasks.map(
-            (task) => Padding(
+                (task) => Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: TaskCard(
                 task: task,
                 goal: goal,
                 onToggleCompleted: () => onToggleTaskCompleted(task.id),
                 onEdit: () => onEditTask(task),
+                onMoveToMilestone: () => onMoveTaskToMilestone(task),
                 onScheduleForToday: () => onScheduleTaskForToday(task.id),
                 onDelete: () => onDeleteTask(task.id),
               ),
