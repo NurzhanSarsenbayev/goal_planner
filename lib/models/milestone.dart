@@ -12,4 +12,20 @@ class Milestone {
   final String title;
   final String description;
   final DateTime createdAt;
+
+  Milestone copyWith({
+    String? id,
+    String? goalId,
+    String? title,
+    String? description,
+    DateTime? createdAt,
+  }) {
+    return Milestone(
+      id: id ?? this.id,
+      goalId: goalId ?? this.goalId,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 }

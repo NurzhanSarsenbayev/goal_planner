@@ -1,7 +1,7 @@
 enum GoalStatus {
   active,
-  paused,
   completed,
+  archived,
 }
 
 class Goal {
@@ -18,4 +18,20 @@ class Goal {
   final String description;
   final GoalStatus status;
   final DateTime createdAt;
+
+  Goal copyWith({
+    String? id,
+    String? title,
+    String? description,
+    GoalStatus? status,
+    DateTime? createdAt,
+  }) {
+    return Goal(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 }

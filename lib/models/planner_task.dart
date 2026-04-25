@@ -1,3 +1,5 @@
+const _unset = Object();
+
 class PlannerTask {
   const PlannerTask({
     required this.id,
@@ -33,6 +35,12 @@ class PlannerTask {
         scheduledDate!.day == now.day;
   }
 
+  bool get isStandalone => goalId == null && milestoneId == null;
+
+  bool get isDirectGoalTask => goalId != null && milestoneId == null;
+
+  bool get isMilestoneTask => goalId != null && milestoneId != null;
+
   PlannerTask toggleCompleted() {
     final nextCompletedState = !isCompleted;
 
@@ -47,35 +55,17 @@ class PlannerTask {
 
     return copyWith(
       scheduledDate: DateTime(now.year, now.month, now.day),
-      completedAt: completedAt,
     );
   }
 
-  PlannerTask moveToDirectGoal() {
-    return PlannerTask(
-      id: id,
-      title: title,
-      description: description,
-      createdAt: createdAt,
-      goalId: goalId,
-      milestoneId: null,
-      scheduledDate: scheduledDate,
-      isCompleted: isCompleted,
-      completedAt: completedAt,
-    );
+  PlannerTask unschedule() {
+    return copyWith(scheduledDate: null);
   }
 
   PlannerTask assignToGoal(String goalId) {
-    return PlannerTask(
-      id: id,
-      title: title,
-      description: description,
-      createdAt: createdAt,
+    return copyWith(
       goalId: goalId,
       milestoneId: null,
-      scheduledDate: scheduledDate,
-      isCompleted: isCompleted,
-      completedAt: completedAt,
     );
   }
 
@@ -83,44 +73,24 @@ class PlannerTask {
     required String goalId,
     required String milestoneId,
   }) {
-    return PlannerTask(
-      id: id,
-      title: title,
-      description: description,
-      createdAt: createdAt,
+    return copyWith(
       goalId: goalId,
       milestoneId: milestoneId,
-      scheduledDate: scheduledDate,
-      isCompleted: isCompleted,
-      completedAt: completedAt,
-    );
-  }
-
-  PlannerTask detachFromGoal() {
-    return PlannerTask(
-      id: id,
-      title: title,
-      description: description,
-      createdAt: createdAt,
-      goalId: null,
-      milestoneId: null,
-      scheduledDate: scheduledDate,
-      isCompleted: isCompleted,
-      completedAt: completedAt,
     );
   }
 
   PlannerTask assignToMilestone(String milestoneId) {
-    return PlannerTask(
-      id: id,
-      title: title,
-      description: description,
-      createdAt: createdAt,
-      goalId: goalId,
-      milestoneId: milestoneId,
-      scheduledDate: scheduledDate,
-      isCompleted: isCompleted,
-      completedAt: completedAt,
+    return copyWith(milestoneId: milestoneId);
+  }
+
+  PlannerTask moveToDirectGoal() {
+    return copyWith(milestoneId: null);
+  }
+
+  PlannerTask detachFromGoal() {
+    return copyWith(
+      goalId: null,
+      milestoneId: null,
     );
   }
 
@@ -129,22 +99,28 @@ class PlannerTask {
     String? title,
     String? description,
     DateTime? createdAt,
-    String? goalId,
-    String? milestoneId,
-    DateTime? scheduledDate,
+    Object? goalId = _unset,
+    Object? milestoneId = _unset,
+    Object? scheduledDate = _unset,
     bool? isCompleted,
-    DateTime? completedAt,
+    Object? completedAt = _unset,
   }) {
     return PlannerTask(
       id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
       createdAt: createdAt ?? this.createdAt,
-      goalId: goalId ?? this.goalId,
-      milestoneId: milestoneId ?? this.milestoneId,
-      scheduledDate: scheduledDate ?? this.scheduledDate,
+      goalId: identical(goalId, _unset) ? this.goalId : goalId as String?,
+      milestoneId: identical(milestoneId, _unset)
+          ? this.milestoneId
+          : milestoneId as String?,
+      scheduledDate: identical(scheduledDate, _unset)
+          ? this.scheduledDate
+          : scheduledDate as DateTime?,
       isCompleted: isCompleted ?? this.isCompleted,
-      completedAt: completedAt,
+      completedAt: identical(completedAt, _unset)
+          ? this.completedAt
+          : completedAt as DateTime?,
     );
   }
 }
