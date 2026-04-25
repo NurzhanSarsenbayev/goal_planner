@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../controllers/all_tasks_controller.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
@@ -25,16 +26,19 @@ class AllTasksScreen extends StatefulWidget {
   final List<Milestone> milestones;
   final List<PlannerTask> tasks;
   final void Function(String taskId) onToggleTaskCompleted;
+
   final void Function({
   required String taskId,
   required String title,
   required String description,
   }) onTaskUpdated;
+
   final void Function({
   required String taskId,
   required String goalId,
   String? milestoneId,
   }) onTaskAttachedToGoal;
+
   final void Function(String taskId) onTaskDetachedFromGoal;
   final void Function(String taskId) onDeleteTask;
 
@@ -43,102 +47,33 @@ class AllTasksScreen extends StatefulWidget {
 }
 
 class _AllTasksScreenState extends State<AllTasksScreen> {
-  late List<PlannerTask> _tasks;
+  late final AllTasksController _controller;
 
   @override
   void initState() {
     super.initState();
-    _tasks = List.of(widget.tasks);
-  }
 
-  void _toggleTaskCompleted(String taskId) {
-    setState(() {
-      _tasks = _tasks.map((task) {
-        if (task.id != taskId) {
-          return task;
-        }
-
-        return task.toggleCompleted();
-      }).toList();
-    });
-
-    widget.onToggleTaskCompleted(taskId);
-  }
-
-  void _deleteTask(String taskId) {
-    setState(() {
-      _tasks = _tasks.where((task) => task.id != taskId).toList();
-    });
-
-    widget.onDeleteTask(taskId);
-  }
-
-  void _updateTask({
-    required String taskId,
-    required String title,
-    required String description,
-  }) {
-    setState(() {
-      _tasks = _tasks.map((task) {
-        if (task.id != taskId) {
-          return task;
-        }
-
-        return task.copyWith(
-          title: title,
-          description: description,
-        );
-      }).toList();
-    });
-
-    widget.onTaskUpdated(
-      taskId: taskId,
-      title: title,
-      description: description,
+    _controller = AllTasksController(
+      tasks: widget.tasks,
+      onToggleTaskCompleted: widget.onToggleTaskCompleted,
+      onTaskUpdated: widget.onTaskUpdated,
+      onTaskAttachedToGoal: widget.onTaskAttachedToGoal,
+      onTaskDetachedFromGoal: widget.onTaskDetachedFromGoal,
+      onDeleteTask: widget.onDeleteTask,
     );
+
+    _controller.addListener(_onControllerChanged);
   }
 
-  void _attachTaskToGoal({
-    required String taskId,
-    required String goalId,
-    String? milestoneId,
-  }) {
-    setState(() {
-      _tasks = _tasks.map((task) {
-        if (task.id != taskId) {
-          return task;
-        }
-
-        if (milestoneId == null) {
-          return task.assignToGoal(goalId);
-        }
-
-        return task.assignToGoalMilestone(
-          goalId: goalId,
-          milestoneId: milestoneId,
-        );
-      }).toList();
-    });
-
-    widget.onTaskAttachedToGoal(
-      taskId: taskId,
-      goalId: goalId,
-      milestoneId: milestoneId,
-    );
+  @override
+  void dispose() {
+    _controller.removeListener(_onControllerChanged);
+    _controller.dispose();
+    super.dispose();
   }
 
-  void _detachTaskFromGoal(String taskId) {
-    setState(() {
-      _tasks = _tasks.map((task) {
-        if (task.id != taskId) {
-          return task;
-        }
-
-        return task.detachFromGoal();
-      }).toList();
-    });
-
-    widget.onTaskDetachedFromGoal(taskId);
+  void _onControllerChanged() {
+    setState(() {});
   }
 
   Future<void> _showEditTaskDialog(PlannerTask task) async {
@@ -158,7 +93,7 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
       return;
     }
 
-    _updateTask(
+    _controller.updateTask(
       taskId: task.id,
       title: result.title,
       description: result.description,
@@ -180,7 +115,7 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
       return;
     }
 
-    _attachTaskToGoal(
+    _controller.attachTaskToGoal(
       taskId: task.id,
       goalId: result.goalId,
       milestoneId: result.milestoneId,
@@ -189,7 +124,9 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_tasks.isEmpty) {
+    final tasks = _controller.tasks;
+
+    if (tasks.isEmpty) {
       return Scaffold(
         appBar: AppBar(
           title: const Text('All tasks'),
@@ -208,10 +145,10 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
       ),
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
-        itemCount: _tasks.length,
+        itemCount: tasks.length,
         separatorBuilder: (_, _) => const SizedBox(height: 8),
         itemBuilder: (context, index) {
-          final task = _tasks[index];
+          final task = tasks[index];
           final goal = _findGoalById(task.goalId);
           final isStandaloneTask = task.goalId == null;
           final isGoalLinkedTask = task.goalId != null;
@@ -219,13 +156,25 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
           return TaskCard(
             task: task,
             goal: goal,
-            onToggleCompleted: () => _toggleTaskCompleted(task.id),
-            onEdit: () => _showEditTaskDialog(task),
-            onAttachToGoal:
-            isStandaloneTask ? () => _showAttachTaskToGoalDialog(task) : null,
-            onDetachFromGoal:
-            isGoalLinkedTask ? () => _detachTaskFromGoal(task.id) : null,
-            onDelete: () => _deleteTask(task.id),
+            onToggleCompleted: () {
+              _controller.toggleTaskCompleted(task.id);
+            },
+            onEdit: () {
+              _showEditTaskDialog(task);
+            },
+            onAttachToGoal: isStandaloneTask
+                ? () {
+              _showAttachTaskToGoalDialog(task);
+            }
+                : null,
+            onDetachFromGoal: isGoalLinkedTask
+                ? () {
+              _controller.detachTaskFromGoal(task.id);
+            }
+                : null,
+            onDelete: () {
+              _controller.deleteTask(task.id);
+            },
           );
         },
       ),
