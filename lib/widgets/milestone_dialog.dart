@@ -1,15 +1,36 @@
 import 'package:flutter/material.dart';
 
-class AddMilestoneDialog extends StatefulWidget {
-  const AddMilestoneDialog({super.key});
+class MilestoneDialog extends StatefulWidget {
+  const MilestoneDialog({
+    super.key,
+    this.initialTitle = '',
+    this.initialDescription = '',
+    this.title = 'Add milestone',
+    this.submitLabel = 'Add',
+  });
+
+  final String initialTitle;
+  final String initialDescription;
+  final String title;
+  final String submitLabel;
 
   @override
-  State<AddMilestoneDialog> createState() => _AddMilestoneDialogState();
+  State<MilestoneDialog> createState() => _MilestoneDialogState();
 }
 
-class _AddMilestoneDialogState extends State<AddMilestoneDialog> {
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
+class _MilestoneDialogState extends State<MilestoneDialog> {
+  late final TextEditingController _titleController;
+  late final TextEditingController _descriptionController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _titleController = TextEditingController(text: widget.initialTitle);
+    _descriptionController = TextEditingController(
+      text: widget.initialDescription,
+    );
+  }
 
   @override
   void dispose() {
@@ -37,7 +58,7 @@ class _AddMilestoneDialogState extends State<AddMilestoneDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add milestone'),
+      title: Text(widget.title),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -72,7 +93,7 @@ class _AddMilestoneDialogState extends State<AddMilestoneDialog> {
         ),
         FilledButton(
           onPressed: _submit,
-          child: const Text('Add'),
+          child: Text(widget.submitLabel),
         ),
       ],
     );

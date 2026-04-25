@@ -12,6 +12,7 @@ class MilestoneCard extends StatelessWidget {
     required this.milestone,
     required this.tasks,
     required this.onAddTask,
+    required this.onEditMilestone,
     required this.onToggleTaskCompleted,
     required this.onEditTask,
     required this.onScheduleTaskForToday,
@@ -22,6 +23,7 @@ class MilestoneCard extends StatelessWidget {
   final Milestone milestone;
   final List<PlannerTask> tasks;
   final VoidCallback onAddTask;
+  final VoidCallback onEditMilestone;
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function(PlannerTask task) onEditTask;
   final void Function(String taskId) onScheduleTaskForToday;
@@ -49,6 +51,22 @@ class MilestoneCard extends StatelessWidget {
             ),
           ],
         ),
+        trailing: PopupMenuButton<_MilestoneAction>(
+          onSelected: (action) {
+            switch (action) {
+              case _MilestoneAction.edit:
+                onEditMilestone();
+            }
+          },
+          itemBuilder: (context) {
+            return const [
+              PopupMenuItem(
+                value: _MilestoneAction.edit,
+                child: Text('Edit'),
+              ),
+            ];
+          },
+        ),
         children: [
           if (tasks.isEmpty)
             Padding(
@@ -63,7 +81,7 @@ class MilestoneCard extends StatelessWidget {
             )
           else
             ...tasks.map(
-              (task) => Padding(
+                  (task) => Padding(
                 padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
                 child: TaskCard(
                   task: task,
@@ -90,4 +108,8 @@ class MilestoneCard extends StatelessWidget {
       ),
     );
   }
+}
+
+enum _MilestoneAction {
+  edit,
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
-import '../widgets/add_milestone_dialog.dart';
+import '../widgets/milestone_dialog.dart';
 import '../widgets/task_dialog.dart';
 import '../widgets/goal_header.dart';
 import '../widgets/milestones_section.dart';
@@ -20,6 +20,7 @@ class GoalDetailsScreen extends StatefulWidget {
     required this.onDeleteTask,
     required this.onTaskUpdated,
     required this.onMilestoneCreated,
+    required this.onMilestoneUpdated,
     required this.onScheduleTaskForToday,
   });
 
@@ -35,6 +36,11 @@ class GoalDetailsScreen extends StatefulWidget {
     required String description,
   }) onTaskUpdated;
   final void Function(Milestone milestone) onMilestoneCreated;
+  final void Function({
+  required String milestoneId,
+  required String title,
+  required String description,
+  }) onMilestoneUpdated;
   final void Function(String taskId) onScheduleTaskForToday;
 
   @override
@@ -136,6 +142,34 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
     widget.onTaskCreated(task);
   }
 
+  void _updateMilestone({
+    required String milestoneId,
+    required String title,
+    required String description,
+  }) {
+    setState(() {
+      _milestones = _milestones.map((milestone) {
+        if (milestone.id != milestoneId) {
+          return milestone;
+        }
+
+        return Milestone(
+          id: milestone.id,
+          goalId: milestone.goalId,
+          title: title,
+          description: description,
+          createdAt: milestone.createdAt,
+        );
+      }).toList();
+    });
+
+    widget.onMilestoneUpdated(
+      milestoneId: milestoneId,
+      title: title,
+      description: description,
+    );
+  }
+
   Future<void> _showAddTaskDialog({String? milestoneId}) async {
     final result = await showDialog<TaskDraft>(
       context: context,
@@ -183,7 +217,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
     final result = await showDialog<MilestoneDraft>(
       context: context,
       builder: (context) {
-        return const AddMilestoneDialog();
+        return const MilestoneDialog();
       },
     );
 
@@ -208,6 +242,29 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
     widget.onMilestoneCreated(milestone);
   }
 
+  Future<void> _showEditMilestoneDialog(Milestone milestone) async {
+    final result = await showDialog<MilestoneDraft>(
+      context: context,
+      builder: (context) {
+        return MilestoneDialog(
+          initialTitle: milestone.title,
+          initialDescription: milestone.description,
+          title: 'Edit milestone',
+          submitLabel: 'Save',
+        );
+      },
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    _updateMilestone(
+      milestoneId: milestone.id,
+      title: result.title,
+      description: result.description,
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final goalTasks = _tasks
@@ -248,6 +305,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             milestones: goalMilestones,
             goalTasks: goalTasks,
             onAddMilestone: _showAddMilestoneDialog,
+            onEditMilestone: _showEditMilestoneDialog,
             onAddTaskToMilestone: (milestoneId) {
               _showAddTaskDialog(milestoneId: milestoneId);
             },

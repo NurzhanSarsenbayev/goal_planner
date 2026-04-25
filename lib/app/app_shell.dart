@@ -162,6 +162,7 @@ class _AppShellState extends State<AppShell> {
             onToggleTaskCompleted: _store.toggleTaskCompleted,
             onTaskCreated: _store.addTask,
             onMilestoneCreated: _store.addMilestone,
+            onMilestoneUpdated: _store.updateMilestone,
             onScheduleTaskForToday: _store.scheduleTaskForToday,
             onDeleteTask: _store.deleteTask,
             onTaskUpdated: _store.updateTask,
