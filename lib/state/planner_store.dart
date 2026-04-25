@@ -212,6 +212,13 @@ class PlannerStore extends ChangeNotifier {
     );
   }
 
+  void removeTaskFromToday(String taskId) {
+    _updateTaskById(
+      taskId,
+          (task) => task.unschedule(),
+    );
+  }
+
   void moveTaskToDirectGoal(String taskId) {
     _updateTaskById(
       taskId,

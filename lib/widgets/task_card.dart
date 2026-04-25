@@ -16,6 +16,7 @@ class TaskCard extends StatelessWidget {
     this.onMoveToMilestone,
     this.onMoveToDirectGoal,
     this.onScheduleForToday,
+    this.onRemoveFromToday,
   });
 
   final PlannerTask task;
@@ -28,11 +29,13 @@ class TaskCard extends StatelessWidget {
   final VoidCallback? onMoveToMilestone;
   final VoidCallback? onMoveToDirectGoal;
   final VoidCallback? onScheduleForToday;
+  final VoidCallback? onRemoveFromToday;
 
   @override
   Widget build(BuildContext context) {
     final shouldShowScheduleButton =
         onScheduleForToday != null && !task.isScheduledForToday;
+    final shouldShowRemoveFromToday = onRemoveFromToday != null;
 
     final shouldShowAttachToGoal = onAttachToGoal != null;
     final shouldShowDetachFromGoal = onDetachFromGoal != null;
@@ -100,6 +103,8 @@ class TaskCard extends StatelessWidget {
                 onMoveToMilestone?.call();
               case _TaskAction.moveToDirectGoal:
                 onMoveToDirectGoal?.call();
+              case _TaskAction.removeFromToday:
+                onRemoveFromToday?.call();
               case _TaskAction.delete:
                 onDelete();
             }
@@ -110,6 +115,11 @@ class TaskCard extends StatelessWidget {
                 value: _TaskAction.edit,
                 child: Text('Edit'),
               ),
+              if (shouldShowRemoveFromToday)
+                const PopupMenuItem(
+                  value: _TaskAction.removeFromToday,
+                  child: Text('Remove from Today'),
+                ),
               if (shouldShowAttachToGoal)
                 const PopupMenuItem(
                   value: _TaskAction.attachToGoal,
@@ -144,6 +154,7 @@ class TaskCard extends StatelessWidget {
 
 enum _TaskAction {
   edit,
+  removeFromToday,
   attachToGoal,
   detachFromGoal,
   moveToMilestone,

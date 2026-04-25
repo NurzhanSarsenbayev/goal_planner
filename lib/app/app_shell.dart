@@ -206,6 +206,7 @@ class _AppShellState extends State<AppShell> {
         onEditTask: _showEditTaskDialog,
         onAttachTaskToGoal: _showAttachTaskToGoalDialog,
         onDetachTaskFromGoal: _store.detachTaskFromGoal,
+        onRemoveTaskFromToday: _store.removeTaskFromToday,
         onDeleteTask: _store.deleteTask,
         onAddTask: _showAddTodayTaskDialog,
       ),
