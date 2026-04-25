@@ -13,10 +13,7 @@ import '../screens/all_tasks_screen.dart';
 import '../screens/more_screen.dart';
 import '../screens/today_screen.dart';
 import '../state/planner_store.dart';
-import '../widgets/goal_dialog.dart';
-import '../widgets/task_dialog.dart';
-import '../widgets/today_task_dialog.dart';
-import '../widgets/task_placement_dialog.dart';
+import 'app_dialogs.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -71,12 +68,7 @@ class _AppShellState extends State<AppShell> {
   }
 
   Future<void> _showAddGoalDialog() async {
-    final result = await showDialog<GoalDraft>(
-      context: context,
-      builder: (context) {
-        return const GoalDialog();
-      },
-    );
+    final result = await showAddGoalDialog(context);
 
     if (result == null) {
       return;
@@ -89,16 +81,9 @@ class _AppShellState extends State<AppShell> {
   }
 
   Future<void> _showEditGoalDialog(Goal goal) async {
-    final result = await showDialog<GoalDraft>(
-      context: context,
-      builder: (context) {
-        return GoalDialog(
-          initialTitle: goal.title,
-          initialDescription: goal.description,
-          title: 'Edit goal',
-          submitLabel: 'Save',
-        );
-      },
+    final result = await showEditGoalDialog(
+      context,
+      goal: goal,
     );
 
     if (result == null) {
@@ -113,14 +98,10 @@ class _AppShellState extends State<AppShell> {
   }
 
   Future<void> _showAddTodayTaskDialog() async {
-    final result = await showDialog<TodayTaskDraft>(
-      context: context,
-      builder: (context) {
-        return TodayTaskDialog(
-          goals: _store.goals,
-          milestones: _store.milestones,
-        );
-      },
+    final result = await showAddTodayTaskDialog(
+      context,
+      goals: _store.goals,
+      milestones: _store.milestones,
     );
 
     if (result == null) {
@@ -136,14 +117,10 @@ class _AppShellState extends State<AppShell> {
   }
 
   Future<void> _showAttachTaskToGoalDialog(PlannerTask task) async {
-    final result = await showDialog<TaskPlacementDraft>(
-      context: context,
-      builder: (context) {
-        return TaskPlacementDialog(
-          goals: _store.goals,
-          milestones: _store.milestones,
-        );
-      },
+    final result = await showTaskPlacementDialog(
+      context,
+      goals: _store.goals,
+      milestones: _store.milestones,
     );
 
     if (result == null) {
@@ -158,16 +135,9 @@ class _AppShellState extends State<AppShell> {
   }
 
   Future<void> _showEditTaskDialog(PlannerTask task) async {
-    final result = await showDialog<TaskDraft>(
-      context: context,
-      builder: (context) {
-        return TaskDialog(
-          initialTitle: task.title,
-          initialDescription: task.description,
-          title: 'Edit task',
-          submitLabel: 'Save',
-        );
-      },
+    final result = await showEditTaskDialog(
+      context,
+      task: task,
     );
 
     if (result == null) {
