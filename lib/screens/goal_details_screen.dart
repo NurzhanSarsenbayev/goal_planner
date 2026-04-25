@@ -26,11 +26,7 @@ class GoalDetailsScreen extends StatefulWidget {
   final List<PlannerTask> tasks;
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function(PlannerTask task) onTaskCreated;
-  final void Function({
-    required String goalId,
-    required String title,
-    required String description,
-  }) onMilestoneCreated;
+  final void Function(Milestone milestone) onMilestoneCreated;
   final void Function(String taskId) onScheduleTaskForToday;
 
   @override
@@ -144,11 +140,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       _milestones = [..._milestones, milestone];
     });
 
-    widget.onMilestoneCreated(
-      goalId: widget.goal.id,
-      title: result.title,
-      description: result.description,
-    );
+    widget.onMilestoneCreated(milestone);
   }
 
   @override

@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
+import '../data/local/app_database.dart' as local;
+import '../data/repositories/planner_repository.dart';
 import '../models/goal.dart';
 import '../screens/calendar_screen.dart';
 import '../screens/goal_details_screen.dart';
@@ -18,7 +22,9 @@ class AppShell extends StatefulWidget {
 }
 
 class _AppShellState extends State<AppShell> {
-  final PlannerStore _store = PlannerStore();
+  late final local.AppDatabase _database;
+  late final PlannerRepository _repository;
+  late final PlannerStore _store;
 
   int _selectedIndex = 0;
 
@@ -32,13 +38,21 @@ class _AppShellState extends State<AppShell> {
   @override
   void initState() {
     super.initState();
+
+    _database = local.AppDatabase();
+    _repository = PlannerRepository(_database);
+    _store = PlannerStore(_repository);
+
     _store.addListener(_onStoreChanged);
+    unawaited(_store.initialize());
   }
 
   @override
   void dispose() {
     _store.removeListener(_onStoreChanged);
     _store.dispose();
+    unawaited(_database.close());
+
     super.dispose();
   }
 
@@ -129,7 +143,11 @@ class _AppShellState extends State<AppShell> {
       appBar: AppBar(
         title: Text(_titles[_selectedIndex]),
       ),
-      body: screens[_selectedIndex],
+      body: _store.isInitialized
+          ? screens[_selectedIndex]
+          : const Center(
+              child: CircularProgressIndicator(),
+            ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: _onDestinationSelected,
