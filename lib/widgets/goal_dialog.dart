@@ -1,15 +1,36 @@
 import 'package:flutter/material.dart';
 
-class AddGoalDialog extends StatefulWidget {
-  const AddGoalDialog({super.key});
+class GoalDialog extends StatefulWidget {
+  const GoalDialog({
+    super.key,
+    this.initialTitle = '',
+    this.initialDescription = '',
+    this.title = 'Add goal',
+    this.submitLabel = 'Add',
+  });
+
+  final String initialTitle;
+  final String initialDescription;
+  final String title;
+  final String submitLabel;
 
   @override
-  State<AddGoalDialog> createState() => _AddGoalDialogState();
+  State<GoalDialog> createState() => _GoalDialogState();
 }
 
-class _AddGoalDialogState extends State<AddGoalDialog> {
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
+class _GoalDialogState extends State<GoalDialog> {
+  late final TextEditingController _titleController;
+  late final TextEditingController _descriptionController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _titleController = TextEditingController(text: widget.initialTitle);
+    _descriptionController = TextEditingController(
+      text: widget.initialDescription,
+    );
+  }
 
   @override
   void dispose() {
@@ -37,7 +58,7 @@ class _AddGoalDialogState extends State<AddGoalDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add goal'),
+      title: Text(widget.title),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -72,7 +93,7 @@ class _AddGoalDialogState extends State<AddGoalDialog> {
         ),
         FilledButton(
           onPressed: _submit,
-          child: const Text('Add'),
+          child: Text(widget.submitLabel),
         ),
       ],
     );

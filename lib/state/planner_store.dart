@@ -73,6 +73,36 @@ class PlannerStore extends ChangeNotifier {
     _persist(_repository.saveGoal(goal));
   }
 
+  void updateGoal({
+    required String goalId,
+    required String title,
+    required String description,
+  }) {
+    Goal? updatedGoal;
+
+    _goals = _goals.map((goal) {
+      if (goal.id != goalId) {
+        return goal;
+      }
+
+      updatedGoal = Goal(
+        id: goal.id,
+        title: title,
+        description: description,
+        status: goal.status,
+        createdAt: goal.createdAt,
+      );
+
+      return updatedGoal!;
+    }).toList();
+
+    notifyListeners();
+
+    if (updatedGoal != null) {
+      _persist(_repository.saveGoal(updatedGoal!));
+    }
+  }
+
   void addMilestone(Milestone milestone) {
     _milestones = [..._milestones, milestone];
     notifyListeners();

@@ -9,12 +9,14 @@ class GoalCard extends StatelessWidget {
     required this.totalTasks,
     required this.completedTasks,
     required this.onTap,
+    required this.onEdit,
   });
 
   final Goal goal;
   final int totalTasks;
   final int completedTasks;
   final VoidCallback onTap;
+  final VoidCallback onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +44,27 @@ class GoalCard extends StatelessWidget {
             ),
           ],
         ),
-        trailing: const Icon(Icons.chevron_right),
+        trailing: PopupMenuButton<_GoalAction>(
+          onSelected: (action) {
+            switch (action) {
+              case _GoalAction.edit:
+                onEdit();
+            }
+          },
+          itemBuilder: (context) {
+            return const [
+              PopupMenuItem(
+                value: _GoalAction.edit,
+                child: Text('Edit'),
+              ),
+            ];
+          },
+        ),
       ),
     );
   }
+}
+
+enum _GoalAction {
+  edit,
 }

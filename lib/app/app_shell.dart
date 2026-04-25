@@ -12,7 +12,7 @@ import '../screens/goals_screen.dart';
 import '../screens/more_screen.dart';
 import '../screens/today_screen.dart';
 import '../state/planner_store.dart';
-import '../widgets/add_goal_dialog.dart';
+import '../widgets/goal_dialog.dart';
 import '../widgets/task_dialog.dart';
 
 class AppShell extends StatefulWidget {
@@ -71,7 +71,7 @@ class _AppShellState extends State<AppShell> {
     final result = await showDialog<GoalDraft>(
       context: context,
       builder: (context) {
-        return const AddGoalDialog();
+        return const GoalDialog();
       },
     );
 
@@ -80,6 +80,30 @@ class _AppShellState extends State<AppShell> {
     }
 
     _store.addGoal(
+      title: result.title,
+      description: result.description,
+    );
+  }
+
+  Future<void> _showEditGoalDialog(Goal goal) async {
+    final result = await showDialog<GoalDraft>(
+      context: context,
+      builder: (context) {
+        return GoalDialog(
+          initialTitle: goal.title,
+          initialDescription: goal.description,
+          title: 'Edit goal',
+          submitLabel: 'Save',
+        );
+      },
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    _store.updateGoal(
+      goalId: goal.id,
       title: result.title,
       description: result.description,
     );
@@ -162,6 +186,7 @@ class _AppShellState extends State<AppShell> {
         goals: _store.goals,
         tasks: _store.tasks,
         onGoalSelected: _openGoalDetails,
+        onEditGoal: _showEditGoalDialog,
         onAddGoal: _showAddGoalDialog,
       ),
       const CalendarScreen(),

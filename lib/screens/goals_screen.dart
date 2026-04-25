@@ -11,12 +11,14 @@ class GoalsScreen extends StatelessWidget {
     required this.goals,
     required this.tasks,
     required this.onGoalSelected,
+    required this.onEditGoal,
     required this.onAddGoal,
   });
 
   final List<Goal> goals;
   final List<PlannerTask> tasks;
   final void Function(Goal goal) onGoalSelected;
+  final void Function(Goal goal) onEditGoal;
   final VoidCallback onAddGoal;
 
   @override
@@ -51,7 +53,7 @@ class GoalsScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             final goal = goals[index];
             final goalTasks =
-                tasks.where((task) => task.goalId == goal.id).toList();
+            tasks.where((task) => task.goalId == goal.id).toList();
 
             final completedTasks =
                 goalTasks.where((task) => task.isCompleted).length;
@@ -61,6 +63,7 @@ class GoalsScreen extends StatelessWidget {
               totalTasks: goalTasks.length,
               completedTasks: completedTasks,
               onTap: () => onGoalSelected(goal),
+              onEdit: () => onEditGoal(goal),
             );
           },
         ),
