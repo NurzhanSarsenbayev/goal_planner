@@ -4,6 +4,7 @@ import '../../models/goal.dart' as domain;
 import '../../models/milestone.dart' as domain;
 import '../../models/planner_task.dart' as domain;
 import '../local/app_database.dart' as local;
+import 'planner_mappers.dart';
 
 class PlannerRepository {
   const PlannerRepository(this._database);
@@ -13,19 +14,19 @@ class PlannerRepository {
   Future<List<domain.Goal>> loadGoals() async {
     final rows = await _database.select(_database.goals).get();
 
-    return rows.map(_mapGoal).toList();
+    return rows.map(mapGoal).toList();
   }
 
   Future<List<domain.Milestone>> loadMilestones() async {
     final rows = await _database.select(_database.milestones).get();
 
-    return rows.map(_mapMilestone).toList();
+    return rows.map(mapMilestone).toList();
   }
 
   Future<List<domain.PlannerTask>> loadTasks() async {
     final rows = await _database.select(_database.tasks).get();
 
-    return rows.map(_mapTask).toList();
+    return rows.map(mapTask).toList();
   }
 
   Future<void> saveGoal(domain.Goal goal) async {
@@ -119,49 +120,5 @@ class PlannerRepository {
         scheduledDate: drift.Value(today),
       ),
     );
-  }
-
-  domain.Goal _mapGoal(local.Goal row) {
-    return domain.Goal(
-      id: row.id,
-      title: row.title,
-      description: row.description,
-      status: _mapGoalStatus(row.status),
-      createdAt: row.createdAt,
-    );
-  }
-
-  domain.Milestone _mapMilestone(local.Milestone row) {
-    return domain.Milestone(
-      id: row.id,
-      goalId: row.goalId,
-      title: row.title,
-      description: row.description,
-      createdAt: row.createdAt,
-    );
-  }
-
-  domain.PlannerTask _mapTask(local.Task row) {
-    return domain.PlannerTask(
-      id: row.id,
-      goalId: row.goalId,
-      milestoneId: row.milestoneId,
-      title: row.title,
-      description: row.description,
-      scheduledDate: row.scheduledDate,
-      isCompleted: row.isCompleted,
-      completedAt: row.completedAt,
-      createdAt: row.createdAt,
-    );
-  }
-
-  domain.GoalStatus _mapGoalStatus(String value) {
-    for (final status in domain.GoalStatus.values) {
-      if (status.name == value) {
-        return status;
-      }
-    }
-
-    return domain.GoalStatus.active;
   }
 }
