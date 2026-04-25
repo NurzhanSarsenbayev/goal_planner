@@ -9,6 +9,7 @@ import '../models/planner_task.dart';
 import '../screens/calendar_screen.dart';
 import '../screens/goal_details_screen.dart';
 import '../screens/goals_screen.dart';
+import '../screens/all_tasks_screen.dart';
 import '../screens/more_screen.dart';
 import '../screens/today_screen.dart';
 import '../state/planner_store.dart';
@@ -180,6 +181,25 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
+  void _openAllTasks() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return AllTasksScreen(
+            goals: _store.goals,
+            milestones: _store.milestones,
+            tasks: _store.tasks,
+            onToggleTaskCompleted: _store.toggleTaskCompleted,
+            onTaskUpdated: _store.updateTask,
+            onTaskAttachedToGoal: _store.attachTaskToGoal,
+            onTaskDetachedFromGoal: _store.detachTaskFromGoal,
+            onDeleteTask: _store.deleteTask,
+          );
+        },
+      ),
+    );
+  }
+
   void _openGoalDetails(Goal goal) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -227,7 +247,9 @@ class _AppShellState extends State<AppShell> {
         onAddGoal: _showAddGoalDialog,
       ),
       const CalendarScreen(),
-      const MoreScreen(),
+      MoreScreen(
+        onOpenAllTasks: _openAllTasks,
+      ),
     ];
 
     return Scaffold(
