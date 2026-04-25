@@ -1,15 +1,36 @@
 import 'package:flutter/material.dart';
 
-class AddTaskDialog extends StatefulWidget {
-  const AddTaskDialog({super.key});
+class TaskDialog extends StatefulWidget {
+  const TaskDialog({
+    super.key,
+    this.initialTitle = '',
+    this.initialDescription = '',
+    this.title = 'Add task',
+    this.submitLabel = 'Add',
+  });
+
+  final String initialTitle;
+  final String initialDescription;
+  final String title;
+  final String submitLabel;
 
   @override
-  State<AddTaskDialog> createState() => _AddTaskDialogState();
+  State<TaskDialog> createState() => _TaskDialogState();
 }
 
-class _AddTaskDialogState extends State<AddTaskDialog> {
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
+class _TaskDialogState extends State<TaskDialog> {
+  late final TextEditingController _titleController;
+  late final TextEditingController _descriptionController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _titleController = TextEditingController(text: widget.initialTitle);
+    _descriptionController = TextEditingController(
+      text: widget.initialDescription,
+    );
+  }
 
   @override
   void dispose() {
@@ -37,7 +58,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add task'),
+      title: Text(widget.title),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -72,7 +93,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
         ),
         FilledButton(
           onPressed: _submit,
-          child: const Text('Add'),
+          child: Text(widget.submitLabel),
         ),
       ],
     );

@@ -4,7 +4,7 @@ import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
 import '../widgets/add_milestone_dialog.dart';
-import '../widgets/add_task_dialog.dart';
+import '../widgets/task_dialog.dart';
 import '../widgets/goal_header.dart';
 import '../widgets/milestones_section.dart';
 import '../widgets/direct_goal_tasks_section.dart';
@@ -109,7 +109,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
     final result = await showDialog<TaskDraft>(
       context: context,
       builder: (context) {
-        return const AddTaskDialog();
+        return const TaskDialog();
       },
     );
 

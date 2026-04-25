@@ -12,7 +12,7 @@ import '../screens/more_screen.dart';
 import '../screens/today_screen.dart';
 import '../state/planner_store.dart';
 import '../widgets/add_goal_dialog.dart';
-import '../widgets/add_task_dialog.dart';
+import '../widgets/task_dialog.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -88,7 +88,7 @@ class _AppShellState extends State<AppShell> {
     final result = await showDialog<TaskDraft>(
       context: context,
       builder: (context) {
-        return const AddTaskDialog();
+        return const TaskDialog();
       },
     );
 
