@@ -96,6 +96,20 @@ class PlannerTask {
     );
   }
 
+  PlannerTask detachFromGoal() {
+    return PlannerTask(
+      id: id,
+      title: title,
+      description: description,
+      createdAt: createdAt,
+      goalId: null,
+      milestoneId: null,
+      scheduledDate: scheduledDate,
+      isCompleted: isCompleted,
+      completedAt: completedAt,
+    );
+  }
+
   PlannerTask assignToMilestone(String milestoneId) {
     return PlannerTask(
       id: id,

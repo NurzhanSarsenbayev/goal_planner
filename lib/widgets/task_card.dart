@@ -12,6 +12,7 @@ class TaskCard extends StatelessWidget {
     required this.onEdit,
     required this.onDelete,
     this.onAttachToGoal,
+    this.onDetachFromGoal,
     this.onMoveToMilestone,
     this.onMoveToDirectGoal,
     this.onScheduleForToday,
@@ -23,6 +24,7 @@ class TaskCard extends StatelessWidget {
   final VoidCallback onEdit;
   final VoidCallback onDelete;
   final VoidCallback? onAttachToGoal;
+  final VoidCallback? onDetachFromGoal;
   final VoidCallback? onMoveToMilestone;
   final VoidCallback? onMoveToDirectGoal;
   final VoidCallback? onScheduleForToday;
@@ -33,6 +35,7 @@ class TaskCard extends StatelessWidget {
         onScheduleForToday != null && !task.isScheduledForToday;
 
     final shouldShowAttachToGoal = onAttachToGoal != null;
+    final shouldShowDetachFromGoal = onDetachFromGoal != null;
     final shouldShowMoveToMilestone = onMoveToMilestone != null;
     final shouldShowMoveToDirectGoal = onMoveToDirectGoal != null;
 
@@ -91,6 +94,8 @@ class TaskCard extends StatelessWidget {
                 onEdit();
               case _TaskAction.attachToGoal:
                 onAttachToGoal?.call();
+              case _TaskAction.detachFromGoal:
+                onDetachFromGoal?.call();
               case _TaskAction.moveToMilestone:
                 onMoveToMilestone?.call();
               case _TaskAction.moveToDirectGoal:
@@ -109,6 +114,11 @@ class TaskCard extends StatelessWidget {
                 const PopupMenuItem(
                   value: _TaskAction.attachToGoal,
                   child: Text('Attach to goal'),
+                ),
+              if (shouldShowDetachFromGoal)
+                const PopupMenuItem(
+                  value: _TaskAction.detachFromGoal,
+                  child: Text('Detach from goal'),
                 ),
               if (shouldShowMoveToMilestone)
                 const PopupMenuItem(
@@ -135,6 +145,7 @@ class TaskCard extends StatelessWidget {
 enum _TaskAction {
   edit,
   attachToGoal,
+  detachFromGoal,
   moveToMilestone,
   moveToDirectGoal,
   delete,

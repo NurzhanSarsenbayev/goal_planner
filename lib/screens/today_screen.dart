@@ -13,6 +13,7 @@ class TodayScreen extends StatelessWidget {
     required this.onToggleTaskCompleted,
     required this.onEditTask,
     required this.onAttachTaskToGoal,
+    required this.onDetachTaskFromGoal,
     required this.onDeleteTask,
     required this.onAddTask,
   });
@@ -22,6 +23,7 @@ class TodayScreen extends StatelessWidget {
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function(PlannerTask task) onEditTask;
   final void Function(PlannerTask task) onAttachTaskToGoal;
+  final void Function(String taskId) onDetachTaskFromGoal;
   final void Function(String taskId) onDeleteTask;
   final VoidCallback onAddTask;
 
@@ -46,6 +48,7 @@ class TodayScreen extends StatelessWidget {
               final task = todayTasks[index];
               final goal = _findGoalById(task.goalId);
               final isStandaloneTask = task.goalId == null;
+              final isGoalLinkedTask = task.goalId != null;
 
               return TaskCard(
                 task: task,
@@ -54,6 +57,8 @@ class TodayScreen extends StatelessWidget {
                 onEdit: () => onEditTask(task),
                 onAttachToGoal:
                 isStandaloneTask ? () => onAttachTaskToGoal(task) : null,
+                onDetachFromGoal:
+                isGoalLinkedTask ? () => onDetachTaskFromGoal(task.id) : null,
                 onDelete: () => onDeleteTask(task.id),
               );
             },
