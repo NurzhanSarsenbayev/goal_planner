@@ -20,12 +20,14 @@ class AllTasksScreen extends StatefulWidget {
     required this.onTaskAttachedToGoal,
     required this.onTaskDetachedFromGoal,
     required this.onDeleteTask,
+    required this.onScheduleTaskForToday,
   });
 
   final List<Goal> goals;
   final List<Milestone> milestones;
   final List<PlannerTask> tasks;
   final void Function(String taskId) onToggleTaskCompleted;
+  final void Function(String taskId) onScheduleTaskForToday;
 
   final void Function({
   required String taskId,
@@ -60,6 +62,7 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
       onTaskAttachedToGoal: widget.onTaskAttachedToGoal,
       onTaskDetachedFromGoal: widget.onTaskDetachedFromGoal,
       onDeleteTask: widget.onDeleteTask,
+      onScheduleTaskForToday: widget.onScheduleTaskForToday,
     );
 
     _controller.addListener(_onControllerChanged);
@@ -172,6 +175,11 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
               _controller.detachTaskFromGoal(task.id);
             }
                 : null,
+            onScheduleForToday: task.isScheduledForToday
+                ? null
+                : () {
+              _controller.scheduleTaskForToday(task.id);
+            },
             onDelete: () {
               _controller.deleteTask(task.id);
             },
