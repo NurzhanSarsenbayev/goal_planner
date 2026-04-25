@@ -237,6 +237,35 @@ class PlannerStore extends ChangeNotifier {
     _persist(_repository.saveTask(task));
   }
 
+  void attachTaskToGoal({
+    required String taskId,
+    required String goalId,
+    String? milestoneId,
+  }) {
+    PlannerTask? updatedTask;
+
+    _tasks = _tasks.map((task) {
+      if (task.id != taskId) {
+        return task;
+      }
+
+      updatedTask = milestoneId == null
+          ? task.assignToGoal(goalId)
+          : task.assignToGoalMilestone(
+        goalId: goalId,
+        milestoneId: milestoneId,
+      );
+
+      return updatedTask!;
+    }).toList();
+
+    notifyListeners();
+
+    if (updatedTask != null) {
+      _persist(_repository.saveTask(updatedTask!));
+    }
+  }
+
   void toggleTaskCompleted(String taskId) {
     PlannerTask? updatedTask;
 

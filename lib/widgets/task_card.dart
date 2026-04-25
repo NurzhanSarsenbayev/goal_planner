@@ -11,6 +11,7 @@ class TaskCard extends StatelessWidget {
     required this.onToggleCompleted,
     required this.onEdit,
     required this.onDelete,
+    this.onAttachToGoal,
     this.onMoveToMilestone,
     this.onMoveToDirectGoal,
     this.onScheduleForToday,
@@ -21,6 +22,7 @@ class TaskCard extends StatelessWidget {
   final VoidCallback onToggleCompleted;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+  final VoidCallback? onAttachToGoal;
   final VoidCallback? onMoveToMilestone;
   final VoidCallback? onMoveToDirectGoal;
   final VoidCallback? onScheduleForToday;
@@ -30,6 +32,7 @@ class TaskCard extends StatelessWidget {
     final shouldShowScheduleButton =
         onScheduleForToday != null && !task.isScheduledForToday;
 
+    final shouldShowAttachToGoal = onAttachToGoal != null;
     final shouldShowMoveToMilestone = onMoveToMilestone != null;
     final shouldShowMoveToDirectGoal = onMoveToDirectGoal != null;
 
@@ -86,6 +89,8 @@ class TaskCard extends StatelessWidget {
             switch (action) {
               case _TaskAction.edit:
                 onEdit();
+              case _TaskAction.attachToGoal:
+                onAttachToGoal?.call();
               case _TaskAction.moveToMilestone:
                 onMoveToMilestone?.call();
               case _TaskAction.moveToDirectGoal:
@@ -100,6 +105,11 @@ class TaskCard extends StatelessWidget {
                 value: _TaskAction.edit,
                 child: Text('Edit'),
               ),
+              if (shouldShowAttachToGoal)
+                const PopupMenuItem(
+                  value: _TaskAction.attachToGoal,
+                  child: Text('Attach to goal'),
+                ),
               if (shouldShowMoveToMilestone)
                 const PopupMenuItem(
                   value: _TaskAction.moveToMilestone,
@@ -124,6 +134,7 @@ class TaskCard extends StatelessWidget {
 
 enum _TaskAction {
   edit,
+  attachToGoal,
   moveToMilestone,
   moveToDirectGoal,
   delete,

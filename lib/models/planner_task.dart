@@ -65,6 +65,37 @@ class PlannerTask {
     );
   }
 
+  PlannerTask assignToGoal(String goalId) {
+    return PlannerTask(
+      id: id,
+      title: title,
+      description: description,
+      createdAt: createdAt,
+      goalId: goalId,
+      milestoneId: null,
+      scheduledDate: scheduledDate,
+      isCompleted: isCompleted,
+      completedAt: completedAt,
+    );
+  }
+
+  PlannerTask assignToGoalMilestone({
+    required String goalId,
+    required String milestoneId,
+  }) {
+    return PlannerTask(
+      id: id,
+      title: title,
+      description: description,
+      createdAt: createdAt,
+      goalId: goalId,
+      milestoneId: milestoneId,
+      scheduledDate: scheduledDate,
+      isCompleted: isCompleted,
+      completedAt: completedAt,
+    );
+  }
+
   PlannerTask assignToMilestone(String milestoneId) {
     return PlannerTask(
       id: id,
