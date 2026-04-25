@@ -1,15 +1,17 @@
 import 'package:flutter/foundation.dart';
 
 import '../data/repositories/planner_repository.dart';
-import '../data/sample_data.dart';
+import 'planner_seed_service.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
 
 class PlannerStore extends ChangeNotifier {
-  PlannerStore(this._repository);
+  PlannerStore(this._repository)
+      : _seedService = PlannerSeedService(_repository);
 
   final PlannerRepository _repository;
+  final PlannerSeedService _seedService;
 
   List<Goal> _goals = [];
   List<Milestone> _milestones = [];
@@ -25,7 +27,7 @@ class PlannerStore extends ChangeNotifier {
     await _loadFromDatabase();
 
     if (_goals.isEmpty && _milestones.isEmpty && _tasks.isEmpty) {
-      await _seedInitialData();
+      await _seedService.seedInitialData();
       await _loadFromDatabase();
     }
 
@@ -37,20 +39,6 @@ class PlannerStore extends ChangeNotifier {
     _goals = await _repository.loadGoals();
     _milestones = await _repository.loadMilestones();
     _tasks = await _repository.loadTasks();
-  }
-
-  Future<void> _seedInitialData() async {
-    for (final goal in sampleGoals) {
-      await _repository.saveGoal(goal);
-    }
-
-    for (final milestone in sampleMilestones) {
-      await _repository.saveMilestone(milestone);
-    }
-
-    for (final task in sampleTasks) {
-      await _repository.saveTask(task);
-    }
   }
 
   void addGoal({
