@@ -12,6 +12,7 @@ class GoalsScreen extends StatelessWidget {
     required this.tasks,
     required this.onGoalSelected,
     required this.onEditGoal,
+    required this.onDeleteGoal,
     required this.onAddGoal,
   });
 
@@ -19,6 +20,7 @@ class GoalsScreen extends StatelessWidget {
   final List<PlannerTask> tasks;
   final void Function(Goal goal) onGoalSelected;
   final void Function(Goal goal) onEditGoal;
+  final void Function(Goal goal) onDeleteGoal;
   final VoidCallback onAddGoal;
 
   @override
@@ -64,6 +66,7 @@ class GoalsScreen extends StatelessWidget {
               completedTasks: completedTasks,
               onTap: () => onGoalSelected(goal),
               onEdit: () => onEditGoal(goal),
+              onDelete: () => onDeleteGoal(goal),
             );
           },
         ),

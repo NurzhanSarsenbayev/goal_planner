@@ -10,6 +10,7 @@ class GoalCard extends StatelessWidget {
     required this.completedTasks,
     required this.onTap,
     required this.onEdit,
+    required this.onDelete,
   });
 
   final Goal goal;
@@ -17,6 +18,7 @@ class GoalCard extends StatelessWidget {
   final int completedTasks;
   final VoidCallback onTap;
   final VoidCallback onEdit;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,8 @@ class GoalCard extends StatelessWidget {
             switch (action) {
               case _GoalAction.edit:
                 onEdit();
+              case _GoalAction.delete:
+                onDelete();
             }
           },
           itemBuilder: (context) {
@@ -56,6 +60,10 @@ class GoalCard extends StatelessWidget {
               PopupMenuItem(
                 value: _GoalAction.edit,
                 child: Text('Edit'),
+              ),
+              PopupMenuItem(
+                value: _GoalAction.delete,
+                child: Text('Delete'),
               ),
             ];
           },
@@ -67,4 +75,5 @@ class GoalCard extends StatelessWidget {
 
 enum _GoalAction {
   edit,
+  delete,
 }

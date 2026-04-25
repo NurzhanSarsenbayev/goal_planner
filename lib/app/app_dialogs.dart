@@ -7,6 +7,7 @@ import '../widgets/goal_dialog.dart';
 import '../widgets/task_dialog.dart';
 import '../widgets/task_placement_dialog.dart';
 import '../widgets/today_task_dialog.dart';
+import '../widgets/delete_goal_dialog.dart';
 
 Future<GoalDraft?> showAddGoalDialog(BuildContext context) {
   return showDialog<GoalDraft>(
@@ -81,4 +82,24 @@ Future<TaskPlacementDraft?> showTaskPlacementDialog(
       );
     },
   );
+}
+
+Future<bool> showDeleteGoalDialog(
+    BuildContext context, {
+      required Goal goal,
+      required int milestoneCount,
+      required int taskCount,
+    }) async {
+  final result = await showDialog<bool>(
+    context: context,
+    builder: (context) {
+      return DeleteGoalDialog(
+        goalTitle: goal.title,
+        milestoneCount: milestoneCount,
+        taskCount: taskCount,
+      );
+    },
+  );
+
+  return result ?? false;
 }

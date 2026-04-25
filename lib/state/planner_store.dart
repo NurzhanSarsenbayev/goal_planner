@@ -75,6 +75,20 @@ class PlannerStore extends ChangeNotifier {
     );
   }
 
+  void deleteGoalWithRelatedData(String goalId) {
+    _goals = _goals.where((goal) => goal.id != goalId).toList();
+
+    _milestones = _milestones
+        .where((milestone) => milestone.goalId != goalId)
+        .toList();
+
+    _tasks = _tasks.where((task) => task.goalId != goalId).toList();
+
+    notifyListeners();
+
+    _persist(_repository.deleteGoalWithRelatedData(goalId));
+  }
+
   void addMilestone(Milestone milestone) {
     _milestones = [..._milestones, milestone];
     notifyListeners();

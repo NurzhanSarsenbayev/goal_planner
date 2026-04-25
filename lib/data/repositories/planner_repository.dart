@@ -41,6 +41,22 @@ class PlannerRepository {
         );
   }
 
+  Future<void> deleteGoalWithRelatedData(String goalId) async {
+    await _database.transaction(() async {
+      await (_database.delete(_database.tasks)
+        ..where((table) => table.goalId.equals(goalId)))
+          .go();
+
+      await (_database.delete(_database.milestones)
+        ..where((table) => table.goalId.equals(goalId)))
+          .go();
+
+      await (_database.delete(_database.goals)
+        ..where((table) => table.id.equals(goalId)))
+          .go();
+    });
+  }
+
   Future<void> saveMilestone(domain.Milestone milestone) async {
     await _database.into(_database.milestones).insertOnConflictUpdate(
           local.MilestonesCompanion.insert(

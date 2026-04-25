@@ -15,6 +15,7 @@ import '../screens/today_screen.dart';
 import '../state/planner_store.dart';
 import 'app_dialogs.dart';
 
+
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
 
@@ -95,6 +96,29 @@ class _AppShellState extends State<AppShell> {
       title: result.title,
       description: result.description,
     );
+  }
+
+  Future<void> _showDeleteGoalDialog(Goal goal) async {
+    final milestoneCount = _store.milestones
+        .where((milestone) => milestone.goalId == goal.id)
+        .length;
+
+    final taskCount = _store.tasks
+        .where((task) => task.goalId == goal.id)
+        .length;
+
+    final shouldDelete = await showDeleteGoalDialog(
+      context,
+      goal: goal,
+      milestoneCount: milestoneCount,
+      taskCount: taskCount,
+    );
+
+    if (!shouldDelete) {
+      return;
+    }
+
+    _store.deleteGoalWithRelatedData(goal.id);
   }
 
   Future<void> _showAddTodayTaskDialog() async {
@@ -215,6 +239,7 @@ class _AppShellState extends State<AppShell> {
         tasks: _store.tasks,
         onGoalSelected: _openGoalDetails,
         onEditGoal: _showEditGoalDialog,
+        onDeleteGoal: _showDeleteGoalDialog,
         onAddGoal: _showAddGoalDialog,
       ),
       const CalendarScreen(),
