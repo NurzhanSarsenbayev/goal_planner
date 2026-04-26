@@ -226,6 +226,16 @@ class PlannerStore extends ChangeNotifier {
     );
   }
 
+  void scheduleTaskForDate({
+    required String taskId,
+    required DateTime scheduledDate,
+  }) {
+    _updateTaskById(
+      taskId,
+          (task) => task.scheduleForDate(scheduledDate),
+    );
+  }
+
   void removeTaskFromToday(String taskId) {
     _updateTaskById(
       taskId,
