@@ -4,7 +4,7 @@ import '../app/app_dialogs.dart';
 import '../models/goal.dart';
 import '../models/planner_task.dart';
 import '../shared/planner_dates.dart';
-import '../widgets/task_card.dart';
+import '../widgets/tasks/task_card.dart';
 import '../widgets/calendar/calendar_month_grid.dart';
 
 class CalendarScreen extends StatefulWidget {

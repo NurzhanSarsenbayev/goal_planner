@@ -4,13 +4,13 @@ import '../controllers/goal_details_controller.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
-import '../widgets/delete_milestone_dialog.dart';
-import '../widgets/direct_goal_tasks_section.dart';
-import '../widgets/goal_header.dart';
-import '../widgets/milestone_dialog.dart';
-import '../widgets/milestones_section.dart';
-import '../widgets/move_task_to_milestone_dialog.dart';
-import '../widgets/task_dialog.dart';
+import '../widgets/milestones/delete_milestone_dialog.dart';
+import '../widgets/tasks/direct_goal_tasks_section.dart';
+import '../widgets/goals/goal_header.dart';
+import '../widgets/milestones/milestone_dialog.dart';
+import '../widgets/milestones/milestones_section.dart';
+import '../widgets/milestones/move_task_to_milestone_dialog.dart';
+import '../widgets/tasks/task_dialog.dart';
 import '../app/app_dialogs.dart';
 
 class GoalDetailsScreen extends StatefulWidget {

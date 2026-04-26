@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../app/app_dialogs.dart';
 import '../models/goal.dart';
 import '../models/planner_task.dart';
-import '../widgets/placeholder_screen.dart';
-import '../widgets/task_card.dart';
+import '../widgets/common/placeholder_screen.dart';
+import '../widgets/tasks/task_card.dart';
 
 class TodayScreen extends StatelessWidget {
   const TodayScreen({

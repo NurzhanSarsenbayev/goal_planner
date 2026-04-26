@@ -4,10 +4,10 @@ import '../controllers/all_tasks_controller.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
-import '../widgets/placeholder_screen.dart';
-import '../widgets/task_card.dart';
-import '../widgets/task_dialog.dart';
-import '../widgets/task_placement_dialog.dart';
+import '../widgets/common/placeholder_screen.dart';
+import '../widgets/tasks/task_card.dart';
+import '../widgets/tasks/task_dialog.dart';
+import '../widgets/tasks/task_placement_dialog.dart';
 import '../app/app_dialogs.dart';
 
 class AllTasksScreen extends StatefulWidget {

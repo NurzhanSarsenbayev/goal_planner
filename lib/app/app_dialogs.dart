@@ -4,11 +4,11 @@ import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
 import '../shared/planner_dates.dart';
-import '../widgets/goal_dialog.dart';
-import '../widgets/task_dialog.dart';
-import '../widgets/task_placement_dialog.dart';
-import '../widgets/add_task_with_placement_dialog.dart';
-import '../widgets/delete_goal_dialog.dart';
+import '../widgets/goals/goal_dialog.dart';
+import '../widgets/tasks/task_dialog.dart';
+import '../widgets/tasks/task_placement_dialog.dart';
+import '../widgets/tasks/add_task_with_placement_dialog.dart';
+import '../widgets/goals/delete_goal_dialog.dart';
 
 Future<GoalDraft?> showAddGoalDialog(BuildContext context) {
   return showDialog<GoalDraft>(
