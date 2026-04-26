@@ -18,6 +18,7 @@ class MilestoneCard extends StatelessWidget {
     required this.onEditTask,
     required this.onMoveTaskToDirectGoal,
     required this.onScheduleTaskForToday,
+    required this.onScheduleTaskForDate,
     required this.onDeleteTask,
   });
 
@@ -31,6 +32,7 @@ class MilestoneCard extends StatelessWidget {
   final void Function(PlannerTask task) onEditTask;
   final void Function(String taskId) onMoveTaskToDirectGoal;
   final void Function(String taskId) onScheduleTaskForToday;
+  final void Function(PlannerTask task) onScheduleTaskForDate;
   final void Function(String taskId) onDeleteTask;
 
   @override
@@ -100,6 +102,9 @@ class MilestoneCard extends StatelessWidget {
                   onEdit: () => onEditTask(task),
                   onMoveToDirectGoal: () => onMoveTaskToDirectGoal(task.id),
                   onScheduleForToday: () => onScheduleTaskForToday(task.id),
+                  onScheduleDate: () {
+                    onScheduleTaskForDate(task);
+                  },
                   onDelete: () => onDeleteTask(task.id),
                 ),
               ),

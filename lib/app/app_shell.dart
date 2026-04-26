@@ -216,6 +216,7 @@ class _AppShellState extends State<AppShell> {
             _store.deleteMilestoneAndMoveTasksToDirect,
             onMilestoneDeletedWithTasks: _store.deleteMilestoneWithTasks,
             onScheduleTaskForToday: _store.scheduleTaskForToday,
+            onScheduleTaskForDate: _store.scheduleTaskForDate,
           );
         },
       ),

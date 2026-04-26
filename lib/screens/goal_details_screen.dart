@@ -11,6 +11,7 @@ import '../widgets/milestone_dialog.dart';
 import '../widgets/milestones_section.dart';
 import '../widgets/move_task_to_milestone_dialog.dart';
 import '../widgets/task_dialog.dart';
+import '../app/app_dialogs.dart';
 
 class GoalDetailsScreen extends StatefulWidget {
   const GoalDetailsScreen({
@@ -29,6 +30,7 @@ class GoalDetailsScreen extends StatefulWidget {
     required this.onMilestoneDeletedAndTasksMovedToDirect,
     required this.onMilestoneDeletedWithTasks,
     required this.onScheduleTaskForToday,
+    required this.onScheduleTaskForDate,
   });
 
   final Goal goal;
@@ -62,6 +64,10 @@ class GoalDetailsScreen extends StatefulWidget {
   final void Function(String milestoneId) onMilestoneDeletedAndTasksMovedToDirect;
   final void Function(String milestoneId) onMilestoneDeletedWithTasks;
   final void Function(String taskId) onScheduleTaskForToday;
+  final void Function({
+  required String taskId,
+  required DateTime scheduledDate,
+  }) onScheduleTaskForDate;
 
   @override
   State<GoalDetailsScreen> createState() => _GoalDetailsScreenState();
@@ -90,6 +96,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       widget.onMilestoneDeletedAndTasksMovedToDirect,
       onMilestoneDeletedWithTasks: widget.onMilestoneDeletedWithTasks,
       onScheduleTaskForToday: widget.onScheduleTaskForToday,
+      onScheduleTaskForDate: widget.onScheduleTaskForDate,
     );
 
     _controller.addListener(_onControllerChanged);
@@ -166,6 +173,22 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
     _controller.assignTaskToMilestone(
       taskId: task.id,
       milestoneId: result.id,
+    );
+  }
+
+  Future<void> _showScheduleTaskDatePicker(PlannerTask task) async {
+    final selectedDate = await showScheduleTaskDatePicker(
+      context,
+      initialDate: task.scheduledDate,
+    );
+
+    if (selectedDate == null) {
+      return;
+    }
+
+    _controller.scheduleTaskForDate(
+      taskId: task.id,
+      scheduledDate: selectedDate,
     );
   }
 
@@ -265,6 +288,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             onEditTask: _showEditTaskDialog,
             onMoveTaskToDirectGoal: _controller.moveTaskToDirectGoal,
             onScheduleTaskForToday: _controller.scheduleTaskForToday,
+            onScheduleTaskForDate: _showScheduleTaskDatePicker,
             onDeleteTask: _controller.deleteTask,
           ),
           const SizedBox(height: 16),
@@ -276,6 +300,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             onEditTask: _showEditTaskDialog,
             onMoveTaskToMilestone: _showMoveTaskToMilestoneDialog,
             onScheduleTaskForToday: _controller.scheduleTaskForToday,
+            onScheduleTaskForDate: _showScheduleTaskDatePicker,
             onDeleteTask: _controller.deleteTask,
           ),
           const SizedBox(height: 80),

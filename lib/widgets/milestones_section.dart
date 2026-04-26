@@ -21,6 +21,7 @@ class MilestonesSection extends StatelessWidget {
     required this.onEditTask,
     required this.onMoveTaskToDirectGoal,
     required this.onScheduleTaskForToday,
+    required this.onScheduleTaskForDate,
     required this.onDeleteTask,
   });
 
@@ -35,6 +36,7 @@ class MilestonesSection extends StatelessWidget {
   final void Function(PlannerTask task) onEditTask;
   final void Function(String taskId) onMoveTaskToDirectGoal;
   final void Function(String taskId) onScheduleTaskForToday;
+  final void Function(PlannerTask task) onScheduleTaskForDate;
   final void Function(String taskId) onDeleteTask;
 
   @override
@@ -73,6 +75,7 @@ class MilestonesSection extends StatelessWidget {
                 onEditTask: onEditTask,
                 onMoveTaskToDirectGoal: onMoveTaskToDirectGoal,
                 onScheduleTaskForToday: onScheduleTaskForToday,
+                onScheduleTaskForDate: onScheduleTaskForDate,
                 onDeleteTask: onDeleteTask,
               ),
             );

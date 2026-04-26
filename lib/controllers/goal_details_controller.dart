@@ -20,6 +20,7 @@ class GoalDetailsController extends ChangeNotifier {
     required this.onMilestoneDeletedAndTasksMovedToDirect,
     required this.onMilestoneDeletedWithTasks,
     required this.onScheduleTaskForToday,
+    required this.onScheduleTaskForDate,
   })  : _milestones = List.of(milestones),
         _tasks = List.of(tasks);
 
@@ -53,6 +54,10 @@ class GoalDetailsController extends ChangeNotifier {
   final void Function(String milestoneId) onMilestoneDeletedAndTasksMovedToDirect;
   final void Function(String milestoneId) onMilestoneDeletedWithTasks;
   final void Function(String taskId) onScheduleTaskForToday;
+  final void Function({
+  required String taskId,
+  required DateTime scheduledDate,
+  }) onScheduleTaskForDate;
 
   List<Milestone> _milestones;
   List<PlannerTask> _tasks;
@@ -131,6 +136,21 @@ class GoalDetailsController extends ChangeNotifier {
     );
 
     onScheduleTaskForToday(taskId);
+  }
+
+  void scheduleTaskForDate({
+    required String taskId,
+    required DateTime scheduledDate,
+  }) {
+    _updateTaskLocally(
+      taskId,
+          (task) => task.scheduleForDate(scheduledDate),
+    );
+
+    onScheduleTaskForDate(
+      taskId: taskId,
+      scheduledDate: scheduledDate,
+    );
   }
 
   void createTask({
