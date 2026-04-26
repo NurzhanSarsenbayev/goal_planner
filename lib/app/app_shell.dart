@@ -231,7 +231,15 @@ class _AppShellState extends State<AppShell> {
         onDeleteGoal: _showDeleteGoalDialog,
         onAddGoal: _showAddGoalDialog,
       ),
-      const CalendarScreen(),
+      CalendarScreen(
+        goals: _store.goals,
+        tasks: _store.tasks,
+        onToggleTaskCompleted: _store.toggleTaskCompleted,
+        onEditTask: _showEditTaskDialog,
+        onScheduleTaskForDate: _store.scheduleTaskForDate,
+        onRemoveTaskFromSchedule: _store.removeTaskFromToday,
+        onDeleteTask: _store.deleteTask,
+      ),
       MoreScreen(onOpenAllTasks: _openAllTasks),
     ];
 
