@@ -109,7 +109,7 @@ class _AppShellState extends State<AppShell> {
     _store.deleteGoalWithRelatedData(goal.id);
   }
 
-  Future<void> _showAddTodayTaskDialog() async {
+  Future<void> _showAddTaskForTodayDialog() async {
     final result = await showAddTaskWithPlacementDialog(
       context,
       goals: _store.goals,
@@ -241,7 +241,7 @@ class _AppShellState extends State<AppShell> {
         onRemoveTaskFromToday: _store.unscheduleTask,
         onScheduleTaskForDate: _store.scheduleTaskForDate,
         onDeleteTask: _store.deleteTask,
-        onAddTask: _showAddTodayTaskDialog,
+        onAddTask: _showAddTaskForTodayDialog,
       ),
       GoalsScreen(
         goals: _store.goals,
