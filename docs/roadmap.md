@@ -132,7 +132,7 @@ Implemented:
 - Goal Details screen.
 - All Tasks screen.
 - More screen.
-- Calendar placeholder.
+- Calendar placeholder before Phase 5.
 
 ### Refactoring completed
 
@@ -155,25 +155,76 @@ And the main execution loop:
 
 ## Phase 5: Date planning and calendar MVP
 
-Status: not started.
+Status: done.
 
 Goal:
 
 Move from “Today-only planning” to basic scheduled-date planning.
 
-Tasks:
+Implemented:
 
 - Add date picker for task scheduling.
 - Keep quick action: Plan today.
-- Replace some “Plan today” flows with a more general Schedule action.
+- Add Schedule date action for tasks.
 - Show scheduled date in TaskCard.
-- Add simple Calendar screen.
-- Start with list grouped by date, not a complex visual calendar grid.
+- Support scheduling tasks from:
+  - All Tasks;
+  - Goal Details;
+  - Today;
+  - Calendar.
+- Support rescheduling tasks to another date.
 - Support removing scheduled date while keeping task visible in All Tasks.
+- Add Calendar screen.
+- Add visual month grid.
+- Highlight selected day.
+- Highlight today.
+- Mark days that have scheduled tasks.
+- Show tasks for selected day.
+- Allow task actions from Calendar:
+  - complete / uncomplete;
+  - edit;
+  - reschedule;
+  - remove scheduled date;
+  - delete.
+- Add task creation from Calendar for selected date.
+- Support task placement when creating from Calendar:
+  - standalone task;
+  - direct goal task;
+  - milestone task.
+- Persist scheduled date after restart.
 
-Expected result:
+Refactoring completed during this phase:
+
+- Extract shared planner date helpers.
+- Extract calendar month grid widget.
+- Show only selected day tasks in Calendar.
+- Rename task creation placement dialog.
+- Organize widgets by feature:
+  - common;
+  - calendar;
+  - goals;
+  - milestones;
+  - tasks.
+
+Current result:
 
 A user can schedule tasks not only for today, but for future dates.
+
+A user can manually test:
+
+> create goal -> add milestone/direct task -> schedule task for future date -> open Calendar -> select date -> see task -> complete task -> see goal progress
+
+Calendar is now useful as a basic planning surface, not a full calendar product.
+
+Not implemented yet:
+
+- time-of-day scheduling;
+- recurring tasks;
+- drag-and-drop planning;
+- week/day calendar views;
+- year calendar view;
+- meetings / birthdays as separate event types;
+- reminders / notifications.
 
 ## Phase 6: Reports MVP
 
@@ -294,14 +345,15 @@ Main differentiator:
 
 ## Current limitations
 
-- Calendar screen is still a placeholder.
-- No date picker yet.
-- Tasks can only be planned quickly for Today.
+- No time-of-day scheduling yet.
 - No recurring tasks.
 - No habits.
 - No reports.
 - No search/filtering in All Tasks.
 - No drag-and-drop planning.
+- No week/day/year calendar views.
+- No separate meeting / birthday event model.
+- No reminders / notifications.
 - No cloud sync/backend.
 - No auth.
 - No design polish.
