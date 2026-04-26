@@ -103,3 +103,18 @@ Future<bool> showDeleteGoalDialog(
 
   return result ?? false;
 }
+
+Future<DateTime?> showScheduleTaskDatePicker(
+    BuildContext context, {
+      required DateTime? initialDate,
+    }) {
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+
+  return showDatePicker(
+    context: context,
+    initialDate: initialDate ?? today,
+    firstDate: DateTime(today.year - 1),
+    lastDate: DateTime(today.year + 5),
+  );
+}

@@ -8,6 +8,7 @@ import '../widgets/placeholder_screen.dart';
 import '../widgets/task_card.dart';
 import '../widgets/task_dialog.dart';
 import '../widgets/task_placement_dialog.dart';
+import '../app/app_dialogs.dart';
 
 class AllTasksScreen extends StatefulWidget {
   const AllTasksScreen({
@@ -21,6 +22,7 @@ class AllTasksScreen extends StatefulWidget {
     required this.onTaskDetachedFromGoal,
     required this.onDeleteTask,
     required this.onScheduleTaskForToday,
+    required this.onScheduleTaskForDate,
   });
 
   final List<Goal> goals;
@@ -28,6 +30,10 @@ class AllTasksScreen extends StatefulWidget {
   final List<PlannerTask> tasks;
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function(String taskId) onScheduleTaskForToday;
+  final void Function({
+  required String taskId,
+  required DateTime scheduledDate,
+  }) onScheduleTaskForDate;
 
   final void Function({
   required String taskId,
@@ -63,6 +69,7 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
       onTaskDetachedFromGoal: widget.onTaskDetachedFromGoal,
       onDeleteTask: widget.onDeleteTask,
       onScheduleTaskForToday: widget.onScheduleTaskForToday,
+      onScheduleTaskForDate: widget.onScheduleTaskForDate,
     );
 
     _controller.addListener(_onControllerChanged);
@@ -125,6 +132,22 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
     );
   }
 
+  Future<void> _showScheduleTaskDatePicker(PlannerTask task) async {
+    final selectedDate = await showScheduleTaskDatePicker(
+      context,
+      initialDate: task.scheduledDate,
+    );
+
+    if (selectedDate == null) {
+      return;
+    }
+
+    _controller.scheduleTaskForDate(
+      taskId: task.id,
+      scheduledDate: selectedDate,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final tasks = _controller.tasks;
@@ -179,6 +202,9 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
                 ? null
                 : () {
               _controller.scheduleTaskForToday(task.id);
+            },
+            onScheduleDate: () {
+              _showScheduleTaskDatePicker(task);
             },
             onDelete: () {
               _controller.deleteTask(task.id);

@@ -16,6 +16,7 @@ class TaskCard extends StatelessWidget {
     this.onMoveToMilestone,
     this.onMoveToDirectGoal,
     this.onScheduleForToday,
+    this.onScheduleDate,
     this.onRemoveFromToday,
   });
 
@@ -29,12 +30,14 @@ class TaskCard extends StatelessWidget {
   final VoidCallback? onMoveToMilestone;
   final VoidCallback? onMoveToDirectGoal;
   final VoidCallback? onScheduleForToday;
+  final VoidCallback? onScheduleDate;
   final VoidCallback? onRemoveFromToday;
 
   @override
   Widget build(BuildContext context) {
     final shouldShowScheduleButton =
         onScheduleForToday != null && !task.isScheduledForToday;
+    final shouldShowScheduleDate = onScheduleDate != null;
     final shouldShowRemoveFromToday = onRemoveFromToday != null;
 
     final shouldShowAttachToGoal = onAttachToGoal != null;
@@ -68,11 +71,11 @@ class TaskCard extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
-            if (task.isScheduledForToday)
+            if (task.scheduledDate != null)
               Padding(
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(
-                  'Planned for today',
+                  _scheduledDateLabel(task.scheduledDate!),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
@@ -105,6 +108,8 @@ class TaskCard extends StatelessWidget {
                 onMoveToDirectGoal?.call();
               case _TaskAction.removeFromToday:
                 onRemoveFromToday?.call();
+              case _TaskAction.scheduleDate:
+                onScheduleDate?.call();
               case _TaskAction.delete:
                 onDelete();
             }
@@ -144,16 +149,37 @@ class TaskCard extends StatelessWidget {
                 value: _TaskAction.delete,
                 child: Text('Delete'),
               ),
+              if (shouldShowScheduleDate)
+                const PopupMenuItem(
+                  value: _TaskAction.scheduleDate,
+                  child: Text('Schedule date'),
+                ),
             ];
           },
         ),
       ),
     );
   }
+  String _scheduledDateLabel(DateTime date) {
+    if (task.isScheduledForToday) {
+      return 'Scheduled: Today';
+    }
+
+    return 'Scheduled: ${_formatDate(date)}';
+  }
+
+  String _formatDate(DateTime date) {
+    final day = date.day.toString().padLeft(2, '0');
+    final month = date.month.toString().padLeft(2, '0');
+    final year = date.year.toString();
+
+    return '$day.$month.$year';
+  }
 }
 
 enum _TaskAction {
   edit,
+  scheduleDate,
   removeFromToday,
   attachToGoal,
   detachFromGoal,

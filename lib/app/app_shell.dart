@@ -189,6 +189,7 @@ class _AppShellState extends State<AppShell> {
             onTaskDetachedFromGoal: _store.detachTaskFromGoal,
             onDeleteTask: _store.deleteTask,
             onScheduleTaskForToday: _store.scheduleTaskForToday,
+            onScheduleTaskForDate: _store.scheduleTaskForDate,
           );
         },
       ),
