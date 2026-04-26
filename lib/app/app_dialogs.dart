@@ -7,7 +7,7 @@ import '../shared/planner_dates.dart';
 import '../widgets/goal_dialog.dart';
 import '../widgets/task_dialog.dart';
 import '../widgets/task_placement_dialog.dart';
-import '../widgets/today_task_dialog.dart';
+import '../widgets/add_task_with_placement_dialog.dart';
 import '../widgets/delete_goal_dialog.dart';
 
 Future<GoalDraft?> showAddGoalDialog(BuildContext context) {
@@ -53,15 +53,15 @@ Future<TaskDraft?> showEditTaskDialog(
   );
 }
 
-Future<TodayTaskDraft?> showAddTodayTaskDialog(
+Future<AddTaskWithPlacementDraft?> showAddTaskWithPlacementDialog(
   BuildContext context, {
   required List<Goal> goals,
   required List<Milestone> milestones,
 }) {
-  return showDialog<TodayTaskDraft>(
+  return showDialog<AddTaskWithPlacementDraft>(
     context: context,
     builder: (context) {
-      return TodayTaskDialog(goals: goals, milestones: milestones);
+      return AddTaskWithPlacementDialog(goals: goals, milestones: milestones);
     },
   );
 }

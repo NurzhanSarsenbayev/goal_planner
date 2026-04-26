@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 
-class TodayTaskDialog extends StatefulWidget {
-  const TodayTaskDialog({
+class AddTaskWithPlacementDialog extends StatefulWidget {
+  const AddTaskWithPlacementDialog({
     super.key,
     required this.goals,
     required this.milestones,
@@ -14,10 +14,12 @@ class TodayTaskDialog extends StatefulWidget {
   final List<Milestone> milestones;
 
   @override
-  State<TodayTaskDialog> createState() => _TodayTaskDialogState();
+  State<AddTaskWithPlacementDialog> createState() =>
+      _AddTaskWithPlacementDialogState();
 }
 
-class _TodayTaskDialogState extends State<TodayTaskDialog> {
+class _AddTaskWithPlacementDialogState
+    extends State<AddTaskWithPlacementDialog> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
 
@@ -50,7 +52,7 @@ class _TodayTaskDialogState extends State<TodayTaskDialog> {
     }
 
     Navigator.of(context).pop(
-      TodayTaskDraft(
+      AddTaskWithPlacementDraft(
         title: title,
         description: description,
         goalId: _selectedGoalId,
@@ -152,8 +154,8 @@ class _TodayTaskDialogState extends State<TodayTaskDialog> {
   }
 }
 
-class TodayTaskDraft {
-  const TodayTaskDraft({
+class AddTaskWithPlacementDraft {
+  const AddTaskWithPlacementDraft({
     required this.title,
     required this.description,
     required this.goalId,

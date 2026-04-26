@@ -110,7 +110,7 @@ class _AppShellState extends State<AppShell> {
   }
 
   Future<void> _showAddTodayTaskDialog() async {
-    final result = await showAddTodayTaskDialog(
+    final result = await showAddTaskWithPlacementDialog(
       context,
       goals: _store.goals,
       milestones: _store.milestones,
@@ -129,7 +129,7 @@ class _AppShellState extends State<AppShell> {
   }
 
   Future<void> _showAddTaskForDateDialog(DateTime scheduledDate) async {
-    final result = await showAddTodayTaskDialog(
+    final result = await showAddTaskWithPlacementDialog(
       context,
       goals: _store.goals,
       milestones: _store.milestones,
