@@ -145,6 +145,22 @@ class PlannerStore extends ChangeNotifier {
     String? goalId,
     String? milestoneId,
   }) {
+    addTaskForDate(
+      title: title,
+      description: description,
+      scheduledDate: todayDate(),
+      goalId: goalId,
+      milestoneId: milestoneId,
+    );
+  }
+
+  void addTaskForDate({
+    required String title,
+    required String description,
+    required DateTime scheduledDate,
+    String? goalId,
+    String? milestoneId,
+  }) {
     final now = DateTime.now();
 
     final task = PlannerTask(
@@ -153,7 +169,7 @@ class PlannerStore extends ChangeNotifier {
       description: description,
       goalId: goalId,
       milestoneId: milestoneId,
-      scheduledDate: todayDate(),
+      scheduledDate: dateOnly(scheduledDate),
       createdAt: now,
     );
 

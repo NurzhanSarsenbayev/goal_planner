@@ -128,6 +128,26 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
+  Future<void> _showAddTaskForDateDialog(DateTime scheduledDate) async {
+    final result = await showAddTodayTaskDialog(
+      context,
+      goals: _store.goals,
+      milestones: _store.milestones,
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    _store.addTaskForDate(
+      title: result.title,
+      description: result.description,
+      scheduledDate: scheduledDate,
+      goalId: result.goalId,
+      milestoneId: result.milestoneId,
+    );
+  }
+
   Future<void> _showAttachTaskToGoalDialog(PlannerTask task) async {
     final result = await showTaskPlacementDialog(
       context,
@@ -239,6 +259,7 @@ class _AppShellState extends State<AppShell> {
         onScheduleTaskForDate: _store.scheduleTaskForDate,
         onRemoveTaskFromSchedule: _store.unscheduleTask,
         onDeleteTask: _store.deleteTask,
+        onAddTaskForDate: _showAddTaskForDateDialog,
       ),
       MoreScreen(onOpenAllTasks: _openAllTasks),
     ];
