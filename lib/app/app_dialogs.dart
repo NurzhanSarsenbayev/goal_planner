@@ -19,9 +19,9 @@ Future<GoalDraft?> showAddGoalDialog(BuildContext context) {
 }
 
 Future<GoalDraft?> showEditGoalDialog(
-    BuildContext context, {
-      required Goal goal,
-    }) {
+  BuildContext context, {
+  required Goal goal,
+}) {
   return showDialog<GoalDraft>(
     context: context,
     builder: (context) {
@@ -36,9 +36,9 @@ Future<GoalDraft?> showEditGoalDialog(
 }
 
 Future<TaskDraft?> showEditTaskDialog(
-    BuildContext context, {
-      required PlannerTask task,
-    }) {
+  BuildContext context, {
+  required PlannerTask task,
+}) {
   return showDialog<TaskDraft>(
     context: context,
     builder: (context) {
@@ -53,43 +53,37 @@ Future<TaskDraft?> showEditTaskDialog(
 }
 
 Future<TodayTaskDraft?> showAddTodayTaskDialog(
-    BuildContext context, {
-      required List<Goal> goals,
-      required List<Milestone> milestones,
-    }) {
+  BuildContext context, {
+  required List<Goal> goals,
+  required List<Milestone> milestones,
+}) {
   return showDialog<TodayTaskDraft>(
     context: context,
     builder: (context) {
-      return TodayTaskDialog(
-        goals: goals,
-        milestones: milestones,
-      );
+      return TodayTaskDialog(goals: goals, milestones: milestones);
     },
   );
 }
 
 Future<TaskPlacementDraft?> showTaskPlacementDialog(
-    BuildContext context, {
-      required List<Goal> goals,
-      required List<Milestone> milestones,
-    }) {
+  BuildContext context, {
+  required List<Goal> goals,
+  required List<Milestone> milestones,
+}) {
   return showDialog<TaskPlacementDraft>(
     context: context,
     builder: (context) {
-      return TaskPlacementDialog(
-        goals: goals,
-        milestones: milestones,
-      );
+      return TaskPlacementDialog(goals: goals, milestones: milestones);
     },
   );
 }
 
 Future<bool> showDeleteGoalDialog(
-    BuildContext context, {
-      required Goal goal,
-      required int milestoneCount,
-      required int taskCount,
-    }) async {
+  BuildContext context, {
+  required Goal goal,
+  required int milestoneCount,
+  required int taskCount,
+}) async {
   final result = await showDialog<bool>(
     context: context,
     builder: (context) {
@@ -105,9 +99,9 @@ Future<bool> showDeleteGoalDialog(
 }
 
 Future<DateTime?> showScheduleTaskDatePicker(
-    BuildContext context, {
-      required DateTime? initialDate,
-    }) {
+  BuildContext context, {
+  required DateTime? initialDate,
+}) {
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
 

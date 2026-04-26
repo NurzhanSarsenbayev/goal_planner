@@ -92,16 +92,14 @@ class _TodayTaskDialogState extends State<TodayTaskDialog> {
             const SizedBox(height: 12),
             DropdownButtonFormField<String?>(
               initialValue: _selectedGoalId,
-              decoration: const InputDecoration(
-                labelText: 'Goal',
-              ),
+              decoration: const InputDecoration(labelText: 'Goal'),
               items: [
                 const DropdownMenuItem<String?>(
                   value: null,
                   child: Text('No goal'),
                 ),
                 ...widget.goals.map(
-                      (goal) => DropdownMenuItem<String?>(
+                  (goal) => DropdownMenuItem<String?>(
                     value: goal.id,
                     child: Text(goal.title),
                   ),
@@ -117,16 +115,14 @@ class _TodayTaskDialogState extends State<TodayTaskDialog> {
             const SizedBox(height: 12),
             DropdownButtonFormField<String?>(
               initialValue: _selectedMilestoneId,
-              decoration: const InputDecoration(
-                labelText: 'Milestone',
-              ),
+              decoration: const InputDecoration(labelText: 'Milestone'),
               items: [
                 const DropdownMenuItem<String?>(
                   value: null,
                   child: Text('No milestone'),
                 ),
                 ...availableMilestones.map(
-                      (milestone) => DropdownMenuItem<String?>(
+                  (milestone) => DropdownMenuItem<String?>(
                     value: milestone.id,
                     child: Text(milestone.title),
                   ),
@@ -135,10 +131,10 @@ class _TodayTaskDialogState extends State<TodayTaskDialog> {
               onChanged: _selectedGoalId == null
                   ? null
                   : (value) {
-                setState(() {
-                  _selectedMilestoneId = value;
-                });
-              },
+                      setState(() {
+                        _selectedMilestoneId = value;
+                      });
+                    },
             ),
           ],
         ),
@@ -150,10 +146,7 @@ class _TodayTaskDialogState extends State<TodayTaskDialog> {
           },
           child: const Text('Cancel'),
         ),
-        FilledButton(
-          onPressed: _submit,
-          child: const Text('Add'),
-        ),
+        FilledButton(onPressed: _submit, child: const Text('Add')),
       ],
     );
   }

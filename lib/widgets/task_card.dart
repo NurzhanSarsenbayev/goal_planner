@@ -49,9 +49,7 @@ class TaskCard extends StatelessWidget {
       child: ListTile(
         onTap: onToggleCompleted,
         leading: Icon(
-          task.isCompleted
-              ? Icons.check_circle
-              : Icons.radio_button_unchecked,
+          task.isCompleted ? Icons.check_circle : Icons.radio_button_unchecked,
         ),
         title: Text(
           task.title,
@@ -116,10 +114,7 @@ class TaskCard extends StatelessWidget {
           },
           itemBuilder: (context) {
             return [
-              const PopupMenuItem(
-                value: _TaskAction.edit,
-                child: Text('Edit'),
-              ),
+              const PopupMenuItem(value: _TaskAction.edit, child: Text('Edit')),
               if (shouldShowRemoveFromToday)
                 const PopupMenuItem(
                   value: _TaskAction.removeFromToday,
@@ -160,6 +155,7 @@ class TaskCard extends StatelessWidget {
       ),
     );
   }
+
   String _scheduledDateLabel(DateTime date) {
     if (task.isScheduledForToday) {
       return 'Scheduled: Today';

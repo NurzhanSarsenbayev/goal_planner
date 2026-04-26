@@ -1,8 +1,4 @@
-enum GoalStatus {
-  active,
-  completed,
-  archived,
-}
+enum GoalStatus { active, completed, archived }
 
 class Goal {
   const Goal({

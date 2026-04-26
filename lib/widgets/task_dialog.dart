@@ -47,12 +47,9 @@ class _TaskDialogState extends State<TaskDialog> {
       return;
     }
 
-    Navigator.of(context).pop(
-      TaskDraft(
-        title: title,
-        description: description,
-      ),
-    );
+    Navigator.of(
+      context,
+    ).pop(TaskDraft(title: title, description: description));
   }
 
   @override
@@ -91,20 +88,14 @@ class _TaskDialogState extends State<TaskDialog> {
           },
           child: const Text('Cancel'),
         ),
-        FilledButton(
-          onPressed: _submit,
-          child: Text(widget.submitLabel),
-        ),
+        FilledButton(onPressed: _submit, child: Text(widget.submitLabel)),
       ],
     );
   }
 }
 
 class TaskDraft {
-  const TaskDraft({
-    required this.title,
-    required this.description,
-  });
+  const TaskDraft({required this.title, required this.description});
 
   final String title;
   final String description;

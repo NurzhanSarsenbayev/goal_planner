@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum DeleteMilestoneAction {
-  moveTasksToDirect,
-  deleteTasks,
-}
+enum DeleteMilestoneAction { moveTasksToDirect, deleteTasks }
 
 class DeleteMilestoneDialog extends StatelessWidget {
   const DeleteMilestoneDialog({
@@ -34,21 +31,17 @@ class DeleteMilestoneDialog extends StatelessWidget {
         if (taskCount > 0)
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(
-                DeleteMilestoneAction.moveTasksToDirect,
-              );
+              Navigator.of(
+                context,
+              ).pop(DeleteMilestoneAction.moveTasksToDirect);
             },
             child: const Text('Move tasks to Direct tasks'),
           ),
         FilledButton(
           onPressed: () {
-            Navigator.of(context).pop(
-              DeleteMilestoneAction.deleteTasks,
-            );
+            Navigator.of(context).pop(DeleteMilestoneAction.deleteTasks);
           },
-          child: Text(
-            taskCount == 0 ? 'Delete' : 'Delete milestone and tasks',
-          ),
+          child: Text(taskCount == 0 ? 'Delete' : 'Delete milestone and tasks'),
         ),
       ],
     );

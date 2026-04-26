@@ -15,7 +15,6 @@ import '../screens/today_screen.dart';
 import '../state/planner_store.dart';
 import 'app_dialogs.dart';
 
-
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
 
@@ -30,12 +29,7 @@ class _AppShellState extends State<AppShell> {
 
   int _selectedIndex = 0;
 
-  static const List<String> _titles = [
-    'Today',
-    'Goals',
-    'Calendar',
-    'More',
-  ];
+  static const List<String> _titles = ['Today', 'Goals', 'Calendar', 'More'];
 
   @override
   void initState() {
@@ -75,17 +69,11 @@ class _AppShellState extends State<AppShell> {
       return;
     }
 
-    _store.addGoal(
-      title: result.title,
-      description: result.description,
-    );
+    _store.addGoal(title: result.title, description: result.description);
   }
 
   Future<void> _showEditGoalDialog(Goal goal) async {
-    final result = await showEditGoalDialog(
-      context,
-      goal: goal,
-    );
+    final result = await showEditGoalDialog(context, goal: goal);
 
     if (result == null) {
       return;
@@ -159,10 +147,7 @@ class _AppShellState extends State<AppShell> {
   }
 
   Future<void> _showEditTaskDialog(PlannerTask task) async {
-    final result = await showEditTaskDialog(
-      context,
-      task: task,
-    );
+    final result = await showEditTaskDialog(context, task: task);
 
     if (result == null) {
       return;
@@ -213,7 +198,7 @@ class _AppShellState extends State<AppShell> {
             onMilestoneCreated: _store.addMilestone,
             onMilestoneUpdated: _store.updateMilestone,
             onMilestoneDeletedAndTasksMovedToDirect:
-            _store.deleteMilestoneAndMoveTasksToDirect,
+                _store.deleteMilestoneAndMoveTasksToDirect,
             onMilestoneDeletedWithTasks: _store.deleteMilestoneWithTasks,
             onScheduleTaskForToday: _store.scheduleTaskForToday,
             onScheduleTaskForDate: _store.scheduleTaskForDate,
@@ -234,6 +219,7 @@ class _AppShellState extends State<AppShell> {
         onAttachTaskToGoal: _showAttachTaskToGoalDialog,
         onDetachTaskFromGoal: _store.detachTaskFromGoal,
         onRemoveTaskFromToday: _store.removeTaskFromToday,
+        onScheduleTaskForDate: _store.scheduleTaskForDate,
         onDeleteTask: _store.deleteTask,
         onAddTask: _showAddTodayTaskDialog,
       ),
@@ -246,20 +232,14 @@ class _AppShellState extends State<AppShell> {
         onAddGoal: _showAddGoalDialog,
       ),
       const CalendarScreen(),
-      MoreScreen(
-        onOpenAllTasks: _openAllTasks,
-      ),
+      MoreScreen(onOpenAllTasks: _openAllTasks),
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_titles[_selectedIndex]),
-      ),
+      appBar: AppBar(title: Text(_titles[_selectedIndex])),
       body: _store.isInitialized
           ? screens[_selectedIndex]
-          : const Center(
-              child: CircularProgressIndicator(),
-            ),
+          : const Center(child: CircularProgressIndicator()),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: _onDestinationSelected,

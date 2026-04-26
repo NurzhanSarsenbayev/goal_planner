@@ -54,11 +54,13 @@ class GoalsScreen extends StatelessWidget {
           separatorBuilder: (_, _) => const SizedBox(height: 8),
           itemBuilder: (context, index) {
             final goal = goals[index];
-            final goalTasks =
-            tasks.where((task) => task.goalId == goal.id).toList();
+            final goalTasks = tasks
+                .where((task) => task.goalId == goal.id)
+                .toList();
 
-            final completedTasks =
-                goalTasks.where((task) => task.isCompleted).length;
+            final completedTasks = goalTasks
+                .where((task) => task.isCompleted)
+                .length;
 
             return GoalCard(
               goal: goal,

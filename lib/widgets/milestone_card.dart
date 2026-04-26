@@ -51,10 +51,7 @@ class MilestoneCard extends StatelessWidget {
           children: [
             if (milestone.description.isNotEmpty) Text(milestone.description),
             const SizedBox(height: 4),
-            Text(
-              progressText,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+            Text(progressText, style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
         trailing: PopupMenuButton<_MilestoneAction>(
@@ -68,10 +65,7 @@ class MilestoneCard extends StatelessWidget {
           },
           itemBuilder: (context) {
             return const [
-              PopupMenuItem(
-                value: _MilestoneAction.edit,
-                child: Text('Edit'),
-              ),
+              PopupMenuItem(value: _MilestoneAction.edit, child: Text('Edit')),
               PopupMenuItem(
                 value: _MilestoneAction.delete,
                 child: Text('Delete'),
@@ -93,7 +87,7 @@ class MilestoneCard extends StatelessWidget {
             )
           else
             ...tasks.map(
-                  (task) => Padding(
+              (task) => Padding(
                 padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
                 child: TaskCard(
                   task: task,
@@ -126,7 +120,4 @@ class MilestoneCard extends StatelessWidget {
   }
 }
 
-enum _MilestoneAction {
-  edit,
-  delete,
-}
+enum _MilestoneAction { edit, delete }

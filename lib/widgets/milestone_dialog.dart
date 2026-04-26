@@ -47,12 +47,9 @@ class _MilestoneDialogState extends State<MilestoneDialog> {
       return;
     }
 
-    Navigator.of(context).pop(
-      MilestoneDraft(
-        title: title,
-        description: description,
-      ),
-    );
+    Navigator.of(
+      context,
+    ).pop(MilestoneDraft(title: title, description: description));
   }
 
   @override
@@ -91,20 +88,14 @@ class _MilestoneDialogState extends State<MilestoneDialog> {
           },
           child: const Text('Cancel'),
         ),
-        FilledButton(
-          onPressed: _submit,
-          child: Text(widget.submitLabel),
-        ),
+        FilledButton(onPressed: _submit, child: Text(widget.submitLabel)),
       ],
     );
   }
 }
 
 class MilestoneDraft {
-  const MilestoneDraft({
-    required this.title,
-    required this.description,
-  });
+  const MilestoneDraft({required this.title, required this.description});
 
   final String title;
   final String description;

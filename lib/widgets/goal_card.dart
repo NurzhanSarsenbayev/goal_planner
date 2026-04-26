@@ -40,10 +40,7 @@ class GoalCard extends StatelessWidget {
             const SizedBox(height: 8),
             LinearProgressIndicator(value: progressValue),
             const SizedBox(height: 4),
-            Text(
-              progressText,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+            Text(progressText, style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
         trailing: PopupMenuButton<_GoalAction>(
@@ -57,14 +54,8 @@ class GoalCard extends StatelessWidget {
           },
           itemBuilder: (context) {
             return const [
-              PopupMenuItem(
-                value: _GoalAction.edit,
-                child: Text('Edit'),
-              ),
-              PopupMenuItem(
-                value: _GoalAction.delete,
-                child: Text('Delete'),
-              ),
+              PopupMenuItem(value: _GoalAction.edit, child: Text('Edit')),
+              PopupMenuItem(value: _GoalAction.delete, child: Text('Delete')),
             ];
           },
         ),
@@ -73,7 +64,4 @@ class GoalCard extends StatelessWidget {
   }
 }
 
-enum _GoalAction {
-  edit,
-  delete,
-}
+enum _GoalAction { edit, delete }

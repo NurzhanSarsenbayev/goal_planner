@@ -41,33 +41,32 @@ class GoalDetailsScreen extends StatefulWidget {
   final void Function(String taskId) onDeleteTask;
 
   final void Function({
-  required String taskId,
-  required String title,
-  required String description,
-  }) onTaskUpdated;
+    required String taskId,
+    required String title,
+    required String description,
+  })
+  onTaskUpdated;
 
   final void Function(String taskId) onTaskMovedToDirectGoal;
 
-  final void Function({
-  required String taskId,
-  required String milestoneId,
-  }) onTaskAssignedToMilestone;
+  final void Function({required String taskId, required String milestoneId})
+  onTaskAssignedToMilestone;
 
   final void Function(Milestone milestone) onMilestoneCreated;
 
   final void Function({
-  required String milestoneId,
-  required String title,
-  required String description,
-  }) onMilestoneUpdated;
+    required String milestoneId,
+    required String title,
+    required String description,
+  })
+  onMilestoneUpdated;
 
-  final void Function(String milestoneId) onMilestoneDeletedAndTasksMovedToDirect;
+  final void Function(String milestoneId)
+  onMilestoneDeletedAndTasksMovedToDirect;
   final void Function(String milestoneId) onMilestoneDeletedWithTasks;
   final void Function(String taskId) onScheduleTaskForToday;
-  final void Function({
-  required String taskId,
-  required DateTime scheduledDate,
-  }) onScheduleTaskForDate;
+  final void Function({required String taskId, required DateTime scheduledDate})
+  onScheduleTaskForDate;
 
   @override
   State<GoalDetailsScreen> createState() => _GoalDetailsScreenState();
@@ -93,7 +92,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       onMilestoneCreated: widget.onMilestoneCreated,
       onMilestoneUpdated: widget.onMilestoneUpdated,
       onMilestoneDeletedAndTasksMovedToDirect:
-      widget.onMilestoneDeletedAndTasksMovedToDirect,
+          widget.onMilestoneDeletedAndTasksMovedToDirect,
       onMilestoneDeletedWithTasks: widget.onMilestoneDeletedWithTasks,
       onScheduleTaskForToday: widget.onScheduleTaskForToday,
       onScheduleTaskForDate: widget.onScheduleTaskForDate,
@@ -170,10 +169,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       return;
     }
 
-    _controller.assignTaskToMilestone(
-      taskId: task.id,
-      milestoneId: result.id,
-    );
+    _controller.assignTaskToMilestone(taskId: task.id, milestoneId: result.id);
   }
 
   Future<void> _showScheduleTaskDatePicker(PlannerTask task) async {
@@ -262,9 +258,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.goal.title),
-      ),
+      appBar: AppBar(title: Text(widget.goal.title)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

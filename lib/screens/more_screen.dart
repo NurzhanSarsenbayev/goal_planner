@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MoreScreen extends StatelessWidget {
-  const MoreScreen({
-    super.key,
-    required this.onOpenAllTasks,
-  });
+  const MoreScreen({super.key, required this.onOpenAllTasks});
 
   final VoidCallback onOpenAllTasks;
 

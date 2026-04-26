@@ -8,7 +8,7 @@ import '../models/planner_task.dart';
 
 class PlannerStore extends ChangeNotifier {
   PlannerStore(this._repository)
-      : _seedService = PlannerSeedService(_repository);
+    : _seedService = PlannerSeedService(_repository);
 
   final PlannerRepository _repository;
   final PlannerSeedService _seedService;
@@ -41,10 +41,7 @@ class PlannerStore extends ChangeNotifier {
     _tasks = await _repository.loadTasks();
   }
 
-  void addGoal({
-    required String title,
-    required String description,
-  }) {
+  void addGoal({required String title, required String description}) {
     final now = DateTime.now();
 
     final goal = Goal(
@@ -68,10 +65,7 @@ class PlannerStore extends ChangeNotifier {
   }) {
     _updateGoalById(
       goalId,
-          (goal) => goal.copyWith(
-        title: title,
-        description: description,
-      ),
+      (goal) => goal.copyWith(title: title, description: description),
     );
   }
 
@@ -103,10 +97,7 @@ class PlannerStore extends ChangeNotifier {
   }) {
     _updateMilestoneById(
       milestoneId,
-          (milestone) => milestone.copyWith(
-        title: title,
-        description: description,
-      ),
+      (milestone) => milestone.copyWith(title: title, description: description),
     );
   }
 
@@ -182,10 +173,7 @@ class PlannerStore extends ChangeNotifier {
   }) {
     _updateTaskById(
       taskId,
-          (task) => task.copyWith(
-        title: title,
-        description: description,
-      ),
+      (task) => task.copyWith(title: title, description: description),
     );
   }
 
@@ -196,74 +184,50 @@ class PlannerStore extends ChangeNotifier {
   }) {
     _updateTaskById(
       taskId,
-          (task) => milestoneId == null
+      (task) => milestoneId == null
           ? task.assignToGoal(goalId)
           : task.assignToGoalMilestone(
-        goalId: goalId,
-        milestoneId: milestoneId,
-      ),
+              goalId: goalId,
+              milestoneId: milestoneId,
+            ),
     );
   }
 
   void detachTaskFromGoal(String taskId) {
-    _updateTaskById(
-      taskId,
-          (task) => task.detachFromGoal(),
-    );
+    _updateTaskById(taskId, (task) => task.detachFromGoal());
   }
 
   void toggleTaskCompleted(String taskId) {
-    _updateTaskById(
-      taskId,
-          (task) => task.toggleCompleted(),
-    );
+    _updateTaskById(taskId, (task) => task.toggleCompleted());
   }
 
   void scheduleTaskForToday(String taskId) {
-    _updateTaskById(
-      taskId,
-          (task) => task.scheduledToday(),
-    );
+    _updateTaskById(taskId, (task) => task.scheduledToday());
   }
 
   void scheduleTaskForDate({
     required String taskId,
     required DateTime scheduledDate,
   }) {
-    _updateTaskById(
-      taskId,
-          (task) => task.scheduleForDate(scheduledDate),
-    );
+    _updateTaskById(taskId, (task) => task.scheduleForDate(scheduledDate));
   }
 
   void removeTaskFromToday(String taskId) {
-    _updateTaskById(
-      taskId,
-          (task) => task.unschedule(),
-    );
+    _updateTaskById(taskId, (task) => task.unschedule());
   }
 
   void moveTaskToDirectGoal(String taskId) {
-    _updateTaskById(
-      taskId,
-          (task) => task.moveToDirectGoal(),
-    );
+    _updateTaskById(taskId, (task) => task.moveToDirectGoal());
   }
 
   void assignTaskToMilestone({
     required String taskId,
     required String milestoneId,
   }) {
-    _updateTaskById(
-      taskId,
-          (task) => task.assignToMilestone(milestoneId),
-    );
+    _updateTaskById(taskId, (task) => task.assignToMilestone(milestoneId));
   }
 
-  void _updateGoalById(
-      String goalId,
-      Goal Function(Goal goal) update,
-      ) {
+  void _updateGoalById(String goalId, Goal Function(Goal goal) update) {
     Goal? updatedGoal;
 
     _goals = _goals.map((goal) {
@@ -283,9 +247,9 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void _updateMilestoneById(
-      String milestoneId,
-      Milestone Function(Milestone milestone) update,
-      ) {
+    String milestoneId,
+    Milestone Function(Milestone milestone) update,
+  ) {
     Milestone? updatedMilestone;
 
     _milestones = _milestones.map((milestone) {
@@ -305,9 +269,9 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void _updateTaskById(
-      String taskId,
-      PlannerTask Function(PlannerTask task) update,
-      ) {
+    String taskId,
+    PlannerTask Function(PlannerTask task) update,
+  ) {
     PlannerTask? updatedTask;
 
     _tasks = _tasks.map((task) {

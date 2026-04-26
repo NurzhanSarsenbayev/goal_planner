@@ -30,22 +30,22 @@ class AllTasksScreen extends StatefulWidget {
   final List<PlannerTask> tasks;
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function(String taskId) onScheduleTaskForToday;
-  final void Function({
-  required String taskId,
-  required DateTime scheduledDate,
-  }) onScheduleTaskForDate;
+  final void Function({required String taskId, required DateTime scheduledDate})
+  onScheduleTaskForDate;
 
   final void Function({
-  required String taskId,
-  required String title,
-  required String description,
-  }) onTaskUpdated;
+    required String taskId,
+    required String title,
+    required String description,
+  })
+  onTaskUpdated;
 
   final void Function({
-  required String taskId,
-  required String goalId,
-  String? milestoneId,
-  }) onTaskAttachedToGoal;
+    required String taskId,
+    required String goalId,
+    String? milestoneId,
+  })
+  onTaskAttachedToGoal;
 
   final void Function(String taskId) onTaskDetachedFromGoal;
   final void Function(String taskId) onDeleteTask;
@@ -154,9 +154,7 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
 
     if (tasks.isEmpty) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('All tasks'),
-        ),
+        appBar: AppBar(title: const Text('All tasks')),
         body: const PlaceholderScreen(
           title: 'All tasks',
           description: 'No tasks created yet.',
@@ -166,9 +164,7 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('All tasks'),
-      ),
+      appBar: AppBar(title: const Text('All tasks')),
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
         itemCount: tasks.length,
@@ -190,19 +186,19 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
             },
             onAttachToGoal: isStandaloneTask
                 ? () {
-              _showAttachTaskToGoalDialog(task);
-            }
+                    _showAttachTaskToGoalDialog(task);
+                  }
                 : null,
             onDetachFromGoal: isGoalLinkedTask
                 ? () {
-              _controller.detachTaskFromGoal(task.id);
-            }
+                    _controller.detachTaskFromGoal(task.id);
+                  }
                 : null,
             onScheduleForToday: task.isScheduledForToday
                 ? null
                 : () {
-              _controller.scheduleTaskForToday(task.id);
-            },
+                    _controller.scheduleTaskForToday(task.id);
+                  },
             onScheduleDate: () {
               _showScheduleTaskDatePicker(task);
             },

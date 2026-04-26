@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../app/app_dialogs.dart';
 import '../models/goal.dart';
 import '../models/planner_task.dart';
 import '../widgets/placeholder_screen.dart';
@@ -17,6 +18,7 @@ class TodayScreen extends StatelessWidget {
     required this.onDeleteTask,
     required this.onAddTask,
     required this.onRemoveTaskFromToday,
+    required this.onScheduleTaskForDate,
   });
 
   final List<Goal> goals;
@@ -24,10 +26,28 @@ class TodayScreen extends StatelessWidget {
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function(PlannerTask task) onEditTask;
   final void Function(String taskId) onRemoveTaskFromToday;
+  final void Function({required String taskId, required DateTime scheduledDate})
+  onScheduleTaskForDate;
   final void Function(PlannerTask task) onAttachTaskToGoal;
   final void Function(String taskId) onDetachTaskFromGoal;
   final void Function(String taskId) onDeleteTask;
   final VoidCallback onAddTask;
+
+  Future<void> _showScheduleTaskDatePicker(
+    BuildContext context,
+    PlannerTask task,
+  ) async {
+    final selectedDate = await showScheduleTaskDatePicker(
+      context,
+      initialDate: task.scheduledDate,
+    );
+
+    if (selectedDate == null) {
+      return;
+    }
+
+    onScheduleTaskForDate(taskId: task.id, scheduledDate: selectedDate);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +77,16 @@ class TodayScreen extends StatelessWidget {
                 goal: goal,
                 onToggleCompleted: () => onToggleTaskCompleted(task.id),
                 onEdit: () => onEditTask(task),
-                onAttachToGoal:
-                isStandaloneTask ? () => onAttachTaskToGoal(task) : null,
-                onDetachFromGoal:
-                isGoalLinkedTask ? () => onDetachTaskFromGoal(task.id) : null,
+                onAttachToGoal: isStandaloneTask
+                    ? () => onAttachTaskToGoal(task)
+                    : null,
+                onDetachFromGoal: isGoalLinkedTask
+                    ? () => onDetachTaskFromGoal(task.id)
+                    : null,
                 onRemoveFromToday: () => onRemoveTaskFromToday(task.id),
+                onScheduleDate: () {
+                  _showScheduleTaskDatePicker(context, task);
+                },
                 onDelete: () => onDeleteTask(task.id),
               );
             },

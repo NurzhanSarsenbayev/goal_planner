@@ -30,7 +30,9 @@ class PlannerRepository {
   }
 
   Future<void> saveGoal(domain.Goal goal) async {
-    await _database.into(_database.goals).insertOnConflictUpdate(
+    await _database
+        .into(_database.goals)
+        .insertOnConflictUpdate(
           local.GoalsCompanion.insert(
             id: goal.id,
             title: goal.title,
@@ -43,22 +45,24 @@ class PlannerRepository {
 
   Future<void> deleteGoalWithRelatedData(String goalId) async {
     await _database.transaction(() async {
-      await (_database.delete(_database.tasks)
-        ..where((table) => table.goalId.equals(goalId)))
-          .go();
+      await (_database.delete(
+        _database.tasks,
+      )..where((table) => table.goalId.equals(goalId))).go();
 
-      await (_database.delete(_database.milestones)
-        ..where((table) => table.goalId.equals(goalId)))
-          .go();
+      await (_database.delete(
+        _database.milestones,
+      )..where((table) => table.goalId.equals(goalId))).go();
 
-      await (_database.delete(_database.goals)
-        ..where((table) => table.id.equals(goalId)))
-          .go();
+      await (_database.delete(
+        _database.goals,
+      )..where((table) => table.id.equals(goalId))).go();
     });
   }
 
   Future<void> saveMilestone(domain.Milestone milestone) async {
-    await _database.into(_database.milestones).insertOnConflictUpdate(
+    await _database
+        .into(_database.milestones)
+        .insertOnConflictUpdate(
           local.MilestonesCompanion.insert(
             id: milestone.id,
             goalId: milestone.goalId,
@@ -72,33 +76,31 @@ class PlannerRepository {
   Future<void> deleteMilestoneAndMoveTasksToDirect(String milestoneId) async {
     await _database.transaction(() async {
       await (_database.update(_database.tasks)
-        ..where((table) => table.milestoneId.equals(milestoneId)))
-          .write(
-        const local.TasksCompanion(
-          milestoneId: drift.Value(null),
-        ),
-      );
+            ..where((table) => table.milestoneId.equals(milestoneId)))
+          .write(const local.TasksCompanion(milestoneId: drift.Value(null)));
 
-      await (_database.delete(_database.milestones)
-        ..where((table) => table.id.equals(milestoneId)))
-          .go();
+      await (_database.delete(
+        _database.milestones,
+      )..where((table) => table.id.equals(milestoneId))).go();
     });
   }
 
   Future<void> deleteMilestoneWithTasks(String milestoneId) async {
     await _database.transaction(() async {
-      await (_database.delete(_database.tasks)
-        ..where((table) => table.milestoneId.equals(milestoneId)))
-          .go();
+      await (_database.delete(
+        _database.tasks,
+      )..where((table) => table.milestoneId.equals(milestoneId))).go();
 
-      await (_database.delete(_database.milestones)
-        ..where((table) => table.id.equals(milestoneId)))
-          .go();
+      await (_database.delete(
+        _database.milestones,
+      )..where((table) => table.id.equals(milestoneId))).go();
     });
   }
 
   Future<void> saveTask(domain.PlannerTask task) async {
-    await _database.into(_database.tasks).insertOnConflictUpdate(
+    await _database
+        .into(_database.tasks)
+        .insertOnConflictUpdate(
           local.TasksCompanion.insert(
             id: task.id,
             goalId: drift.Value(task.goalId),
@@ -114,15 +116,15 @@ class PlannerRepository {
   }
 
   Future<void> deleteTask(String taskId) async {
-    await (_database.delete(_database.tasks)
-          ..where((table) => table.id.equals(taskId)))
-        .go();
+    await (_database.delete(
+      _database.tasks,
+    )..where((table) => table.id.equals(taskId))).go();
   }
 
   Future<void> updateTask(domain.PlannerTask task) async {
-    await (_database.update(_database.tasks)
-          ..where((table) => table.id.equals(task.id)))
-        .write(
+    await (_database.update(
+      _database.tasks,
+    )..where((table) => table.id.equals(task.id))).write(
       local.TasksCompanion(
         goalId: drift.Value(task.goalId),
         milestoneId: drift.Value(task.milestoneId),
@@ -137,9 +139,9 @@ class PlannerRepository {
   }
 
   Future<void> toggleTaskCompleted(String taskId) async {
-    final task = await (_database.select(_database.tasks)
-          ..where((table) => table.id.equals(taskId)))
-        .getSingleOrNull();
+    final task = await (_database.select(
+      _database.tasks,
+    )..where((table) => table.id.equals(taskId))).getSingleOrNull();
 
     if (task == null) {
       return;
@@ -147,14 +149,12 @@ class PlannerRepository {
 
     final nextCompletedState = !task.isCompleted;
 
-    await (_database.update(_database.tasks)
-          ..where((table) => table.id.equals(taskId)))
-        .write(
+    await (_database.update(
+      _database.tasks,
+    )..where((table) => table.id.equals(taskId))).write(
       local.TasksCompanion(
         isCompleted: drift.Value(nextCompletedState),
-        completedAt: drift.Value(
-          nextCompletedState ? DateTime.now() : null,
-        ),
+        completedAt: drift.Value(nextCompletedState ? DateTime.now() : null),
       ),
     );
   }
@@ -165,10 +165,6 @@ class PlannerRepository {
 
     await (_database.update(_database.tasks)
           ..where((table) => table.id.equals(taskId)))
-        .write(
-      local.TasksCompanion(
-        scheduledDate: drift.Value(today),
-      ),
-    );
+        .write(local.TasksCompanion(scheduledDate: drift.Value(today)));
   }
 }

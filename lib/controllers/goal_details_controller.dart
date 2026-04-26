@@ -21,8 +21,8 @@ class GoalDetailsController extends ChangeNotifier {
     required this.onMilestoneDeletedWithTasks,
     required this.onScheduleTaskForToday,
     required this.onScheduleTaskForDate,
-  })  : _milestones = List.of(milestones),
-        _tasks = List.of(tasks);
+  }) : _milestones = List.of(milestones),
+       _tasks = List.of(tasks);
 
   final Goal goal;
 
@@ -31,33 +31,32 @@ class GoalDetailsController extends ChangeNotifier {
   final void Function(String taskId) onDeleteTask;
 
   final void Function({
-  required String taskId,
-  required String title,
-  required String description,
-  }) onTaskUpdated;
+    required String taskId,
+    required String title,
+    required String description,
+  })
+  onTaskUpdated;
 
   final void Function(String taskId) onTaskMovedToDirectGoal;
 
-  final void Function({
-  required String taskId,
-  required String milestoneId,
-  }) onTaskAssignedToMilestone;
+  final void Function({required String taskId, required String milestoneId})
+  onTaskAssignedToMilestone;
 
   final void Function(Milestone milestone) onMilestoneCreated;
 
   final void Function({
-  required String milestoneId,
-  required String title,
-  required String description,
-  }) onMilestoneUpdated;
+    required String milestoneId,
+    required String title,
+    required String description,
+  })
+  onMilestoneUpdated;
 
-  final void Function(String milestoneId) onMilestoneDeletedAndTasksMovedToDirect;
+  final void Function(String milestoneId)
+  onMilestoneDeletedAndTasksMovedToDirect;
   final void Function(String milestoneId) onMilestoneDeletedWithTasks;
   final void Function(String taskId) onScheduleTaskForToday;
-  final void Function({
-  required String taskId,
-  required DateTime scheduledDate,
-  }) onScheduleTaskForDate;
+  final void Function({required String taskId, required DateTime scheduledDate})
+  onScheduleTaskForDate;
 
   List<Milestone> _milestones;
   List<PlannerTask> _tasks;
@@ -73,15 +72,16 @@ class GoalDetailsController extends ChangeNotifier {
   }
 
   List<PlannerTask> get directGoalTasks {
-    final milestoneIds =
-    goalMilestones.map((milestone) => milestone.id).toSet();
+    final milestoneIds = goalMilestones
+        .map((milestone) => milestone.id)
+        .toSet();
 
     return goalTasks
         .where(
           (task) =>
-      task.milestoneId == null ||
-          !milestoneIds.contains(task.milestoneId),
-    )
+              task.milestoneId == null ||
+              !milestoneIds.contains(task.milestoneId),
+        )
         .toList();
   }
 
@@ -94,10 +94,7 @@ class GoalDetailsController extends ChangeNotifier {
   }
 
   void toggleTaskCompleted(String taskId) {
-    _updateTaskLocally(
-      taskId,
-          (task) => task.toggleCompleted(),
-    );
+    _updateTaskLocally(taskId, (task) => task.toggleCompleted());
 
     onToggleTaskCompleted(taskId);
   }
@@ -116,24 +113,14 @@ class GoalDetailsController extends ChangeNotifier {
   }) {
     _updateTaskLocally(
       taskId,
-          (task) => task.copyWith(
-        title: title,
-        description: description,
-      ),
+      (task) => task.copyWith(title: title, description: description),
     );
 
-    onTaskUpdated(
-      taskId: taskId,
-      title: title,
-      description: description,
-    );
+    onTaskUpdated(taskId: taskId, title: title, description: description);
   }
 
   void scheduleTaskForToday(String taskId) {
-    _updateTaskLocally(
-      taskId,
-          (task) => task.scheduledToday(),
-    );
+    _updateTaskLocally(taskId, (task) => task.scheduledToday());
 
     onScheduleTaskForToday(taskId);
   }
@@ -142,15 +129,9 @@ class GoalDetailsController extends ChangeNotifier {
     required String taskId,
     required DateTime scheduledDate,
   }) {
-    _updateTaskLocally(
-      taskId,
-          (task) => task.scheduleForDate(scheduledDate),
-    );
+    _updateTaskLocally(taskId, (task) => task.scheduleForDate(scheduledDate));
 
-    onScheduleTaskForDate(
-      taskId: taskId,
-      scheduledDate: scheduledDate,
-    );
+    onScheduleTaskForDate(taskId: taskId, scheduledDate: scheduledDate);
   }
 
   void createTask({
@@ -176,10 +157,7 @@ class GoalDetailsController extends ChangeNotifier {
   }
 
   void moveTaskToDirectGoal(String taskId) {
-    _updateTaskLocally(
-      taskId,
-          (task) => task.moveToDirectGoal(),
-    );
+    _updateTaskLocally(taskId, (task) => task.moveToDirectGoal());
 
     onTaskMovedToDirectGoal(taskId);
   }
@@ -188,21 +166,12 @@ class GoalDetailsController extends ChangeNotifier {
     required String taskId,
     required String milestoneId,
   }) {
-    _updateTaskLocally(
-      taskId,
-          (task) => task.assignToMilestone(milestoneId),
-    );
+    _updateTaskLocally(taskId, (task) => task.assignToMilestone(milestoneId));
 
-    onTaskAssignedToMilestone(
-      taskId: taskId,
-      milestoneId: milestoneId,
-    );
+    onTaskAssignedToMilestone(taskId: taskId, milestoneId: milestoneId);
   }
 
-  void createMilestone({
-    required String title,
-    required String description,
-  }) {
+  void createMilestone({required String title, required String description}) {
     final now = DateTime.now();
 
     final milestone = Milestone(
@@ -229,10 +198,7 @@ class GoalDetailsController extends ChangeNotifier {
         return milestone;
       }
 
-      return milestone.copyWith(
-        title: title,
-        description: description,
-      );
+      return milestone.copyWith(title: title, description: description);
     }).toList();
 
     notifyListeners();
@@ -275,9 +241,9 @@ class GoalDetailsController extends ChangeNotifier {
   }
 
   void _updateTaskLocally(
-      String taskId,
-      PlannerTask Function(PlannerTask task) update,
-      ) {
+    String taskId,
+    PlannerTask Function(PlannerTask task) update,
+  ) {
     _tasks = _tasks.map((task) {
       if (task.id != taskId) {
         return task;

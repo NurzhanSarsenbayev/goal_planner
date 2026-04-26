@@ -45,9 +45,7 @@ class _DeleteGoalDialogState extends State<DeleteGoalDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'This will permanently delete "${widget.goalTitle}".',
-          ),
+          Text('This will permanently delete "${widget.goalTitle}".'),
           const SizedBox(height: 12),
           Text('Milestones: ${widget.milestoneCount}'),
           Text('Tasks: ${widget.taskCount}'),

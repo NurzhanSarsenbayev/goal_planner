@@ -47,12 +47,9 @@ class _GoalDialogState extends State<GoalDialog> {
       return;
     }
 
-    Navigator.of(context).pop(
-      GoalDraft(
-        title: title,
-        description: description,
-      ),
-    );
+    Navigator.of(
+      context,
+    ).pop(GoalDraft(title: title, description: description));
   }
 
   @override
@@ -91,20 +88,14 @@ class _GoalDialogState extends State<GoalDialog> {
           },
           child: const Text('Cancel'),
         ),
-        FilledButton(
-          onPressed: _submit,
-          child: Text(widget.submitLabel),
-        ),
+        FilledButton(onPressed: _submit, child: Text(widget.submitLabel)),
       ],
     );
   }
 }
 
 class GoalDraft {
-  const GoalDraft({
-    required this.title,
-    required this.description,
-  });
+  const GoalDraft({required this.title, required this.description});
 
   final String title;
   final String description;

@@ -41,13 +41,10 @@ class DirectGoalTasksSection extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         if (tasks.isEmpty)
-          Text(
-            'No direct tasks.',
-            style: Theme.of(context).textTheme.bodySmall,
-          )
+          Text('No direct tasks.', style: Theme.of(context).textTheme.bodySmall)
         else
           ...tasks.map(
-                (task) => Padding(
+            (task) => Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: TaskCard(
                 task: task,

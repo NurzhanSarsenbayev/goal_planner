@@ -55,16 +55,14 @@ class _TaskPlacementDialogState extends State<TaskPlacementDialog> {
         children: [
           DropdownButtonFormField<String>(
             initialValue: _selectedGoalId,
-            decoration: const InputDecoration(
-              labelText: 'Goal',
-            ),
+            decoration: const InputDecoration(labelText: 'Goal'),
             items: widget.goals
                 .map(
                   (goal) => DropdownMenuItem<String>(
-                value: goal.id,
-                child: Text(goal.title),
-              ),
-            )
+                    value: goal.id,
+                    child: Text(goal.title),
+                  ),
+                )
                 .toList(),
             onChanged: (value) {
               setState(() {
@@ -76,16 +74,14 @@ class _TaskPlacementDialogState extends State<TaskPlacementDialog> {
           const SizedBox(height: 12),
           DropdownButtonFormField<String?>(
             initialValue: _selectedMilestoneId,
-            decoration: const InputDecoration(
-              labelText: 'Milestone',
-            ),
+            decoration: const InputDecoration(labelText: 'Milestone'),
             items: [
               const DropdownMenuItem<String?>(
                 value: null,
                 child: Text('No milestone'),
               ),
               ...availableMilestones.map(
-                    (milestone) => DropdownMenuItem<String?>(
+                (milestone) => DropdownMenuItem<String?>(
                   value: milestone.id,
                   child: Text(milestone.title),
                 ),
@@ -94,10 +90,10 @@ class _TaskPlacementDialogState extends State<TaskPlacementDialog> {
             onChanged: _selectedGoalId == null
                 ? null
                 : (value) {
-              setState(() {
-                _selectedMilestoneId = value;
-              });
-            },
+                    setState(() {
+                      _selectedMilestoneId = value;
+                    });
+                  },
           ),
         ],
       ),
@@ -118,10 +114,7 @@ class _TaskPlacementDialogState extends State<TaskPlacementDialog> {
 }
 
 class TaskPlacementDraft {
-  const TaskPlacementDraft({
-    required this.goalId,
-    required this.milestoneId,
-  });
+  const TaskPlacementDraft({required this.goalId, required this.milestoneId});
 
   final String goalId;
   final String? milestoneId;

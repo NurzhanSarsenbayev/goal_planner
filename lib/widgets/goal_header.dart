@@ -38,10 +38,7 @@ class GoalHeader extends StatelessWidget {
             const SizedBox(height: 16),
             LinearProgressIndicator(value: progressValue),
             const SizedBox(height: 8),
-            Text(
-              progressText,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+            Text(progressText, style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
       ),

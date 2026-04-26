@@ -55,9 +55,7 @@ class PlannerTask {
   }
 
   PlannerTask scheduleForDate(DateTime date) {
-    return copyWith(
-      scheduledDate: DateTime(date.year, date.month, date.day),
-    );
+    return copyWith(scheduledDate: DateTime(date.year, date.month, date.day));
   }
 
   PlannerTask unschedule() {
@@ -65,20 +63,14 @@ class PlannerTask {
   }
 
   PlannerTask assignToGoal(String goalId) {
-    return copyWith(
-      goalId: goalId,
-      milestoneId: null,
-    );
+    return copyWith(goalId: goalId, milestoneId: null);
   }
 
   PlannerTask assignToGoalMilestone({
     required String goalId,
     required String milestoneId,
   }) {
-    return copyWith(
-      goalId: goalId,
-      milestoneId: milestoneId,
-    );
+    return copyWith(goalId: goalId, milestoneId: milestoneId);
   }
 
   PlannerTask assignToMilestone(String milestoneId) {
@@ -90,10 +82,7 @@ class PlannerTask {
   }
 
   PlannerTask detachFromGoal() {
-    return copyWith(
-      goalId: null,
-      milestoneId: null,
-    );
+    return copyWith(goalId: null, milestoneId: null);
   }
 
   PlannerTask copyWith({
