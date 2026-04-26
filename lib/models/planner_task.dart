@@ -51,10 +51,12 @@ class PlannerTask {
   }
 
   PlannerTask scheduledToday() {
-    final now = DateTime.now();
+    return scheduleForDate(DateTime.now());
+  }
 
+  PlannerTask scheduleForDate(DateTime date) {
     return copyWith(
-      scheduledDate: DateTime(now.year, now.month, now.day),
+      scheduledDate: DateTime(date.year, date.month, date.day),
     );
   }
 
