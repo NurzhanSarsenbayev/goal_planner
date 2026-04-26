@@ -4,7 +4,6 @@ import '../app/app_dialogs.dart';
 import '../models/goal.dart';
 import '../models/planner_task.dart';
 import '../shared/planner_dates.dart';
-import '../widgets/placeholder_screen.dart';
 import '../widgets/task_card.dart';
 import '../widgets/calendar/calendar_month_grid.dart';
 
@@ -48,30 +47,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final scheduledGroups = _buildScheduledTaskGroups(widget.tasks);
-
-    if (scheduledGroups.isEmpty) {
-      return Column(
-        children: [
-          CalendarMonthGrid(
-            visibleMonth: _visibleMonth,
-            selectedDate: _selectedDate,
-            datesWithTasks: const {},
-            onPreviousMonth: _showPreviousMonth,
-            onNextMonth: _showNextMonth,
-            onSelectDate: _selectDate,
-          ),
-          const Expanded(
-            child: PlaceholderScreen(
-              title: 'Calendar',
-              description: 'No scheduled tasks yet.',
-              icon: Icons.calendar_month,
-            ),
-          ),
-        ],
-      );
-    }
-
     final selectedDateTasks = _tasksForDate(_selectedDate);
     final datesWithTasks = _datesWithTasks(widget.tasks);
 
@@ -120,43 +95,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
             ),
             const SizedBox(height: 8),
           ],
-        const SizedBox(height: 24),
-        Text(
-          'All scheduled tasks',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: 8),
-        for (final group in scheduledGroups) ...[
-          Padding(
-            padding: const EdgeInsets.only(top: 8, bottom: 8),
-            child: Text(
-              _dateGroupTitle(group.date),
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-          ),
-          for (final task in group.tasks) ...[
-            TaskCard(
-              task: task,
-              goal: _findGoalById(task.goalId),
-              onToggleCompleted: () {
-                widget.onToggleTaskCompleted(task.id);
-              },
-              onEdit: () {
-                widget.onEditTask(task);
-              },
-              onScheduleDate: () {
-                _showScheduleTaskDatePicker(context, task);
-              },
-              onUnschedule: () {
-                widget.onRemoveTaskFromSchedule(task.id);
-              },
-              onDelete: () {
-                widget.onDeleteTask(task.id);
-              },
-            ),
-            const SizedBox(height: 8),
-          ],
-        ],
       ],
     );
   }
@@ -218,40 +156,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
         .toSet();
   }
 
-  List<_ScheduledTaskGroup> _buildScheduledTaskGroups(
-    List<PlannerTask> sourceTasks,
-  ) {
-    final scheduledTasks =
-        sourceTasks.where((task) => task.scheduledDate != null).toList()
-          ..sort((first, second) {
-            final firstDate = first.scheduledDate!;
-            final secondDate = second.scheduledDate!;
-
-            final dateComparison = firstDate.compareTo(secondDate);
-
-            if (dateComparison != 0) {
-              return dateComparison;
-            }
-
-            return first.title.compareTo(second.title);
-          });
-
-    final groups = <_ScheduledTaskGroup>[];
-
-    for (final task in scheduledTasks) {
-      final scheduledDate = task.scheduledDate!;
-      final scheduledDateOnly = dateOnly(scheduledDate);
-
-      if (groups.isEmpty || groups.last.date != scheduledDateOnly) {
-        groups.add(_ScheduledTaskGroup(date: scheduledDateOnly, tasks: [task]));
-      } else {
-        groups.last.tasks.add(task);
-      }
-    }
-
-    return groups;
-  }
-
   String _selectedDateTitle(DateTime date) {
     return 'Selected day: ${_dateGroupTitle(date)}';
   }
@@ -273,11 +177,4 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
     return null;
   }
-}
-
-class _ScheduledTaskGroup {
-  _ScheduledTaskGroup({required this.date, required this.tasks});
-
-  final DateTime date;
-  final List<PlannerTask> tasks;
 }
