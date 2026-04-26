@@ -1,3 +1,5 @@
+import '../shared/planner_dates.dart';
+
 const _unset = Object();
 
 class PlannerTask {
@@ -28,11 +30,7 @@ class PlannerTask {
       return false;
     }
 
-    final now = DateTime.now();
-
-    return scheduledDate!.year == now.year &&
-        scheduledDate!.month == now.month &&
-        scheduledDate!.day == now.day;
+    return dateOnly(scheduledDate!) == todayDate();
   }
 
   bool get isStandalone => goalId == null && milestoneId == null;
@@ -55,7 +53,7 @@ class PlannerTask {
   }
 
   PlannerTask scheduleForDate(DateTime date) {
-    return copyWith(scheduledDate: DateTime(date.year, date.month, date.day));
+    return copyWith(scheduledDate: dateOnly(date));
   }
 
   PlannerTask unschedule() {

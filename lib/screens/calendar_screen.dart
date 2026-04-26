@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../app/app_dialogs.dart';
 import '../models/goal.dart';
 import '../models/planner_task.dart';
+import '../shared/planner_dates.dart';
 import '../widgets/placeholder_screen.dart';
 import '../widgets/task_card.dart';
 
@@ -39,7 +40,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   void initState() {
     super.initState();
 
-    final today = _dateOnly(DateTime.now());
+    final today = todayDate();
     _visibleMonth = DateTime(today.year, today.month);
     _selectedDate = today;
   }
@@ -173,7 +174,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   void _selectDate(DateTime date) {
     setState(() {
-      _selectedDate = _dateOnly(date);
+      _selectedDate = dateOnly(date);
     });
   }
 
@@ -194,7 +195,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   List<PlannerTask> _tasksForDate(DateTime date) {
-    final selectedDate = _dateOnly(date);
+    final selectedDate = dateOnly(date);
 
     final selectedTasks = widget.tasks.where((task) {
       final scheduledDate = task.scheduledDate;
@@ -203,7 +204,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         return false;
       }
 
-      return _dateOnly(scheduledDate) == selectedDate;
+      return dateOnly(scheduledDate) == selectedDate;
     }).toList()..sort((first, second) => first.title.compareTo(second.title));
 
     return selectedTasks;
@@ -212,7 +213,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Set<DateTime> _datesWithTasks(List<PlannerTask> sourceTasks) {
     return sourceTasks
         .where((task) => task.scheduledDate != null)
-        .map((task) => _dateOnly(task.scheduledDate!))
+        .map((task) => dateOnly(task.scheduledDate!))
         .toSet();
   }
 
@@ -238,10 +239,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
     for (final task in scheduledTasks) {
       final scheduledDate = task.scheduledDate!;
-      final dateOnly = _dateOnly(scheduledDate);
+      final scheduledDateOnly = dateOnly(scheduledDate);
 
-      if (groups.isEmpty || groups.last.date != dateOnly) {
-        groups.add(_ScheduledTaskGroup(date: dateOnly, tasks: [task]));
+      if (groups.isEmpty || groups.last.date != scheduledDateOnly) {
+        groups.add(_ScheduledTaskGroup(date: scheduledDateOnly, tasks: [task]));
       } else {
         groups.last.tasks.add(task);
       }
@@ -255,35 +256,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   String _dateGroupTitle(DateTime date) {
-    final today = _dateOnly(DateTime.now());
-    final tomorrow = today.add(const Duration(days: 1));
-    final yesterday = today.subtract(const Duration(days: 1));
-
-    if (date == today) {
-      return 'Today';
-    }
-
-    if (date == tomorrow) {
-      return 'Tomorrow';
-    }
-
-    if (date == yesterday) {
-      return 'Yesterday';
-    }
-
-    return _formatDate(date);
-  }
-
-  String _formatDate(DateTime date) {
-    final day = date.day.toString().padLeft(2, '0');
-    final month = date.month.toString().padLeft(2, '0');
-    final year = date.year.toString();
-
-    return '$day.$month.$year';
-  }
-
-  DateTime _dateOnly(DateTime date) {
-    return DateTime(date.year, date.month, date.day);
+    return relativePlannerDateTitle(date);
   }
 
   Goal? _findGoalById(String? goalId) {
@@ -335,7 +308,7 @@ class _MonthGrid extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    _monthTitle(visibleMonth),
+                    plannerMonthTitle(visibleMonth),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
@@ -375,18 +348,18 @@ class _MonthGrid extends StatelessWidget {
                   return const SizedBox.shrink();
                 }
 
-                final dateOnly = _dateOnly(date);
-                final isSelected = dateOnly == _dateOnly(selectedDate);
-                final isToday = dateOnly == _dateOnly(DateTime.now());
-                final hasTasks = datesWithTasks.contains(dateOnly);
+                final currentDate = dateOnly(date);
+                final isSelected = currentDate == dateOnly(selectedDate);
+                final isToday = currentDate == todayDate();
+                final hasTasks = datesWithTasks.contains(currentDate);
 
                 return _DayCell(
-                  date: dateOnly,
+                  date: currentDate,
                   isSelected: isSelected,
                   isToday: isToday,
                   hasTasks: hasTasks,
                   onTap: () {
-                    onSelectDate(dateOnly);
+                    onSelectDate(currentDate);
                   },
                 );
               },
@@ -411,29 +384,6 @@ class _MonthGrid extends StatelessWidget {
       for (var day = 1; day <= daysInMonth; day++)
         DateTime(visibleMonth.year, visibleMonth.month, day),
     ];
-  }
-
-  String _monthTitle(DateTime date) {
-    const monthNames = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-
-    return '${monthNames[date.month - 1]} ${date.year}';
-  }
-
-  DateTime _dateOnly(DateTime date) {
-    return DateTime(date.year, date.month, date.day);
   }
 }
 

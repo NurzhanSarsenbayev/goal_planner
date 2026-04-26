@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/goal.dart';
 import '../models/planner_task.dart';
+import '../shared/planner_dates.dart';
 
 class TaskCard extends StatelessWidget {
   const TaskCard({
@@ -171,15 +172,7 @@ class TaskCard extends StatelessWidget {
       return 'Scheduled: Today';
     }
 
-    return 'Scheduled: ${_formatDate(date)}';
-  }
-
-  String _formatDate(DateTime date) {
-    final day = date.day.toString().padLeft(2, '0');
-    final month = date.month.toString().padLeft(2, '0');
-    final year = date.year.toString();
-
-    return '$day.$month.$year';
+    return 'Scheduled: ${formatPlannerDate(date)}';
   }
 }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
+import '../shared/planner_dates.dart';
 import '../widgets/goal_dialog.dart';
 import '../widgets/task_dialog.dart';
 import '../widgets/task_placement_dialog.dart';
@@ -102,8 +103,7 @@ Future<DateTime?> showScheduleTaskDatePicker(
   BuildContext context, {
   required DateTime? initialDate,
 }) {
-  final now = DateTime.now();
-  final today = DateTime(now.year, now.month, now.day);
+  final today = todayDate();
 
   return showDatePicker(
     context: context,

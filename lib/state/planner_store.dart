@@ -5,6 +5,7 @@ import 'planner_seed_service.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
+import '../shared/planner_dates.dart';
 
 class PlannerStore extends ChangeNotifier {
   PlannerStore(this._repository)
@@ -152,7 +153,7 @@ class PlannerStore extends ChangeNotifier {
       description: description,
       goalId: goalId,
       milestoneId: milestoneId,
-      scheduledDate: DateTime(now.year, now.month, now.day),
+      scheduledDate: todayDate(),
       createdAt: now,
     );
 
