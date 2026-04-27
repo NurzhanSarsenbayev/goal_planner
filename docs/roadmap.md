@@ -226,7 +226,7 @@ Not implemented yet:
 - meetings / birthdays as separate event types;
 - reminders / notifications.
 
-## Phase 6: Reports MVP
+## Phase 6: Reports and validation analytics MVP
 
 Status: not started.
 
@@ -234,17 +234,132 @@ Goal:
 
 Show useful progress feedback without overbuilding analytics.
 
-Tasks:
+The main question this phase should answer:
 
-- Add Done today section.
+> Did daily actions actually move long-term goals, or did the app become a generic todo list?
+
+Scope:
+
+### Done today
+
+- Add Done today section to Today screen.
+- Show tasks completed today based on `completedAt`.
+- Keep pending today tasks separate from completed today tasks.
+- Make completed work visible during the day.
+
+### Daily report
+
+- Add Daily Report screen, accessible from More.
 - Show completed tasks for selected day.
+- Group completed tasks by goal.
+- Show standalone completed tasks separately.
+- Show simple counts:
+  - completed tasks;
+  - goal-linked completed tasks;
+  - standalone completed tasks.
+
+### Period summary
+
+- Support quick report periods:
+  - Today;
+  - Last 7 days;
+  - Last 14 days.
+- Show completed task count for the selected period.
+- Show goal-linked vs standalone completed task count.
+- Show active days count.
 - Show completed tasks grouped by goal.
-- Add simple daily report.
-- Later: weekly report.
+- Show completed tasks grouped by day.
 
 Expected result:
 
-A user can see what was completed today and how it contributed to goals.
+A user can see:
+
+- what was completed today;
+- what was completed on a selected day;
+- what was completed over the last 7 / 14 days;
+- which goals received actual completed actions;
+- whether most completed work was goal-linked or just standalone todo work.
+
+Validation value:
+
+This phase helps evaluate whether the app is used as a goal-linked planner or just as a simple todo list.
+
+Not doing initially:
+
+- complex dashboards;
+- charts;
+- productivity score;
+- streaks;
+- AI-generated reviews;
+- export;
+- custom date ranges;
+- weekly comparison;
+- yearly analytics;
+- habit analytics.
+
+## Phase 6.5: Recurring task planning MVP
+
+Status: not started.
+
+Goal:
+
+Make repeated weekday-based tasks easy to plan without manually scheduling each date.
+
+Problem:
+
+Some tasks repeat on predictable days, for example:
+
+- workout on Monday / Wednesday / Friday;
+- take out trash every Friday;
+- pay something every 15th later;
+- weekly planning every Sunday.
+
+Initial scope:
+
+- Create recurring task rule.
+- Support weekday selection:
+  - Monday;
+  - Tuesday;
+  - Wednesday;
+  - Thursday;
+  - Friday;
+  - Saturday;
+  - Sunday.
+- Support task placement:
+  - standalone recurring task;
+  - direct goal recurring task;
+  - milestone recurring task.
+- Show upcoming recurring task occurrences in Today.
+- Show upcoming recurring task occurrences in Calendar.
+- Completing one occurrence affects only that occurrence.
+- Keep recurring planning local-first.
+- Keep recurrence simple enough for the first user test.
+
+Possible implementation direction:
+
+- Start with weekday-based recurrence only.
+- Generate or expose upcoming occurrences for a short window, for example next 14 days.
+- Do not attempt full calendar recurrence rules yet.
+
+Expected result:
+
+A user can create a repeated task like:
+
+> Workout every Monday, Wednesday and Friday
+
+and see the correct occurrences in Today and Calendar without manually scheduling every date.
+
+Not doing initially:
+
+- complex recurrence rules;
+- monthly recurrence;
+- yearly recurrence;
+- recurrence exceptions;
+- edit this occurrence / this and following / entire series;
+- drag-and-drop recurring occurrences;
+- reminders;
+- time-of-day scheduling;
+- habit streaks.
 
 ## Phase 7: Habits MVP
 
@@ -252,21 +367,49 @@ Status: not started.
 
 Goal:
 
-Add recurring daily behavior tracking only after task/date flow is stable.
+Add recurring daily behavior tracking only after reports and recurring task planning are stable.
+
+Why this is separate from recurring tasks:
+
+Recurring tasks are planned actions that appear as tasks on specific dates.
+
+Habits are routines tracked over time, where the history and consistency matter more than a single task instance.
 
 Initial habit scope:
 
+- Create habit.
+- Edit habit.
+- Delete habit.
 - Habit title.
+- Optional description.
 - Daily checkbox.
+- Optional weekdays.
 - Optional time.
 - Show timed habits in Today.
-- Simple completion history.
+- Show untimed habits in a simple habit list.
+- Mark habit complete for a day.
+- Store habit completion history.
+- Show simple habit completion history.
+
+Expected result:
+
+A user can track routines like:
+
+- 10,000 steps;
+- meditation;
+- drink water;
+- reading;
+- stretching.
 
 Not doing initially:
 
 - complex streak gamification;
 - habit analytics;
 - habit templates;
+- habit categories;
+- penalties;
+- social features;
+- reminders;
 - weight tracker;
 - expense tracker.
 
@@ -359,6 +502,7 @@ Main differentiator:
 - No design polish.
 - Sample seed data still exists for development.
 - State management is still custom ChangeNotifier-based; Riverpod is not introduced yet.
+
 
 ## Not doing now
 
