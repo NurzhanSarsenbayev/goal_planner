@@ -12,6 +12,7 @@ import '../screens/goals_screen.dart';
 import '../screens/all_tasks_screen.dart';
 import '../screens/more_screen.dart';
 import '../screens/today_screen.dart';
+import '../screens/reports_screen.dart';
 import '../state/planner_store.dart';
 import 'app_dialogs.dart';
 
@@ -201,6 +202,22 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
+  void _openReports() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return ReportsScreen(
+            goals: _store.goals,
+            tasks: _store.tasks,
+            onToggleTaskCompleted: _store.toggleTaskCompleted,
+            onEditTask: _showEditTaskDialog,
+            onDeleteTask: _store.deleteTask,
+          );
+        },
+      ),
+    );
+  }
+
   void _openGoalDetails(Goal goal) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -261,7 +278,7 @@ class _AppShellState extends State<AppShell> {
         onDeleteTask: _store.deleteTask,
         onAddTaskForDate: _showAddTaskForDateDialog,
       ),
-      MoreScreen(onOpenAllTasks: _openAllTasks),
+      MoreScreen(onOpenAllTasks: _openAllTasks, onOpenReports: _openReports),
     ];
 
     return Scaffold(
