@@ -5,6 +5,7 @@ import '../models/planner_task.dart';
 import '../reports/report_builder.dart';
 import '../reports/report_period.dart';
 import '../widgets/tasks/task_card.dart';
+import '../shared/planner_dates.dart';
 
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({
@@ -64,6 +65,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
               completedCount: report.completedCount,
               goalLinkedCount: report.goalLinkedCount,
               standaloneCount: report.standaloneCount,
+              activeDaysCount: report.activeDaysCount,
             ),
             const SizedBox(height: 24),
             Text('By goal', style: Theme.of(context).textTheme.titleMedium),
@@ -107,6 +109,20 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 ),
                 const SizedBox(height: 8),
               ],
+            ],
+            const SizedBox(height: 24),
+            Text('By day', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            for (final group in report.dayGroups) ...[
+              _DayReportSection(
+                date: group.date,
+                tasks: group.tasks,
+                goals: widget.goals,
+                onToggleTaskCompleted: widget.onToggleTaskCompleted,
+                onEditTask: widget.onEditTask,
+                onDeleteTask: widget.onDeleteTask,
+              ),
+              const SizedBox(height: 16),
             ],
           ],
         ],
@@ -172,11 +188,13 @@ class _ReportSummaryCard extends StatelessWidget {
     required this.completedCount,
     required this.goalLinkedCount,
     required this.standaloneCount,
+    required this.activeDaysCount,
   });
 
   final int completedCount;
   final int goalLinkedCount;
   final int standaloneCount;
+  final int activeDaysCount;
 
   @override
   Widget build(BuildContext context) {
@@ -190,6 +208,8 @@ class _ReportSummaryCard extends StatelessWidget {
             _SummaryRow(label: 'Goal-linked', value: goalLinkedCount),
             const SizedBox(height: 8),
             _SummaryRow(label: 'Standalone', value: standaloneCount),
+            const SizedBox(height: 8),
+            _SummaryRow(label: 'Active days', value: activeDaysCount),
           ],
         ),
       ),
@@ -211,6 +231,68 @@ class _SummaryRow extends StatelessWidget {
         Text(value.toString(), style: Theme.of(context).textTheme.titleMedium),
       ],
     );
+  }
+}
+
+class _DayReportSection extends StatelessWidget {
+  const _DayReportSection({
+    required this.date,
+    required this.tasks,
+    required this.goals,
+    required this.onToggleTaskCompleted,
+    required this.onEditTask,
+    required this.onDeleteTask,
+  });
+
+  final DateTime date;
+  final List<PlannerTask> tasks;
+  final List<Goal> goals;
+  final void Function(String taskId) onToggleTaskCompleted;
+  final void Function(PlannerTask task) onEditTask;
+  final void Function(String taskId) onDeleteTask;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          relativePlannerDateTitle(date),
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+        const SizedBox(height: 8),
+        for (final task in tasks) ...[
+          TaskCard(
+            task: task,
+            goal: _findGoalById(task.goalId),
+            onToggleCompleted: () {
+              onToggleTaskCompleted(task.id);
+            },
+            onEdit: () {
+              onEditTask(task);
+            },
+            onDelete: () {
+              onDeleteTask(task.id);
+            },
+          ),
+          const SizedBox(height: 8),
+        ],
+      ],
+    );
+  }
+
+  Goal? _findGoalById(String? goalId) {
+    if (goalId == null) {
+      return null;
+    }
+
+    for (final goal in goals) {
+      if (goal.id == goalId) {
+        return goal;
+      }
+    }
+
+    return null;
   }
 }
 

@@ -95,6 +95,51 @@ void main() {
       expect(summary.goalGroups.first.tasks.first.id, 'goal-task');
     });
 
+    test('counts active days in selected period', () {
+      final summary = buildReportSummary(
+        goals: [],
+        tasks: [
+          _completedTask(id: 'today-1', completedAt: today),
+          _completedTask(
+            id: 'today-2',
+            completedAt: today.add(const Duration(hours: 1)),
+          ),
+          _completedTask(
+            id: 'yesterday',
+            completedAt: today.subtract(const Duration(days: 1)),
+          ),
+        ],
+        period: ReportPeriod.last7Days,
+        today: today,
+      );
+
+      expect(summary.activeDaysCount, 2);
+    });
+
+    test('groups completed tasks by day from newest to oldest', () {
+      final summary = buildReportSummary(
+        goals: [],
+        tasks: [
+          _completedTask(
+            id: 'yesterday',
+            completedAt: today.subtract(const Duration(days: 1)),
+          ),
+          _completedTask(id: 'today', completedAt: today),
+        ],
+        period: ReportPeriod.last7Days,
+        today: today,
+      );
+
+      expect(summary.dayGroups.length, 2);
+      expect(summary.dayGroups[0].date, today);
+      expect(summary.dayGroups[0].tasks.first.id, 'today');
+      expect(
+        summary.dayGroups[1].date,
+        today.subtract(const Duration(days: 1)),
+      );
+      expect(summary.dayGroups[1].tasks.first.id, 'yesterday');
+    });
+
     test('ignores tasks that are not completed', () {
       final summary = buildReportSummary(
         goals: [],

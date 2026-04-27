@@ -206,12 +206,17 @@ class _AppShellState extends State<AppShell> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          return ReportsScreen(
-            goals: _store.goals,
-            tasks: _store.tasks,
-            onToggleTaskCompleted: _store.toggleTaskCompleted,
-            onEditTask: _showEditTaskDialog,
-            onDeleteTask: _store.deleteTask,
+          return AnimatedBuilder(
+            animation: _store,
+            builder: (context, _) {
+              return ReportsScreen(
+                goals: _store.goals,
+                tasks: _store.tasks,
+                onToggleTaskCompleted: _store.toggleTaskCompleted,
+                onEditTask: _showEditTaskDialog,
+                onDeleteTask: _store.deleteTask,
+              );
+            },
           );
         },
       ),

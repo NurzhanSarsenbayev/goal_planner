@@ -11,6 +11,7 @@ class ReportSummary {
     required this.goalLinkedTasks,
     required this.standaloneTasks,
     required this.goalGroups,
+    required this.dayGroups,
   });
 
   final ReportPeriod period;
@@ -20,17 +21,27 @@ class ReportSummary {
   final List<PlannerTask> goalLinkedTasks;
   final List<PlannerTask> standaloneTasks;
   final List<GoalTaskReportGroup> goalGroups;
+  final List<DayTaskReportGroup> dayGroups;
 
   int get completedCount => completedTasks.length;
 
   int get goalLinkedCount => goalLinkedTasks.length;
 
   int get standaloneCount => standaloneTasks.length;
+
+  int get activeDaysCount => dayGroups.length;
 }
 
 class GoalTaskReportGroup {
   const GoalTaskReportGroup({required this.goal, required this.tasks});
 
   final Goal goal;
+  final List<PlannerTask> tasks;
+}
+
+class DayTaskReportGroup {
+  const DayTaskReportGroup({required this.date, required this.tasks});
+
+  final DateTime date;
   final List<PlannerTask> tasks;
 }

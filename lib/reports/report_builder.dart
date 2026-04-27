@@ -48,6 +48,7 @@ ReportSummary buildReportSummary({
     goalLinkedTasks: goalLinkedTasks,
     standaloneTasks: standaloneTasks,
     goalGroups: _groupTasksByGoal(goals: goals, tasks: goalLinkedTasks),
+    dayGroups: _groupTasksByDay(completedTasks),
   );
 }
 
@@ -65,6 +66,28 @@ List<GoalTaskReportGroup> _groupTasksByGoal({
     }
 
     groups.add(GoalTaskReportGroup(goal: goal, tasks: goalTasks));
+  }
+
+  return groups;
+}
+
+List<DayTaskReportGroup> _groupTasksByDay(List<PlannerTask> tasks) {
+  final groups = <DayTaskReportGroup>[];
+
+  for (final task in tasks) {
+    final completedAt = task.completedAt;
+
+    if (completedAt == null) {
+      continue;
+    }
+
+    final completedDate = dateOnly(completedAt);
+
+    if (groups.isEmpty || groups.last.date != completedDate) {
+      groups.add(DayTaskReportGroup(date: completedDate, tasks: [task]));
+    } else {
+      groups.last.tasks.add(task);
+    }
   }
 
   return groups;
