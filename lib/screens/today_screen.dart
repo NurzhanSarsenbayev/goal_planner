@@ -169,6 +169,7 @@ class TodayScreen extends StatelessWidget {
     final isGoalLinkedTask = task.goalId != null;
 
     return TaskCard(
+      key: ValueKey(task.id),
       task: task,
       goal: goal,
       onToggleCompleted: () => onToggleTaskCompleted(task.id),

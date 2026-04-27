@@ -55,12 +55,7 @@ class TaskCard extends StatelessWidget {
         leading: Icon(
           task.isCompleted ? Icons.check_circle : Icons.radio_button_unchecked,
         ),
-        title: Text(
-          task.title,
-          style: task.isCompleted
-              ? const TextStyle(decoration: TextDecoration.lineThrough)
-              : null,
-        ),
+        title: Text(task.title, style: _titleStyle(context)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -164,6 +159,19 @@ class TaskCard extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+
+  TextStyle _titleStyle(BuildContext context) {
+    final baseStyle =
+        Theme.of(context).textTheme.titleMedium ?? const TextStyle();
+
+    return baseStyle.copyWith(
+      decoration: task.isCompleted
+          ? TextDecoration.lineThrough
+          : TextDecoration.none,
+      decorationColor: Theme.of(context).colorScheme.onSurface,
+      decorationThickness: 2,
     );
   }
 
