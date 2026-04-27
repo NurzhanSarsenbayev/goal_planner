@@ -32,4 +32,12 @@ extension ReportPeriodDetails on ReportPeriod {
       ),
     };
   }
+
+  int get daysCount {
+    return switch (this) {
+      ReportPeriod.today => 1,
+      ReportPeriod.last7Days => 7,
+      ReportPeriod.last14Days => 14,
+    };
+  }
 }

@@ -30,6 +30,14 @@ class ReportSummary {
   int get standaloneCount => standaloneTasks.length;
 
   int get activeDaysCount => dayGroups.length;
+
+  int get goalLinkedSharePercent {
+    if (completedCount == 0) {
+      return 0;
+    }
+
+    return ((goalLinkedCount / completedCount) * 100).round();
+  }
 }
 
 class GoalTaskReportGroup {

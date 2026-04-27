@@ -50,6 +50,42 @@ void main() {
       });
     });
 
+    test('calculates goal-linked share percent', () {
+      final goal = _goal(id: 'goal-1', title: 'Blog');
+
+      final summary = buildReportSummary(
+        goals: [goal],
+        tasks: [
+          _completedTask(
+            id: 'goal-task-1',
+            completedAt: today,
+            goalId: goal.id,
+          ),
+          _completedTask(
+            id: 'goal-task-2',
+            completedAt: today,
+            goalId: goal.id,
+          ),
+          _completedTask(id: 'standalone-task', completedAt: today),
+        ],
+        period: ReportPeriod.today,
+        today: today,
+      );
+
+      expect(summary.goalLinkedSharePercent, 67);
+    });
+
+    test('goal-linked share is zero when no tasks are completed', () {
+      final summary = buildReportSummary(
+        goals: [],
+        tasks: [],
+        period: ReportPeriod.today,
+        today: today,
+      );
+
+      expect(summary.goalLinkedSharePercent, 0);
+    });
+
     test('last 14 days includes today through thirteen days ago', () {
       final summary = buildReportSummary(
         goals: [],
