@@ -5,6 +5,7 @@ import '../models/goal.dart';
 import '../models/planner_task.dart';
 import '../widgets/common/placeholder_screen.dart';
 import '../widgets/tasks/task_card.dart';
+import '../shared/planner_dates.dart';
 
 class TodayScreen extends StatelessWidget {
   const TodayScreen({
@@ -51,45 +52,52 @@ class TodayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todayTasks = tasks.where((task) => task.isScheduledForToday).toList();
+    final pendingTodayTasks = tasks
+        .where((task) => task.isScheduledForToday && !task.isCompleted)
+        .toList();
+
+    final doneTodayTasks = tasks.where(_wasCompletedToday).toList();
 
     return Stack(
       children: [
-        if (todayTasks.isEmpty)
+        if (pendingTodayTasks.isEmpty && doneTodayTasks.isEmpty)
           const PlaceholderScreen(
             title: 'Today',
             description: 'No tasks scheduled for today yet.',
             icon: Icons.today,
           )
         else
-          ListView.separated(
+          ListView(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
-            itemCount: todayTasks.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 8),
-            itemBuilder: (context, index) {
-              final task = todayTasks[index];
-              final goal = _findGoalById(task.goalId);
-              final isStandaloneTask = task.goalId == null;
-              final isGoalLinkedTask = task.goalId != null;
-
-              return TaskCard(
-                task: task,
-                goal: goal,
-                onToggleCompleted: () => onToggleTaskCompleted(task.id),
-                onEdit: () => onEditTask(task),
-                onAttachToGoal: isStandaloneTask
-                    ? () => onAttachTaskToGoal(task)
-                    : null,
-                onDetachFromGoal: isGoalLinkedTask
-                    ? () => onDetachTaskFromGoal(task.id)
-                    : null,
-                onRemoveFromToday: () => onRemoveTaskFromToday(task.id),
-                onScheduleDate: () {
-                  _showScheduleTaskDatePicker(context, task);
-                },
-                onDelete: () => onDeleteTask(task.id),
-              );
-            },
+            children: [
+              Text(
+                'To do today',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 8),
+              if (pendingTodayTasks.isEmpty)
+                Text(
+                  'No tasks left for today.',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                )
+              else
+                for (final task in pendingTodayTasks) ...[
+                  _buildTaskCard(context, task),
+                  const SizedBox(height: 8),
+                ],
+              if (doneTodayTasks.isNotEmpty) ...[
+                const SizedBox(height: 24),
+                Text(
+                  'Done today',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 8),
+                for (final task in doneTodayTasks) ...[
+                  _buildTaskCard(context, task),
+                  const SizedBox(height: 8),
+                ],
+              ],
+            ],
           ),
         Positioned(
           right: 16,
@@ -116,5 +124,39 @@ class TodayScreen extends StatelessWidget {
     }
 
     return null;
+  }
+
+  bool _wasCompletedToday(PlannerTask task) {
+    final completedAt = task.completedAt;
+
+    if (completedAt == null) {
+      return false;
+    }
+
+    return dateOnly(completedAt) == todayDate();
+  }
+
+  Widget _buildTaskCard(BuildContext context, PlannerTask task) {
+    final goal = _findGoalById(task.goalId);
+    final isStandaloneTask = task.goalId == null;
+    final isGoalLinkedTask = task.goalId != null;
+
+    return TaskCard(
+      task: task,
+      goal: goal,
+      onToggleCompleted: () => onToggleTaskCompleted(task.id),
+      onEdit: () => onEditTask(task),
+      onAttachToGoal: isStandaloneTask ? () => onAttachTaskToGoal(task) : null,
+      onDetachFromGoal: isGoalLinkedTask
+          ? () => onDetachTaskFromGoal(task.id)
+          : null,
+      onRemoveFromToday: task.isScheduledForToday
+          ? () => onRemoveTaskFromToday(task.id)
+          : null,
+      onScheduleDate: () {
+        _showScheduleTaskDatePicker(context, task);
+      },
+      onDelete: () => onDeleteTask(task.id),
+    );
   }
 }
