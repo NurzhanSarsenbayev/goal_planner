@@ -52,6 +52,11 @@ class TodayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final overdueTasks = tasks.where(_isOverdue).toList()
+      ..sort((first, second) {
+        return first.scheduledDate!.compareTo(second.scheduledDate!);
+      });
+
     final pendingTodayTasks = tasks
         .where((task) => task.isScheduledForToday && !task.isCompleted)
         .toList();
@@ -60,7 +65,9 @@ class TodayScreen extends StatelessWidget {
 
     return Stack(
       children: [
-        if (pendingTodayTasks.isEmpty && doneTodayTasks.isEmpty)
+        if (overdueTasks.isEmpty &&
+            pendingTodayTasks.isEmpty &&
+            doneTodayTasks.isEmpty)
           const PlaceholderScreen(
             title: 'Today',
             description: 'No tasks scheduled for today yet.',
@@ -70,6 +77,15 @@ class TodayScreen extends StatelessWidget {
           ListView(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
             children: [
+              if (overdueTasks.isNotEmpty) ...[
+                Text('Overdue', style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 8),
+                for (final task in overdueTasks) ...[
+                  _buildTaskCard(context, task),
+                  const SizedBox(height: 8),
+                ],
+                const SizedBox(height: 24),
+              ],
               Text(
                 'To do today',
                 style: Theme.of(context).textTheme.titleMedium,
@@ -85,6 +101,7 @@ class TodayScreen extends StatelessWidget {
                   _buildTaskCard(context, task),
                   const SizedBox(height: 8),
                 ],
+
               if (doneTodayTasks.isNotEmpty) ...[
                 const SizedBox(height: 24),
                 Text(
@@ -136,6 +153,16 @@ class TodayScreen extends StatelessWidget {
     return dateOnly(completedAt) == todayDate();
   }
 
+  bool _isOverdue(PlannerTask task) {
+    final scheduledDate = task.scheduledDate;
+
+    if (scheduledDate == null || task.isCompleted) {
+      return false;
+    }
+
+    return dateOnly(scheduledDate).isBefore(todayDate());
+  }
+
   Widget _buildTaskCard(BuildContext context, PlannerTask task) {
     final goal = _findGoalById(task.goalId);
     final isStandaloneTask = task.goalId == null;
@@ -151,6 +178,9 @@ class TodayScreen extends StatelessWidget {
           ? () => onDetachTaskFromGoal(task.id)
           : null,
       onRemoveFromToday: task.isScheduledForToday
+          ? () => onRemoveTaskFromToday(task.id)
+          : null,
+      onUnschedule: _isOverdue(task)
           ? () => onRemoveTaskFromToday(task.id)
           : null,
       onScheduleDate: () {
