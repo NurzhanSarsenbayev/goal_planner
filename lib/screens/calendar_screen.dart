@@ -13,6 +13,7 @@ class CalendarScreen extends StatefulWidget {
     required this.goals,
     required this.tasks,
     required this.onToggleTaskCompleted,
+    required this.onCompleteTaskOnDate,
     required this.onEditTask,
     required this.onScheduleTaskForDate,
     required this.onRemoveTaskFromSchedule,
@@ -23,6 +24,8 @@ class CalendarScreen extends StatefulWidget {
   final List<Goal> goals;
   final List<PlannerTask> tasks;
   final void Function(String taskId) onToggleTaskCompleted;
+  final void Function({required String taskId, required DateTime completedAt})
+  onCompleteTaskOnDate;
   final void Function(PlannerTask task) onEditTask;
   final void Function({required String taskId, required DateTime scheduledDate})
   onScheduleTaskForDate;
@@ -82,7 +85,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   task: task,
                   goal: _findGoalById(task.goalId),
                   onToggleCompleted: () {
-                    widget.onToggleTaskCompleted(task.id);
+                    handleTaskCompletionWithDateFlow(
+                      context,
+                      task: task,
+                      onToggleTaskCompleted: widget.onToggleTaskCompleted,
+                      onCompleteTaskOnDate: widget.onCompleteTaskOnDate,
+                    );
                   },
                   onEdit: () {
                     widget.onEditTask(task);

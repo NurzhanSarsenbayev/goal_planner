@@ -22,7 +22,7 @@ class DirectGoalTasksSection extends StatelessWidget {
   final Goal goal;
   final List<PlannerTask> tasks;
   final VoidCallback onAddTask;
-  final void Function(String taskId) onToggleTaskCompleted;
+  final void Function(PlannerTask task) onToggleTaskCompleted;
   final void Function(PlannerTask task) onEditTask;
   final void Function(PlannerTask task) onMoveTaskToMilestone;
   final void Function(String taskId) onScheduleTaskForToday;
@@ -49,7 +49,7 @@ class DirectGoalTasksSection extends StatelessWidget {
               child: TaskCard(
                 task: task,
                 goal: goal,
-                onToggleCompleted: () => onToggleTaskCompleted(task.id),
+                onToggleCompleted: () => onToggleTaskCompleted(task),
                 onEdit: () => onEditTask(task),
                 onMoveToMilestone: () => onMoveTaskToMilestone(task),
                 onScheduleForToday: () => onScheduleTaskForToday(task.id),

@@ -23,6 +23,7 @@ class AllTasksScreen extends StatefulWidget {
     required this.onDeleteTask,
     required this.onScheduleTaskForToday,
     required this.onScheduleTaskForDate,
+    required this.onCompleteTaskOnDate,
   });
 
   final List<Goal> goals;
@@ -32,6 +33,8 @@ class AllTasksScreen extends StatefulWidget {
   final void Function(String taskId) onScheduleTaskForToday;
   final void Function({required String taskId, required DateTime scheduledDate})
   onScheduleTaskForDate;
+  final void Function({required String taskId, required DateTime completedAt})
+  onCompleteTaskOnDate;
 
   final void Function({
     required String taskId,
@@ -70,6 +73,7 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
       onDeleteTask: widget.onDeleteTask,
       onScheduleTaskForToday: widget.onScheduleTaskForToday,
       onScheduleTaskForDate: widget.onScheduleTaskForDate,
+      onCompleteTaskOnDate: widget.onCompleteTaskOnDate,
     );
 
     _controller.addListener(_onControllerChanged);
@@ -179,7 +183,12 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
             task: task,
             goal: goal,
             onToggleCompleted: () {
-              _controller.toggleTaskCompleted(task.id);
+              handleTaskCompletionWithDateFlow(
+                context,
+                task: task,
+                onToggleTaskCompleted: _controller.toggleTaskCompleted,
+                onCompleteTaskOnDate: _controller.completeTaskOnDate,
+              );
             },
             onEdit: () {
               _showEditTaskDialog(task);

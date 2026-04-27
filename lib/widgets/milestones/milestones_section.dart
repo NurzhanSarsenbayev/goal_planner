@@ -32,7 +32,7 @@ class MilestonesSection extends StatelessWidget {
   final void Function(Milestone milestone) onEditMilestone;
   final void Function(Milestone milestone) onDeleteMilestone;
   final void Function(String milestoneId) onAddTaskToMilestone;
-  final void Function(String taskId) onToggleTaskCompleted;
+  final void Function(PlannerTask task) onToggleTaskCompleted;
   final void Function(PlannerTask task) onEditTask;
   final void Function(String taskId) onMoveTaskToDirectGoal;
   final void Function(String taskId) onScheduleTaskForToday;

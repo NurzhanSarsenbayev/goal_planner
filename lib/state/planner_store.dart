@@ -218,6 +218,13 @@ class PlannerStore extends ChangeNotifier {
     _updateTaskById(taskId, (task) => task.toggleCompleted());
   }
 
+  void completeTaskOnDate({
+    required String taskId,
+    required DateTime completedAt,
+  }) {
+    _updateTaskById(taskId, (task) => task.completedOn(completedAt));
+  }
+
   void scheduleTaskForToday(String taskId) {
     _updateTaskById(taskId, (task) => task.scheduledToday());
   }

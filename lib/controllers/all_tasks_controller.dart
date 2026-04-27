@@ -12,6 +12,7 @@ class AllTasksController extends ChangeNotifier {
     required this.onDeleteTask,
     required this.onScheduleTaskForToday,
     required this.onScheduleTaskForDate,
+    required this.onCompleteTaskOnDate,
   }) : _tasks = List.of(tasks);
 
   final void Function(String taskId) onToggleTaskCompleted;
@@ -35,6 +36,8 @@ class AllTasksController extends ChangeNotifier {
 
   final void Function(String taskId) onTaskDetachedFromGoal;
   final void Function(String taskId) onDeleteTask;
+  final void Function({required String taskId, required DateTime completedAt})
+  onCompleteTaskOnDate;
 
   List<PlannerTask> _tasks;
 
@@ -44,6 +47,15 @@ class AllTasksController extends ChangeNotifier {
     _updateTaskLocally(taskId, (task) => task.toggleCompleted());
 
     onToggleTaskCompleted(taskId);
+  }
+
+  void completeTaskOnDate({
+    required String taskId,
+    required DateTime completedAt,
+  }) {
+    _updateTaskLocally(taskId, (task) => task.completedOn(completedAt));
+
+    onCompleteTaskOnDate(taskId: taskId, completedAt: completedAt);
   }
 
   void scheduleTaskForToday(String taskId) {

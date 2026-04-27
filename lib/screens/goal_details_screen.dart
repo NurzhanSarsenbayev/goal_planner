@@ -31,6 +31,7 @@ class GoalDetailsScreen extends StatefulWidget {
     required this.onMilestoneDeletedWithTasks,
     required this.onScheduleTaskForToday,
     required this.onScheduleTaskForDate,
+    required this.onCompleteTaskOnDate,
   });
 
   final Goal goal;
@@ -67,6 +68,8 @@ class GoalDetailsScreen extends StatefulWidget {
   final void Function(String taskId) onScheduleTaskForToday;
   final void Function({required String taskId, required DateTime scheduledDate})
   onScheduleTaskForDate;
+  final void Function({required String taskId, required DateTime completedAt})
+  onCompleteTaskOnDate;
 
   @override
   State<GoalDetailsScreen> createState() => _GoalDetailsScreenState();
@@ -96,6 +99,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
       onMilestoneDeletedWithTasks: widget.onMilestoneDeletedWithTasks,
       onScheduleTaskForToday: widget.onScheduleTaskForToday,
       onScheduleTaskForDate: widget.onScheduleTaskForDate,
+      onCompleteTaskOnDate: widget.onCompleteTaskOnDate,
     );
 
     _controller.addListener(_onControllerChanged);
@@ -255,6 +259,15 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
     }
   }
 
+  void _toggleTaskCompletedWithDateFlow(PlannerTask task) {
+    handleTaskCompletionWithDateFlow(
+      context,
+      task: task,
+      onToggleTaskCompleted: _controller.toggleTaskCompleted,
+      onCompleteTaskOnDate: _controller.completeTaskOnDate,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -278,7 +291,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             onAddTaskToMilestone: (milestoneId) {
               _showAddTaskDialog(milestoneId: milestoneId);
             },
-            onToggleTaskCompleted: _controller.toggleTaskCompleted,
+            onToggleTaskCompleted: _toggleTaskCompletedWithDateFlow,
             onEditTask: _showEditTaskDialog,
             onMoveTaskToDirectGoal: _controller.moveTaskToDirectGoal,
             onScheduleTaskForToday: _controller.scheduleTaskForToday,
@@ -290,7 +303,7 @@ class _GoalDetailsScreenState extends State<GoalDetailsScreen> {
             goal: widget.goal,
             tasks: _controller.directGoalTasks,
             onAddTask: _showAddTaskDialog,
-            onToggleTaskCompleted: _controller.toggleTaskCompleted,
+            onToggleTaskCompleted: _toggleTaskCompletedWithDateFlow,
             onEditTask: _showEditTaskDialog,
             onMoveTaskToMilestone: _showMoveTaskToMilestoneDialog,
             onScheduleTaskForToday: _controller.scheduleTaskForToday,

@@ -196,6 +196,7 @@ class _AppShellState extends State<AppShell> {
             onDeleteTask: _store.deleteTask,
             onScheduleTaskForToday: _store.scheduleTaskForToday,
             onScheduleTaskForDate: _store.scheduleTaskForDate,
+            onCompleteTaskOnDate: _store.completeTaskOnDate,
           );
         },
       ),
@@ -244,6 +245,7 @@ class _AppShellState extends State<AppShell> {
             onMilestoneDeletedWithTasks: _store.deleteMilestoneWithTasks,
             onScheduleTaskForToday: _store.scheduleTaskForToday,
             onScheduleTaskForDate: _store.scheduleTaskForDate,
+            onCompleteTaskOnDate: _store.completeTaskOnDate,
           );
         },
       ),
@@ -257,6 +259,7 @@ class _AppShellState extends State<AppShell> {
         goals: _store.goals,
         tasks: _store.tasks,
         onToggleTaskCompleted: _store.toggleTaskCompleted,
+        onCompleteTaskOnDate: _store.completeTaskOnDate,
         onEditTask: _showEditTaskDialog,
         onAttachTaskToGoal: _showAttachTaskToGoalDialog,
         onDetachTaskFromGoal: _store.detachTaskFromGoal,
@@ -277,6 +280,7 @@ class _AppShellState extends State<AppShell> {
         goals: _store.goals,
         tasks: _store.tasks,
         onToggleTaskCompleted: _store.toggleTaskCompleted,
+        onCompleteTaskOnDate: _store.completeTaskOnDate,
         onEditTask: _showEditTaskDialog,
         onScheduleTaskForDate: _store.scheduleTaskForDate,
         onRemoveTaskFromSchedule: _store.unscheduleTask,

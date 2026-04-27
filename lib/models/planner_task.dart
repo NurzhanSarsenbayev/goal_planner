@@ -48,6 +48,10 @@ class PlannerTask {
     );
   }
 
+  PlannerTask completedOn(DateTime date) {
+    return copyWith(isCompleted: true, completedAt: dateOnly(date));
+  }
+
   PlannerTask scheduledToday() {
     return scheduleForDate(DateTime.now());
   }

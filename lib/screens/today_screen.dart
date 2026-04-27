@@ -13,6 +13,7 @@ class TodayScreen extends StatelessWidget {
     required this.goals,
     required this.tasks,
     required this.onToggleTaskCompleted,
+    required this.onCompleteTaskOnDate,
     required this.onEditTask,
     required this.onAttachTaskToGoal,
     required this.onDetachTaskFromGoal,
@@ -25,6 +26,8 @@ class TodayScreen extends StatelessWidget {
   final List<Goal> goals;
   final List<PlannerTask> tasks;
   final void Function(String taskId) onToggleTaskCompleted;
+  final void Function({required String taskId, required DateTime completedAt})
+  onCompleteTaskOnDate;
   final void Function(PlannerTask task) onEditTask;
   final void Function(String taskId) onRemoveTaskFromToday;
   final void Function({required String taskId, required DateTime scheduledDate})
@@ -172,7 +175,14 @@ class TodayScreen extends StatelessWidget {
       key: ValueKey(task.id),
       task: task,
       goal: goal,
-      onToggleCompleted: () => onToggleTaskCompleted(task.id),
+      onToggleCompleted: () {
+        handleTaskCompletionWithDateFlow(
+          context,
+          task: task,
+          onToggleTaskCompleted: onToggleTaskCompleted,
+          onCompleteTaskOnDate: onCompleteTaskOnDate,
+        );
+      },
       onEdit: () => onEditTask(task),
       onAttachToGoal: isStandaloneTask ? () => onAttachTaskToGoal(task) : null,
       onDetachFromGoal: isGoalLinkedTask

@@ -1,4 +1,4 @@
-# Roadmap
+ # Roadmap
 
 ## Phase 0: Setup
 
@@ -228,7 +228,7 @@ Not implemented yet:
 
 ## Phase 6: Reports and validation analytics MVP
 
-Status: not started.
+Status: mostly done.
 
 Goal:
 
@@ -238,63 +238,115 @@ The main question this phase should answer:
 
 > Did daily actions actually move long-term goals, or did the app become a generic todo list?
 
-Scope:
+Implemented:
 
-### Done today
+### Today execution feedback
 
 - Add Done today section to Today screen.
 - Show tasks completed today based on `completedAt`.
 - Keep pending today tasks separate from completed today tasks.
-- Make completed work visible during the day.
+- Add Overdue section to Today screen.
+- Show overdue tasks separately from today's planned tasks.
+- Support removing scheduled date from overdue tasks.
+- Support moving overdue tasks back to Today.
+- Support date-aware completion flow:
+  - today / unscheduled task -> complete today;
+  - past scheduled task -> choose completion date;
+  - future scheduled task -> confirm early completion;
+  - completed task -> uncomplete without dialog.
+- Apply date-aware completion flow across:
+  - Today;
+  - Calendar;
+  - All Tasks;
+  - Goal Details.
 
-### Daily report
+### Reports screen
 
-- Add Daily Report screen, accessible from More.
-- Show completed tasks for selected day.
-- Group completed tasks by goal.
-- Show standalone completed tasks separately.
-- Show simple counts:
-  - completed tasks;
-  - goal-linked completed tasks;
-  - standalone completed tasks.
-
-### Period summary
-
+- Add Reports screen accessible from More.
 - Support quick report periods:
   - Today;
   - Last 7 days;
   - Last 14 days.
-- Show completed task count for the selected period.
-- Show goal-linked vs standalone completed task count.
-- Show active days count.
-- Show completed tasks grouped by goal.
+- Show completed tasks for selected period.
+- Show summary card:
+  - completed task count;
+  - planned task count;
+  - plan completion percent;
+  - current completion streak.
+- Show goal contribution:
+  - completed tasks per goal;
+  - standalone completed tasks.
 - Show completed tasks grouped by day.
+- Show completed count in each day section.
+- Refresh Reports screen when store data changes.
+- Support complete / uncomplete from Reports.
 
-Expected result:
+### Report logic and tests
+
+- Extract report calculation from UI.
+- Add report builder.
+- Add report period model.
+- Add report summary model.
+- Add unit tests for:
+  - Today period;
+  - Last 7 days period;
+  - Last 14 days period;
+  - goal-linked vs standalone counts;
+  - active days;
+  - day grouping;
+  - planned task count;
+  - plan completion percent;
+  - current streak.
+
+### Refactoring completed during this phase
+
+- Extract report widgets:
+  - report period selector;
+  - report summary card;
+  - goal report section;
+  - day report section;
+  - empty report card.
+- Fix completed task title decoration.
+- Keep Reports screen focused on screen orchestration.
+
+Current result:
 
 A user can see:
 
+- what is planned for today;
+- what is overdue;
 - what was completed today;
-- what was completed on a selected day;
 - what was completed over the last 7 / 14 days;
-- which goals received actual completed actions;
-- whether most completed work was goal-linked or just standalone todo work.
+- how many planned tasks were actually completed;
+- which goals received completed actions;
+- how many days in a row they completed at least one task.
+
+A user can manually test:
+
+> create goal -> add milestone/direct task -> schedule tasks -> complete tasks across days -> open Reports -> switch Today / 7 days / 14 days -> see completed work, plan completion, streak, goal contribution and by-day history
 
 Validation value:
 
 This phase helps evaluate whether the app is used as a goal-linked planner or just as a simple todo list.
 
-Not doing initially:
+The most important validation signals are:
 
-- complex dashboards;
-- charts;
-- productivity score;
-- streaks;
-- AI-generated reviews;
-- export;
+- user completes tasks linked to goals;
+- user checks Reports;
+- user understands plan completion;
+- user notices overdue tasks and reschedules or completes them;
+- user can review the last 7 / 14 days and see meaningful goal progress.
+
+Not implemented yet:
+
+- custom selected-day report;
 - custom date ranges;
 - weekly comparison;
-- yearly analytics;
+- monthly / yearly analytics;
+- charts;
+- productivity score;
+- AI-generated reviews;
+- export;
 - habit analytics.
 
 ## Phase 6.5: Recurring task planning MVP
@@ -436,6 +488,10 @@ Success signals:
 - User links tasks to goals.
 - User completes tasks.
 - User checks progress/report.
+- User reviews the last 7 / 14 days.
+- User understands planned vs completed tasks.
+- User uses overdue tasks instead of losing old planned tasks.
+- User can see which goals received real completed actions.
 - User understands the difference between standalone, direct goal, and milestone tasks.
 
 Failure signals:
@@ -489,9 +545,14 @@ Main differentiator:
 ## Current limitations
 
 - No time-of-day scheduling yet.
-- No recurring tasks.
+- No recurring task planning yet.
 - No habits.
-- No reports.
+- No habit completion history.
+- Reports support only Today / Last 7 days / Last 14 days.
+- No custom selected-day report yet.
+- No custom report date ranges.
+- No weekly comparison.
+- No monthly / yearly analytics.
 - No search/filtering in All Tasks.
 - No drag-and-drop planning.
 - No week/day/year calendar views.
@@ -499,7 +560,7 @@ Main differentiator:
 - No reminders / notifications.
 - No cloud sync/backend.
 - No auth.
-- No design polish.
+- No serious design polish yet.
 - Sample seed data still exists for development.
 - State management is still custom ChangeNotifier-based; Riverpod is not introduced yet.
 
