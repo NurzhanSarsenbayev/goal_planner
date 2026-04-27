@@ -8,22 +8,32 @@ class ReportSummary {
     required this.startDate,
     required this.endDate,
     required this.completedTasks,
+    required this.plannedTasks,
+    required this.completedPlannedTasks,
     required this.goalLinkedTasks,
     required this.standaloneTasks,
     required this.goalGroups,
     required this.dayGroups,
+    required this.currentStreakDays,
   });
 
   final ReportPeriod period;
   final DateTime startDate;
   final DateTime endDate;
   final List<PlannerTask> completedTasks;
+  final List<PlannerTask> plannedTasks;
+  final List<PlannerTask> completedPlannedTasks;
   final List<PlannerTask> goalLinkedTasks;
   final List<PlannerTask> standaloneTasks;
   final List<GoalTaskReportGroup> goalGroups;
   final List<DayTaskReportGroup> dayGroups;
+  final int currentStreakDays;
 
   int get completedCount => completedTasks.length;
+
+  int get plannedCount => plannedTasks.length;
+
+  int get completedPlannedCount => completedPlannedTasks.length;
 
   int get goalLinkedCount => goalLinkedTasks.length;
 
@@ -31,12 +41,12 @@ class ReportSummary {
 
   int get activeDaysCount => dayGroups.length;
 
-  int get goalLinkedSharePercent {
-    if (completedCount == 0) {
+  int get planCompletionPercent {
+    if (plannedCount == 0) {
       return 0;
     }
 
-    return ((goalLinkedCount / completedCount) * 100).round();
+    return ((completedPlannedCount / plannedCount) * 100).round();
   }
 }
 

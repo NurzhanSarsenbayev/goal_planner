@@ -29,7 +29,7 @@ class DayReportSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          relativePlannerDateTitle(date),
+          '${relativePlannerDateTitle(date)} · ${tasks.length} completed',
           style: Theme.of(context).textTheme.titleSmall,
         ),
         const SizedBox(height: 8),

@@ -9,7 +9,7 @@ import '../widgets/reports/empty_report_card.dart';
 import '../widgets/reports/goal_report_section.dart';
 import '../widgets/reports/report_period_selector.dart';
 import '../widgets/reports/report_summary_card.dart';
-import '../widgets/tasks/task_card.dart';
+import '../widgets/reports/standalone_report_section.dart';
 
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({
@@ -67,52 +67,28 @@ class _ReportsScreenState extends State<ReportsScreen> {
           else ...[
             ReportSummaryCard(
               completedCount: report.completedCount,
-              goalLinkedCount: report.goalLinkedCount,
-              standaloneCount: report.standaloneCount,
-              activeDaysCount: report.activeDaysCount,
-              periodDaysCount: report.period.daysCount,
-              goalLinkedSharePercent: report.goalLinkedSharePercent,
+              plannedCount: report.plannedCount,
+              planCompletionPercent: report.planCompletionPercent,
+              currentStreakDays: report.currentStreakDays,
             ),
             const SizedBox(height: 24),
-            Text('By goal', style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              'Goal contribution',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 8),
-            if (report.goalGroups.isEmpty)
+            if (report.goalGroups.isEmpty && report.standaloneTasks.isEmpty)
               Text(
-                'No goal-linked tasks completed in this period.',
+                'No completed tasks in this period.',
                 style: Theme.of(context).textTheme.bodyMedium,
               )
-            else
+            else ...[
               for (final group in report.goalGroups) ...[
-                GoalReportSection(
-                  goal: group.goal,
-                  tasks: group.tasks,
-                  onToggleTaskCompleted: widget.onToggleTaskCompleted,
-                  onEditTask: widget.onEditTask,
-                  onDeleteTask: widget.onDeleteTask,
-                ),
-                const SizedBox(height: 16),
+                GoalReportSection(goal: group.goal, tasks: group.tasks),
+                const SizedBox(height: 8),
               ],
-            if (report.standaloneTasks.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Text(
-                'Standalone',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 8),
-              for (final task in report.standaloneTasks) ...[
-                TaskCard(
-                  task: task,
-                  goal: null,
-                  onToggleCompleted: () {
-                    widget.onToggleTaskCompleted(task.id);
-                  },
-                  onEdit: () {
-                    widget.onEditTask(task);
-                  },
-                  onDelete: () {
-                    widget.onDeleteTask(task.id);
-                  },
-                ),
+              if (report.standaloneTasks.isNotEmpty) ...[
+                StandaloneReportSection(completedCount: report.standaloneCount),
                 const SizedBox(height: 8),
               ],
             ],

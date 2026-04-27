@@ -50,42 +50,6 @@ void main() {
       });
     });
 
-    test('calculates goal-linked share percent', () {
-      final goal = _goal(id: 'goal-1', title: 'Blog');
-
-      final summary = buildReportSummary(
-        goals: [goal],
-        tasks: [
-          _completedTask(
-            id: 'goal-task-1',
-            completedAt: today,
-            goalId: goal.id,
-          ),
-          _completedTask(
-            id: 'goal-task-2',
-            completedAt: today,
-            goalId: goal.id,
-          ),
-          _completedTask(id: 'standalone-task', completedAt: today),
-        ],
-        period: ReportPeriod.today,
-        today: today,
-      );
-
-      expect(summary.goalLinkedSharePercent, 67);
-    });
-
-    test('goal-linked share is zero when no tasks are completed', () {
-      final summary = buildReportSummary(
-        goals: [],
-        tasks: [],
-        period: ReportPeriod.today,
-        today: today,
-      );
-
-      expect(summary.goalLinkedSharePercent, 0);
-    });
-
     test('last 14 days includes today through thirteen days ago', () {
       final summary = buildReportSummary(
         goals: [],
@@ -129,6 +93,19 @@ void main() {
       expect(summary.goalGroups.length, 1);
       expect(summary.goalGroups.first.goal.id, goal.id);
       expect(summary.goalGroups.first.tasks.first.id, 'goal-task');
+    });
+
+    test('ignores tasks that are not completed', () {
+      final summary = buildReportSummary(
+        goals: [],
+        tasks: [
+          _task(id: 'not-completed', completedAt: today, isCompleted: false),
+        ],
+        period: ReportPeriod.today,
+        today: today,
+      );
+
+      expect(summary.completedTasks, isEmpty);
     });
 
     test('counts active days in selected period', () {
@@ -176,17 +153,89 @@ void main() {
       expect(summary.dayGroups[1].tasks.first.id, 'yesterday');
     });
 
-    test('ignores tasks that are not completed', () {
+    test('calculates planned task count and plan completion percent', () {
       final summary = buildReportSummary(
         goals: [],
         tasks: [
-          _task(id: 'not-completed', completedAt: today, isCompleted: false),
+          _completedTask(
+            id: 'planned-completed-1',
+            completedAt: today,
+            scheduledDate: today,
+          ),
+          _completedTask(
+            id: 'planned-completed-2',
+            completedAt: today,
+            scheduledDate: today,
+          ),
+          _task(
+            id: 'planned-not-completed',
+            completedAt: null,
+            isCompleted: false,
+            scheduledDate: today,
+          ),
+          _completedTask(id: 'completed-unplanned', completedAt: today),
         ],
         period: ReportPeriod.today,
         today: today,
       );
 
-      expect(summary.completedTasks, isEmpty);
+      expect(summary.completedCount, 3);
+      expect(summary.plannedCount, 3);
+      expect(summary.completedPlannedCount, 2);
+      expect(summary.planCompletionPercent, 67);
+    });
+
+    test('plan completion percent is zero when nothing was planned', () {
+      final summary = buildReportSummary(
+        goals: [],
+        tasks: [_completedTask(id: 'completed-unplanned', completedAt: today)],
+        period: ReportPeriod.today,
+        today: today,
+      );
+
+      expect(summary.plannedCount, 0);
+      expect(summary.planCompletionPercent, 0);
+    });
+
+    test('calculates current streak ending today', () {
+      final summary = buildReportSummary(
+        goals: [],
+        tasks: [
+          _completedTask(id: 'today', completedAt: today),
+          _completedTask(
+            id: 'yesterday',
+            completedAt: today.subtract(const Duration(days: 1)),
+          ),
+          _completedTask(
+            id: 'two-days-ago',
+            completedAt: today.subtract(const Duration(days: 2)),
+          ),
+          _completedTask(
+            id: 'four-days-ago',
+            completedAt: today.subtract(const Duration(days: 4)),
+          ),
+        ],
+        period: ReportPeriod.last14Days,
+        today: today,
+      );
+
+      expect(summary.currentStreakDays, 3);
+    });
+
+    test('current streak is zero when today has no completed tasks', () {
+      final summary = buildReportSummary(
+        goals: [],
+        tasks: [
+          _completedTask(
+            id: 'yesterday',
+            completedAt: today.subtract(const Duration(days: 1)),
+          ),
+        ],
+        period: ReportPeriod.last7Days,
+        today: today,
+      );
+
+      expect(summary.currentStreakDays, 0);
     });
   });
 }
@@ -205,20 +254,23 @@ PlannerTask _completedTask({
   required String id,
   required DateTime completedAt,
   String? goalId,
+  DateTime? scheduledDate,
 }) {
   return _task(
     id: id,
     completedAt: completedAt,
     goalId: goalId,
+    scheduledDate: scheduledDate,
     isCompleted: true,
   );
 }
 
 PlannerTask _task({
   required String id,
-  required DateTime completedAt,
+  required DateTime? completedAt,
   required bool isCompleted,
   String? goalId,
+  DateTime? scheduledDate,
 }) {
   return PlannerTask(
     id: id,
@@ -226,6 +278,7 @@ PlannerTask _task({
     description: '',
     createdAt: DateTime(2026),
     goalId: goalId,
+    scheduledDate: scheduledDate,
     isCompleted: isCompleted,
     completedAt: completedAt,
   );

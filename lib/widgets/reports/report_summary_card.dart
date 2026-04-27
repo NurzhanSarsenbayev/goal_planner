@@ -4,68 +4,108 @@ class ReportSummaryCard extends StatelessWidget {
   const ReportSummaryCard({
     super.key,
     required this.completedCount,
-    required this.goalLinkedCount,
-    required this.standaloneCount,
-    required this.activeDaysCount,
-    required this.periodDaysCount,
-    required this.goalLinkedSharePercent,
+    required this.plannedCount,
+    required this.planCompletionPercent,
+    required this.currentStreakDays,
   });
 
   final int completedCount;
-  final int goalLinkedCount;
-  final int standaloneCount;
-  final int activeDaysCount;
-  final int periodDaysCount;
-  final int goalLinkedSharePercent;
+  final int plannedCount;
+  final int planCompletionPercent;
+  final int currentStreakDays;
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _SummaryRow(
-              label: 'Completed tasks',
-              value: completedCount.toString(),
+            Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: completedCount.toString(),
+                    style: textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  TextSpan(text: ' completed', style: textTheme.titleMedium),
+                ],
+              ),
             ),
-            const SizedBox(height: 8),
-            _SummaryRow(
-              label: 'Goal-linked',
-              value: goalLinkedCount.toString(),
-            ),
-            const SizedBox(height: 8),
-            _SummaryRow(label: 'Standalone', value: standaloneCount.toString()),
-            const SizedBox(height: 8),
-            _SummaryRow(
-              label: 'Goal-linked share',
-              value: '$goalLinkedSharePercent%',
-            ),
-            const SizedBox(height: 8),
-            _SummaryRow(
-              label: 'Active days',
-              value: '$activeDaysCount / $periodDaysCount',
+            const SizedBox(height: 4),
+            Text('out of $plannedCount planned', style: textTheme.bodyMedium),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: _MetricPill(
+                    value: '$planCompletionPercent%',
+                    label: 'plan completion',
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _MetricPill(
+                    value: _streakValue(),
+                    label: 'current streak',
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
   }
+
+  String _streakValue() {
+    if (currentStreakDays == 0) {
+      return '0 days';
+    }
+
+    if (currentStreakDays == 1) {
+      return '🔥 1 day';
+    }
+
+    return '🔥 $currentStreakDays days';
+  }
 }
 
-class _SummaryRow extends StatelessWidget {
-  const _SummaryRow({required this.label, required this.value});
+class _MetricPill extends StatelessWidget {
+  const _MetricPill({required this.value, required this.label});
 
-  final String label;
   final String value;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(child: Text(label)),
-        Text(value, style: Theme.of(context).textTheme.titleMedium),
-      ],
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        children: [
+          Text(
+            value,
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ],
+      ),
     );
   }
 }
