@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../models/goal.dart';
 import '../models/planner_task.dart';
-import '../shared/planner_dates.dart';
+import '../reports/report_builder.dart';
+import '../reports/report_period.dart';
 import '../widgets/tasks/task_card.dart';
 
 class ReportsScreen extends StatefulWidget {
@@ -26,18 +27,16 @@ class ReportsScreen extends StatefulWidget {
 }
 
 class _ReportsScreenState extends State<ReportsScreen> {
-  _ReportPeriod _selectedPeriod = _ReportPeriod.today;
+  ReportPeriod _selectedPeriod = ReportPeriod.today;
 
   @override
   Widget build(BuildContext context) {
-    final completedTasks = _completedTasksForPeriod(_selectedPeriod);
-    final goalLinkedTasks = completedTasks
-        .where((task) => task.goalId != null)
-        .toList();
-    final standaloneTasks = completedTasks
-        .where((task) => task.goalId == null)
-        .toList();
-    final groupedByGoal = _groupTasksByGoal(goalLinkedTasks);
+    final report = buildReportSummary(
+      goals: widget.goals,
+      tasks: widget.tasks,
+      period: _selectedPeriod,
+      today: DateTime.now(),
+    );
 
     return Scaffold(
       appBar: AppBar(title: const Text('Reports')),
@@ -45,7 +44,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
         padding: const EdgeInsets.all(16),
         children: [
           Text(
-            _periodTitle(_selectedPeriod),
+            _selectedPeriod.title,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 16),
@@ -58,24 +57,24 @@ class _ReportsScreenState extends State<ReportsScreen> {
             },
           ),
           const SizedBox(height: 16),
-          if (completedTasks.isEmpty)
-            _EmptyReportCard(periodTitle: _periodTitle(_selectedPeriod))
+          if (report.completedTasks.isEmpty)
+            _EmptyReportCard(periodTitle: _selectedPeriod.title)
           else ...[
             _ReportSummaryCard(
-              completedCount: completedTasks.length,
-              goalLinkedCount: goalLinkedTasks.length,
-              standaloneCount: standaloneTasks.length,
+              completedCount: report.completedCount,
+              goalLinkedCount: report.goalLinkedCount,
+              standaloneCount: report.standaloneCount,
             ),
             const SizedBox(height: 24),
             Text('By goal', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
-            if (groupedByGoal.isEmpty)
+            if (report.goalGroups.isEmpty)
               Text(
                 'No goal-linked tasks completed in this period.',
                 style: Theme.of(context).textTheme.bodyMedium,
               )
             else
-              for (final group in groupedByGoal) ...[
+              for (final group in report.goalGroups) ...[
                 _GoalReportSection(
                   goal: group.goal,
                   tasks: group.tasks,
@@ -85,14 +84,14 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 ),
                 const SizedBox(height: 16),
               ],
-            if (standaloneTasks.isNotEmpty) ...[
+            if (report.standaloneTasks.isNotEmpty) ...[
               const SizedBox(height: 8),
               Text(
                 'Standalone',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
-              for (final task in standaloneTasks) ...[
+              for (final task in report.standaloneTasks) ...[
                 TaskCard(
                   task: task,
                   goal: null,
@@ -114,69 +113,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
       ),
     );
   }
-
-  List<PlannerTask> _completedTasksForPeriod(_ReportPeriod period) {
-    final today = todayDate();
-    final startDate = _periodStartDate(period, today);
-
-    final completedTasks =
-        widget.tasks.where((task) {
-          final completedAt = task.completedAt;
-
-          if (completedAt == null) {
-            return false;
-          }
-
-          final completedDate = dateOnly(completedAt);
-
-          return !completedDate.isBefore(startDate) &&
-              !completedDate.isAfter(today);
-        }).toList()..sort((first, second) {
-          final firstCompletedAt = first.completedAt!;
-          final secondCompletedAt = second.completedAt!;
-
-          return secondCompletedAt.compareTo(firstCompletedAt);
-        });
-
-    return completedTasks;
-  }
-
-  DateTime _periodStartDate(_ReportPeriod period, DateTime today) {
-    return switch (period) {
-      _ReportPeriod.today => today,
-      _ReportPeriod.last7Days => today.subtract(const Duration(days: 6)),
-      _ReportPeriod.last14Days => today.subtract(const Duration(days: 13)),
-    };
-  }
-
-  List<_GoalTaskGroup> _groupTasksByGoal(List<PlannerTask> sourceTasks) {
-    final groups = <_GoalTaskGroup>[];
-
-    for (final goal in widget.goals) {
-      final goalTasks = sourceTasks
-          .where((task) => task.goalId == goal.id)
-          .toList();
-
-      if (goalTasks.isEmpty) {
-        continue;
-      }
-
-      groups.add(_GoalTaskGroup(goal: goal, tasks: goalTasks));
-    }
-
-    return groups;
-  }
-
-  String _periodTitle(_ReportPeriod period) {
-    return switch (period) {
-      _ReportPeriod.today => 'Today',
-      _ReportPeriod.last7Days => 'Last 7 days',
-      _ReportPeriod.last14Days => 'Last 14 days',
-    };
-  }
 }
-
-enum _ReportPeriod { today, last7Days, last14Days }
 
 class _ReportPeriodSelector extends StatelessWidget {
   const _ReportPeriodSelector({
@@ -184,16 +121,16 @@ class _ReportPeriodSelector extends StatelessWidget {
     required this.onChanged,
   });
 
-  final _ReportPeriod selectedPeriod;
-  final void Function(_ReportPeriod period) onChanged;
+  final ReportPeriod selectedPeriod;
+  final void Function(ReportPeriod period) onChanged;
 
   @override
   Widget build(BuildContext context) {
-    return SegmentedButton<_ReportPeriod>(
+    return SegmentedButton<ReportPeriod>(
       segments: const [
-        ButtonSegment(value: _ReportPeriod.today, label: Text('Today')),
-        ButtonSegment(value: _ReportPeriod.last7Days, label: Text('7 days')),
-        ButtonSegment(value: _ReportPeriod.last14Days, label: Text('14 days')),
+        ButtonSegment(value: ReportPeriod.today, label: Text('Today')),
+        ButtonSegment(value: ReportPeriod.last7Days, label: Text('7 days')),
+        ButtonSegment(value: ReportPeriod.last14Days, label: Text('14 days')),
       ],
       selected: {selectedPeriod},
       onSelectionChanged: (selection) {
@@ -318,11 +255,4 @@ class _GoalReportSection extends StatelessWidget {
       ],
     );
   }
-}
-
-class _GoalTaskGroup {
-  const _GoalTaskGroup({required this.goal, required this.tasks});
-
-  final Goal goal;
-  final List<PlannerTask> tasks;
 }
