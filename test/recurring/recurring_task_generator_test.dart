@@ -6,9 +6,10 @@ import 'package:goal_planner/recurring/recurring_task_generator.dart';
 
 void main() {
   group('generateRecurringTaskOccurrences', () {
-    final today = DateTime(2026, 4, 27); // Monday
+    final startDate = DateTime(2026, 4, 27); // Monday
+    final endDate = DateTime(2026, 5, 3); // Sunday
 
-    test('generates weekly occurrences inside horizon', () {
+    test('generates weekly occurrences inside date range', () {
       final rule = _weeklyRule(
         id: 'rule-1',
         weekdays: [DateTime.monday, DateTime.wednesday, DateTime.friday],
@@ -18,8 +19,8 @@ void main() {
         rules: [rule],
         exceptions: [],
         existingTasks: [],
-        today: today,
-        horizonDays: 7,
+        startDate: startDate,
+        endDate: endDate,
       );
 
       expect(generated.map((task) => task.scheduledDate).toList(), [
@@ -29,19 +30,33 @@ void main() {
       ]);
     });
 
-    test('generates monthly occurrence inside horizon', () {
+    test('generates monthly occurrence inside date range', () {
       final rule = _monthlyRule(id: 'rule-1', monthDay: 1);
 
       final generated = generateRecurringTaskOccurrences(
         rules: [rule],
         exceptions: [],
         existingTasks: [],
-        today: today,
-        horizonDays: 7,
+        startDate: startDate,
+        endDate: endDate,
       );
 
       expect(generated.length, 1);
       expect(generated.first.scheduledDate, DateTime(2026, 5, 1));
+    });
+
+    test('returns empty list when end date is before start date', () {
+      final rule = _weeklyRule(id: 'rule-1', weekdays: [DateTime.monday]);
+
+      final generated = generateRecurringTaskOccurrences(
+        rules: [rule],
+        exceptions: [],
+        existingTasks: [],
+        startDate: DateTime(2026, 5, 2),
+        endDate: DateTime(2026, 5, 1),
+      );
+
+      expect(generated, isEmpty);
     });
 
     test('does not generate inactive rule occurrences', () {
@@ -55,7 +70,8 @@ void main() {
         rules: [rule],
         exceptions: [],
         existingTasks: [],
-        today: today,
+        startDate: startDate,
+        endDate: endDate,
       );
 
       expect(generated, isEmpty);
@@ -72,8 +88,8 @@ void main() {
         rules: [rule],
         exceptions: [],
         existingTasks: [],
-        today: today,
-        horizonDays: 1,
+        startDate: DateTime(2026, 4, 27),
+        endDate: DateTime(2026, 4, 27),
       );
 
       expect(generated, isEmpty);
@@ -90,8 +106,8 @@ void main() {
         rules: [rule],
         exceptions: [],
         existingTasks: [],
-        today: today,
-        horizonDays: 1,
+        startDate: DateTime(2026, 4, 27),
+        endDate: DateTime(2026, 4, 27),
       );
 
       expect(generated, isEmpty);
@@ -103,16 +119,16 @@ void main() {
       final exception = RecurringTaskException(
         id: 'exception-1',
         ruleId: rule.id,
-        date: today,
-        createdAt: today,
+        date: startDate,
+        createdAt: startDate,
       );
 
       final generated = generateRecurringTaskOccurrences(
         rules: [rule],
         exceptions: [exception],
         existingTasks: [],
-        today: today,
-        horizonDays: 1,
+        startDate: startDate,
+        endDate: startDate,
       );
 
       expect(generated, isEmpty);
@@ -126,19 +142,33 @@ void main() {
         title: 'Workout',
         description: '',
         recurringRuleId: rule.id,
-        scheduledDate: today,
-        createdAt: today,
+        scheduledDate: startDate,
+        createdAt: startDate,
       );
 
       final generated = generateRecurringTaskOccurrences(
         rules: [rule],
         exceptions: [],
         existingTasks: [existingTask],
-        today: today,
-        horizonDays: 1,
+        startDate: startDate,
+        endDate: startDate,
       );
 
       expect(generated, isEmpty);
+    });
+
+    test('does not generate duplicates inside same generation result', () {
+      final rule = _weeklyRule(id: 'rule-1', weekdays: [DateTime.monday]);
+
+      final generated = generateRecurringTaskOccurrences(
+        rules: [rule, rule],
+        exceptions: [],
+        existingTasks: [],
+        startDate: startDate,
+        endDate: startDate,
+      );
+
+      expect(generated.length, 1);
     });
 
     test('generated occurrence copies rule placement and content', () {
@@ -155,8 +185,8 @@ void main() {
         rules: [rule],
         exceptions: [],
         existingTasks: [],
-        today: today,
-        horizonDays: 1,
+        startDate: startDate,
+        endDate: startDate,
       );
 
       final task = generated.single;
@@ -166,7 +196,7 @@ void main() {
       expect(task.goalId, 'goal-1');
       expect(task.milestoneId, 'milestone-1');
       expect(task.recurringRuleId, rule.id);
-      expect(task.scheduledDate, today);
+      expect(task.scheduledDate, startDate);
     });
 
     test('uses deterministic occurrence task id', () {
@@ -176,6 +206,29 @@ void main() {
       );
 
       expect(id, 'task_recurring_rule-1_20260427');
+    });
+  });
+
+  group('generateUpcomingRecurringTaskOccurrences', () {
+    test('generates from today for configured number of days', () {
+      final today = DateTime(2026, 4, 27); // Monday
+      final rule = _weeklyRule(
+        id: 'rule-1',
+        weekdays: [DateTime.monday, DateTime.wednesday],
+      );
+
+      final generated = generateUpcomingRecurringTaskOccurrences(
+        rules: [rule],
+        exceptions: [],
+        existingTasks: [],
+        today: today,
+        days: 3,
+      );
+
+      expect(generated.map((task) => task.scheduledDate).toList(), [
+        DateTime(2026, 4, 27),
+        DateTime(2026, 4, 29),
+      ]);
     });
   });
 }

@@ -3,16 +3,22 @@ import '../models/recurring_task_exception.dart';
 import '../models/recurring_task_rule.dart';
 import '../shared/planner_dates.dart';
 
-const defaultRecurringGenerationHorizonDays = 14;
+const defaultUpcomingRecurringGenerationDays = 14;
 
 List<PlannerTask> generateRecurringTaskOccurrences({
   required List<RecurringTaskRule> rules,
   required List<RecurringTaskException> exceptions,
   required List<PlannerTask> existingTasks,
-  required DateTime today,
-  int horizonDays = defaultRecurringGenerationHorizonDays,
+  required DateTime startDate,
+  required DateTime endDate,
 }) {
-  final normalizedToday = dateOnly(today);
+  final normalizedStartDate = dateOnly(startDate);
+  final normalizedEndDate = dateOnly(endDate);
+
+  if (normalizedEndDate.isBefore(normalizedStartDate)) {
+    return const [];
+  }
+
   final generatedTasks = <PlannerTask>[];
 
   for (final rule in rules) {
@@ -20,34 +26,46 @@ List<PlannerTask> generateRecurringTaskOccurrences({
       continue;
     }
 
-    for (var offset = 0; offset < horizonDays; offset++) {
-      final date = normalizedToday.add(Duration(days: offset));
+    var date = normalizedStartDate;
 
-      if (!rule.matchesDate(date)) {
-        continue;
+    while (!date.isAfter(normalizedEndDate)) {
+      if (rule.matchesDate(date) &&
+          !_hasExceptionForDate(
+            ruleId: rule.id,
+            date: date,
+            exceptions: exceptions,
+          ) &&
+          !_hasExistingOccurrenceForDate(
+            ruleId: rule.id,
+            date: date,
+            existingTasks: [...existingTasks, ...generatedTasks],
+          )) {
+        generatedTasks.add(_createOccurrenceTask(rule: rule, date: date));
       }
 
-      if (_hasExceptionForDate(
-        ruleId: rule.id,
-        date: date,
-        exceptions: exceptions,
-      )) {
-        continue;
-      }
-
-      if (_hasExistingOccurrenceForDate(
-        ruleId: rule.id,
-        date: date,
-        existingTasks: existingTasks,
-      )) {
-        continue;
-      }
-
-      generatedTasks.add(_createOccurrenceTask(rule: rule, date: date));
+      date = date.add(const Duration(days: 1));
     }
   }
 
   return generatedTasks;
+}
+
+List<PlannerTask> generateUpcomingRecurringTaskOccurrences({
+  required List<RecurringTaskRule> rules,
+  required List<RecurringTaskException> exceptions,
+  required List<PlannerTask> existingTasks,
+  required DateTime today,
+  int days = defaultUpcomingRecurringGenerationDays,
+}) {
+  final normalizedToday = dateOnly(today);
+
+  return generateRecurringTaskOccurrences(
+    rules: rules,
+    exceptions: exceptions,
+    existingTasks: existingTasks,
+    startDate: normalizedToday,
+    endDate: normalizedToday.add(Duration(days: days - 1)),
+  );
 }
 
 PlannerTask _createOccurrenceTask({

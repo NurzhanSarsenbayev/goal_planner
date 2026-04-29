@@ -193,8 +193,8 @@ class PlannerStore extends ChangeNotifier {
   void addRecurringTaskRule(RecurringTaskRule rule) {
     _recurringRules = [..._recurringRules, rule];
 
-    final generatedTasks = generateRecurringTaskOccurrences(
-      rules: [rule],
+    final generatedTasks = generateUpcomingRecurringTaskOccurrences(
+      rules: _recurringRules,
       exceptions: _recurringExceptions,
       existingTasks: _tasks,
       today: todayDate(),
@@ -288,7 +288,7 @@ class PlannerStore extends ChangeNotifier {
   }
 
   Future<void> _ensureUpcomingRecurringTaskOccurrences() async {
-    final generatedTasks = generateRecurringTaskOccurrences(
+    final generatedTasks = generateUpcomingRecurringTaskOccurrences(
       rules: _recurringRules,
       exceptions: _recurringExceptions,
       existingTasks: _tasks,
