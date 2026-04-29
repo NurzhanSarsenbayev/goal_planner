@@ -10,6 +10,7 @@ class PlannerTask {
     required this.createdAt,
     this.goalId,
     this.milestoneId,
+    this.recurringRuleId,
     this.scheduledDate,
     this.isCompleted = false,
     this.completedAt,
@@ -21,6 +22,7 @@ class PlannerTask {
   final DateTime createdAt;
   final String? goalId;
   final String? milestoneId;
+  final String? recurringRuleId;
   final DateTime? scheduledDate;
   final bool isCompleted;
   final DateTime? completedAt;
@@ -94,6 +96,7 @@ class PlannerTask {
     DateTime? createdAt,
     Object? goalId = _unset,
     Object? milestoneId = _unset,
+    Object? recurringRuleId = _unset,
     Object? scheduledDate = _unset,
     bool? isCompleted,
     Object? completedAt = _unset,
@@ -107,6 +110,9 @@ class PlannerTask {
       milestoneId: identical(milestoneId, _unset)
           ? this.milestoneId
           : milestoneId as String?,
+      recurringRuleId: identical(recurringRuleId, _unset)
+          ? this.recurringRuleId
+          : recurringRuleId as String?,
       scheduledDate: identical(scheduledDate, _unset)
           ? this.scheduledDate
           : scheduledDate as DateTime?,
