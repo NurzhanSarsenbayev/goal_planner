@@ -351,25 +351,48 @@ Not implemented yet:
 
 ## Phase 6.5: Recurring task planning MVP
 
-Status: not started.
+Status: in progress.
 
 Goal:
 
-Make repeated weekday-based tasks easy to plan without manually scheduling each date.
+Make repeated tasks easy to plan without manually scheduling each date.
 
 Problem:
 
-Some tasks repeat on predictable days, for example:
+Some tasks repeat on predictable patterns, for example:
 
 - workout on Monday / Wednesday / Friday;
 - take out trash every Friday;
-- pay something every 15th later;
+- pay something every 15th;
+- weigh in once a month;
 - weekly planning every Sunday.
 
-Initial scope:
+Current architecture decision:
 
-- Create recurring task rule.
-- Support weekday selection:
+Recurring tasks are implemented as:
+
+> RecurringTaskRule -> generated PlannerTask occurrences
+
+A recurring rule defines the repeated task.
+
+Generated occurrences are normal `PlannerTask` items with:
+
+- concrete `scheduledDate`;
+- optional `goalId`;
+- optional `milestoneId`;
+- `recurringRuleId` linking them back to the rule.
+
+This lets Today, Calendar and Reports work with recurring occurrences mostly like normal scheduled tasks.
+
+Implemented:
+
+### Domain model
+
+- Add `RecurringTaskRule`.
+- Add recurrence types:
+  - weekly;
+  - monthly.
+- Support weekly weekdays:
   - Monday;
   - Tuesday;
   - Wednesday;
@@ -377,41 +400,169 @@ Initial scope:
   - Friday;
   - Saturday;
   - Sunday.
-- Support task placement:
+- Support monthly day selection.
+- Support monthly day fallback:
+  - if the selected day does not exist in a month, occurrence is created on the last day of that month.
+  - example: day 31 -> February 28/29, April 30.
+- Add `RecurringTaskException`.
+- Add `recurringRuleId` to `PlannerTask`.
+
+### Tests
+
+- Add tests for weekly rule matching.
+- Add tests for monthly rule matching.
+- Add tests for inactive rules.
+- Add tests for start/end date boundaries.
+- Add tests for monthly last-day fallback.
+- Add tests for recurring exceptions.
+- Add tests for recurring occurrence generation.
+- Add tests preventing duplicate generated occurrences.
+
+### Persistence
+
+- Upgrade Drift schema to version 2.
+- Add `recurring_task_rules` table.
+- Add `recurring_task_exceptions` table.
+- Add nullable `recurringRuleId` column to `tasks`.
+- Add migration from schema v1 to v2.
+- Add repository mapping for recurring rules.
+- Add repository mapping for recurring exceptions.
+- Persist generated recurring task occurrences as normal tasks.
+
+### Recurring occurrence generation
+
+- Add recurring task occurrence generator.
+- Generate concrete `PlannerTask` occurrences from active rules.
+- Respect recurring exceptions.
+- Avoid duplicate occurrences.
+- Use deterministic generated task IDs.
+- Generate upcoming occurrences on app start.
+- Refactor generator to support arbitrary date ranges:
+  - `startDate`;
+  - `endDate`.
+- Keep upcoming generation for near-term Today usage.
+- Generate recurring occurrences for visible Calendar month.
+
+### Store integration
+
+- Load recurring rules into `PlannerStore`.
+- Load recurring exceptions into `PlannerStore`.
+- Add recurring rule creation to `PlannerStore`.
+- Generate and persist upcoming occurrences when a rule is created.
+- Generate and persist missing occurrences when Calendar opens a visible month.
+
+### UI
+
+- Add `Recurring tasks` screen.
+- Add entry point from More.
+- Add recurring rule list.
+- Add reusable recurring rule card.
+- Add recurring rule creation dialog from Recurring Tasks screen.
+- Support recurring rule placement:
   - standalone recurring task;
   - direct goal recurring task;
   - milestone recurring task.
-- Show upcoming recurring task occurrences in Today.
-- Show upcoming recurring task occurrences in Calendar.
-- Completing one occurrence affects only that occurrence.
-- Keep recurring planning local-first.
-- Keep recurrence simple enough for the first user test.
+- Support weekly rule creation.
+- Support monthly rule creation.
+- Disable Add button until recurring rule form is valid.
+- Allow monthly day 1-31.
+- Show helper text explaining monthly last-day fallback.
+- Show recurring rules in All Tasks instead of flooding All Tasks with future generated occurrences.
+- Hide future uncompleted recurring occurrences from default All Tasks view.
+- Keep today / overdue / completed recurring occurrences visible in All Tasks.
 
-Possible implementation direction:
+Current result:
 
-- Start with weekday-based recurrence only.
-- Generate or expose upcoming occurrences for a short window, for example next 14 days.
-- Do not attempt full calendar recurrence rules yet.
+A user can create a recurring task rule from More -> Recurring tasks.
 
-Expected result:
-
-A user can create a repeated task like:
+Examples:
 
 > Workout every Monday, Wednesday and Friday
 
-and see the correct occurrences in Today and Calendar without manually scheduling every date.
+> Pay taxes monthly on day 31
+
+The app generates concrete scheduled task occurrences.
+
+Generated occurrences appear in:
+
+- Today, if occurrence is scheduled for today;
+- Calendar, when the relevant month is opened;
+- Reports, as planned/completed tasks;
+- All Tasks only when actionable/history-relevant.
+
+All Tasks now shows recurring rules separately, instead of being flooded with future generated occurrences.
+
+Still to do:
+
+### Recurring occurrence deletion
+
+- When deleting a generated recurring occurrence, create a `RecurringTaskException`.
+- Delete only the selected occurrence.
+- Ensure the occurrence does not reappear after:
+  - Calendar month regeneration;
+  - app restart;
+  - rule sync.
+
+### Recurring rule deletion / deactivation
+
+- Add ability to deactivate a recurring rule.
+- Decide deletion behavior:
+  - deactivate rule;
+  - delete future uncompleted occurrences;
+  - keep completed history.
+- Add UI action from Recurring Tasks screen.
+
+### Creation entry points
+
+- Add recurring task creation from Today.
+- Add recurring task creation from Calendar.
+- For Calendar creation:
+  - preselect weekday based on selected date for weekly recurrence.
+  - optionally preselect month day for monthly recurrence.
+
+### Rule editing
+
+- Add edit recurring rule flow.
+- Sync future occurrences when rule changes.
+- Example:
+  - old: Monday / Wednesday / Friday
+  - new: Tuesday / Wednesday / Friday
+  - delete future uncompleted Monday occurrences;
+  - generate future Tuesday occurrences;
+  - keep completed history.
+
+### Occurrence behavior polish
+
+- Decide how rescheduling a generated occurrence should behave.
+- For MVP:
+  - editing/rescheduling an occurrence should affect only that occurrence.
+  - editing the rule should affect future generated occurrences.
+
+Expected result for Phase 6.5 done:
+
+A user can:
+
+- create weekly recurring tasks;
+- create monthly recurring tasks;
+- link recurring tasks to goals/milestones;
+- see generated occurrences in Today and Calendar;
+- complete one occurrence without completing the whole series;
+- delete one occurrence without it being regenerated;
+- deactivate a recurring rule;
+- avoid All Tasks being flooded with future generated occurrences.
 
 Not doing initially:
 
-- complex recurrence rules;
-- monthly recurrence;
+- complex RRULE support;
 - yearly recurrence;
-- recurrence exceptions;
-- edit this occurrence / this and following / entire series;
-- drag-and-drop recurring occurrences;
-- reminders;
+- every N days recurrence;
 - time-of-day scheduling;
-- habit streaks.
+- reminders;
+- drag-and-drop recurring occurrences;
+- edit this and following;
+- advanced recurrence exceptions;
+- habit streaks;
+- full habit system.
 
 ## Phase 7: Habits MVP
 
