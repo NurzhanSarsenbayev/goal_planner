@@ -52,8 +52,25 @@ class RecurringTaskRule {
 
     return switch (recurrenceType) {
       RecurrenceType.weekly => weekdays.contains(normalizedDate.weekday),
-      RecurrenceType.monthly => monthDay == normalizedDate.day,
+      RecurrenceType.monthly => _matchesMonthlyDate(normalizedDate),
     };
+  }
+
+  bool _matchesMonthlyDate(DateTime date) {
+    final day = monthDay;
+
+    if (day == null || day < 1 || day > 31) {
+      return false;
+    }
+
+    final lastDayOfMonth = _lastDayOfMonth(date);
+    final targetDay = day > lastDayOfMonth ? lastDayOfMonth : day;
+
+    return date.day == targetDay;
+  }
+
+  int _lastDayOfMonth(DateTime date) {
+    return DateTime(date.year, date.month + 1, 0).day;
   }
 
   RecurringTaskRule copyWith({

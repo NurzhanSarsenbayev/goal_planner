@@ -23,6 +23,40 @@ void main() {
       expect(rule.matchesDate(DateTime(2026, 4, 16)), isFalse);
     });
 
+    test('monthly rule matches selected day when month has that day', () {
+      final rule = _monthlyRule(
+        monthDay: 31,
+        startDate: DateTime(2026, 1, 1),
+      );
+
+      expect(rule.matchesDate(DateTime(2026, 1, 31)), isTrue);
+      expect(rule.matchesDate(DateTime(2026, 1, 30)), isFalse);
+    });
+
+    test('monthly rule falls back to last day for shorter months', () {
+      final rule = _monthlyRule(monthDay: 31);
+
+      expect(rule.matchesDate(DateTime(2026, 4, 30)), isTrue);
+      expect(rule.matchesDate(DateTime(2026, 4, 29)), isFalse);
+    });
+
+    test('monthly rule falls back to February 28 in non-leap year', () {
+      final rule = _monthlyRule(
+        monthDay: 31,
+        startDate: DateTime(2026, 1, 1),
+      );
+
+      expect(rule.matchesDate(DateTime(2026, 2, 28)), isTrue);
+      expect(rule.matchesDate(DateTime(2026, 2, 27)), isFalse);
+    });
+
+    test('monthly rule falls back to February 29 in leap year', () {
+      final rule = _monthlyRule(monthDay: 31);
+
+      expect(rule.matchesDate(DateTime(2028, 2, 29)), isTrue);
+      expect(rule.matchesDate(DateTime(2028, 2, 28)), isFalse);
+    });
+
     test('inactive rule does not match any date', () {
       final rule = _weeklyRule(weekdays: [DateTime.monday], isActive: false);
 
