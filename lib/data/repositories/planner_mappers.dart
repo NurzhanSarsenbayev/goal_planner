@@ -28,6 +28,7 @@ domain.PlannerTask mapTask(local.Task row) {
     id: row.id,
     goalId: row.goalId,
     milestoneId: row.milestoneId,
+    recurringRuleId: row.recurringRuleId,
     title: row.title,
     description: row.description,
     scheduledDate: row.scheduledDate,

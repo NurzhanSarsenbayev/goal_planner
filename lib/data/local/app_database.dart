@@ -37,12 +37,57 @@ class Milestones extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+class RecurringTaskRules extends Table {
+  TextColumn get id => text()();
+
+  TextColumn get goalId => text().nullable().references(Goals, #id)();
+
+  TextColumn get milestoneId => text().nullable().references(Milestones, #id)();
+
+  TextColumn get title => text()();
+
+  TextColumn get description => text().withDefault(const Constant(''))();
+
+  TextColumn get recurrenceType => text()();
+
+  TextColumn get weekdays => text().nullable()();
+
+  IntColumn get monthDay => integer().nullable()();
+
+  DateTimeColumn get startDate => dateTime()();
+
+  DateTimeColumn get endDate => dateTime().nullable()();
+
+  BoolColumn get isActive => boolean().withDefault(const Constant(true))();
+
+  DateTimeColumn get createdAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+class RecurringTaskExceptions extends Table {
+  TextColumn get id => text()();
+
+  TextColumn get ruleId => text().references(RecurringTaskRules, #id)();
+
+  DateTimeColumn get date => dateTime()();
+
+  DateTimeColumn get createdAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 class Tasks extends Table {
   TextColumn get id => text()();
 
   TextColumn get goalId => text().nullable().references(Goals, #id)();
 
   TextColumn get milestoneId => text().nullable().references(Milestones, #id)();
+
+  TextColumn get recurringRuleId =>
+      text().nullable().references(RecurringTaskRules, #id)();
 
   TextColumn get title => text()();
 
@@ -60,12 +105,33 @@ class Tasks extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-@DriftDatabase(tables: [Goals, Milestones, Tasks])
+@DriftDatabase(
+  tables: [
+    Goals,
+    Milestones,
+    RecurringTaskRules,
+    RecurringTaskExceptions,
+    Tasks,
+  ],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onUpgrade: (migrator, from, to) async {
+        if (from < 2) {
+          await migrator.createTable(recurringTaskRules);
+          await migrator.createTable(recurringTaskExceptions);
+          await migrator.addColumn(tasks, tasks.recurringRuleId);
+        }
+      },
+    );
+  }
 }
 
 LazyDatabase _openConnection() {

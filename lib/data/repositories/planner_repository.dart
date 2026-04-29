@@ -105,6 +105,7 @@ class PlannerRepository {
             id: task.id,
             goalId: drift.Value(task.goalId),
             milestoneId: drift.Value(task.milestoneId),
+            recurringRuleId: drift.Value(task.recurringRuleId),
             title: task.title,
             description: drift.Value(task.description),
             scheduledDate: drift.Value(task.scheduledDate),
@@ -128,6 +129,7 @@ class PlannerRepository {
       local.TasksCompanion(
         goalId: drift.Value(task.goalId),
         milestoneId: drift.Value(task.milestoneId),
+        recurringRuleId: drift.Value(task.recurringRuleId),
         title: drift.Value(task.title),
         description: drift.Value(task.description),
         scheduledDate: drift.Value(task.scheduledDate),

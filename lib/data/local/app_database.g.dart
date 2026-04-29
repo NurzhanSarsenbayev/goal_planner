@@ -727,6 +727,1045 @@ class MilestonesCompanion extends UpdateCompanion<Milestone> {
   }
 }
 
+class $RecurringTaskRulesTable extends RecurringTaskRules
+    with TableInfo<$RecurringTaskRulesTable, RecurringTaskRule> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $RecurringTaskRulesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _goalIdMeta = const VerificationMeta('goalId');
+  @override
+  late final GeneratedColumn<String> goalId = GeneratedColumn<String>(
+    'goal_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES goals (id)',
+    ),
+  );
+  static const VerificationMeta _milestoneIdMeta = const VerificationMeta(
+    'milestoneId',
+  );
+  @override
+  late final GeneratedColumn<String> milestoneId = GeneratedColumn<String>(
+    'milestone_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES milestones (id)',
+    ),
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _recurrenceTypeMeta = const VerificationMeta(
+    'recurrenceType',
+  );
+  @override
+  late final GeneratedColumn<String> recurrenceType = GeneratedColumn<String>(
+    'recurrence_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _weekdaysMeta = const VerificationMeta(
+    'weekdays',
+  );
+  @override
+  late final GeneratedColumn<String> weekdays = GeneratedColumn<String>(
+    'weekdays',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _monthDayMeta = const VerificationMeta(
+    'monthDay',
+  );
+  @override
+  late final GeneratedColumn<int> monthDay = GeneratedColumn<int>(
+    'month_day',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _startDateMeta = const VerificationMeta(
+    'startDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startDate = GeneratedColumn<DateTime>(
+    'start_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _endDateMeta = const VerificationMeta(
+    'endDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> endDate = GeneratedColumn<DateTime>(
+    'end_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _isActiveMeta = const VerificationMeta(
+    'isActive',
+  );
+  @override
+  late final GeneratedColumn<bool> isActive = GeneratedColumn<bool>(
+    'is_active',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_active" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    goalId,
+    milestoneId,
+    title,
+    description,
+    recurrenceType,
+    weekdays,
+    monthDay,
+    startDate,
+    endDate,
+    isActive,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'recurring_task_rules';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<RecurringTaskRule> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('goal_id')) {
+      context.handle(
+        _goalIdMeta,
+        goalId.isAcceptableOrUnknown(data['goal_id']!, _goalIdMeta),
+      );
+    }
+    if (data.containsKey('milestone_id')) {
+      context.handle(
+        _milestoneIdMeta,
+        milestoneId.isAcceptableOrUnknown(
+          data['milestone_id']!,
+          _milestoneIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('recurrence_type')) {
+      context.handle(
+        _recurrenceTypeMeta,
+        recurrenceType.isAcceptableOrUnknown(
+          data['recurrence_type']!,
+          _recurrenceTypeMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_recurrenceTypeMeta);
+    }
+    if (data.containsKey('weekdays')) {
+      context.handle(
+        _weekdaysMeta,
+        weekdays.isAcceptableOrUnknown(data['weekdays']!, _weekdaysMeta),
+      );
+    }
+    if (data.containsKey('month_day')) {
+      context.handle(
+        _monthDayMeta,
+        monthDay.isAcceptableOrUnknown(data['month_day']!, _monthDayMeta),
+      );
+    }
+    if (data.containsKey('start_date')) {
+      context.handle(
+        _startDateMeta,
+        startDate.isAcceptableOrUnknown(data['start_date']!, _startDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startDateMeta);
+    }
+    if (data.containsKey('end_date')) {
+      context.handle(
+        _endDateMeta,
+        endDate.isAcceptableOrUnknown(data['end_date']!, _endDateMeta),
+      );
+    }
+    if (data.containsKey('is_active')) {
+      context.handle(
+        _isActiveMeta,
+        isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  RecurringTaskRule map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return RecurringTaskRule(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      goalId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}goal_id'],
+      ),
+      milestoneId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}milestone_id'],
+      ),
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      )!,
+      recurrenceType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}recurrence_type'],
+      )!,
+      weekdays: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}weekdays'],
+      ),
+      monthDay: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}month_day'],
+      ),
+      startDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}start_date'],
+      )!,
+      endDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}end_date'],
+      ),
+      isActive: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_active'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $RecurringTaskRulesTable createAlias(String alias) {
+    return $RecurringTaskRulesTable(attachedDatabase, alias);
+  }
+}
+
+class RecurringTaskRule extends DataClass
+    implements Insertable<RecurringTaskRule> {
+  final String id;
+  final String? goalId;
+  final String? milestoneId;
+  final String title;
+  final String description;
+  final String recurrenceType;
+  final String? weekdays;
+  final int? monthDay;
+  final DateTime startDate;
+  final DateTime? endDate;
+  final bool isActive;
+  final DateTime createdAt;
+  const RecurringTaskRule({
+    required this.id,
+    this.goalId,
+    this.milestoneId,
+    required this.title,
+    required this.description,
+    required this.recurrenceType,
+    this.weekdays,
+    this.monthDay,
+    required this.startDate,
+    this.endDate,
+    required this.isActive,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    if (!nullToAbsent || goalId != null) {
+      map['goal_id'] = Variable<String>(goalId);
+    }
+    if (!nullToAbsent || milestoneId != null) {
+      map['milestone_id'] = Variable<String>(milestoneId);
+    }
+    map['title'] = Variable<String>(title);
+    map['description'] = Variable<String>(description);
+    map['recurrence_type'] = Variable<String>(recurrenceType);
+    if (!nullToAbsent || weekdays != null) {
+      map['weekdays'] = Variable<String>(weekdays);
+    }
+    if (!nullToAbsent || monthDay != null) {
+      map['month_day'] = Variable<int>(monthDay);
+    }
+    map['start_date'] = Variable<DateTime>(startDate);
+    if (!nullToAbsent || endDate != null) {
+      map['end_date'] = Variable<DateTime>(endDate);
+    }
+    map['is_active'] = Variable<bool>(isActive);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  RecurringTaskRulesCompanion toCompanion(bool nullToAbsent) {
+    return RecurringTaskRulesCompanion(
+      id: Value(id),
+      goalId: goalId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(goalId),
+      milestoneId: milestoneId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(milestoneId),
+      title: Value(title),
+      description: Value(description),
+      recurrenceType: Value(recurrenceType),
+      weekdays: weekdays == null && nullToAbsent
+          ? const Value.absent()
+          : Value(weekdays),
+      monthDay: monthDay == null && nullToAbsent
+          ? const Value.absent()
+          : Value(monthDay),
+      startDate: Value(startDate),
+      endDate: endDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(endDate),
+      isActive: Value(isActive),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory RecurringTaskRule.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return RecurringTaskRule(
+      id: serializer.fromJson<String>(json['id']),
+      goalId: serializer.fromJson<String?>(json['goalId']),
+      milestoneId: serializer.fromJson<String?>(json['milestoneId']),
+      title: serializer.fromJson<String>(json['title']),
+      description: serializer.fromJson<String>(json['description']),
+      recurrenceType: serializer.fromJson<String>(json['recurrenceType']),
+      weekdays: serializer.fromJson<String?>(json['weekdays']),
+      monthDay: serializer.fromJson<int?>(json['monthDay']),
+      startDate: serializer.fromJson<DateTime>(json['startDate']),
+      endDate: serializer.fromJson<DateTime?>(json['endDate']),
+      isActive: serializer.fromJson<bool>(json['isActive']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'goalId': serializer.toJson<String?>(goalId),
+      'milestoneId': serializer.toJson<String?>(milestoneId),
+      'title': serializer.toJson<String>(title),
+      'description': serializer.toJson<String>(description),
+      'recurrenceType': serializer.toJson<String>(recurrenceType),
+      'weekdays': serializer.toJson<String?>(weekdays),
+      'monthDay': serializer.toJson<int?>(monthDay),
+      'startDate': serializer.toJson<DateTime>(startDate),
+      'endDate': serializer.toJson<DateTime?>(endDate),
+      'isActive': serializer.toJson<bool>(isActive),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  RecurringTaskRule copyWith({
+    String? id,
+    Value<String?> goalId = const Value.absent(),
+    Value<String?> milestoneId = const Value.absent(),
+    String? title,
+    String? description,
+    String? recurrenceType,
+    Value<String?> weekdays = const Value.absent(),
+    Value<int?> monthDay = const Value.absent(),
+    DateTime? startDate,
+    Value<DateTime?> endDate = const Value.absent(),
+    bool? isActive,
+    DateTime? createdAt,
+  }) => RecurringTaskRule(
+    id: id ?? this.id,
+    goalId: goalId.present ? goalId.value : this.goalId,
+    milestoneId: milestoneId.present ? milestoneId.value : this.milestoneId,
+    title: title ?? this.title,
+    description: description ?? this.description,
+    recurrenceType: recurrenceType ?? this.recurrenceType,
+    weekdays: weekdays.present ? weekdays.value : this.weekdays,
+    monthDay: monthDay.present ? monthDay.value : this.monthDay,
+    startDate: startDate ?? this.startDate,
+    endDate: endDate.present ? endDate.value : this.endDate,
+    isActive: isActive ?? this.isActive,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  RecurringTaskRule copyWithCompanion(RecurringTaskRulesCompanion data) {
+    return RecurringTaskRule(
+      id: data.id.present ? data.id.value : this.id,
+      goalId: data.goalId.present ? data.goalId.value : this.goalId,
+      milestoneId: data.milestoneId.present
+          ? data.milestoneId.value
+          : this.milestoneId,
+      title: data.title.present ? data.title.value : this.title,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+      recurrenceType: data.recurrenceType.present
+          ? data.recurrenceType.value
+          : this.recurrenceType,
+      weekdays: data.weekdays.present ? data.weekdays.value : this.weekdays,
+      monthDay: data.monthDay.present ? data.monthDay.value : this.monthDay,
+      startDate: data.startDate.present ? data.startDate.value : this.startDate,
+      endDate: data.endDate.present ? data.endDate.value : this.endDate,
+      isActive: data.isActive.present ? data.isActive.value : this.isActive,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RecurringTaskRule(')
+          ..write('id: $id, ')
+          ..write('goalId: $goalId, ')
+          ..write('milestoneId: $milestoneId, ')
+          ..write('title: $title, ')
+          ..write('description: $description, ')
+          ..write('recurrenceType: $recurrenceType, ')
+          ..write('weekdays: $weekdays, ')
+          ..write('monthDay: $monthDay, ')
+          ..write('startDate: $startDate, ')
+          ..write('endDate: $endDate, ')
+          ..write('isActive: $isActive, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    goalId,
+    milestoneId,
+    title,
+    description,
+    recurrenceType,
+    weekdays,
+    monthDay,
+    startDate,
+    endDate,
+    isActive,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is RecurringTaskRule &&
+          other.id == this.id &&
+          other.goalId == this.goalId &&
+          other.milestoneId == this.milestoneId &&
+          other.title == this.title &&
+          other.description == this.description &&
+          other.recurrenceType == this.recurrenceType &&
+          other.weekdays == this.weekdays &&
+          other.monthDay == this.monthDay &&
+          other.startDate == this.startDate &&
+          other.endDate == this.endDate &&
+          other.isActive == this.isActive &&
+          other.createdAt == this.createdAt);
+}
+
+class RecurringTaskRulesCompanion extends UpdateCompanion<RecurringTaskRule> {
+  final Value<String> id;
+  final Value<String?> goalId;
+  final Value<String?> milestoneId;
+  final Value<String> title;
+  final Value<String> description;
+  final Value<String> recurrenceType;
+  final Value<String?> weekdays;
+  final Value<int?> monthDay;
+  final Value<DateTime> startDate;
+  final Value<DateTime?> endDate;
+  final Value<bool> isActive;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const RecurringTaskRulesCompanion({
+    this.id = const Value.absent(),
+    this.goalId = const Value.absent(),
+    this.milestoneId = const Value.absent(),
+    this.title = const Value.absent(),
+    this.description = const Value.absent(),
+    this.recurrenceType = const Value.absent(),
+    this.weekdays = const Value.absent(),
+    this.monthDay = const Value.absent(),
+    this.startDate = const Value.absent(),
+    this.endDate = const Value.absent(),
+    this.isActive = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  RecurringTaskRulesCompanion.insert({
+    required String id,
+    this.goalId = const Value.absent(),
+    this.milestoneId = const Value.absent(),
+    required String title,
+    this.description = const Value.absent(),
+    required String recurrenceType,
+    this.weekdays = const Value.absent(),
+    this.monthDay = const Value.absent(),
+    required DateTime startDate,
+    this.endDate = const Value.absent(),
+    this.isActive = const Value.absent(),
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       title = Value(title),
+       recurrenceType = Value(recurrenceType),
+       startDate = Value(startDate),
+       createdAt = Value(createdAt);
+  static Insertable<RecurringTaskRule> custom({
+    Expression<String>? id,
+    Expression<String>? goalId,
+    Expression<String>? milestoneId,
+    Expression<String>? title,
+    Expression<String>? description,
+    Expression<String>? recurrenceType,
+    Expression<String>? weekdays,
+    Expression<int>? monthDay,
+    Expression<DateTime>? startDate,
+    Expression<DateTime>? endDate,
+    Expression<bool>? isActive,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (goalId != null) 'goal_id': goalId,
+      if (milestoneId != null) 'milestone_id': milestoneId,
+      if (title != null) 'title': title,
+      if (description != null) 'description': description,
+      if (recurrenceType != null) 'recurrence_type': recurrenceType,
+      if (weekdays != null) 'weekdays': weekdays,
+      if (monthDay != null) 'month_day': monthDay,
+      if (startDate != null) 'start_date': startDate,
+      if (endDate != null) 'end_date': endDate,
+      if (isActive != null) 'is_active': isActive,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  RecurringTaskRulesCompanion copyWith({
+    Value<String>? id,
+    Value<String?>? goalId,
+    Value<String?>? milestoneId,
+    Value<String>? title,
+    Value<String>? description,
+    Value<String>? recurrenceType,
+    Value<String?>? weekdays,
+    Value<int?>? monthDay,
+    Value<DateTime>? startDate,
+    Value<DateTime?>? endDate,
+    Value<bool>? isActive,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return RecurringTaskRulesCompanion(
+      id: id ?? this.id,
+      goalId: goalId ?? this.goalId,
+      milestoneId: milestoneId ?? this.milestoneId,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      recurrenceType: recurrenceType ?? this.recurrenceType,
+      weekdays: weekdays ?? this.weekdays,
+      monthDay: monthDay ?? this.monthDay,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      isActive: isActive ?? this.isActive,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (goalId.present) {
+      map['goal_id'] = Variable<String>(goalId.value);
+    }
+    if (milestoneId.present) {
+      map['milestone_id'] = Variable<String>(milestoneId.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (recurrenceType.present) {
+      map['recurrence_type'] = Variable<String>(recurrenceType.value);
+    }
+    if (weekdays.present) {
+      map['weekdays'] = Variable<String>(weekdays.value);
+    }
+    if (monthDay.present) {
+      map['month_day'] = Variable<int>(monthDay.value);
+    }
+    if (startDate.present) {
+      map['start_date'] = Variable<DateTime>(startDate.value);
+    }
+    if (endDate.present) {
+      map['end_date'] = Variable<DateTime>(endDate.value);
+    }
+    if (isActive.present) {
+      map['is_active'] = Variable<bool>(isActive.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RecurringTaskRulesCompanion(')
+          ..write('id: $id, ')
+          ..write('goalId: $goalId, ')
+          ..write('milestoneId: $milestoneId, ')
+          ..write('title: $title, ')
+          ..write('description: $description, ')
+          ..write('recurrenceType: $recurrenceType, ')
+          ..write('weekdays: $weekdays, ')
+          ..write('monthDay: $monthDay, ')
+          ..write('startDate: $startDate, ')
+          ..write('endDate: $endDate, ')
+          ..write('isActive: $isActive, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $RecurringTaskExceptionsTable extends RecurringTaskExceptions
+    with TableInfo<$RecurringTaskExceptionsTable, RecurringTaskException> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $RecurringTaskExceptionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _ruleIdMeta = const VerificationMeta('ruleId');
+  @override
+  late final GeneratedColumn<String> ruleId = GeneratedColumn<String>(
+    'rule_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES recurring_task_rules (id)',
+    ),
+  );
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+    'date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, ruleId, date, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'recurring_task_exceptions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<RecurringTaskException> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('rule_id')) {
+      context.handle(
+        _ruleIdMeta,
+        ruleId.isAcceptableOrUnknown(data['rule_id']!, _ruleIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_ruleIdMeta);
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+        _dateMeta,
+        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  RecurringTaskException map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return RecurringTaskException(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      ruleId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}rule_id'],
+      )!,
+      date: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}date'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $RecurringTaskExceptionsTable createAlias(String alias) {
+    return $RecurringTaskExceptionsTable(attachedDatabase, alias);
+  }
+}
+
+class RecurringTaskException extends DataClass
+    implements Insertable<RecurringTaskException> {
+  final String id;
+  final String ruleId;
+  final DateTime date;
+  final DateTime createdAt;
+  const RecurringTaskException({
+    required this.id,
+    required this.ruleId,
+    required this.date,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['rule_id'] = Variable<String>(ruleId);
+    map['date'] = Variable<DateTime>(date);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  RecurringTaskExceptionsCompanion toCompanion(bool nullToAbsent) {
+    return RecurringTaskExceptionsCompanion(
+      id: Value(id),
+      ruleId: Value(ruleId),
+      date: Value(date),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory RecurringTaskException.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return RecurringTaskException(
+      id: serializer.fromJson<String>(json['id']),
+      ruleId: serializer.fromJson<String>(json['ruleId']),
+      date: serializer.fromJson<DateTime>(json['date']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'ruleId': serializer.toJson<String>(ruleId),
+      'date': serializer.toJson<DateTime>(date),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  RecurringTaskException copyWith({
+    String? id,
+    String? ruleId,
+    DateTime? date,
+    DateTime? createdAt,
+  }) => RecurringTaskException(
+    id: id ?? this.id,
+    ruleId: ruleId ?? this.ruleId,
+    date: date ?? this.date,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  RecurringTaskException copyWithCompanion(
+    RecurringTaskExceptionsCompanion data,
+  ) {
+    return RecurringTaskException(
+      id: data.id.present ? data.id.value : this.id,
+      ruleId: data.ruleId.present ? data.ruleId.value : this.ruleId,
+      date: data.date.present ? data.date.value : this.date,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RecurringTaskException(')
+          ..write('id: $id, ')
+          ..write('ruleId: $ruleId, ')
+          ..write('date: $date, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, ruleId, date, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is RecurringTaskException &&
+          other.id == this.id &&
+          other.ruleId == this.ruleId &&
+          other.date == this.date &&
+          other.createdAt == this.createdAt);
+}
+
+class RecurringTaskExceptionsCompanion
+    extends UpdateCompanion<RecurringTaskException> {
+  final Value<String> id;
+  final Value<String> ruleId;
+  final Value<DateTime> date;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const RecurringTaskExceptionsCompanion({
+    this.id = const Value.absent(),
+    this.ruleId = const Value.absent(),
+    this.date = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  RecurringTaskExceptionsCompanion.insert({
+    required String id,
+    required String ruleId,
+    required DateTime date,
+    required DateTime createdAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       ruleId = Value(ruleId),
+       date = Value(date),
+       createdAt = Value(createdAt);
+  static Insertable<RecurringTaskException> custom({
+    Expression<String>? id,
+    Expression<String>? ruleId,
+    Expression<DateTime>? date,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (ruleId != null) 'rule_id': ruleId,
+      if (date != null) 'date': date,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  RecurringTaskExceptionsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? ruleId,
+    Value<DateTime>? date,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return RecurringTaskExceptionsCompanion(
+      id: id ?? this.id,
+      ruleId: ruleId ?? this.ruleId,
+      date: date ?? this.date,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (ruleId.present) {
+      map['rule_id'] = Variable<String>(ruleId.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RecurringTaskExceptionsCompanion(')
+          ..write('id: $id, ')
+          ..write('ruleId: $ruleId, ')
+          ..write('date: $date, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -765,6 +1804,20 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     requiredDuringInsert: false,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'REFERENCES milestones (id)',
+    ),
+  );
+  static const VerificationMeta _recurringRuleIdMeta = const VerificationMeta(
+    'recurringRuleId',
+  );
+  @override
+  late final GeneratedColumn<String> recurringRuleId = GeneratedColumn<String>(
+    'recurring_rule_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES recurring_task_rules (id)',
     ),
   );
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
@@ -842,6 +1895,7 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     id,
     goalId,
     milestoneId,
+    recurringRuleId,
     title,
     description,
     scheduledDate,
@@ -878,6 +1932,15 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
         milestoneId.isAcceptableOrUnknown(
           data['milestone_id']!,
           _milestoneIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('recurring_rule_id')) {
+      context.handle(
+        _recurringRuleIdMeta,
+        recurringRuleId.isAcceptableOrUnknown(
+          data['recurring_rule_id']!,
+          _recurringRuleIdMeta,
         ),
       );
     }
@@ -954,6 +2017,10 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
         DriftSqlType.string,
         data['${effectivePrefix}milestone_id'],
       ),
+      recurringRuleId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}recurring_rule_id'],
+      ),
       title: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}title'],
@@ -991,6 +2058,7 @@ class Task extends DataClass implements Insertable<Task> {
   final String id;
   final String? goalId;
   final String? milestoneId;
+  final String? recurringRuleId;
   final String title;
   final String description;
   final DateTime? scheduledDate;
@@ -1001,6 +2069,7 @@ class Task extends DataClass implements Insertable<Task> {
     required this.id,
     this.goalId,
     this.milestoneId,
+    this.recurringRuleId,
     required this.title,
     required this.description,
     this.scheduledDate,
@@ -1017,6 +2086,9 @@ class Task extends DataClass implements Insertable<Task> {
     }
     if (!nullToAbsent || milestoneId != null) {
       map['milestone_id'] = Variable<String>(milestoneId);
+    }
+    if (!nullToAbsent || recurringRuleId != null) {
+      map['recurring_rule_id'] = Variable<String>(recurringRuleId);
     }
     map['title'] = Variable<String>(title);
     map['description'] = Variable<String>(description);
@@ -1040,6 +2112,9 @@ class Task extends DataClass implements Insertable<Task> {
       milestoneId: milestoneId == null && nullToAbsent
           ? const Value.absent()
           : Value(milestoneId),
+      recurringRuleId: recurringRuleId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(recurringRuleId),
       title: Value(title),
       description: Value(description),
       scheduledDate: scheduledDate == null && nullToAbsent
@@ -1062,6 +2137,7 @@ class Task extends DataClass implements Insertable<Task> {
       id: serializer.fromJson<String>(json['id']),
       goalId: serializer.fromJson<String?>(json['goalId']),
       milestoneId: serializer.fromJson<String?>(json['milestoneId']),
+      recurringRuleId: serializer.fromJson<String?>(json['recurringRuleId']),
       title: serializer.fromJson<String>(json['title']),
       description: serializer.fromJson<String>(json['description']),
       scheduledDate: serializer.fromJson<DateTime?>(json['scheduledDate']),
@@ -1077,6 +2153,7 @@ class Task extends DataClass implements Insertable<Task> {
       'id': serializer.toJson<String>(id),
       'goalId': serializer.toJson<String?>(goalId),
       'milestoneId': serializer.toJson<String?>(milestoneId),
+      'recurringRuleId': serializer.toJson<String?>(recurringRuleId),
       'title': serializer.toJson<String>(title),
       'description': serializer.toJson<String>(description),
       'scheduledDate': serializer.toJson<DateTime?>(scheduledDate),
@@ -1090,6 +2167,7 @@ class Task extends DataClass implements Insertable<Task> {
     String? id,
     Value<String?> goalId = const Value.absent(),
     Value<String?> milestoneId = const Value.absent(),
+    Value<String?> recurringRuleId = const Value.absent(),
     String? title,
     String? description,
     Value<DateTime?> scheduledDate = const Value.absent(),
@@ -1100,6 +2178,9 @@ class Task extends DataClass implements Insertable<Task> {
     id: id ?? this.id,
     goalId: goalId.present ? goalId.value : this.goalId,
     milestoneId: milestoneId.present ? milestoneId.value : this.milestoneId,
+    recurringRuleId: recurringRuleId.present
+        ? recurringRuleId.value
+        : this.recurringRuleId,
     title: title ?? this.title,
     description: description ?? this.description,
     scheduledDate: scheduledDate.present
@@ -1116,6 +2197,9 @@ class Task extends DataClass implements Insertable<Task> {
       milestoneId: data.milestoneId.present
           ? data.milestoneId.value
           : this.milestoneId,
+      recurringRuleId: data.recurringRuleId.present
+          ? data.recurringRuleId.value
+          : this.recurringRuleId,
       title: data.title.present ? data.title.value : this.title,
       description: data.description.present
           ? data.description.value
@@ -1139,6 +2223,7 @@ class Task extends DataClass implements Insertable<Task> {
           ..write('id: $id, ')
           ..write('goalId: $goalId, ')
           ..write('milestoneId: $milestoneId, ')
+          ..write('recurringRuleId: $recurringRuleId, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
           ..write('scheduledDate: $scheduledDate, ')
@@ -1154,6 +2239,7 @@ class Task extends DataClass implements Insertable<Task> {
     id,
     goalId,
     milestoneId,
+    recurringRuleId,
     title,
     description,
     scheduledDate,
@@ -1168,6 +2254,7 @@ class Task extends DataClass implements Insertable<Task> {
           other.id == this.id &&
           other.goalId == this.goalId &&
           other.milestoneId == this.milestoneId &&
+          other.recurringRuleId == this.recurringRuleId &&
           other.title == this.title &&
           other.description == this.description &&
           other.scheduledDate == this.scheduledDate &&
@@ -1180,6 +2267,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
   final Value<String> id;
   final Value<String?> goalId;
   final Value<String?> milestoneId;
+  final Value<String?> recurringRuleId;
   final Value<String> title;
   final Value<String> description;
   final Value<DateTime?> scheduledDate;
@@ -1191,6 +2279,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     this.id = const Value.absent(),
     this.goalId = const Value.absent(),
     this.milestoneId = const Value.absent(),
+    this.recurringRuleId = const Value.absent(),
     this.title = const Value.absent(),
     this.description = const Value.absent(),
     this.scheduledDate = const Value.absent(),
@@ -1203,6 +2292,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     required String id,
     this.goalId = const Value.absent(),
     this.milestoneId = const Value.absent(),
+    this.recurringRuleId = const Value.absent(),
     required String title,
     this.description = const Value.absent(),
     this.scheduledDate = const Value.absent(),
@@ -1217,6 +2307,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     Expression<String>? id,
     Expression<String>? goalId,
     Expression<String>? milestoneId,
+    Expression<String>? recurringRuleId,
     Expression<String>? title,
     Expression<String>? description,
     Expression<DateTime>? scheduledDate,
@@ -1229,6 +2320,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
       if (id != null) 'id': id,
       if (goalId != null) 'goal_id': goalId,
       if (milestoneId != null) 'milestone_id': milestoneId,
+      if (recurringRuleId != null) 'recurring_rule_id': recurringRuleId,
       if (title != null) 'title': title,
       if (description != null) 'description': description,
       if (scheduledDate != null) 'scheduled_date': scheduledDate,
@@ -1243,6 +2335,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     Value<String>? id,
     Value<String?>? goalId,
     Value<String?>? milestoneId,
+    Value<String?>? recurringRuleId,
     Value<String>? title,
     Value<String>? description,
     Value<DateTime?>? scheduledDate,
@@ -1255,6 +2348,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
       id: id ?? this.id,
       goalId: goalId ?? this.goalId,
       milestoneId: milestoneId ?? this.milestoneId,
+      recurringRuleId: recurringRuleId ?? this.recurringRuleId,
       title: title ?? this.title,
       description: description ?? this.description,
       scheduledDate: scheduledDate ?? this.scheduledDate,
@@ -1276,6 +2370,9 @@ class TasksCompanion extends UpdateCompanion<Task> {
     }
     if (milestoneId.present) {
       map['milestone_id'] = Variable<String>(milestoneId.value);
+    }
+    if (recurringRuleId.present) {
+      map['recurring_rule_id'] = Variable<String>(recurringRuleId.value);
     }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
@@ -1307,6 +2404,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
           ..write('id: $id, ')
           ..write('goalId: $goalId, ')
           ..write('milestoneId: $milestoneId, ')
+          ..write('recurringRuleId: $recurringRuleId, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
           ..write('scheduledDate: $scheduledDate, ')
@@ -1324,6 +2422,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $GoalsTable goals = $GoalsTable(this);
   late final $MilestonesTable milestones = $MilestonesTable(this);
+  late final $RecurringTaskRulesTable recurringTaskRules =
+      $RecurringTaskRulesTable(this);
+  late final $RecurringTaskExceptionsTable recurringTaskExceptions =
+      $RecurringTaskExceptionsTable(this);
   late final $TasksTable tasks = $TasksTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -1332,6 +2434,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     goals,
     milestones,
+    recurringTaskRules,
+    recurringTaskExceptions,
     tasks,
   ];
 }
@@ -1372,6 +2476,30 @@ final class $$GoalsTableReferences
     ).filter((f) => f.goalId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_milestonesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$RecurringTaskRulesTable, List<RecurringTaskRule>>
+  _recurringTaskRulesRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.recurringTaskRules,
+        aliasName: $_aliasNameGenerator(
+          db.goals.id,
+          db.recurringTaskRules.goalId,
+        ),
+      );
+
+  $$RecurringTaskRulesTableProcessedTableManager get recurringTaskRulesRefs {
+    final manager = $$RecurringTaskRulesTableTableManager(
+      $_db,
+      $_db.recurringTaskRules,
+    ).filter((f) => f.goalId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _recurringTaskRulesRefsTable($_db),
+    );
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -1446,6 +2574,31 @@ class $$GoalsTableFilterComposer extends Composer<_$AppDatabase, $GoalsTable> {
           }) => $$MilestonesTableFilterComposer(
             $db: $db,
             $table: $db.milestones,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> recurringTaskRulesRefs(
+    Expression<bool> Function($$RecurringTaskRulesTableFilterComposer f) f,
+  ) {
+    final $$RecurringTaskRulesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.recurringTaskRules,
+      getReferencedColumn: (t) => t.goalId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RecurringTaskRulesTableFilterComposer(
+            $db: $db,
+            $table: $db.recurringTaskRules,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -1567,6 +2720,32 @@ class $$GoalsTableAnnotationComposer
     return f(composer);
   }
 
+  Expression<T> recurringTaskRulesRefs<T extends Object>(
+    Expression<T> Function($$RecurringTaskRulesTableAnnotationComposer a) f,
+  ) {
+    final $$RecurringTaskRulesTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.recurringTaskRules,
+          getReferencedColumn: (t) => t.goalId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$RecurringTaskRulesTableAnnotationComposer(
+                $db: $db,
+                $table: $db.recurringTaskRules,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
   Expression<T> tasksRefs<T extends Object>(
     Expression<T> Function($$TasksTableAnnotationComposer a) f,
   ) {
@@ -1606,7 +2785,11 @@ class $$GoalsTableTableManager
           $$GoalsTableUpdateCompanionBuilder,
           (Goal, $$GoalsTableReferences),
           Goal,
-          PrefetchHooks Function({bool milestonesRefs, bool tasksRefs})
+          PrefetchHooks Function({
+            bool milestonesRefs,
+            bool recurringTaskRulesRefs,
+            bool tasksRefs,
+          })
         > {
   $$GoalsTableTableManager(_$AppDatabase db, $GoalsTable table)
     : super(
@@ -1657,43 +2840,77 @@ class $$GoalsTableTableManager
                     (e.readTable(table), $$GoalsTableReferences(db, table, e)),
               )
               .toList(),
-          prefetchHooksCallback: ({milestonesRefs = false, tasksRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (milestonesRefs) db.milestones,
-                if (tasksRefs) db.tasks,
-              ],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (milestonesRefs)
-                    await $_getPrefetchedData<Goal, $GoalsTable, Milestone>(
-                      currentTable: table,
-                      referencedTable: $$GoalsTableReferences
-                          ._milestonesRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$GoalsTableReferences(db, table, p0).milestonesRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.goalId == item.id),
-                      typedResults: items,
-                    ),
-                  if (tasksRefs)
-                    await $_getPrefetchedData<Goal, $GoalsTable, Task>(
-                      currentTable: table,
-                      referencedTable: $$GoalsTableReferences._tasksRefsTable(
-                        db,
-                      ),
-                      managerFromTypedResult: (p0) =>
-                          $$GoalsTableReferences(db, table, p0).tasksRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.goalId == item.id),
-                      typedResults: items,
-                    ),
-                ];
+          prefetchHooksCallback:
+              ({
+                milestonesRefs = false,
+                recurringTaskRulesRefs = false,
+                tasksRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (milestonesRefs) db.milestones,
+                    if (recurringTaskRulesRefs) db.recurringTaskRules,
+                    if (tasksRefs) db.tasks,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (milestonesRefs)
+                        await $_getPrefetchedData<Goal, $GoalsTable, Milestone>(
+                          currentTable: table,
+                          referencedTable: $$GoalsTableReferences
+                              ._milestonesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$GoalsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).milestonesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.goalId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (recurringTaskRulesRefs)
+                        await $_getPrefetchedData<
+                          Goal,
+                          $GoalsTable,
+                          RecurringTaskRule
+                        >(
+                          currentTable: table,
+                          referencedTable: $$GoalsTableReferences
+                              ._recurringTaskRulesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$GoalsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).recurringTaskRulesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.goalId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (tasksRefs)
+                        await $_getPrefetchedData<Goal, $GoalsTable, Task>(
+                          currentTable: table,
+                          referencedTable: $$GoalsTableReferences
+                              ._tasksRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$GoalsTableReferences(db, table, p0).tasksRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.goalId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -1710,7 +2927,11 @@ typedef $$GoalsTableProcessedTableManager =
       $$GoalsTableUpdateCompanionBuilder,
       (Goal, $$GoalsTableReferences),
       Goal,
-      PrefetchHooks Function({bool milestonesRefs, bool tasksRefs})
+      PrefetchHooks Function({
+        bool milestonesRefs,
+        bool recurringTaskRulesRefs,
+        bool tasksRefs,
+      })
     >;
 typedef $$MilestonesTableCreateCompanionBuilder =
     MilestonesCompanion Function({
@@ -1750,6 +2971,30 @@ final class $$MilestonesTableReferences
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$RecurringTaskRulesTable, List<RecurringTaskRule>>
+  _recurringTaskRulesRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.recurringTaskRules,
+        aliasName: $_aliasNameGenerator(
+          db.milestones.id,
+          db.recurringTaskRules.milestoneId,
+        ),
+      );
+
+  $$RecurringTaskRulesTableProcessedTableManager get recurringTaskRulesRefs {
+    final manager = $$RecurringTaskRulesTableTableManager(
+      $_db,
+      $_db.recurringTaskRules,
+    ).filter((f) => f.milestoneId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _recurringTaskRulesRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
     );
   }
 
@@ -1823,6 +3068,31 @@ class $$MilestonesTableFilterComposer
           ),
     );
     return composer;
+  }
+
+  Expression<bool> recurringTaskRulesRefs(
+    Expression<bool> Function($$RecurringTaskRulesTableFilterComposer f) f,
+  ) {
+    final $$RecurringTaskRulesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.recurringTaskRules,
+      getReferencedColumn: (t) => t.milestoneId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RecurringTaskRulesTableFilterComposer(
+            $db: $db,
+            $table: $db.recurringTaskRules,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
   }
 
   Expression<bool> tasksRefs(
@@ -1950,6 +3220,32 @@ class $$MilestonesTableAnnotationComposer
     return composer;
   }
 
+  Expression<T> recurringTaskRulesRefs<T extends Object>(
+    Expression<T> Function($$RecurringTaskRulesTableAnnotationComposer a) f,
+  ) {
+    final $$RecurringTaskRulesTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.recurringTaskRules,
+          getReferencedColumn: (t) => t.milestoneId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$RecurringTaskRulesTableAnnotationComposer(
+                $db: $db,
+                $table: $db.recurringTaskRules,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
   Expression<T> tasksRefs<T extends Object>(
     Expression<T> Function($$TasksTableAnnotationComposer a) f,
   ) {
@@ -1989,7 +3285,11 @@ class $$MilestonesTableTableManager
           $$MilestonesTableUpdateCompanionBuilder,
           (Milestone, $$MilestonesTableReferences),
           Milestone,
-          PrefetchHooks Function({bool goalId, bool tasksRefs})
+          PrefetchHooks Function({
+            bool goalId,
+            bool recurringTaskRulesRefs,
+            bool tasksRefs,
+          })
         > {
   $$MilestonesTableTableManager(_$AppDatabase db, $MilestonesTable table)
     : super(
@@ -2042,65 +3342,99 @@ class $$MilestonesTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({goalId = false, tasksRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [if (tasksRefs) db.tasks],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (goalId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.goalId,
-                                referencedTable: $$MilestonesTableReferences
-                                    ._goalIdTable(db),
-                                referencedColumn: $$MilestonesTableReferences
-                                    ._goalIdTable(db)
-                                    .id,
-                              )
-                              as T;
-                    }
+          prefetchHooksCallback:
+              ({
+                goalId = false,
+                recurringTaskRulesRefs = false,
+                tasksRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (recurringTaskRulesRefs) db.recurringTaskRules,
+                    if (tasksRefs) db.tasks,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (goalId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.goalId,
+                                    referencedTable: $$MilestonesTableReferences
+                                        ._goalIdTable(db),
+                                    referencedColumn:
+                                        $$MilestonesTableReferences
+                                            ._goalIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
 
-                    return state;
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (recurringTaskRulesRefs)
+                        await $_getPrefetchedData<
+                          Milestone,
+                          $MilestonesTable,
+                          RecurringTaskRule
+                        >(
+                          currentTable: table,
+                          referencedTable: $$MilestonesTableReferences
+                              ._recurringTaskRulesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$MilestonesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).recurringTaskRulesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.milestoneId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (tasksRefs)
+                        await $_getPrefetchedData<
+                          Milestone,
+                          $MilestonesTable,
+                          Task
+                        >(
+                          currentTable: table,
+                          referencedTable: $$MilestonesTableReferences
+                              ._tasksRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$MilestonesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).tasksRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.milestoneId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
                   },
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (tasksRefs)
-                    await $_getPrefetchedData<
-                      Milestone,
-                      $MilestonesTable,
-                      Task
-                    >(
-                      currentTable: table,
-                      referencedTable: $$MilestonesTableReferences
-                          ._tasksRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$MilestonesTableReferences(db, table, p0).tasksRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where(
-                            (e) => e.milestoneId == item.id,
-                          ),
-                      typedResults: items,
-                    ),
-                ];
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -2117,13 +3451,1122 @@ typedef $$MilestonesTableProcessedTableManager =
       $$MilestonesTableUpdateCompanionBuilder,
       (Milestone, $$MilestonesTableReferences),
       Milestone,
-      PrefetchHooks Function({bool goalId, bool tasksRefs})
+      PrefetchHooks Function({
+        bool goalId,
+        bool recurringTaskRulesRefs,
+        bool tasksRefs,
+      })
+    >;
+typedef $$RecurringTaskRulesTableCreateCompanionBuilder =
+    RecurringTaskRulesCompanion Function({
+      required String id,
+      Value<String?> goalId,
+      Value<String?> milestoneId,
+      required String title,
+      Value<String> description,
+      required String recurrenceType,
+      Value<String?> weekdays,
+      Value<int?> monthDay,
+      required DateTime startDate,
+      Value<DateTime?> endDate,
+      Value<bool> isActive,
+      required DateTime createdAt,
+      Value<int> rowid,
+    });
+typedef $$RecurringTaskRulesTableUpdateCompanionBuilder =
+    RecurringTaskRulesCompanion Function({
+      Value<String> id,
+      Value<String?> goalId,
+      Value<String?> milestoneId,
+      Value<String> title,
+      Value<String> description,
+      Value<String> recurrenceType,
+      Value<String?> weekdays,
+      Value<int?> monthDay,
+      Value<DateTime> startDate,
+      Value<DateTime?> endDate,
+      Value<bool> isActive,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+final class $$RecurringTaskRulesTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $RecurringTaskRulesTable,
+          RecurringTaskRule
+        > {
+  $$RecurringTaskRulesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $GoalsTable _goalIdTable(_$AppDatabase db) => db.goals.createAlias(
+    $_aliasNameGenerator(db.recurringTaskRules.goalId, db.goals.id),
+  );
+
+  $$GoalsTableProcessedTableManager? get goalId {
+    final $_column = $_itemColumn<String>('goal_id');
+    if ($_column == null) return null;
+    final manager = $$GoalsTableTableManager(
+      $_db,
+      $_db.goals,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_goalIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $MilestonesTable _milestoneIdTable(_$AppDatabase db) =>
+      db.milestones.createAlias(
+        $_aliasNameGenerator(
+          db.recurringTaskRules.milestoneId,
+          db.milestones.id,
+        ),
+      );
+
+  $$MilestonesTableProcessedTableManager? get milestoneId {
+    final $_column = $_itemColumn<String>('milestone_id');
+    if ($_column == null) return null;
+    final manager = $$MilestonesTableTableManager(
+      $_db,
+      $_db.milestones,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_milestoneIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $RecurringTaskExceptionsTable,
+    List<RecurringTaskException>
+  >
+  _recurringTaskExceptionsRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.recurringTaskExceptions,
+        aliasName: $_aliasNameGenerator(
+          db.recurringTaskRules.id,
+          db.recurringTaskExceptions.ruleId,
+        ),
+      );
+
+  $$RecurringTaskExceptionsTableProcessedTableManager
+  get recurringTaskExceptionsRefs {
+    final manager = $$RecurringTaskExceptionsTableTableManager(
+      $_db,
+      $_db.recurringTaskExceptions,
+    ).filter((f) => f.ruleId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _recurringTaskExceptionsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$TasksTable, List<Task>> _tasksRefsTable(
+    _$AppDatabase db,
+  ) => MultiTypedResultKey.fromTable(
+    db.tasks,
+    aliasName: $_aliasNameGenerator(
+      db.recurringTaskRules.id,
+      db.tasks.recurringRuleId,
+    ),
+  );
+
+  $$TasksTableProcessedTableManager get tasksRefs {
+    final manager = $$TasksTableTableManager($_db, $_db.tasks).filter(
+      (f) => f.recurringRuleId.id.sqlEquals($_itemColumn<String>('id')!),
+    );
+
+    final cache = $_typedResult.readTableOrNull(_tasksRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$RecurringTaskRulesTableFilterComposer
+    extends Composer<_$AppDatabase, $RecurringTaskRulesTable> {
+  $$RecurringTaskRulesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get recurrenceType => $composableBuilder(
+    column: $table.recurrenceType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get weekdays => $composableBuilder(
+    column: $table.weekdays,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get monthDay => $composableBuilder(
+    column: $table.monthDay,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isActive => $composableBuilder(
+    column: $table.isActive,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$GoalsTableFilterComposer get goalId {
+    final $$GoalsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.goalId,
+      referencedTable: $db.goals,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$GoalsTableFilterComposer(
+            $db: $db,
+            $table: $db.goals,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$MilestonesTableFilterComposer get milestoneId {
+    final $$MilestonesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.milestoneId,
+      referencedTable: $db.milestones,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$MilestonesTableFilterComposer(
+            $db: $db,
+            $table: $db.milestones,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> recurringTaskExceptionsRefs(
+    Expression<bool> Function($$RecurringTaskExceptionsTableFilterComposer f) f,
+  ) {
+    final $$RecurringTaskExceptionsTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.recurringTaskExceptions,
+          getReferencedColumn: (t) => t.ruleId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$RecurringTaskExceptionsTableFilterComposer(
+                $db: $db,
+                $table: $db.recurringTaskExceptions,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<bool> tasksRefs(
+    Expression<bool> Function($$TasksTableFilterComposer f) f,
+  ) {
+    final $$TasksTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.tasks,
+      getReferencedColumn: (t) => t.recurringRuleId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TasksTableFilterComposer(
+            $db: $db,
+            $table: $db.tasks,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$RecurringTaskRulesTableOrderingComposer
+    extends Composer<_$AppDatabase, $RecurringTaskRulesTable> {
+  $$RecurringTaskRulesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get recurrenceType => $composableBuilder(
+    column: $table.recurrenceType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get weekdays => $composableBuilder(
+    column: $table.weekdays,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get monthDay => $composableBuilder(
+    column: $table.monthDay,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isActive => $composableBuilder(
+    column: $table.isActive,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$GoalsTableOrderingComposer get goalId {
+    final $$GoalsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.goalId,
+      referencedTable: $db.goals,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$GoalsTableOrderingComposer(
+            $db: $db,
+            $table: $db.goals,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$MilestonesTableOrderingComposer get milestoneId {
+    final $$MilestonesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.milestoneId,
+      referencedTable: $db.milestones,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$MilestonesTableOrderingComposer(
+            $db: $db,
+            $table: $db.milestones,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$RecurringTaskRulesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $RecurringTaskRulesTable> {
+  $$RecurringTaskRulesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get recurrenceType => $composableBuilder(
+    column: $table.recurrenceType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get weekdays =>
+      $composableBuilder(column: $table.weekdays, builder: (column) => column);
+
+  GeneratedColumn<int> get monthDay =>
+      $composableBuilder(column: $table.monthDay, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startDate =>
+      $composableBuilder(column: $table.startDate, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get endDate =>
+      $composableBuilder(column: $table.endDate, builder: (column) => column);
+
+  GeneratedColumn<bool> get isActive =>
+      $composableBuilder(column: $table.isActive, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$GoalsTableAnnotationComposer get goalId {
+    final $$GoalsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.goalId,
+      referencedTable: $db.goals,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$GoalsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.goals,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$MilestonesTableAnnotationComposer get milestoneId {
+    final $$MilestonesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.milestoneId,
+      referencedTable: $db.milestones,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$MilestonesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.milestones,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> recurringTaskExceptionsRefs<T extends Object>(
+    Expression<T> Function($$RecurringTaskExceptionsTableAnnotationComposer a)
+    f,
+  ) {
+    final $$RecurringTaskExceptionsTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.recurringTaskExceptions,
+          getReferencedColumn: (t) => t.ruleId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$RecurringTaskExceptionsTableAnnotationComposer(
+                $db: $db,
+                $table: $db.recurringTaskExceptions,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> tasksRefs<T extends Object>(
+    Expression<T> Function($$TasksTableAnnotationComposer a) f,
+  ) {
+    final $$TasksTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.tasks,
+      getReferencedColumn: (t) => t.recurringRuleId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TasksTableAnnotationComposer(
+            $db: $db,
+            $table: $db.tasks,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$RecurringTaskRulesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $RecurringTaskRulesTable,
+          RecurringTaskRule,
+          $$RecurringTaskRulesTableFilterComposer,
+          $$RecurringTaskRulesTableOrderingComposer,
+          $$RecurringTaskRulesTableAnnotationComposer,
+          $$RecurringTaskRulesTableCreateCompanionBuilder,
+          $$RecurringTaskRulesTableUpdateCompanionBuilder,
+          (RecurringTaskRule, $$RecurringTaskRulesTableReferences),
+          RecurringTaskRule,
+          PrefetchHooks Function({
+            bool goalId,
+            bool milestoneId,
+            bool recurringTaskExceptionsRefs,
+            bool tasksRefs,
+          })
+        > {
+  $$RecurringTaskRulesTableTableManager(
+    _$AppDatabase db,
+    $RecurringTaskRulesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$RecurringTaskRulesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$RecurringTaskRulesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$RecurringTaskRulesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String?> goalId = const Value.absent(),
+                Value<String?> milestoneId = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> description = const Value.absent(),
+                Value<String> recurrenceType = const Value.absent(),
+                Value<String?> weekdays = const Value.absent(),
+                Value<int?> monthDay = const Value.absent(),
+                Value<DateTime> startDate = const Value.absent(),
+                Value<DateTime?> endDate = const Value.absent(),
+                Value<bool> isActive = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => RecurringTaskRulesCompanion(
+                id: id,
+                goalId: goalId,
+                milestoneId: milestoneId,
+                title: title,
+                description: description,
+                recurrenceType: recurrenceType,
+                weekdays: weekdays,
+                monthDay: monthDay,
+                startDate: startDate,
+                endDate: endDate,
+                isActive: isActive,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                Value<String?> goalId = const Value.absent(),
+                Value<String?> milestoneId = const Value.absent(),
+                required String title,
+                Value<String> description = const Value.absent(),
+                required String recurrenceType,
+                Value<String?> weekdays = const Value.absent(),
+                Value<int?> monthDay = const Value.absent(),
+                required DateTime startDate,
+                Value<DateTime?> endDate = const Value.absent(),
+                Value<bool> isActive = const Value.absent(),
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => RecurringTaskRulesCompanion.insert(
+                id: id,
+                goalId: goalId,
+                milestoneId: milestoneId,
+                title: title,
+                description: description,
+                recurrenceType: recurrenceType,
+                weekdays: weekdays,
+                monthDay: monthDay,
+                startDate: startDate,
+                endDate: endDate,
+                isActive: isActive,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$RecurringTaskRulesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({
+                goalId = false,
+                milestoneId = false,
+                recurringTaskExceptionsRefs = false,
+                tasksRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (recurringTaskExceptionsRefs) db.recurringTaskExceptions,
+                    if (tasksRefs) db.tasks,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (goalId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.goalId,
+                                    referencedTable:
+                                        $$RecurringTaskRulesTableReferences
+                                            ._goalIdTable(db),
+                                    referencedColumn:
+                                        $$RecurringTaskRulesTableReferences
+                                            ._goalIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (milestoneId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.milestoneId,
+                                    referencedTable:
+                                        $$RecurringTaskRulesTableReferences
+                                            ._milestoneIdTable(db),
+                                    referencedColumn:
+                                        $$RecurringTaskRulesTableReferences
+                                            ._milestoneIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (recurringTaskExceptionsRefs)
+                        await $_getPrefetchedData<
+                          RecurringTaskRule,
+                          $RecurringTaskRulesTable,
+                          RecurringTaskException
+                        >(
+                          currentTable: table,
+                          referencedTable: $$RecurringTaskRulesTableReferences
+                              ._recurringTaskExceptionsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$RecurringTaskRulesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).recurringTaskExceptionsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.ruleId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (tasksRefs)
+                        await $_getPrefetchedData<
+                          RecurringTaskRule,
+                          $RecurringTaskRulesTable,
+                          Task
+                        >(
+                          currentTable: table,
+                          referencedTable: $$RecurringTaskRulesTableReferences
+                              ._tasksRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$RecurringTaskRulesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).tasksRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.recurringRuleId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$RecurringTaskRulesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $RecurringTaskRulesTable,
+      RecurringTaskRule,
+      $$RecurringTaskRulesTableFilterComposer,
+      $$RecurringTaskRulesTableOrderingComposer,
+      $$RecurringTaskRulesTableAnnotationComposer,
+      $$RecurringTaskRulesTableCreateCompanionBuilder,
+      $$RecurringTaskRulesTableUpdateCompanionBuilder,
+      (RecurringTaskRule, $$RecurringTaskRulesTableReferences),
+      RecurringTaskRule,
+      PrefetchHooks Function({
+        bool goalId,
+        bool milestoneId,
+        bool recurringTaskExceptionsRefs,
+        bool tasksRefs,
+      })
+    >;
+typedef $$RecurringTaskExceptionsTableCreateCompanionBuilder =
+    RecurringTaskExceptionsCompanion Function({
+      required String id,
+      required String ruleId,
+      required DateTime date,
+      required DateTime createdAt,
+      Value<int> rowid,
+    });
+typedef $$RecurringTaskExceptionsTableUpdateCompanionBuilder =
+    RecurringTaskExceptionsCompanion Function({
+      Value<String> id,
+      Value<String> ruleId,
+      Value<DateTime> date,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+final class $$RecurringTaskExceptionsTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $RecurringTaskExceptionsTable,
+          RecurringTaskException
+        > {
+  $$RecurringTaskExceptionsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $RecurringTaskRulesTable _ruleIdTable(_$AppDatabase db) =>
+      db.recurringTaskRules.createAlias(
+        $_aliasNameGenerator(
+          db.recurringTaskExceptions.ruleId,
+          db.recurringTaskRules.id,
+        ),
+      );
+
+  $$RecurringTaskRulesTableProcessedTableManager get ruleId {
+    final $_column = $_itemColumn<String>('rule_id')!;
+
+    final manager = $$RecurringTaskRulesTableTableManager(
+      $_db,
+      $_db.recurringTaskRules,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_ruleIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$RecurringTaskExceptionsTableFilterComposer
+    extends Composer<_$AppDatabase, $RecurringTaskExceptionsTable> {
+  $$RecurringTaskExceptionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$RecurringTaskRulesTableFilterComposer get ruleId {
+    final $$RecurringTaskRulesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.ruleId,
+      referencedTable: $db.recurringTaskRules,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RecurringTaskRulesTableFilterComposer(
+            $db: $db,
+            $table: $db.recurringTaskRules,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$RecurringTaskExceptionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $RecurringTaskExceptionsTable> {
+  $$RecurringTaskExceptionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$RecurringTaskRulesTableOrderingComposer get ruleId {
+    final $$RecurringTaskRulesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.ruleId,
+      referencedTable: $db.recurringTaskRules,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RecurringTaskRulesTableOrderingComposer(
+            $db: $db,
+            $table: $db.recurringTaskRules,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$RecurringTaskExceptionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $RecurringTaskExceptionsTable> {
+  $$RecurringTaskExceptionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$RecurringTaskRulesTableAnnotationComposer get ruleId {
+    final $$RecurringTaskRulesTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.ruleId,
+          referencedTable: $db.recurringTaskRules,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$RecurringTaskRulesTableAnnotationComposer(
+                $db: $db,
+                $table: $db.recurringTaskRules,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
+}
+
+class $$RecurringTaskExceptionsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $RecurringTaskExceptionsTable,
+          RecurringTaskException,
+          $$RecurringTaskExceptionsTableFilterComposer,
+          $$RecurringTaskExceptionsTableOrderingComposer,
+          $$RecurringTaskExceptionsTableAnnotationComposer,
+          $$RecurringTaskExceptionsTableCreateCompanionBuilder,
+          $$RecurringTaskExceptionsTableUpdateCompanionBuilder,
+          (RecurringTaskException, $$RecurringTaskExceptionsTableReferences),
+          RecurringTaskException,
+          PrefetchHooks Function({bool ruleId})
+        > {
+  $$RecurringTaskExceptionsTableTableManager(
+    _$AppDatabase db,
+    $RecurringTaskExceptionsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$RecurringTaskExceptionsTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$RecurringTaskExceptionsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$RecurringTaskExceptionsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> ruleId = const Value.absent(),
+                Value<DateTime> date = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => RecurringTaskExceptionsCompanion(
+                id: id,
+                ruleId: ruleId,
+                date: date,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String ruleId,
+                required DateTime date,
+                required DateTime createdAt,
+                Value<int> rowid = const Value.absent(),
+              }) => RecurringTaskExceptionsCompanion.insert(
+                id: id,
+                ruleId: ruleId,
+                date: date,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$RecurringTaskExceptionsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({ruleId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (ruleId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.ruleId,
+                                referencedTable:
+                                    $$RecurringTaskExceptionsTableReferences
+                                        ._ruleIdTable(db),
+                                referencedColumn:
+                                    $$RecurringTaskExceptionsTableReferences
+                                        ._ruleIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$RecurringTaskExceptionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $RecurringTaskExceptionsTable,
+      RecurringTaskException,
+      $$RecurringTaskExceptionsTableFilterComposer,
+      $$RecurringTaskExceptionsTableOrderingComposer,
+      $$RecurringTaskExceptionsTableAnnotationComposer,
+      $$RecurringTaskExceptionsTableCreateCompanionBuilder,
+      $$RecurringTaskExceptionsTableUpdateCompanionBuilder,
+      (RecurringTaskException, $$RecurringTaskExceptionsTableReferences),
+      RecurringTaskException,
+      PrefetchHooks Function({bool ruleId})
     >;
 typedef $$TasksTableCreateCompanionBuilder =
     TasksCompanion Function({
       required String id,
       Value<String?> goalId,
       Value<String?> milestoneId,
+      Value<String?> recurringRuleId,
       required String title,
       Value<String> description,
       Value<DateTime?> scheduledDate,
@@ -2137,6 +4580,7 @@ typedef $$TasksTableUpdateCompanionBuilder =
       Value<String> id,
       Value<String?> goalId,
       Value<String?> milestoneId,
+      Value<String?> recurringRuleId,
       Value<String> title,
       Value<String> description,
       Value<DateTime?> scheduledDate,
@@ -2180,6 +4624,28 @@ final class $$TasksTableReferences
       $_db.milestones,
     ).filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_milestoneIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $RecurringTaskRulesTable _recurringRuleIdTable(_$AppDatabase db) =>
+      db.recurringTaskRules.createAlias(
+        $_aliasNameGenerator(
+          db.tasks.recurringRuleId,
+          db.recurringTaskRules.id,
+        ),
+      );
+
+  $$RecurringTaskRulesTableProcessedTableManager? get recurringRuleId {
+    final $_column = $_itemColumn<String>('recurring_rule_id');
+    if ($_column == null) return null;
+    final manager = $$RecurringTaskRulesTableTableManager(
+      $_db,
+      $_db.recurringTaskRules,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_recurringRuleIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
@@ -2267,6 +4733,29 @@ class $$TasksTableFilterComposer extends Composer<_$AppDatabase, $TasksTable> {
           }) => $$MilestonesTableFilterComposer(
             $db: $db,
             $table: $db.milestones,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$RecurringTaskRulesTableFilterComposer get recurringRuleId {
+    final $$RecurringTaskRulesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.recurringRuleId,
+      referencedTable: $db.recurringTaskRules,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RecurringTaskRulesTableFilterComposer(
+            $db: $db,
+            $table: $db.recurringTaskRules,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -2366,6 +4855,29 @@ class $$TasksTableOrderingComposer
     );
     return composer;
   }
+
+  $$RecurringTaskRulesTableOrderingComposer get recurringRuleId {
+    final $$RecurringTaskRulesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.recurringRuleId,
+      referencedTable: $db.recurringTaskRules,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RecurringTaskRulesTableOrderingComposer(
+            $db: $db,
+            $table: $db.recurringTaskRules,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $$TasksTableAnnotationComposer
@@ -2451,6 +4963,30 @@ class $$TasksTableAnnotationComposer
     );
     return composer;
   }
+
+  $$RecurringTaskRulesTableAnnotationComposer get recurringRuleId {
+    final $$RecurringTaskRulesTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.recurringRuleId,
+          referencedTable: $db.recurringTaskRules,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$RecurringTaskRulesTableAnnotationComposer(
+                $db: $db,
+                $table: $db.recurringTaskRules,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
 }
 
 class $$TasksTableTableManager
@@ -2466,7 +5002,11 @@ class $$TasksTableTableManager
           $$TasksTableUpdateCompanionBuilder,
           (Task, $$TasksTableReferences),
           Task,
-          PrefetchHooks Function({bool goalId, bool milestoneId})
+          PrefetchHooks Function({
+            bool goalId,
+            bool milestoneId,
+            bool recurringRuleId,
+          })
         > {
   $$TasksTableTableManager(_$AppDatabase db, $TasksTable table)
     : super(
@@ -2484,6 +5024,7 @@ class $$TasksTableTableManager
                 Value<String> id = const Value.absent(),
                 Value<String?> goalId = const Value.absent(),
                 Value<String?> milestoneId = const Value.absent(),
+                Value<String?> recurringRuleId = const Value.absent(),
                 Value<String> title = const Value.absent(),
                 Value<String> description = const Value.absent(),
                 Value<DateTime?> scheduledDate = const Value.absent(),
@@ -2495,6 +5036,7 @@ class $$TasksTableTableManager
                 id: id,
                 goalId: goalId,
                 milestoneId: milestoneId,
+                recurringRuleId: recurringRuleId,
                 title: title,
                 description: description,
                 scheduledDate: scheduledDate,
@@ -2508,6 +5050,7 @@ class $$TasksTableTableManager
                 required String id,
                 Value<String?> goalId = const Value.absent(),
                 Value<String?> milestoneId = const Value.absent(),
+                Value<String?> recurringRuleId = const Value.absent(),
                 required String title,
                 Value<String> description = const Value.absent(),
                 Value<DateTime?> scheduledDate = const Value.absent(),
@@ -2519,6 +5062,7 @@ class $$TasksTableTableManager
                 id: id,
                 goalId: goalId,
                 milestoneId: milestoneId,
+                recurringRuleId: recurringRuleId,
                 title: title,
                 description: description,
                 scheduledDate: scheduledDate,
@@ -2533,60 +5077,74 @@ class $$TasksTableTableManager
                     (e.readTable(table), $$TasksTableReferences(db, table, e)),
               )
               .toList(),
-          prefetchHooksCallback: ({goalId = false, milestoneId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (goalId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.goalId,
-                                referencedTable: $$TasksTableReferences
-                                    ._goalIdTable(db),
-                                referencedColumn: $$TasksTableReferences
-                                    ._goalIdTable(db)
-                                    .id,
-                              )
-                              as T;
-                    }
-                    if (milestoneId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.milestoneId,
-                                referencedTable: $$TasksTableReferences
-                                    ._milestoneIdTable(db),
-                                referencedColumn: $$TasksTableReferences
-                                    ._milestoneIdTable(db)
-                                    .id,
-                              )
-                              as T;
-                    }
+          prefetchHooksCallback:
+              ({goalId = false, milestoneId = false, recurringRuleId = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (goalId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.goalId,
+                                    referencedTable: $$TasksTableReferences
+                                        ._goalIdTable(db),
+                                    referencedColumn: $$TasksTableReferences
+                                        ._goalIdTable(db)
+                                        .id,
+                                  )
+                                  as T;
+                        }
+                        if (milestoneId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.milestoneId,
+                                    referencedTable: $$TasksTableReferences
+                                        ._milestoneIdTable(db),
+                                    referencedColumn: $$TasksTableReferences
+                                        ._milestoneIdTable(db)
+                                        .id,
+                                  )
+                                  as T;
+                        }
+                        if (recurringRuleId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.recurringRuleId,
+                                    referencedTable: $$TasksTableReferences
+                                        ._recurringRuleIdTable(db),
+                                    referencedColumn: $$TasksTableReferences
+                                        ._recurringRuleIdTable(db)
+                                        .id,
+                                  )
+                                  as T;
+                        }
 
-                    return state;
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [];
                   },
-              getPrefetchedDataCallback: (items) async {
-                return [];
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -2603,7 +5161,11 @@ typedef $$TasksTableProcessedTableManager =
       $$TasksTableUpdateCompanionBuilder,
       (Task, $$TasksTableReferences),
       Task,
-      PrefetchHooks Function({bool goalId, bool milestoneId})
+      PrefetchHooks Function({
+        bool goalId,
+        bool milestoneId,
+        bool recurringRuleId,
+      })
     >;
 
 class $AppDatabaseManager {
@@ -2613,6 +5175,13 @@ class $AppDatabaseManager {
       $$GoalsTableTableManager(_db, _db.goals);
   $$MilestonesTableTableManager get milestones =>
       $$MilestonesTableTableManager(_db, _db.milestones);
+  $$RecurringTaskRulesTableTableManager get recurringTaskRules =>
+      $$RecurringTaskRulesTableTableManager(_db, _db.recurringTaskRules);
+  $$RecurringTaskExceptionsTableTableManager get recurringTaskExceptions =>
+      $$RecurringTaskExceptionsTableTableManager(
+        _db,
+        _db.recurringTaskExceptions,
+      );
   $$TasksTableTableManager get tasks =>
       $$TasksTableTableManager(_db, _db.tasks);
 }
