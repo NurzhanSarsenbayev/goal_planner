@@ -192,6 +192,7 @@ class _AppShellState extends State<AppShell> {
             goals: _store.goals,
             milestones: _store.milestones,
             tasks: _store.tasks,
+            recurringRules: _store.recurringRules,
             onToggleTaskCompleted: _store.toggleTaskCompleted,
             onTaskUpdated: _store.updateTask,
             onTaskAttachedToGoal: _store.attachTaskToGoal,
