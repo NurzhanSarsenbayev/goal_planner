@@ -13,6 +13,7 @@ import '../screens/all_tasks_screen.dart';
 import '../screens/more_screen.dart';
 import '../screens/today_screen.dart';
 import '../screens/reports_screen.dart';
+import '../screens/recurring_tasks_screen.dart';
 import '../state/planner_store.dart';
 import 'app_dialogs.dart';
 
@@ -224,6 +225,21 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
+  void _openRecurringTasks() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return AnimatedBuilder(
+            animation: _store,
+            builder: (context, _) {
+              return RecurringTasksScreen(rules: _store.recurringRules);
+            },
+          );
+        },
+      ),
+    );
+  }
+
   void _openGoalDetails(Goal goal) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -287,7 +303,11 @@ class _AppShellState extends State<AppShell> {
         onDeleteTask: _store.deleteTask,
         onAddTaskForDate: _showAddTaskForDateDialog,
       ),
-      MoreScreen(onOpenAllTasks: _openAllTasks, onOpenReports: _openReports),
+      MoreScreen(
+        onOpenAllTasks: _openAllTasks,
+        onOpenReports: _openReports,
+        onOpenRecurringTasks: _openRecurringTasks,
+      ),
     ];
 
     return Scaffold(

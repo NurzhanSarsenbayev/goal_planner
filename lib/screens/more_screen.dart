@@ -5,10 +5,12 @@ class MoreScreen extends StatelessWidget {
     super.key,
     required this.onOpenAllTasks,
     required this.onOpenReports,
+    required this.onOpenRecurringTasks,
   });
 
   final VoidCallback onOpenAllTasks;
   final VoidCallback onOpenReports;
+  final VoidCallback onOpenRecurringTasks;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,16 @@ class MoreScreen extends StatelessWidget {
             subtitle: const Text('Review completed work and goal progress.'),
             trailing: const Icon(Icons.chevron_right),
             onTap: onOpenReports,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Card(
+          child: ListTile(
+            leading: const Icon(Icons.repeat),
+            title: const Text('Recurring tasks'),
+            subtitle: const Text('Manage repeated weekday and monthly tasks.'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: onOpenRecurringTasks,
           ),
         ),
       ],
