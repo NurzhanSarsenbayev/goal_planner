@@ -3,6 +3,8 @@ import 'package:drift/drift.dart' as drift;
 import '../../models/goal.dart' as domain;
 import '../../models/milestone.dart' as domain;
 import '../../models/planner_task.dart' as domain;
+import '../../models/recurring_task_exception.dart' as domain;
+import '../../models/recurring_task_rule.dart' as domain;
 import '../local/app_database.dart' as local;
 import 'planner_mappers.dart';
 
@@ -27,6 +29,21 @@ class PlannerRepository {
     final rows = await _database.select(_database.tasks).get();
 
     return rows.map(mapTask).toList();
+  }
+
+  Future<List<domain.RecurringTaskRule>> loadRecurringTaskRules() async {
+    final rows = await _database.select(_database.recurringTaskRules).get();
+
+    return rows.map(mapRecurringTaskRule).toList();
+  }
+
+  Future<List<domain.RecurringTaskException>>
+  loadRecurringTaskExceptions() async {
+    final rows = await _database
+        .select(_database.recurringTaskExceptions)
+        .get();
+
+    return rows.map(mapRecurringTaskException).toList();
   }
 
   Future<void> saveGoal(domain.Goal goal) async {
@@ -112,6 +129,42 @@ class PlannerRepository {
             isCompleted: drift.Value(task.isCompleted),
             completedAt: drift.Value(task.completedAt),
             createdAt: task.createdAt,
+          ),
+        );
+  }
+
+  Future<void> saveRecurringTaskRule(domain.RecurringTaskRule rule) async {
+    await _database
+        .into(_database.recurringTaskRules)
+        .insertOnConflictUpdate(
+          local.RecurringTaskRulesCompanion.insert(
+            id: rule.id,
+            goalId: drift.Value(rule.goalId),
+            milestoneId: drift.Value(rule.milestoneId),
+            title: rule.title,
+            description: drift.Value(rule.description),
+            recurrenceType: recurrenceTypeToDatabaseValue(rule.recurrenceType),
+            weekdays: drift.Value(weekdaysToDatabaseValue(rule.weekdays)),
+            monthDay: drift.Value(rule.monthDay),
+            startDate: rule.startDate,
+            endDate: drift.Value(rule.endDate),
+            isActive: drift.Value(rule.isActive),
+            createdAt: rule.createdAt,
+          ),
+        );
+  }
+
+  Future<void> saveRecurringTaskException(
+    domain.RecurringTaskException exception,
+  ) async {
+    await _database
+        .into(_database.recurringTaskExceptions)
+        .insertOnConflictUpdate(
+          local.RecurringTaskExceptionsCompanion.insert(
+            id: exception.id,
+            ruleId: exception.ruleId,
+            date: exception.date,
+            createdAt: exception.createdAt,
           ),
         );
   }
