@@ -45,16 +45,41 @@ class _AddRecurringTaskRuleDialogState
   final _descriptionController = TextEditingController();
 
   RecurrenceType _recurrenceType = RecurrenceType.weekly;
-  final Set<int> _selectedWeekdays = {DateTime.monday};
+  final Set<int> _selectedWeekdays = {};
   int _selectedMonthDay = 1;
   String? _selectedGoalId;
   String? _selectedMilestoneId;
 
+  bool get _canSubmit {
+    final hasTitle = _titleController.text.trim().isNotEmpty;
+
+    if (!hasTitle) {
+      return false;
+    }
+
+    return switch (_recurrenceType) {
+      RecurrenceType.weekly => _selectedWeekdays.isNotEmpty,
+      RecurrenceType.monthly =>
+        _selectedMonthDay >= 1 && _selectedMonthDay <= 31,
+    };
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController.addListener(_onFormChanged);
+  }
+
   @override
   void dispose() {
+    _titleController.removeListener(_onFormChanged);
     _titleController.dispose();
     _descriptionController.dispose();
     super.dispose();
+  }
+
+  void _onFormChanged() {
+    setState(() {});
   }
 
   @override
@@ -104,6 +129,7 @@ class _AddRecurringTaskRuleDialogState
             if (_selectedGoalId != null) ...[
               const SizedBox(height: 8),
               DropdownButtonFormField<String?>(
+                key: ValueKey(_selectedGoalId),
                 initialValue: _selectedMilestoneId,
                 decoration: const InputDecoration(labelText: 'Milestone'),
                 items: [
@@ -150,10 +176,6 @@ class _AddRecurringTaskRuleDialogState
                 onChanged: (weekday) {
                   setState(() {
                     if (_selectedWeekdays.contains(weekday)) {
-                      if (_selectedWeekdays.length == 1) {
-                        return;
-                      }
-
                       _selectedWeekdays.remove(weekday);
                     } else {
                       _selectedWeekdays.add(weekday);
@@ -161,12 +183,12 @@ class _AddRecurringTaskRuleDialogState
                   });
                 },
               )
-            else
+            else ...[
               DropdownButtonFormField<int>(
                 initialValue: _selectedMonthDay,
                 decoration: const InputDecoration(labelText: 'Day of month'),
                 items: [
-                  for (var day = 1; day <= 28; day++)
+                  for (var day = 1; day <= 31; day++)
                     DropdownMenuItem(value: day, child: Text('Day $day')),
                 ],
                 onChanged: (day) {
@@ -179,6 +201,12 @@ class _AddRecurringTaskRuleDialogState
                   });
                 },
               ),
+              const SizedBox(height: 8),
+              Text(
+                'If a month does not have this day, the task will be created on the last day of that month.',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
           ],
         ),
       ),
@@ -189,23 +217,20 @@ class _AddRecurringTaskRuleDialogState
           },
           child: const Text('Cancel'),
         ),
-        FilledButton(onPressed: _submit, child: const Text('Add')),
+        FilledButton(
+          onPressed: _canSubmit ? _submit : null,
+          child: const Text('Add'),
+        ),
       ],
     );
   }
 
   void _submit() {
-    final title = _titleController.text.trim();
-
-    if (title.isEmpty) {
-      return;
-    }
-
     final selectedWeekdays = _selectedWeekdays.toList()..sort();
 
     Navigator.of(context).pop(
       AddRecurringTaskRuleDraft(
-        title: title,
+        title: _titleController.text.trim(),
         description: _descriptionController.text.trim(),
         goalId: _selectedGoalId,
         milestoneId: _selectedMilestoneId,
