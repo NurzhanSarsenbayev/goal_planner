@@ -9,6 +9,7 @@ import '../widgets/tasks/task_dialog.dart';
 import '../widgets/tasks/task_placement_dialog.dart';
 import '../widgets/tasks/add_task_with_placement_dialog.dart';
 import '../widgets/goals/delete_goal_dialog.dart';
+import '../widgets/recurring/add_recurring_task_rule_dialog.dart';
 
 Future<GoalDraft?> showAddGoalDialog(BuildContext context) {
   return showDialog<GoalDraft>(
@@ -110,6 +111,19 @@ Future<DateTime?> showScheduleTaskDatePicker(
     initialDate: initialDate ?? today,
     firstDate: DateTime(today.year - 1),
     lastDate: DateTime(today.year + 5),
+  );
+}
+
+Future<AddRecurringTaskRuleDraft?> showAddRecurringTaskRuleDialog(
+  BuildContext context, {
+  required List<Goal> goals,
+  required List<Milestone> milestones,
+}) {
+  return showDialog<AddRecurringTaskRuleDraft>(
+    context: context,
+    builder: (context) {
+      return AddRecurringTaskRuleDialog(goals: goals, milestones: milestones);
+    },
   );
 }
 

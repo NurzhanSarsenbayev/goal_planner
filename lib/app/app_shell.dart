@@ -6,6 +6,8 @@ import '../data/local/app_database.dart' as local;
 import '../data/repositories/planner_repository.dart';
 import '../models/goal.dart';
 import '../models/planner_task.dart';
+import '../models/recurring_task_rule.dart';
+import '../shared/planner_dates.dart';
 import '../screens/calendar_screen.dart';
 import '../screens/goal_details_screen.dart';
 import '../screens/goals_screen.dart';
@@ -232,12 +234,44 @@ class _AppShellState extends State<AppShell> {
           return AnimatedBuilder(
             animation: _store,
             builder: (context, _) {
-              return RecurringTasksScreen(rules: _store.recurringRules);
+              return RecurringTasksScreen(
+                rules: _store.recurringRules,
+                onAddRule: _showAddRecurringTaskRuleDialog,
+              );
             },
           );
         },
       ),
     );
+  }
+
+  Future<void> _showAddRecurringTaskRuleDialog() async {
+    final result = await showAddRecurringTaskRuleDialog(
+      context,
+      goals: _store.goals,
+      milestones: _store.milestones,
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    final now = DateTime.now();
+
+    final rule = RecurringTaskRule(
+      id: 'recurring_rule_${now.microsecondsSinceEpoch}',
+      title: result.title,
+      description: result.description,
+      goalId: result.goalId,
+      milestoneId: result.milestoneId,
+      recurrenceType: result.recurrenceType,
+      weekdays: result.weekdays,
+      monthDay: result.monthDay,
+      startDate: todayDate(),
+      createdAt: now,
+    );
+
+    _store.addRecurringTaskRule(rule);
   }
 
   void _openGoalDetails(Goal goal) {

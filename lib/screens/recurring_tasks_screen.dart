@@ -4,9 +4,14 @@ import '../models/recurring_task_rule.dart';
 import '../widgets/common/placeholder_screen.dart';
 
 class RecurringTasksScreen extends StatelessWidget {
-  const RecurringTasksScreen({super.key, required this.rules});
+  const RecurringTasksScreen({
+    super.key,
+    required this.rules,
+    required this.onAddRule,
+  });
 
   final List<RecurringTaskRule> rules;
+  final VoidCallback onAddRule;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +33,11 @@ class RecurringTasksScreen extends StatelessWidget {
                 return _RecurringTaskRuleCard(rule: rule);
               },
             ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: onAddRule,
+        icon: const Icon(Icons.add),
+        label: const Text('Add rule'),
+      ),
     );
   }
 }
