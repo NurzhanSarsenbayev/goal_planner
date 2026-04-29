@@ -19,6 +19,7 @@ class CalendarScreen extends StatefulWidget {
     required this.onRemoveTaskFromSchedule,
     required this.onDeleteTask,
     required this.onAddTaskForDate,
+    required this.onEnsureRecurringTasksForMonth,
   });
 
   final List<Goal> goals;
@@ -32,6 +33,7 @@ class CalendarScreen extends StatefulWidget {
   final void Function(String taskId) onRemoveTaskFromSchedule;
   final void Function(String taskId) onDeleteTask;
   final void Function(DateTime date) onAddTaskForDate;
+  final void Function(DateTime visibleMonth) onEnsureRecurringTasksForMonth;
 
   @override
   State<CalendarScreen> createState() => _CalendarScreenState();
@@ -48,6 +50,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     final today = todayDate();
     _visibleMonth = DateTime(today.year, today.month);
     _selectedDate = today;
+    widget.onEnsureRecurringTasksForMonth(_visibleMonth);
   }
 
   @override
@@ -125,15 +128,23 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   void _showPreviousMonth() {
+    final previousMonth = DateTime(_visibleMonth.year, _visibleMonth.month - 1);
+
     setState(() {
-      _visibleMonth = DateTime(_visibleMonth.year, _visibleMonth.month - 1);
+      _visibleMonth = previousMonth;
     });
+
+    widget.onEnsureRecurringTasksForMonth(previousMonth);
   }
 
   void _showNextMonth() {
+    final nextMonth = DateTime(_visibleMonth.year, _visibleMonth.month + 1);
+
     setState(() {
-      _visibleMonth = DateTime(_visibleMonth.year, _visibleMonth.month + 1);
+      _visibleMonth = nextMonth;
     });
+
+    widget.onEnsureRecurringTasksForMonth(nextMonth);
   }
 
   void _selectDate(DateTime date) {

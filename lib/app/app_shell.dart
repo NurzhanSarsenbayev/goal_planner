@@ -336,6 +336,8 @@ class _AppShellState extends State<AppShell> {
         onRemoveTaskFromSchedule: _store.unscheduleTask,
         onDeleteTask: _store.deleteTask,
         onAddTaskForDate: _showAddTaskForDateDialog,
+        onEnsureRecurringTasksForMonth:
+            _store.ensureRecurringTaskOccurrencesForMonth,
       ),
       MoreScreen(
         onOpenAllTasks: _openAllTasks,

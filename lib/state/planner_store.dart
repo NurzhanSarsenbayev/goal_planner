@@ -304,6 +304,31 @@ class PlannerStore extends ChangeNotifier {
     await Future.wait(generatedTasks.map(_repository.saveTask));
   }
 
+  void ensureRecurringTaskOccurrencesForMonth(DateTime visibleMonth) {
+    final monthStart = DateTime(visibleMonth.year, visibleMonth.month);
+    final monthEnd = DateTime(visibleMonth.year, visibleMonth.month + 1, 0);
+
+    final generatedTasks = generateRecurringTaskOccurrences(
+      rules: _recurringRules,
+      exceptions: _recurringExceptions,
+      existingTasks: _tasks,
+      startDate: monthStart,
+      endDate: monthEnd,
+    );
+
+    if (generatedTasks.isEmpty) {
+      return;
+    }
+
+    _tasks = [..._tasks, ...generatedTasks];
+
+    notifyListeners();
+
+    _persist(
+      Future.wait(generatedTasks.map(_repository.saveTask)).then((_) {}),
+    );
+  }
+
   void _updateGoalById(String goalId, Goal Function(Goal goal) update) {
     Goal? updatedGoal;
 
