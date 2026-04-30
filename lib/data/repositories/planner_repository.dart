@@ -175,6 +175,16 @@ class PlannerRepository {
     )..where((table) => table.id.equals(taskId))).go();
   }
 
+  Future<void> deleteTaskWithRecurringException({
+    required String taskId,
+    required domain.RecurringTaskException exception,
+  }) async {
+    await _database.transaction(() async {
+      await saveRecurringTaskException(exception);
+      await deleteTask(taskId);
+    });
+  }
+
   Future<void> updateTask(domain.PlannerTask task) async {
     await (_database.update(
       _database.tasks,
