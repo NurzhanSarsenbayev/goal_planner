@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import '../../models/recurring_task_rule.dart';
 
 class RecurringTaskRuleCard extends StatelessWidget {
-  const RecurringTaskRuleCard({super.key, required this.rule});
+  const RecurringTaskRuleCard({
+    super.key,
+    required this.rule,
+    this.onActiveChanged,
+  });
 
   final RecurringTaskRule rule;
+  final ValueChanged<bool>? onActiveChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +21,32 @@ class RecurringTaskRuleCard extends StatelessWidget {
         ),
         title: Text(rule.title),
         subtitle: Text(_ruleSubtitle()),
-        trailing: rule.isActive
+        trailing: onActiveChanged == null
             ? null
-            : Text('Inactive', style: Theme.of(context).textTheme.bodySmall),
+            : PopupMenuButton<_RecurringTaskRuleAction>(
+                onSelected: (action) {
+                  switch (action) {
+                    case _RecurringTaskRuleAction.activate:
+                      onActiveChanged?.call(true);
+                    case _RecurringTaskRuleAction.deactivate:
+                      onActiveChanged?.call(false);
+                  }
+                },
+                itemBuilder: (context) {
+                  return [
+                    if (rule.isActive)
+                      const PopupMenuItem(
+                        value: _RecurringTaskRuleAction.deactivate,
+                        child: Text('Deactivate'),
+                      )
+                    else
+                      const PopupMenuItem(
+                        value: _RecurringTaskRuleAction.activate,
+                        child: Text('Activate'),
+                      ),
+                  ];
+                },
+              ),
       ),
     );
   }
@@ -26,12 +54,15 @@ class RecurringTaskRuleCard extends StatelessWidget {
   String _ruleSubtitle() {
     final placement = _placementLabel();
     final recurrence = _recurrenceLabel();
+    final baseLabel = placement == null
+        ? recurrence
+        : '$recurrence · $placement';
 
-    if (placement == null) {
-      return recurrence;
+    if (rule.isActive) {
+      return baseLabel;
     }
 
-    return '$recurrence · $placement';
+    return 'Inactive · $baseLabel';
   }
 
   String? _placementLabel() {
@@ -86,3 +117,5 @@ class RecurringTaskRuleCard extends StatelessWidget {
     };
   }
 }
+
+enum _RecurringTaskRuleAction { activate, deactivate }

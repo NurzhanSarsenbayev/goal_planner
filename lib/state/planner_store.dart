@@ -212,6 +212,26 @@ class PlannerStore extends ChangeNotifier {
     );
   }
 
+  void setRecurringTaskRuleActive({
+    required String ruleId,
+    required bool isActive,
+  }) {
+    final rule = _findRecurringTaskRuleById(ruleId);
+
+    if (rule == null || rule.isActive == isActive) {
+      return;
+    }
+
+    final updatedRule = rule.copyWith(isActive: isActive);
+
+    if (isActive) {
+      _activateRecurringTaskRule(updatedRule);
+      return;
+    }
+
+    _deactivateRecurringTaskRule(updatedRule);
+  }
+
   void deleteTask(String taskId) {
     final taskToDelete = _findTaskById(taskId);
 
@@ -345,6 +365,70 @@ class PlannerStore extends ChangeNotifier {
       _repository.updateTaskWithRecurringException(
         task: updatedTask,
         exception: exception,
+      ),
+    );
+  }
+
+  RecurringTaskRule? _findRecurringTaskRuleById(String ruleId) {
+    for (final rule in _recurringRules) {
+      if (rule.id == ruleId) {
+        return rule;
+      }
+    }
+
+    return null;
+  }
+
+  void _replaceRecurringTaskRule(RecurringTaskRule updatedRule) {
+    _recurringRules = _recurringRules.map((rule) {
+      if (rule.id != updatedRule.id) {
+        return rule;
+      }
+
+      return updatedRule;
+    }).toList();
+  }
+
+  bool _isUnfinishedOccurrenceFromRule({
+    required PlannerTask task,
+    required String ruleId,
+  }) {
+    return task.recurringRuleId == ruleId && !task.isCompleted;
+  }
+
+  void _deactivateRecurringTaskRule(RecurringTaskRule updatedRule) {
+    _replaceRecurringTaskRule(updatedRule);
+
+    _tasks = _tasks.where((task) {
+      return !_isUnfinishedOccurrenceFromRule(
+        task: task,
+        ruleId: updatedRule.id,
+      );
+    }).toList();
+
+    notifyListeners();
+
+    _persist(_repository.deactivateRecurringTaskRule(updatedRule));
+  }
+
+  void _activateRecurringTaskRule(RecurringTaskRule updatedRule) {
+    _replaceRecurringTaskRule(updatedRule);
+
+    final generatedTasks = generateUpcomingRecurringTaskOccurrences(
+      rules: _recurringRules,
+      exceptions: _recurringExceptions,
+      existingTasks: _tasks,
+      today: todayDate(),
+    );
+
+    _tasks = [..._tasks, ...generatedTasks];
+
+    notifyListeners();
+
+    _persist(
+      _repository.saveRecurringTaskRuleWithGeneratedTasks(
+        rule: updatedRule,
+        generatedTasks: generatedTasks,
       ),
     );
   }

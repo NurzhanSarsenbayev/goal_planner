@@ -9,10 +9,13 @@ class RecurringTasksScreen extends StatelessWidget {
     super.key,
     required this.rules,
     required this.onAddRule,
+    required this.onRuleActiveChanged,
   });
 
   final List<RecurringTaskRule> rules;
   final VoidCallback onAddRule;
+  final void Function(RecurringTaskRule rule, bool isActive)
+  onRuleActiveChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,12 @@ class RecurringTasksScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final rule = rules[index];
 
-                return RecurringTaskRuleCard(rule: rule);
+                return RecurringTaskRuleCard(
+                  rule: rule,
+                  onActiveChanged: (isActive) {
+                    onRuleActiveChanged(rule, isActive);
+                  },
+                );
               },
             ),
       floatingActionButton: FloatingActionButton.extended(
