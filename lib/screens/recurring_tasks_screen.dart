@@ -10,12 +10,14 @@ class RecurringTasksScreen extends StatelessWidget {
     required this.rules,
     required this.onAddRule,
     required this.onRuleActiveChanged,
+    required this.onDeleteRule,
   });
 
   final List<RecurringTaskRule> rules;
   final VoidCallback onAddRule;
   final void Function(RecurringTaskRule rule, bool isActive)
   onRuleActiveChanged;
+  final ValueChanged<RecurringTaskRule> onDeleteRule;
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +35,13 @@ class RecurringTasksScreen extends StatelessWidget {
               separatorBuilder: (_, _) => const SizedBox(height: 8),
               itemBuilder: (context, index) {
                 final rule = rules[index];
-
                 return RecurringTaskRuleCard(
                   rule: rule,
                   onActiveChanged: (isActive) {
                     onRuleActiveChanged(rule, isActive);
+                  },
+                  onDelete: () {
+                    _confirmDeleteRule(context, rule);
                   },
                 );
               },
@@ -48,5 +52,39 @@ class RecurringTasksScreen extends StatelessWidget {
         label: const Text('Add rule'),
       ),
     );
+  }
+
+  Future<void> _confirmDeleteRule(
+    BuildContext context,
+    RecurringTaskRule rule,
+  ) async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Delete recurring rule?'),
+          content: const Text(
+            'This will remove all unfinished generated tasks from this series. '
+            'Completed tasks will stay in your history.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldDelete != true) {
+      return;
+    }
+
+    onDeleteRule(rule);
   }
 }

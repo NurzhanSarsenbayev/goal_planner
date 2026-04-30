@@ -7,10 +7,12 @@ class RecurringTaskRuleCard extends StatelessWidget {
     super.key,
     required this.rule,
     this.onActiveChanged,
+    this.onDelete,
   });
 
   final RecurringTaskRule rule;
   final ValueChanged<bool>? onActiveChanged;
+  final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -30,19 +32,26 @@ class RecurringTaskRuleCard extends StatelessWidget {
                       onActiveChanged?.call(true);
                     case _RecurringTaskRuleAction.deactivate:
                       onActiveChanged?.call(false);
+                    case _RecurringTaskRuleAction.delete:
+                      onDelete?.call();
                   }
                 },
                 itemBuilder: (context) {
                   return [
-                    if (rule.isActive)
+                    if (onActiveChanged != null && rule.isActive)
                       const PopupMenuItem(
                         value: _RecurringTaskRuleAction.deactivate,
                         child: Text('Deactivate'),
                       )
-                    else
+                    else if (onActiveChanged != null)
                       const PopupMenuItem(
                         value: _RecurringTaskRuleAction.activate,
                         child: Text('Activate'),
+                      ),
+                    if (onDelete != null)
+                      const PopupMenuItem(
+                        value: _RecurringTaskRuleAction.delete,
+                        child: Text('Delete'),
                       ),
                   ];
                 },
@@ -118,4 +127,4 @@ class RecurringTaskRuleCard extends StatelessWidget {
   }
 }
 
-enum _RecurringTaskRuleAction { activate, deactivate }
+enum _RecurringTaskRuleAction { activate, deactivate, delete }

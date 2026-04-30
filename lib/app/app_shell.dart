@@ -244,6 +244,9 @@ class _AppShellState extends State<AppShell> {
                     isActive: isActive,
                   );
                 },
+                onDeleteRule: (rule) {
+                  _store.deleteRecurringTaskRule(rule.id);
+                },
               );
             },
           );

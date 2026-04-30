@@ -196,6 +196,32 @@ class PlannerRepository {
     });
   }
 
+  Future<void> deleteRecurringTaskRuleSeries(String ruleId) async {
+    await _database.transaction(() async {
+      await (_database.delete(_database.tasks)..where((table) {
+            return table.recurringRuleId.equals(ruleId) &
+                table.isCompleted.equals(false);
+          }))
+          .go();
+
+      await (_database.update(_database.tasks)..where((table) {
+            return table.recurringRuleId.equals(ruleId) &
+                table.isCompleted.equals(true);
+          }))
+          .write(
+            const local.TasksCompanion(recurringRuleId: drift.Value(null)),
+          );
+
+      await (_database.delete(
+        _database.recurringTaskExceptions,
+      )..where((table) => table.ruleId.equals(ruleId))).go();
+
+      await (_database.delete(
+        _database.recurringTaskRules,
+      )..where((table) => table.id.equals(ruleId))).go();
+    });
+  }
+
   Future<void> deleteTask(String taskId) async {
     await (_database.delete(
       _database.tasks,

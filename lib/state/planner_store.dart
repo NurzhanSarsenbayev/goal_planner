@@ -232,6 +232,39 @@ class PlannerStore extends ChangeNotifier {
     _deactivateRecurringTaskRule(updatedRule);
   }
 
+  void deleteRecurringTaskRule(String ruleId) {
+    final rule = _findRecurringTaskRuleById(ruleId);
+
+    if (rule == null) {
+      return;
+    }
+
+    _recurringRules = _recurringRules
+        .where((rule) => rule.id != ruleId)
+        .toList();
+
+    _recurringExceptions = _recurringExceptions.where((exception) {
+      return exception.ruleId != ruleId;
+    }).toList();
+
+    _tasks = _tasks
+        .where((task) {
+          return !_isUnfinishedOccurrenceFromRule(task: task, ruleId: ruleId);
+        })
+        .map((task) {
+          if (task.recurringRuleId == ruleId && task.isCompleted) {
+            return task.copyWith(recurringRuleId: null);
+          }
+
+          return task;
+        })
+        .toList();
+
+    notifyListeners();
+
+    _persist(_repository.deleteRecurringTaskRuleSeries(ruleId));
+  }
+
   void deleteTask(String taskId) {
     final taskToDelete = _findTaskById(taskId);
 
