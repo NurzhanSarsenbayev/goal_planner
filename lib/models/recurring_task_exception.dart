@@ -31,3 +31,15 @@ class RecurringTaskException {
     );
   }
 }
+
+String recurringTaskExceptionId({
+  required String ruleId,
+  required DateTime date,
+}) {
+  final normalizedDate = dateOnly(date);
+  final year = normalizedDate.year.toString().padLeft(4, '0');
+  final month = normalizedDate.month.toString().padLeft(2, '0');
+  final day = normalizedDate.day.toString().padLeft(2, '0');
+
+  return 'recurring_exception_${ruleId}_$year$month$day';
+}

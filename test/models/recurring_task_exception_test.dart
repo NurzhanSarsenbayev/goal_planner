@@ -45,6 +45,15 @@ void main() {
       );
     });
 
+    test('uses deterministic exception id', () {
+      final id = recurringTaskExceptionId(
+        ruleId: 'rule-1',
+        date: DateTime(2026, 4, 27, 18, 45),
+      );
+
+      expect(id, 'recurring_exception_rule-1_20260427');
+    });
+
     test('does not match different date', () {
       final exception = RecurringTaskException(
         id: 'exception-1',
