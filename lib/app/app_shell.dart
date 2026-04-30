@@ -238,6 +238,12 @@ class _AppShellState extends State<AppShell> {
               return RecurringTasksScreen(
                 rules: _store.recurringRules,
                 onAddRule: _showAddRecurringTaskRuleDialog,
+                onRuleActiveChanged: (rule, isActive) {
+                  _store.setRecurringTaskRuleActive(
+                    ruleId: rule.id,
+                    isActive: isActive,
+                  );
+                },
               );
             },
           );

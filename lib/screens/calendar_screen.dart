@@ -50,7 +50,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
     final today = todayDate();
     _visibleMonth = DateTime(today.year, today.month);
     _selectedDate = today;
-    widget.onEnsureRecurringTasksForMonth(_visibleMonth);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+
+      widget.onEnsureRecurringTasksForMonth(_visibleMonth);
+    });
   }
 
   @override
