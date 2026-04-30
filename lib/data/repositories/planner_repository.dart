@@ -185,6 +185,16 @@ class PlannerRepository {
     });
   }
 
+  Future<void> updateTaskWithRecurringException({
+    required domain.PlannerTask task,
+    required domain.RecurringTaskException exception,
+  }) async {
+    await _database.transaction(() async {
+      await saveRecurringTaskException(exception);
+      await updateTask(task);
+    });
+  }
+
   Future<void> updateTask(domain.PlannerTask task) async {
     await (_database.update(
       _database.tasks,

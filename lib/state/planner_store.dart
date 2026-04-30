@@ -257,30 +257,15 @@ class PlannerStore extends ChangeNotifier {
       return;
     }
 
-    final exception = RecurringTaskException(
-      id: recurringTaskExceptionId(
-        ruleId: recurringRuleId,
-        date: scheduledDate,
-      ),
+    final exception = _createRecurringTaskException(
       ruleId: recurringRuleId,
       date: scheduledDate,
-      createdAt: DateTime.now(),
-    );
-
-    final exceptionAlreadyExists = _recurringExceptions.any(
-      (existingException) => existingException.matches(
-        ruleId: recurringRuleId,
-        date: scheduledDate,
-      ),
     );
 
     _tasks = _tasks
         .where((existingTask) => existingTask.id != task.id)
         .toList();
-
-    if (!exceptionAlreadyExists) {
-      _recurringExceptions = [..._recurringExceptions, exception];
-    }
+    _addRecurringExceptionIfMissing(exception);
 
     notifyListeners();
 
@@ -290,6 +275,115 @@ class PlannerStore extends ChangeNotifier {
         exception: exception,
       ),
     );
+  }
+
+  void _rescheduleRecurringOccurrence({
+    required PlannerTask task,
+    required DateTime scheduledDate,
+  }) {
+    final recurringRuleId = task.recurringRuleId;
+    final oldScheduledDate = task.scheduledDate;
+
+    if (recurringRuleId == null || oldScheduledDate == null) {
+      _updateTaskById(task.id, (existingTask) {
+        return existingTask.scheduleForDate(scheduledDate);
+      });
+      return;
+    }
+
+    final normalizedOldDate = dateOnly(oldScheduledDate);
+    final normalizedNewDate = dateOnly(scheduledDate);
+
+    if (normalizedOldDate == normalizedNewDate) {
+      return;
+    }
+
+    final exception = _createRecurringTaskException(
+      ruleId: recurringRuleId,
+      date: normalizedOldDate,
+    );
+
+    final updatedTask = task
+        .scheduleForDate(normalizedNewDate)
+        .copyWith(recurringRuleId: null);
+
+    _replaceTask(updatedTask);
+    _addRecurringExceptionIfMissing(exception);
+
+    notifyListeners();
+
+    _persist(
+      _repository.updateTaskWithRecurringException(
+        task: updatedTask,
+        exception: exception,
+      ),
+    );
+  }
+
+  void _unscheduleRecurringOccurrence(PlannerTask task) {
+    final recurringRuleId = task.recurringRuleId;
+    final scheduledDate = task.scheduledDate;
+
+    if (recurringRuleId == null || scheduledDate == null) {
+      _updateTaskById(task.id, (existingTask) => existingTask.unschedule());
+      return;
+    }
+
+    final exception = _createRecurringTaskException(
+      ruleId: recurringRuleId,
+      date: scheduledDate,
+    );
+
+    final updatedTask = task.unschedule().copyWith(recurringRuleId: null);
+
+    _replaceTask(updatedTask);
+    _addRecurringExceptionIfMissing(exception);
+
+    notifyListeners();
+
+    _persist(
+      _repository.updateTaskWithRecurringException(
+        task: updatedTask,
+        exception: exception,
+      ),
+    );
+  }
+
+  RecurringTaskException _createRecurringTaskException({
+    required String ruleId,
+    required DateTime date,
+  }) {
+    return RecurringTaskException(
+      id: recurringTaskExceptionId(ruleId: ruleId, date: date),
+      ruleId: ruleId,
+      date: date,
+      createdAt: DateTime.now(),
+    );
+  }
+
+  void _addRecurringExceptionIfMissing(RecurringTaskException exception) {
+    final exceptionAlreadyExists = _recurringExceptions.any(
+      (existingException) => existingException.matches(
+        ruleId: exception.ruleId,
+        date: exception.date,
+      ),
+    );
+
+    if (exceptionAlreadyExists) {
+      return;
+    }
+
+    _recurringExceptions = [..._recurringExceptions, exception];
+  }
+
+  void _replaceTask(PlannerTask updatedTask) {
+    _tasks = _tasks.map((task) {
+      if (task.id != updatedTask.id) {
+        return task;
+      }
+
+      return updatedTask;
+    }).toList();
   }
 
   void updateTask({
@@ -335,17 +429,42 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void scheduleTaskForToday(String taskId) {
-    _updateTaskById(taskId, (task) => task.scheduledToday());
+    scheduleTaskForDate(taskId: taskId, scheduledDate: todayDate());
   }
 
   void scheduleTaskForDate({
     required String taskId,
     required DateTime scheduledDate,
   }) {
+    final taskToUpdate = _findTaskById(taskId);
+
+    if (taskToUpdate == null) {
+      return;
+    }
+
+    if (_isRecurringOccurrence(taskToUpdate)) {
+      _rescheduleRecurringOccurrence(
+        task: taskToUpdate,
+        scheduledDate: scheduledDate,
+      );
+      return;
+    }
+
     _updateTaskById(taskId, (task) => task.scheduleForDate(scheduledDate));
   }
 
   void unscheduleTask(String taskId) {
+    final taskToUpdate = _findTaskById(taskId);
+
+    if (taskToUpdate == null) {
+      return;
+    }
+
+    if (_isRecurringOccurrence(taskToUpdate)) {
+      _unscheduleRecurringOccurrence(taskToUpdate);
+      return;
+    }
+
     _updateTaskById(taskId, (task) => task.unschedule());
   }
 
