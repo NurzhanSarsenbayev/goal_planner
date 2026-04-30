@@ -213,10 +213,83 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void deleteTask(String taskId) {
+    final taskToDelete = _findTaskById(taskId);
+
+    if (taskToDelete == null) {
+      return;
+    }
+
+    if (_isRecurringOccurrence(taskToDelete)) {
+      _deleteRecurringOccurrence(taskToDelete);
+      return;
+    }
+
+    _deleteRegularTask(taskId);
+  }
+
+  PlannerTask? _findTaskById(String taskId) {
+    for (final task in _tasks) {
+      if (task.id == taskId) {
+        return task;
+      }
+    }
+
+    return null;
+  }
+
+  bool _isRecurringOccurrence(PlannerTask task) {
+    return task.recurringRuleId != null && task.scheduledDate != null;
+  }
+
+  void _deleteRegularTask(String taskId) {
     _tasks = _tasks.where((task) => task.id != taskId).toList();
     notifyListeners();
 
     _persist(_repository.deleteTask(taskId));
+  }
+
+  void _deleteRecurringOccurrence(PlannerTask task) {
+    final recurringRuleId = task.recurringRuleId;
+    final scheduledDate = task.scheduledDate;
+
+    if (recurringRuleId == null || scheduledDate == null) {
+      _deleteRegularTask(task.id);
+      return;
+    }
+
+    final exception = RecurringTaskException(
+      id: recurringTaskExceptionId(
+        ruleId: recurringRuleId,
+        date: scheduledDate,
+      ),
+      ruleId: recurringRuleId,
+      date: scheduledDate,
+      createdAt: DateTime.now(),
+    );
+
+    final exceptionAlreadyExists = _recurringExceptions.any(
+      (existingException) => existingException.matches(
+        ruleId: recurringRuleId,
+        date: scheduledDate,
+      ),
+    );
+
+    _tasks = _tasks
+        .where((existingTask) => existingTask.id != task.id)
+        .toList();
+
+    if (!exceptionAlreadyExists) {
+      _recurringExceptions = [..._recurringExceptions, exception];
+    }
+
+    notifyListeners();
+
+    _persist(
+      _repository.deleteTaskWithRecurringException(
+        taskId: task.id,
+        exception: exception,
+      ),
+    );
   }
 
   void updateTask({
