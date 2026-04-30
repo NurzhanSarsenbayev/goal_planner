@@ -20,6 +20,7 @@ class CalendarScreen extends StatefulWidget {
     required this.onDeleteTask,
     required this.onAddTaskForDate,
     required this.onEnsureRecurringTasksForMonth,
+    required this.onAddRecurringTaskForDate,
   });
 
   final List<Goal> goals;
@@ -34,6 +35,7 @@ class CalendarScreen extends StatefulWidget {
   final void Function(String taskId) onDeleteTask;
   final void Function(DateTime date) onAddTaskForDate;
   final void Function(DateTime visibleMonth) onEnsureRecurringTasksForMonth;
+  final void Function(DateTime date) onAddRecurringTaskForDate;
 
   @override
   State<CalendarScreen> createState() => _CalendarScreenState();
@@ -124,10 +126,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
           bottom: 16,
           child: FloatingActionButton.extended(
             onPressed: () {
-              widget.onAddTaskForDate(_selectedDate);
+              _showAddActionSheet(context);
             },
             icon: const Icon(Icons.add),
-            label: const Text('Add task'),
+            label: const Text('Add'),
           ),
         ),
       ],
@@ -158,6 +160,74 @@ class _CalendarScreenState extends State<CalendarScreen> {
     setState(() {
       _selectedDate = dateOnly(date);
     });
+  }
+
+  Future<void> _showAddActionSheet(BuildContext context) async {
+    final isPastDate = dateOnly(_selectedDate).isBefore(todayDate());
+
+    final selectedAction = await showModalBottomSheet<_CalendarAddAction>(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (isPastDate)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(Icons.history),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              'You are creating a task for a past date: '
+                              '${formatPlannerDate(_selectedDate)}.',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ListTile(
+                leading: const Icon(Icons.check_circle_outline),
+                title: const Text('One-time task'),
+                subtitle: Text(
+                  'Create a task for ${formatPlannerDate(_selectedDate)}',
+                ),
+                onTap: () {
+                  Navigator.of(context).pop(_CalendarAddAction.oneTimeTask);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.repeat),
+                title: const Text('Recurring task'),
+                subtitle: Text(
+                  'Create a repeating task starting ${formatPlannerDate(_selectedDate)}',
+                ),
+                onTap: () {
+                  Navigator.of(context).pop(_CalendarAddAction.recurringTask);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (selectedAction == _CalendarAddAction.oneTimeTask) {
+      widget.onAddTaskForDate(_selectedDate);
+      return;
+    }
+
+    if (selectedAction == _CalendarAddAction.recurringTask) {
+      widget.onAddRecurringTaskForDate(_selectedDate);
+    }
   }
 
   Future<void> _showScheduleTaskDatePicker(
@@ -221,3 +291,5 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return null;
   }
 }
+
+enum _CalendarAddAction { oneTimeTask, recurringTask }

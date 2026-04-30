@@ -256,7 +256,7 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
-  Future<void> _showAddRecurringTaskRuleDialog() async {
+  Future<void> _showAddRecurringTaskRuleDialog({DateTime? startDate}) async {
     final result = await showAddRecurringTaskRuleDialog(
       context,
       goals: _store.goals,
@@ -278,11 +278,17 @@ class _AppShellState extends State<AppShell> {
       recurrenceType: result.recurrenceType,
       weekdays: result.weekdays,
       monthDay: result.monthDay,
-      startDate: todayDate(),
+      startDate: dateOnly(startDate ?? todayDate()),
       createdAt: now,
     );
 
     _store.addRecurringTaskRule(rule);
+
+    if (startDate != null) {
+      _store.ensureRecurringTaskOccurrencesForMonth(
+        DateTime(startDate.year, startDate.month),
+      );
+    }
   }
 
   Future<void> _showEditRecurringTaskRuleDialog(RecurringTaskRule rule) async {
@@ -353,7 +359,9 @@ class _AppShellState extends State<AppShell> {
         onScheduleTaskForDate: _store.scheduleTaskForDate,
         onDeleteTask: _store.deleteTask,
         onAddTask: _showAddTaskForTodayDialog,
-        onAddRecurringTask: _showAddRecurringTaskRuleDialog,
+        onAddRecurringTask: () {
+          _showAddRecurringTaskRuleDialog();
+        },
       ),
       GoalsScreen(
         goals: _store.goals,
@@ -375,6 +383,9 @@ class _AppShellState extends State<AppShell> {
         onAddTaskForDate: _showAddTaskForDateDialog,
         onEnsureRecurringTasksForMonth:
             _store.ensureRecurringTaskOccurrencesForMonth,
+        onAddRecurringTaskForDate: (date) {
+          _showAddRecurringTaskRuleDialog(startDate: date);
+        },
       ),
       MoreScreen(
         onOpenAllTasks: _openAllTasks,
