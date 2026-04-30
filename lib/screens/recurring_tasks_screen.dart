@@ -11,6 +11,7 @@ class RecurringTasksScreen extends StatelessWidget {
     required this.onAddRule,
     required this.onRuleActiveChanged,
     required this.onDeleteRule,
+    required this.onEditRule,
   });
 
   final List<RecurringTaskRule> rules;
@@ -18,6 +19,7 @@ class RecurringTasksScreen extends StatelessWidget {
   final void Function(RecurringTaskRule rule, bool isActive)
   onRuleActiveChanged;
   final ValueChanged<RecurringTaskRule> onDeleteRule;
+  final ValueChanged<RecurringTaskRule> onEditRule;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,9 @@ class RecurringTasksScreen extends StatelessWidget {
                   rule: rule,
                   onActiveChanged: (isActive) {
                     onRuleActiveChanged(rule, isActive);
+                  },
+                  onEdit: () {
+                    onEditRule(rule);
                   },
                   onDelete: () {
                     _confirmDeleteRule(context, rule);

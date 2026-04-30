@@ -222,6 +222,25 @@ class PlannerRepository {
     });
   }
 
+  Future<void> updateRecurringTaskRuleAndRebuildOccurrences({
+    required domain.RecurringTaskRule rule,
+    required List<domain.PlannerTask> generatedTasks,
+  }) async {
+    await _database.transaction(() async {
+      await (_database.delete(_database.tasks)..where((table) {
+            return table.recurringRuleId.equals(rule.id) &
+                table.isCompleted.equals(false);
+          }))
+          .go();
+
+      await saveRecurringTaskRule(rule);
+
+      for (final task in generatedTasks) {
+        await saveTask(task);
+      }
+    });
+  }
+
   Future<void> deleteTask(String taskId) async {
     await (_database.delete(
       _database.tasks,

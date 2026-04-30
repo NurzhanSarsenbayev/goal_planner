@@ -1,5 +1,7 @@
 import '../shared/planner_dates.dart';
 
+const _unset = Object();
+
 enum RecurrenceType { weekly, monthly }
 
 class RecurringTaskRule {
@@ -77,13 +79,13 @@ class RecurringTaskRule {
     String? id,
     String? title,
     String? description,
-    String? goalId,
-    String? milestoneId,
+    Object? goalId = _unset,
+    Object? milestoneId = _unset,
     RecurrenceType? recurrenceType,
     List<int>? weekdays,
-    int? monthDay,
+    Object? monthDay = _unset,
     DateTime? startDate,
-    DateTime? endDate,
+    Object? endDate = _unset,
     bool? isActive,
     DateTime? createdAt,
   }) {
@@ -91,13 +93,15 @@ class RecurringTaskRule {
       id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
-      goalId: goalId ?? this.goalId,
-      milestoneId: milestoneId ?? this.milestoneId,
+      goalId: identical(goalId, _unset) ? this.goalId : goalId as String?,
+      milestoneId: identical(milestoneId, _unset)
+          ? this.milestoneId
+          : milestoneId as String?,
       recurrenceType: recurrenceType ?? this.recurrenceType,
       weekdays: weekdays ?? this.weekdays,
-      monthDay: monthDay ?? this.monthDay,
+      monthDay: identical(monthDay, _unset) ? this.monthDay : monthDay as int?,
       startDate: startDate ?? this.startDate,
-      endDate: endDate ?? this.endDate,
+      endDate: identical(endDate, _unset) ? this.endDate : endDate as DateTime?,
       isActive: isActive ?? this.isActive,
       createdAt: createdAt ?? this.createdAt,
     );

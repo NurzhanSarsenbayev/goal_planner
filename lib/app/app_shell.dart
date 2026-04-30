@@ -238,6 +238,7 @@ class _AppShellState extends State<AppShell> {
               return RecurringTasksScreen(
                 rules: _store.recurringRules,
                 onAddRule: _showAddRecurringTaskRuleDialog,
+                onEditRule: _showEditRecurringTaskRuleDialog,
                 onRuleActiveChanged: (rule, isActive) {
                   _store.setRecurringTaskRuleActive(
                     ruleId: rule.id,
@@ -282,6 +283,31 @@ class _AppShellState extends State<AppShell> {
     );
 
     _store.addRecurringTaskRule(rule);
+  }
+
+  Future<void> _showEditRecurringTaskRuleDialog(RecurringTaskRule rule) async {
+    final result = await showEditRecurringTaskRuleDialog(
+      context,
+      rule: rule,
+      goals: _store.goals,
+      milestones: _store.milestones,
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    final updatedRule = rule.copyWith(
+      title: result.title,
+      description: result.description,
+      goalId: result.goalId,
+      milestoneId: result.milestoneId,
+      recurrenceType: result.recurrenceType,
+      weekdays: result.weekdays,
+      monthDay: result.monthDay,
+    );
+
+    _store.updateRecurringTaskRule(updatedRule);
   }
 
   void _openGoalDetails(Goal goal) {

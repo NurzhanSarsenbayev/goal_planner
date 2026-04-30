@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
+import '../models/recurring_task_rule.dart';
 import '../shared/planner_dates.dart';
 import '../widgets/goals/goal_dialog.dart';
 import '../widgets/tasks/task_dialog.dart';
@@ -123,6 +124,26 @@ Future<AddRecurringTaskRuleDraft?> showAddRecurringTaskRuleDialog(
     context: context,
     builder: (context) {
       return AddRecurringTaskRuleDialog(goals: goals, milestones: milestones);
+    },
+  );
+}
+
+Future<AddRecurringTaskRuleDraft?> showEditRecurringTaskRuleDialog(
+  BuildContext context, {
+  required RecurringTaskRule rule,
+  required List<Goal> goals,
+  required List<Milestone> milestones,
+}) {
+  return showDialog<AddRecurringTaskRuleDraft>(
+    context: context,
+    builder: (context) {
+      return AddRecurringTaskRuleDialog(
+        goals: goals,
+        milestones: milestones,
+        initialRule: rule,
+        dialogTitle: 'Edit recurring task',
+        submitLabel: 'Save',
+      );
     },
   );
 }

@@ -29,10 +29,16 @@ class AddRecurringTaskRuleDialog extends StatefulWidget {
     super.key,
     required this.goals,
     required this.milestones,
+    this.initialRule,
+    this.dialogTitle = 'Add recurring task',
+    this.submitLabel = 'Add',
   });
 
   final List<Goal> goals;
   final List<Milestone> milestones;
+  final RecurringTaskRule? initialRule;
+  final String dialogTitle;
+  final String submitLabel;
 
   @override
   State<AddRecurringTaskRuleDialog> createState() =>
@@ -67,6 +73,21 @@ class _AddRecurringTaskRuleDialogState
   @override
   void initState() {
     super.initState();
+
+    final initialRule = widget.initialRule;
+
+    if (initialRule != null) {
+      _titleController.text = initialRule.title;
+      _descriptionController.text = initialRule.description;
+      _recurrenceType = initialRule.recurrenceType;
+      _selectedWeekdays
+        ..clear()
+        ..addAll(initialRule.weekdays);
+      _selectedMonthDay = initialRule.monthDay ?? 1;
+      _selectedGoalId = initialRule.goalId;
+      _selectedMilestoneId = initialRule.milestoneId;
+    }
+
     _titleController.addListener(_onFormChanged);
   }
 
@@ -89,7 +110,7 @@ class _AddRecurringTaskRuleDialogState
         .toList();
 
     return AlertDialog(
-      title: const Text('Add recurring task'),
+      title: Text(widget.dialogTitle),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -219,7 +240,7 @@ class _AddRecurringTaskRuleDialogState
         ),
         FilledButton(
           onPressed: _canSubmit ? _submit : null,
-          child: const Text('Add'),
+          child: Text(widget.submitLabel),
         ),
       ],
     );
