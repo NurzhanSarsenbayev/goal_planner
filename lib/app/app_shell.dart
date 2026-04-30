@@ -353,6 +353,7 @@ class _AppShellState extends State<AppShell> {
         onScheduleTaskForDate: _store.scheduleTaskForDate,
         onDeleteTask: _store.deleteTask,
         onAddTask: _showAddTaskForTodayDialog,
+        onAddRecurringTask: _showAddRecurringTaskRuleDialog,
       ),
       GoalsScreen(
         goals: _store.goals,

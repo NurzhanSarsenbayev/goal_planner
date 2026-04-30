@@ -21,6 +21,7 @@ class TodayScreen extends StatelessWidget {
     required this.onAddTask,
     required this.onRemoveTaskFromToday,
     required this.onScheduleTaskForDate,
+    required this.onAddRecurringTask,
   });
 
   final List<Goal> goals;
@@ -36,6 +37,7 @@ class TodayScreen extends StatelessWidget {
   final void Function(String taskId) onDetachTaskFromGoal;
   final void Function(String taskId) onDeleteTask;
   final VoidCallback onAddTask;
+  final VoidCallback onAddRecurringTask;
 
   Future<void> _showScheduleTaskDatePicker(
     BuildContext context,
@@ -51,6 +53,46 @@ class TodayScreen extends StatelessWidget {
     }
 
     onScheduleTaskForDate(taskId: task.id, scheduledDate: selectedDate);
+  }
+
+  Future<void> _showAddActionSheet(BuildContext context) async {
+    final selectedAction = await showModalBottomSheet<_TodayAddAction>(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.check_circle_outline),
+                title: const Text('One-time task'),
+                subtitle: const Text('Create a task for today'),
+                onTap: () {
+                  Navigator.of(context).pop(_TodayAddAction.oneTimeTask);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.repeat),
+                title: const Text('Recurring task'),
+                subtitle: const Text('Create a task that repeats'),
+                onTap: () {
+                  Navigator.of(context).pop(_TodayAddAction.recurringTask);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    switch (selectedAction) {
+      case _TodayAddAction.oneTimeTask:
+        onAddTask();
+      case _TodayAddAction.recurringTask:
+        onAddRecurringTask();
+      case null:
+        return;
+    }
   }
 
   @override
@@ -123,7 +165,9 @@ class TodayScreen extends StatelessWidget {
           right: 16,
           bottom: 16,
           child: FloatingActionButton.extended(
-            onPressed: onAddTask,
+            onPressed: () {
+              _showAddActionSheet(context);
+            },
             icon: const Icon(Icons.add),
             label: const Text('Add task'),
           ),
@@ -201,3 +245,5 @@ class TodayScreen extends StatelessWidget {
     );
   }
 }
+
+enum _TodayAddAction { oneTimeTask, recurringTask }
