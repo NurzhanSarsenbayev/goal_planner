@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../features/goals/application/goal_repository.dart';
 import '../features/goals/application/goal_application_service.dart';
 import '../features/milestones/application/milestone_repository.dart';
+import '../features/milestones/application/milestone_application_service.dart';
 import '../features/tasks/application/task_application_service.dart';
 import '../features/tasks/application/task_repository.dart';
 import '../features/recurring/application/recurring_task_application_service.dart';
@@ -45,6 +46,8 @@ class PlannerStore extends ChangeNotifier {
       const TaskApplicationService();
   final GoalApplicationService _goalApplicationService =
       const GoalApplicationService();
+  final MilestoneApplicationService _milestoneApplicationService =
+      const MilestoneApplicationService();
   final RecurringTaskApplicationService _recurringTaskApplicationService =
       RecurringTaskApplicationService();
 
@@ -137,10 +140,12 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void addMilestone(Milestone milestone) {
-    _milestones = [..._milestones, milestone];
-    notifyListeners();
+    final result = _milestoneApplicationService.addMilestone(
+      milestones: _milestones,
+      milestone: milestone,
+    );
 
-    _persist(_milestoneRepository.saveMilestone(milestone));
+    _applyMilestoneMutationResult(result);
   }
 
   void updateMilestone({
@@ -148,63 +153,57 @@ class PlannerStore extends ChangeNotifier {
     required String title,
     required String description,
   }) {
-    _updateMilestoneById(
-      milestoneId,
-      (milestone) => milestone.copyWith(title: title, description: description),
+    final result = _milestoneApplicationService.updateMilestoneDetails(
+      milestones: _milestones,
+      milestoneId: milestoneId,
+      title: title,
+      description: description,
     );
+
+    _applyMilestoneMutationResult(result);
   }
 
   void deleteMilestoneAndMoveTasksToDirect(String milestoneId) {
-    _milestones = _milestones
-        .where((milestone) => milestone.id != milestoneId)
-        .toList();
+    final result = _milestoneApplicationService
+        .deleteMilestoneAndMoveTasksToDirect(
+          milestoneId: milestoneId,
+          milestones: _milestones,
+          tasks: _tasks,
+          recurringRules: _recurringRules,
+        );
 
-    _tasks = _tasks.map((task) {
-      if (task.milestoneId != milestoneId) {
-        return task;
-      }
-
-      return task.moveToDirectGoal();
-    }).toList();
-
-    _recurringRules = _recurringRules.map((rule) {
-      if (rule.milestoneId != milestoneId) {
-        return rule;
-      }
-
-      return rule.copyWith(milestoneId: null);
-    }).toList();
+    _milestones = result.milestones;
+    _tasks = result.tasks;
+    _recurringRules = result.recurringRules;
 
     notifyListeners();
 
     _persist(
-      _cleanupRepository.deleteMilestoneAndMoveTasksToDirect(milestoneId),
+      _cleanupRepository.deleteMilestoneAndMoveTasksToDirect(
+        result.milestoneIdToDelete,
+      ),
     );
   }
 
   void deleteMilestoneWithTasks(String milestoneId) {
-    final deletedRecurringRuleIds = _recurringRules
-        .where((rule) => rule.milestoneId == milestoneId)
-        .map((rule) => rule.id)
-        .toSet();
+    final result = _milestoneApplicationService.deleteMilestoneWithTasks(
+      milestoneId: milestoneId,
+      milestones: _milestones,
+      tasks: _tasks,
+      recurringRules: _recurringRules,
+      recurringExceptions: _recurringExceptions,
+    );
 
-    _milestones = _milestones
-        .where((milestone) => milestone.id != milestoneId)
-        .toList();
-
-    _tasks = _tasks.where((task) => task.milestoneId != milestoneId).toList();
-
-    _recurringRules = _recurringRules
-        .where((rule) => rule.milestoneId != milestoneId)
-        .toList();
-
-    _recurringExceptions = _recurringExceptions.where((exception) {
-      return !deletedRecurringRuleIds.contains(exception.ruleId);
-    }).toList();
+    _milestones = result.milestones;
+    _tasks = result.tasks;
+    _recurringRules = result.recurringRules;
+    _recurringExceptions = result.recurringExceptions;
 
     notifyListeners();
 
-    _persist(_cleanupRepository.deleteMilestoneWithTasks(milestoneId));
+    _persist(
+      _cleanupRepository.deleteMilestoneWithTasks(result.milestoneIdToDelete),
+    );
   }
 
   void addTask(PlannerTask task) {
@@ -703,28 +702,6 @@ class PlannerStore extends ChangeNotifier {
     _persist(_recurringTaskRepository.saveGeneratedOccurrences(generatedTasks));
   }
 
-  void _updateMilestoneById(
-    String milestoneId,
-    Milestone Function(Milestone milestone) update,
-  ) {
-    Milestone? updatedMilestone;
-
-    _milestones = _milestones.map((milestone) {
-      if (milestone.id != milestoneId) {
-        return milestone;
-      }
-
-      updatedMilestone = update(milestone);
-      return updatedMilestone!;
-    }).toList();
-
-    notifyListeners();
-
-    if (updatedMilestone != null) {
-      _persist(_milestoneRepository.saveMilestone(updatedMilestone!));
-    }
-  }
-
   void _persist(Future<void> operation) {
     operation.catchError((Object error, StackTrace stackTrace) {
       debugPrint('Persistence error: $error');
@@ -743,6 +720,20 @@ class PlannerStore extends ChangeNotifier {
     final goalToPersist = result.goalToPersist;
     if (goalToPersist != null) {
       _persist(_goalRepository.saveGoal(goalToPersist));
+    }
+  }
+
+  void _applyMilestoneMutationResult(MilestoneMutationResult result) {
+    if (!result.hasChange) {
+      return;
+    }
+
+    _milestones = result.milestones;
+    notifyListeners();
+
+    final milestoneToPersist = result.milestoneToPersist;
+    if (milestoneToPersist != null) {
+      _persist(_milestoneRepository.saveMilestone(milestoneToPersist));
     }
   }
 
