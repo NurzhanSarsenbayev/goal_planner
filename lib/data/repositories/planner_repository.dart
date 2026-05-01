@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart' as drift;
 
-import '../../models/goal.dart' as domain;
 import '../../models/milestone.dart' as domain;
 import '../local/app_database.dart' as local;
 import 'planner_mappers.dart';
@@ -10,30 +9,10 @@ class PlannerRepository {
 
   final local.AppDatabase _database;
 
-  Future<List<domain.Goal>> loadGoals() async {
-    final rows = await _database.select(_database.goals).get();
-
-    return rows.map(mapGoal).toList();
-  }
-
   Future<List<domain.Milestone>> loadMilestones() async {
     final rows = await _database.select(_database.milestones).get();
 
     return rows.map(mapMilestone).toList();
-  }
-
-  Future<void> saveGoal(domain.Goal goal) async {
-    await _database
-        .into(_database.goals)
-        .insertOnConflictUpdate(
-          local.GoalsCompanion.insert(
-            id: goal.id,
-            title: goal.title,
-            description: drift.Value(goal.description),
-            status: goal.status.name,
-            createdAt: goal.createdAt,
-          ),
-        );
   }
 
   Future<void> deleteGoalWithRelatedData(String goalId) async {

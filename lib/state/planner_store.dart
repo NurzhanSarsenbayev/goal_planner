@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../data/repositories/planner_repository.dart';
+import '../features/goals/application/goal_repository.dart';
 import '../features/tasks/application/task_application_service.dart';
 import '../features/tasks/application/task_repository.dart';
 import '../features/recurring/application/recurring_task_application_service.dart';
@@ -15,15 +16,22 @@ import '../shared/planner_dates.dart';
 
 class PlannerStore extends ChangeNotifier {
   PlannerStore(
-    this._repository,
-    this._taskRepository,
-    this._recurringTaskRepository,
-  ) : _seedService = PlannerSeedService(
-        repository: _repository,
-        taskRepository: _taskRepository,
+    PlannerRepository repository,
+    GoalRepository goalRepository,
+    TaskRepository taskRepository,
+    RecurringTaskRepository recurringTaskRepository,
+  ) : _repository = repository,
+      _goalRepository = goalRepository,
+      _taskRepository = taskRepository,
+      _recurringTaskRepository = recurringTaskRepository,
+      _seedService = PlannerSeedService(
+        repository: repository,
+        goalRepository: goalRepository,
+        taskRepository: taskRepository,
       );
 
   final PlannerRepository _repository;
+  final GoalRepository _goalRepository;
   final TaskRepository _taskRepository;
   final RecurringTaskRepository _recurringTaskRepository;
   final PlannerSeedService _seedService;
@@ -65,7 +73,7 @@ class PlannerStore extends ChangeNotifier {
   }
 
   Future<void> _loadFromDatabase() async {
-    _goals = await _repository.loadGoals();
+    _goals = await _goalRepository.loadGoals();
     _milestones = await _repository.loadMilestones();
     _tasks = await _taskRepository.loadTasks();
     _recurringRules = await _recurringTaskRepository.loadRecurringTaskRules();
@@ -87,7 +95,7 @@ class PlannerStore extends ChangeNotifier {
     _goals = [..._goals, goal];
     notifyListeners();
 
-    _persist(_repository.saveGoal(goal));
+    _persist(_goalRepository.saveGoal(goal));
   }
 
   void updateGoal({
@@ -708,7 +716,7 @@ class PlannerStore extends ChangeNotifier {
     notifyListeners();
 
     if (updatedGoal != null) {
-      _persist(_repository.saveGoal(updatedGoal!));
+      _persist(_goalRepository.saveGoal(updatedGoal!));
     }
   }
 

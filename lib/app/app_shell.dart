@@ -6,6 +6,7 @@ import 'actions/recurring_rule_dialog_actions.dart';
 import '../data/local/app_database.dart' as local;
 import '../data/repositories/planner_repository.dart';
 import '../data/repositories/drift_task_repository.dart';
+import '../data/repositories/drift_goal_repository.dart';
 import '../data/repositories/drift_recurring_task_repository.dart';
 import '../models/goal.dart';
 import '../models/planner_task.dart';
@@ -31,6 +32,7 @@ class _AppShellState extends State<AppShell> {
   late final local.AppDatabase _database;
   late final PlannerRepository _repository;
   late final DriftTaskRepository _taskRepository;
+  late final DriftGoalRepository _goalRepository;
   late final DriftRecurringTaskRepository _recurringTaskRepository;
   late final PlannerStore _store;
   late final RecurringRuleDialogActions _recurringRuleDialogActions;
@@ -45,10 +47,12 @@ class _AppShellState extends State<AppShell> {
 
     _database = local.AppDatabase();
     _repository = PlannerRepository(_database);
+    _goalRepository = DriftGoalRepository(_database);
     _taskRepository = DriftTaskRepository(_database);
     _recurringTaskRepository = DriftRecurringTaskRepository(_database);
     _store = PlannerStore(
       _repository,
+      _goalRepository,
       _taskRepository,
       _recurringTaskRepository,
     );
