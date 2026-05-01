@@ -1,19 +1,11 @@
 import 'package:drift/drift.dart' as drift;
 
-import '../../models/milestone.dart' as domain;
 import '../local/app_database.dart' as local;
-import 'planner_mappers.dart';
 
 class PlannerRepository {
   const PlannerRepository(this._database);
 
   final local.AppDatabase _database;
-
-  Future<List<domain.Milestone>> loadMilestones() async {
-    final rows = await _database.select(_database.milestones).get();
-
-    return rows.map(mapMilestone).toList();
-  }
 
   Future<void> deleteGoalWithRelatedData(String goalId) async {
     await _database.transaction(() async {
@@ -45,20 +37,6 @@ class PlannerRepository {
         _database.goals,
       )..where((table) => table.id.equals(goalId))).go();
     });
-  }
-
-  Future<void> saveMilestone(domain.Milestone milestone) async {
-    await _database
-        .into(_database.milestones)
-        .insertOnConflictUpdate(
-          local.MilestonesCompanion.insert(
-            id: milestone.id,
-            goalId: milestone.goalId,
-            title: milestone.title,
-            description: drift.Value(milestone.description),
-            createdAt: milestone.createdAt,
-          ),
-        );
   }
 
   Future<void> deleteMilestoneAndMoveTasksToDirect(String milestoneId) async {

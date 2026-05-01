@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../data/repositories/planner_repository.dart';
 import '../features/goals/application/goal_repository.dart';
+import '../features/milestones/application/milestone_repository.dart';
 import '../features/tasks/application/task_application_service.dart';
 import '../features/tasks/application/task_repository.dart';
 import '../features/recurring/application/recurring_task_application_service.dart';
@@ -18,20 +19,23 @@ class PlannerStore extends ChangeNotifier {
   PlannerStore(
     PlannerRepository repository,
     GoalRepository goalRepository,
+    MilestoneRepository milestoneRepository,
     TaskRepository taskRepository,
     RecurringTaskRepository recurringTaskRepository,
   ) : _repository = repository,
       _goalRepository = goalRepository,
+      _milestoneRepository = milestoneRepository,
       _taskRepository = taskRepository,
       _recurringTaskRepository = recurringTaskRepository,
       _seedService = PlannerSeedService(
-        repository: repository,
         goalRepository: goalRepository,
+        milestoneRepository: milestoneRepository,
         taskRepository: taskRepository,
       );
 
   final PlannerRepository _repository;
   final GoalRepository _goalRepository;
+  final MilestoneRepository _milestoneRepository;
   final TaskRepository _taskRepository;
   final RecurringTaskRepository _recurringTaskRepository;
   final PlannerSeedService _seedService;
@@ -74,7 +78,7 @@ class PlannerStore extends ChangeNotifier {
 
   Future<void> _loadFromDatabase() async {
     _goals = await _goalRepository.loadGoals();
-    _milestones = await _repository.loadMilestones();
+    _milestones = await _milestoneRepository.loadMilestones();
     _tasks = await _taskRepository.loadTasks();
     _recurringRules = await _recurringTaskRepository.loadRecurringTaskRules();
     _recurringExceptions = await _recurringTaskRepository
@@ -140,7 +144,7 @@ class PlannerStore extends ChangeNotifier {
     _milestones = [..._milestones, milestone];
     notifyListeners();
 
-    _persist(_repository.saveMilestone(milestone));
+    _persist(_milestoneRepository.saveMilestone(milestone));
   }
 
   void updateMilestone({
@@ -738,7 +742,7 @@ class PlannerStore extends ChangeNotifier {
     notifyListeners();
 
     if (updatedMilestone != null) {
-      _persist(_repository.saveMilestone(updatedMilestone!));
+      _persist(_milestoneRepository.saveMilestone(updatedMilestone!));
     }
   }
 
