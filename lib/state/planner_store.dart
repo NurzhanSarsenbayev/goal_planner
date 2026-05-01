@@ -211,10 +211,10 @@ class PlannerStore extends ChangeNotifier {
     notifyListeners();
 
     _persist(
-      Future.wait([
-        _repository.saveRecurringTaskRule(rule),
-        ...generatedTasks.map(_repository.saveTask),
-      ]).then((_) {}),
+      _repository.saveRecurringTaskRuleWithOccurrences(
+        rule: rule,
+        generatedTasks: generatedTasks,
+      ),
     );
   }
 
