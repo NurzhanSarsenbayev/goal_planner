@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../data/repositories/planner_repository.dart';
+import '../features/tasks/application/task_application_service.dart';
 import 'planner_seed_service.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
@@ -18,6 +19,9 @@ class PlannerStore extends ChangeNotifier {
 
   final PlannerRepository _repository;
   final PlannerSeedService _seedService;
+  final TaskApplicationService _taskApplicationService =
+      const TaskApplicationService();
+
   final RecurringOccurrenceLifecycle _recurringOccurrenceLifecycle =
       RecurringOccurrenceLifecycle();
   final RecurringRuleLifecycle _recurringRuleLifecycle =
@@ -187,10 +191,27 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void addTask(PlannerTask task) {
-    _tasks = [..._tasks, task];
-    notifyListeners();
+    final result = _taskApplicationService.addTask(tasks: _tasks, task: task);
 
-    _persist(_repository.saveTask(task));
+    _applyTaskMutationResult(result);
+  }
+
+  void addTaskForDate({
+    required String title,
+    required String description,
+    required DateTime scheduledDate,
+    String? goalId,
+    String? milestoneId,
+  }) {
+    final task = _taskApplicationService.createTask(
+      title: title,
+      description: description,
+      goalId: goalId,
+      milestoneId: milestoneId,
+      scheduledDate: scheduledDate,
+    );
+
+    addTask(task);
   }
 
   void addTaskForToday({
@@ -206,28 +227,6 @@ class PlannerStore extends ChangeNotifier {
       goalId: goalId,
       milestoneId: milestoneId,
     );
-  }
-
-  void addTaskForDate({
-    required String title,
-    required String description,
-    required DateTime scheduledDate,
-    String? goalId,
-    String? milestoneId,
-  }) {
-    final now = DateTime.now();
-
-    final task = PlannerTask(
-      id: 'task_${now.microsecondsSinceEpoch}',
-      title: title,
-      description: description,
-      goalId: goalId,
-      milestoneId: milestoneId,
-      scheduledDate: dateOnly(scheduledDate),
-      createdAt: now,
-    );
-
-    addTask(task);
   }
 
   void addRecurringTaskRule(RecurringTaskRule rule) {
@@ -316,6 +315,15 @@ class PlannerStore extends ChangeNotifier {
     );
   }
 
+  void _deleteRegularTask(String taskId) {
+    final result = _taskApplicationService.deleteTask(
+      tasks: _tasks,
+      taskId: taskId,
+    );
+
+    _applyTaskMutationResult(result);
+  }
+
   void deleteTask(String taskId) {
     final taskToDelete = _findTaskById(taskId);
 
@@ -343,13 +351,6 @@ class PlannerStore extends ChangeNotifier {
 
   bool _isRecurringOccurrence(PlannerTask task) {
     return task.recurringRuleId != null && task.scheduledDate != null;
-  }
-
-  void _deleteRegularTask(String taskId) {
-    _tasks = _tasks.where((task) => task.id != taskId).toList();
-    notifyListeners();
-
-    _persist(_repository.deleteTask(taskId));
   }
 
   void _deleteRecurringOccurrence(PlannerTask task) {
@@ -501,10 +502,14 @@ class PlannerStore extends ChangeNotifier {
     required String title,
     required String description,
   }) {
-    _updateTaskById(
-      taskId,
-      (task) => task.copyWith(title: title, description: description),
+    final result = _taskApplicationService.updateTaskDetails(
+      tasks: _tasks,
+      taskId: taskId,
+      title: title,
+      description: description,
     );
+
+    _applyTaskMutationResult(result);
   }
 
   void attachTaskToGoal({
@@ -512,30 +517,45 @@ class PlannerStore extends ChangeNotifier {
     required String goalId,
     String? milestoneId,
   }) {
-    _updateTaskById(
-      taskId,
-      (task) => milestoneId == null
-          ? task.assignToGoal(goalId)
-          : task.assignToGoalMilestone(
-              goalId: goalId,
-              milestoneId: milestoneId,
-            ),
+    final result = _taskApplicationService.attachTaskToGoal(
+      tasks: _tasks,
+      taskId: taskId,
+      goalId: goalId,
+      milestoneId: milestoneId,
     );
+
+    _applyTaskMutationResult(result);
   }
 
   void detachTaskFromGoal(String taskId) {
-    _updateTaskById(taskId, (task) => task.detachFromGoal());
+    final result = _taskApplicationService.detachTaskFromGoal(
+      tasks: _tasks,
+      taskId: taskId,
+    );
+
+    _applyTaskMutationResult(result);
   }
 
   void toggleTaskCompleted(String taskId) {
-    _updateTaskById(taskId, (task) => task.toggleCompleted());
+    final result = _taskApplicationService.toggleTaskCompleted(
+      tasks: _tasks,
+      taskId: taskId,
+    );
+
+    _applyTaskMutationResult(result);
   }
 
   void completeTaskOnDate({
     required String taskId,
     required DateTime completedAt,
   }) {
-    _updateTaskById(taskId, (task) => task.completedOn(completedAt));
+    final result = _taskApplicationService.completeTaskOnDate(
+      tasks: _tasks,
+      taskId: taskId,
+      completedAt: completedAt,
+    );
+
+    _applyTaskMutationResult(result);
   }
 
   void scheduleTaskForToday(String taskId) {
@@ -560,7 +580,13 @@ class PlannerStore extends ChangeNotifier {
       return;
     }
 
-    _updateTaskById(taskId, (task) => task.scheduleForDate(scheduledDate));
+    final result = _taskApplicationService.scheduleTaskForDate(
+      tasks: _tasks,
+      taskId: taskId,
+      scheduledDate: scheduledDate,
+    );
+
+    _applyTaskMutationResult(result);
   }
 
   void unscheduleTask(String taskId) {
@@ -575,18 +601,34 @@ class PlannerStore extends ChangeNotifier {
       return;
     }
 
-    _updateTaskById(taskId, (task) => task.unschedule());
+    final result = _taskApplicationService.unscheduleTask(
+      tasks: _tasks,
+      taskId: taskId,
+    );
+
+    _applyTaskMutationResult(result);
   }
 
   void moveTaskToDirectGoal(String taskId) {
-    _updateTaskById(taskId, (task) => task.moveToDirectGoal());
+    final result = _taskApplicationService.moveTaskToDirectGoal(
+      tasks: _tasks,
+      taskId: taskId,
+    );
+
+    _applyTaskMutationResult(result);
   }
 
   void assignTaskToMilestone({
     required String taskId,
     required String milestoneId,
   }) {
-    _updateTaskById(taskId, (task) => task.assignToMilestone(milestoneId));
+    final result = _taskApplicationService.assignTaskToMilestone(
+      tasks: _tasks,
+      taskId: taskId,
+      milestoneId: milestoneId,
+    );
+
+    _applyTaskMutationResult(result);
   }
 
   Future<void> _ensureUpcomingRecurringTaskOccurrences() async {
@@ -672,32 +714,29 @@ class PlannerStore extends ChangeNotifier {
     }
   }
 
-  void _updateTaskById(
-    String taskId,
-    PlannerTask Function(PlannerTask task) update,
-  ) {
-    PlannerTask? updatedTask;
-
-    _tasks = _tasks.map((task) {
-      if (task.id != taskId) {
-        return task;
-      }
-
-      updatedTask = update(task);
-      return updatedTask!;
-    }).toList();
-
-    notifyListeners();
-
-    if (updatedTask != null) {
-      _persist(_repository.saveTask(updatedTask!));
-    }
-  }
-
   void _persist(Future<void> operation) {
     operation.catchError((Object error, StackTrace stackTrace) {
       debugPrint('Persistence error: $error');
       debugPrintStack(stackTrace: stackTrace);
     });
+  }
+
+  void _applyTaskMutationResult(TaskMutationResult result) {
+    if (!result.hasChange) {
+      return;
+    }
+
+    _tasks = result.tasks;
+    notifyListeners();
+
+    final taskToPersist = result.taskToPersist;
+    if (taskToPersist != null) {
+      _persist(_repository.saveTask(taskToPersist));
+    }
+
+    final taskIdToDelete = result.taskIdToDelete;
+    if (taskIdToDelete != null) {
+      _persist(_repository.deleteTask(taskIdToDelete));
+    }
   }
 }
