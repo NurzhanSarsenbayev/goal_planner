@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'actions/recurring_rule_dialog_actions.dart';
 import 'actions/goal_dialog_actions.dart';
+import 'actions/task_dialog_actions.dart';
 import '../data/local/app_database.dart' as local;
 import '../data/repositories/drift_planner_cleanup_repository.dart';
 import '../data/repositories/drift_task_repository.dart';
@@ -11,7 +12,6 @@ import '../data/repositories/drift_goal_repository.dart';
 import '../data/repositories/drift_recurring_task_repository.dart';
 import '../data/repositories/drift_milestone_repository.dart';
 import '../models/goal.dart';
-import '../models/planner_task.dart';
 import '../screens/calendar_screen.dart';
 import '../screens/goal_details_screen.dart';
 import '../screens/goals_screen.dart';
@@ -21,7 +21,6 @@ import '../screens/today_screen.dart';
 import '../screens/reports_screen.dart';
 import '../screens/recurring_tasks_screen.dart';
 import '../state/planner_store.dart';
-import 'app_dialogs.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -39,6 +38,7 @@ class _AppShellState extends State<AppShell> {
   late final DriftRecurringTaskRepository _recurringTaskRepository;
   late final PlannerStore _store;
   late final GoalDialogActions _goalDialogActions;
+  late final TaskDialogActions _taskDialogActions;
   late final RecurringRuleDialogActions _recurringRuleDialogActions;
 
   int _selectedIndex = 0;
@@ -66,6 +66,7 @@ class _AppShellState extends State<AppShell> {
     );
 
     _goalDialogActions = GoalDialogActions(store: _store);
+    _taskDialogActions = TaskDialogActions(store: _store);
     _recurringRuleDialogActions = RecurringRuleDialogActions(store: _store);
 
     _store.addListener(_onStoreChanged);
@@ -89,77 +90,6 @@ class _AppShellState extends State<AppShell> {
     setState(() {
       _selectedIndex = index;
     });
-  }
-
-  Future<void> _showAddTaskForTodayDialog() async {
-    final result = await showAddTaskWithPlacementDialog(
-      context,
-      goals: _store.goals,
-      milestones: _store.milestones,
-    );
-
-    if (result == null) {
-      return;
-    }
-
-    _store.addTaskForToday(
-      title: result.title,
-      description: result.description,
-      goalId: result.goalId,
-      milestoneId: result.milestoneId,
-    );
-  }
-
-  Future<void> _showAddTaskForDateDialog(DateTime scheduledDate) async {
-    final result = await showAddTaskWithPlacementDialog(
-      context,
-      goals: _store.goals,
-      milestones: _store.milestones,
-    );
-
-    if (result == null) {
-      return;
-    }
-
-    _store.addTaskForDate(
-      title: result.title,
-      description: result.description,
-      scheduledDate: scheduledDate,
-      goalId: result.goalId,
-      milestoneId: result.milestoneId,
-    );
-  }
-
-  Future<void> _showAttachTaskToGoalDialog(PlannerTask task) async {
-    final result = await showTaskPlacementDialog(
-      context,
-      goals: _store.goals,
-      milestones: _store.milestones,
-    );
-
-    if (result == null) {
-      return;
-    }
-
-    _store.attachTaskToGoal(
-      taskId: task.id,
-      goalId: result.goalId,
-      milestoneId: result.milestoneId,
-    );
-  }
-
-  Future<void> _showEditTaskDialog(PlannerTask task) async {
-    final result = await showEditTaskDialog(context, task: task);
-
-    if (result == null) {
-      return;
-    }
-
-    _store.updateTask(
-      taskId: task.id,
-      title: result.title,
-      description: result.description,
-    );
   }
 
   void _openAllTasks() {
@@ -201,7 +131,9 @@ class _AppShellState extends State<AppShell> {
                 goals: _store.goals,
                 tasks: _store.tasks,
                 onToggleTaskCompleted: _store.toggleTaskCompleted,
-                onEditTask: _showEditTaskDialog,
+                onEditTask: (task) {
+                  _taskDialogActions.showEditDialog(context, task);
+                },
                 onDeleteTask: _store.deleteTask,
               );
             },
@@ -289,13 +221,19 @@ class _AppShellState extends State<AppShell> {
         tasks: _store.tasks,
         onToggleTaskCompleted: _store.toggleTaskCompleted,
         onCompleteTaskOnDate: _store.completeTaskOnDate,
-        onEditTask: _showEditTaskDialog,
-        onAttachTaskToGoal: _showAttachTaskToGoalDialog,
+        onEditTask: (task) {
+          _taskDialogActions.showEditDialog(context, task);
+        },
+        onAttachTaskToGoal: (task) {
+          _taskDialogActions.showAttachToGoalDialog(context, task);
+        },
+        onAddTask: () {
+          _taskDialogActions.showAddForTodayDialog(context);
+        },
         onDetachTaskFromGoal: _store.detachTaskFromGoal,
         onRemoveTaskFromToday: _store.unscheduleTask,
         onScheduleTaskForDate: _store.scheduleTaskForDate,
         onDeleteTask: _store.deleteTask,
-        onAddTask: _showAddTaskForTodayDialog,
         onAddRecurringTask: () {
           _recurringRuleDialogActions.showAddDialog(context);
         },
@@ -319,11 +257,15 @@ class _AppShellState extends State<AppShell> {
         tasks: _store.tasks,
         onToggleTaskCompleted: _store.toggleTaskCompleted,
         onCompleteTaskOnDate: _store.completeTaskOnDate,
-        onEditTask: _showEditTaskDialog,
+        onEditTask: (task) {
+          _taskDialogActions.showEditDialog(context, task);
+        },
+        onAddTaskForDate: (date) {
+          _taskDialogActions.showAddForDateDialog(context, date);
+        },
         onScheduleTaskForDate: _store.scheduleTaskForDate,
         onRemoveTaskFromSchedule: _store.unscheduleTask,
         onDeleteTask: _store.deleteTask,
-        onAddTaskForDate: _showAddTaskForDateDialog,
         onEnsureRecurringTasksForMonth:
             _store.ensureRecurringTaskOccurrencesForMonth,
         onAddRecurringTaskForDate: (date) {
