@@ -1,6 +1,6 @@
-import '../models/planner_task.dart';
-import '../models/recurring_task_exception.dart';
-import '../shared/planner_dates.dart';
+import '../../../models/planner_task.dart';
+import '../../../models/recurring_task_exception.dart';
+import '../../../shared/planner_dates.dart';
 
 class RecurringOccurrenceLifecycleResult {
   const RecurringOccurrenceLifecycleResult({

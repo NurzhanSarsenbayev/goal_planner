@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:goal_planner/models/planner_task.dart';
 import 'package:goal_planner/models/recurring_task_exception.dart';
 import 'package:goal_planner/models/recurring_task_rule.dart';
-import 'package:goal_planner/recurring/recurring_task_generator.dart';
+import 'package:goal_planner/features/recurring/domain/recurring_task_generator.dart';
 
 void main() {
   group('generateRecurringTaskOccurrences', () {

@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:goal_planner/models/planner_task.dart';
 import 'package:goal_planner/models/recurring_task_exception.dart';
-import 'package:goal_planner/recurring/recurring_occurrence_lifecycle.dart';
+import 'package:goal_planner/features/recurring/domain/recurring_occurrence_lifecycle.dart';
 
 void main() {
   group('RecurringOccurrenceLifecycle', () {

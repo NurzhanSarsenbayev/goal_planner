@@ -1,7 +1,7 @@
-import '../models/planner_task.dart';
-import '../models/recurring_task_exception.dart';
-import '../models/recurring_task_rule.dart';
-import '../recurring/recurring_task_generator.dart';
+import '../../../models/planner_task.dart';
+import '../../../models/recurring_task_exception.dart';
+import '../../../models/recurring_task_rule.dart';
+import '../domain/recurring_task_generator.dart';
 
 class RecurringRuleLifecycleResult {
   const RecurringRuleLifecycleResult({
