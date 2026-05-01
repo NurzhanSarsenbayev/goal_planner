@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'actions/recurring_rule_dialog_actions.dart';
+import 'actions/goal_dialog_actions.dart';
 import '../data/local/app_database.dart' as local;
 import '../data/repositories/drift_planner_cleanup_repository.dart';
 import '../data/repositories/drift_task_repository.dart';
@@ -37,6 +38,7 @@ class _AppShellState extends State<AppShell> {
   late final DriftMilestoneRepository _milestoneRepository;
   late final DriftRecurringTaskRepository _recurringTaskRepository;
   late final PlannerStore _store;
+  late final GoalDialogActions _goalDialogActions;
   late final RecurringRuleDialogActions _recurringRuleDialogActions;
 
   int _selectedIndex = 0;
@@ -48,6 +50,7 @@ class _AppShellState extends State<AppShell> {
     super.initState();
 
     _database = local.AppDatabase();
+
     _cleanupRepository = DriftPlannerCleanupRepository(_database);
     _goalRepository = DriftGoalRepository(_database);
     _milestoneRepository = DriftMilestoneRepository(_database);
@@ -61,6 +64,8 @@ class _AppShellState extends State<AppShell> {
       _taskRepository,
       _recurringTaskRepository,
     );
+
+    _goalDialogActions = GoalDialogActions(store: _store);
     _recurringRuleDialogActions = RecurringRuleDialogActions(store: _store);
 
     _store.addListener(_onStoreChanged);
@@ -84,53 +89,6 @@ class _AppShellState extends State<AppShell> {
     setState(() {
       _selectedIndex = index;
     });
-  }
-
-  Future<void> _showAddGoalDialog() async {
-    final result = await showAddGoalDialog(context);
-
-    if (result == null) {
-      return;
-    }
-
-    _store.addGoal(title: result.title, description: result.description);
-  }
-
-  Future<void> _showEditGoalDialog(Goal goal) async {
-    final result = await showEditGoalDialog(context, goal: goal);
-
-    if (result == null) {
-      return;
-    }
-
-    _store.updateGoal(
-      goalId: goal.id,
-      title: result.title,
-      description: result.description,
-    );
-  }
-
-  Future<void> _showDeleteGoalDialog(Goal goal) async {
-    final milestoneCount = _store.milestones
-        .where((milestone) => milestone.goalId == goal.id)
-        .length;
-
-    final taskCount = _store.tasks
-        .where((task) => task.goalId == goal.id)
-        .length;
-
-    final shouldDelete = await showDeleteGoalDialog(
-      context,
-      goal: goal,
-      milestoneCount: milestoneCount,
-      taskCount: taskCount,
-    );
-
-    if (!shouldDelete) {
-      return;
-    }
-
-    _store.deleteGoalWithRelatedData(goal.id);
   }
 
   Future<void> _showAddTaskForTodayDialog() async {
@@ -346,9 +304,15 @@ class _AppShellState extends State<AppShell> {
         goals: _store.goals,
         tasks: _store.tasks,
         onGoalSelected: _openGoalDetails,
-        onEditGoal: _showEditGoalDialog,
-        onDeleteGoal: _showDeleteGoalDialog,
-        onAddGoal: _showAddGoalDialog,
+        onEditGoal: (goal) {
+          _goalDialogActions.showEditDialog(context, goal);
+        },
+        onDeleteGoal: (goal) {
+          _goalDialogActions.showDeleteDialog(context, goal);
+        },
+        onAddGoal: () {
+          _goalDialogActions.showAddDialog(context);
+        },
       ),
       CalendarScreen(
         goals: _store.goals,
