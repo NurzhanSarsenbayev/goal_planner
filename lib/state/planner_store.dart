@@ -2,15 +2,14 @@ import 'package:flutter/foundation.dart';
 
 import '../data/repositories/planner_repository.dart';
 import '../features/tasks/application/task_application_service.dart';
+import '../features/recurring/application/recurring_task_application_service.dart';
 import 'planner_seed_service.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
 import '../models/recurring_task_exception.dart';
 import '../models/recurring_task_rule.dart';
-import '../recurring/recurring_task_generator.dart';
 import '../recurring/recurring_occurrence_lifecycle.dart';
-import '../recurring/recurring_rule_lifecycle.dart';
 import '../shared/planner_dates.dart';
 
 class PlannerStore extends ChangeNotifier {
@@ -24,8 +23,8 @@ class PlannerStore extends ChangeNotifier {
 
   final RecurringOccurrenceLifecycle _recurringOccurrenceLifecycle =
       RecurringOccurrenceLifecycle();
-  final RecurringRuleLifecycle _recurringRuleLifecycle =
-      RecurringRuleLifecycle();
+  final RecurringTaskApplicationService _recurringTaskApplicationService =
+      RecurringTaskApplicationService();
 
   List<Goal> _goals = [];
   List<Milestone> _milestones = [];
@@ -230,23 +229,30 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void addRecurringTaskRule(RecurringTaskRule rule) {
-    _recurringRules = [..._recurringRules, rule];
-
-    final generatedTasks = generateUpcomingRecurringTaskOccurrences(
+    final result = _recurringTaskApplicationService.addRule(
+      rule: rule,
       rules: _recurringRules,
       exceptions: _recurringExceptions,
-      existingTasks: _tasks,
+      tasks: _tasks,
       today: todayDate(),
     );
 
-    _tasks = [..._tasks, ...generatedTasks];
+    final ruleToPersist = result.ruleToPersist;
+
+    if (ruleToPersist == null) {
+      return;
+    }
+
+    _recurringRules = result.rules;
+    _tasks = result.tasks;
+    _recurringExceptions = result.exceptions;
 
     notifyListeners();
 
     _persist(
       _repository.saveRecurringTaskRuleWithOccurrences(
-        rule: rule,
-        generatedTasks: generatedTasks,
+        rule: ruleToPersist,
+        generatedTasks: result.generatedTasks,
       ),
     );
   }
@@ -264,7 +270,7 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void deleteRecurringTaskRule(String ruleId) {
-    final result = _recurringRuleLifecycle.deleteRule(
+    final result = _recurringTaskApplicationService.deleteRule(
       ruleId: ruleId,
       rules: _recurringRules,
       tasks: _tasks,
@@ -287,7 +293,7 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void updateRecurringTaskRule(RecurringTaskRule updatedRule) {
-    final result = _recurringRuleLifecycle.updateRuleAndRebuildOccurrences(
+    final result = _recurringTaskApplicationService.updateRule(
       updatedRule: updatedRule,
       rules: _recurringRules,
       tasks: _tasks,
@@ -442,7 +448,7 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void _deactivateRecurringTaskRule(String ruleId) {
-    final result = _recurringRuleLifecycle.deactivateRule(
+    final result = _recurringTaskApplicationService.deactivateRule(
       ruleId: ruleId,
       rules: _recurringRules,
       tasks: _tasks,
@@ -469,7 +475,7 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void _activateRecurringTaskRule(String ruleId) {
-    final result = _recurringRuleLifecycle.activateRule(
+    final result = _recurringTaskApplicationService.activateRule(
       ruleId: ruleId,
       rules: _recurringRules,
       tasks: _tasks,
@@ -632,12 +638,13 @@ class PlannerStore extends ChangeNotifier {
   }
 
   Future<void> _ensureUpcomingRecurringTaskOccurrences() async {
-    final generatedTasks = generateUpcomingRecurringTaskOccurrences(
-      rules: _recurringRules,
-      exceptions: _recurringExceptions,
-      existingTasks: _tasks,
-      today: todayDate(),
-    );
+    final generatedTasks = _recurringTaskApplicationService
+        .generateUpcomingOccurrences(
+          rules: _recurringRules,
+          exceptions: _recurringExceptions,
+          existingTasks: _tasks,
+          today: todayDate(),
+        );
 
     if (generatedTasks.isEmpty) {
       return;
@@ -652,13 +659,14 @@ class PlannerStore extends ChangeNotifier {
     final monthStart = DateTime(visibleMonth.year, visibleMonth.month);
     final monthEnd = DateTime(visibleMonth.year, visibleMonth.month + 1, 0);
 
-    final generatedTasks = generateRecurringTaskOccurrences(
-      rules: _recurringRules,
-      exceptions: _recurringExceptions,
-      existingTasks: _tasks,
-      startDate: monthStart,
-      endDate: monthEnd,
-    );
+    final generatedTasks = _recurringTaskApplicationService
+        .generateOccurrencesForRange(
+          rules: _recurringRules,
+          exceptions: _recurringExceptions,
+          existingTasks: _tasks,
+          startDate: monthStart,
+          endDate: monthEnd,
+        );
 
     if (generatedTasks.isEmpty) {
       return;
