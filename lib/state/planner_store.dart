@@ -91,6 +91,11 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void deleteGoalWithRelatedData(String goalId) {
+    final deletedRecurringRuleIds = _recurringRules
+        .where((rule) => rule.goalId == goalId)
+        .map((rule) => rule.id)
+        .toSet();
+
     _goals = _goals.where((goal) => goal.id != goalId).toList();
 
     _milestones = _milestones
@@ -98,6 +103,14 @@ class PlannerStore extends ChangeNotifier {
         .toList();
 
     _tasks = _tasks.where((task) => task.goalId != goalId).toList();
+
+    _recurringRules = _recurringRules
+        .where((rule) => rule.goalId != goalId)
+        .toList();
+
+    _recurringExceptions = _recurringExceptions.where((exception) {
+      return !deletedRecurringRuleIds.contains(exception.ruleId);
+    }).toList();
 
     notifyListeners();
 
@@ -135,17 +148,38 @@ class PlannerStore extends ChangeNotifier {
       return task.moveToDirectGoal();
     }).toList();
 
+    _recurringRules = _recurringRules.map((rule) {
+      if (rule.milestoneId != milestoneId) {
+        return rule;
+      }
+
+      return rule.copyWith(milestoneId: null);
+    }).toList();
+
     notifyListeners();
 
     _persist(_repository.deleteMilestoneAndMoveTasksToDirect(milestoneId));
   }
 
   void deleteMilestoneWithTasks(String milestoneId) {
+    final deletedRecurringRuleIds = _recurringRules
+        .where((rule) => rule.milestoneId == milestoneId)
+        .map((rule) => rule.id)
+        .toSet();
+
     _milestones = _milestones
         .where((milestone) => milestone.id != milestoneId)
         .toList();
 
     _tasks = _tasks.where((task) => task.milestoneId != milestoneId).toList();
+
+    _recurringRules = _recurringRules
+        .where((rule) => rule.milestoneId != milestoneId)
+        .toList();
+
+    _recurringExceptions = _recurringExceptions.where((exception) {
+      return !deletedRecurringRuleIds.contains(exception.ruleId);
+    }).toList();
 
     notifyListeners();
 
