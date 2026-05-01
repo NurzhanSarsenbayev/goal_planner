@@ -250,7 +250,7 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(_repository.deleteRecurringTaskRuleSeries(ruleIdToDelete));
+    _persist(_repository.deleteRecurringTaskRuleAndCleanSeries(ruleIdToDelete));
   }
 
   void updateRecurringTaskRule(RecurringTaskRule updatedRule) {
@@ -275,7 +275,7 @@ class PlannerStore extends ChangeNotifier {
     notifyListeners();
 
     _persist(
-      _repository.updateRecurringTaskRuleAndRebuildOccurrences(
+      _repository.updateRecurringTaskRuleAndReplaceUnfinishedOccurrences(
         rule: ruleToPersist,
         generatedTasks: result.generatedTasks,
       ),
@@ -426,7 +426,11 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(_repository.deactivateRecurringTaskRule(ruleToPersist));
+    _persist(
+      _repository.deactivateRecurringTaskRuleAndDeleteUnfinishedOccurrences(
+        ruleToPersist,
+      ),
+    );
   }
 
   void _activateRecurringTaskRule(String ruleId) {
@@ -451,7 +455,7 @@ class PlannerStore extends ChangeNotifier {
     notifyListeners();
 
     _persist(
-      _repository.saveRecurringTaskRuleWithGeneratedTasks(
+      _repository.saveRecurringTaskRuleWithOccurrences(
         rule: ruleToPersist,
         generatedTasks: result.generatedTasks,
       ),

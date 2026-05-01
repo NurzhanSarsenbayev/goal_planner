@@ -169,7 +169,7 @@ class PlannerRepository {
         );
   }
 
-  Future<void> saveRecurringTaskRuleWithGeneratedTasks({
+  Future<void> saveRecurringTaskRuleWithOccurrences({
     required domain.RecurringTaskRule rule,
     required List<domain.PlannerTask> generatedTasks,
   }) async {
@@ -182,9 +182,9 @@ class PlannerRepository {
     });
   }
 
-  Future<void> deactivateRecurringTaskRule(
-    domain.RecurringTaskRule rule,
-  ) async {
+  Future<void> deactivateRecurringTaskRuleAndDeleteUnfinishedOccurrences(
+      domain.RecurringTaskRule rule,
+      ) async {
     await _database.transaction(() async {
       await saveRecurringTaskRule(rule);
 
@@ -196,7 +196,7 @@ class PlannerRepository {
     });
   }
 
-  Future<void> deleteRecurringTaskRuleSeries(String ruleId) async {
+  Future<void> deleteRecurringTaskRuleAndCleanSeries(String ruleId) async {
     await _database.transaction(() async {
       await (_database.delete(_database.tasks)..where((table) {
             return table.recurringRuleId.equals(ruleId) &
@@ -222,7 +222,7 @@ class PlannerRepository {
     });
   }
 
-  Future<void> updateRecurringTaskRuleAndRebuildOccurrences({
+  Future<void> updateRecurringTaskRuleAndReplaceUnfinishedOccurrences({
     required domain.RecurringTaskRule rule,
     required List<domain.PlannerTask> generatedTasks,
   }) async {
