@@ -189,19 +189,24 @@ class _AppShellState extends State<AppShell> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          return AllTasksScreen(
-            goals: _store.goals,
-            milestones: _store.milestones,
-            tasks: _store.tasks,
-            recurringRules: _store.recurringRules,
-            onToggleTaskCompleted: _store.toggleTaskCompleted,
-            onTaskUpdated: _store.updateTask,
-            onTaskAttachedToGoal: _store.attachTaskToGoal,
-            onTaskDetachedFromGoal: _store.detachTaskFromGoal,
-            onDeleteTask: _store.deleteTask,
-            onScheduleTaskForToday: _store.scheduleTaskForToday,
-            onScheduleTaskForDate: _store.scheduleTaskForDate,
-            onCompleteTaskOnDate: _store.completeTaskOnDate,
+          return AnimatedBuilder(
+            animation: _store,
+            builder: (context, _) {
+              return AllTasksScreen(
+                goals: _store.goals,
+                milestones: _store.milestones,
+                tasks: _store.tasks,
+                recurringRules: _store.recurringRules,
+                onToggleTaskCompleted: _store.toggleTaskCompleted,
+                onTaskUpdated: _store.updateTask,
+                onTaskAttachedToGoal: _store.attachTaskToGoal,
+                onTaskDetachedFromGoal: _store.detachTaskFromGoal,
+                onDeleteTask: _store.deleteTask,
+                onScheduleTaskForToday: _store.scheduleTaskForToday,
+                onScheduleTaskForDate: _store.scheduleTaskForDate,
+                onCompleteTaskOnDate: _store.completeTaskOnDate,
+              );
+            },
           );
         },
       ),

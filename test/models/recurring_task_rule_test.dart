@@ -24,10 +24,7 @@ void main() {
     });
 
     test('monthly rule matches selected day when month has that day', () {
-      final rule = _monthlyRule(
-        monthDay: 31,
-        startDate: DateTime(2026, 1, 1),
-      );
+      final rule = _monthlyRule(monthDay: 31, startDate: DateTime(2026, 1, 1));
 
       expect(rule.matchesDate(DateTime(2026, 1, 31)), isTrue);
       expect(rule.matchesDate(DateTime(2026, 1, 30)), isFalse);
@@ -41,10 +38,7 @@ void main() {
     });
 
     test('monthly rule falls back to February 28 in non-leap year', () {
-      final rule = _monthlyRule(
-        monthDay: 31,
-        startDate: DateTime(2026, 1, 1),
-      );
+      final rule = _monthlyRule(monthDay: 31, startDate: DateTime(2026, 1, 1));
 
       expect(rule.matchesDate(DateTime(2026, 2, 28)), isTrue);
       expect(rule.matchesDate(DateTime(2026, 2, 27)), isFalse);

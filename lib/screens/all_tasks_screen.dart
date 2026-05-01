@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../controllers/all_tasks_controller.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
@@ -13,7 +12,7 @@ import '../widgets/recurring/recurring_task_rule_card.dart';
 import '../shared/planner_dates.dart';
 import '../app/app_dialogs.dart';
 
-class AllTasksScreen extends StatefulWidget {
+class AllTasksScreen extends StatelessWidget {
   const AllTasksScreen({
     super.key,
     required this.goals,
@@ -58,44 +57,10 @@ class AllTasksScreen extends StatefulWidget {
   final void Function(String taskId) onTaskDetachedFromGoal;
   final void Function(String taskId) onDeleteTask;
 
-  @override
-  State<AllTasksScreen> createState() => _AllTasksScreenState();
-}
-
-class _AllTasksScreenState extends State<AllTasksScreen> {
-  late final AllTasksController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AllTasksController(
-      tasks: widget.tasks,
-      onToggleTaskCompleted: widget.onToggleTaskCompleted,
-      onTaskUpdated: widget.onTaskUpdated,
-      onTaskAttachedToGoal: widget.onTaskAttachedToGoal,
-      onTaskDetachedFromGoal: widget.onTaskDetachedFromGoal,
-      onDeleteTask: widget.onDeleteTask,
-      onScheduleTaskForToday: widget.onScheduleTaskForToday,
-      onScheduleTaskForDate: widget.onScheduleTaskForDate,
-      onCompleteTaskOnDate: widget.onCompleteTaskOnDate,
-    );
-
-    _controller.addListener(_onControllerChanged);
-  }
-
-  @override
-  void dispose() {
-    _controller.removeListener(_onControllerChanged);
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _onControllerChanged() {
-    setState(() {});
-  }
-
-  Future<void> _showEditTaskDialog(PlannerTask task) async {
+  Future<void> _showEditTaskDialog(
+    BuildContext context,
+    PlannerTask task,
+  ) async {
     final result = await showDialog<TaskDraft>(
       context: context,
       builder: (context) {
@@ -112,7 +77,7 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
       return;
     }
 
-    _controller.updateTask(
+    onTaskUpdated(
       taskId: task.id,
       title: result.title,
       description: result.description,
@@ -139,14 +104,14 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
     return !normalizedScheduledDate.isAfter(todayDate());
   }
 
-  Future<void> _showAttachTaskToGoalDialog(PlannerTask task) async {
+  Future<void> _showAttachTaskToGoalDialog(
+    BuildContext context,
+    PlannerTask task,
+  ) async {
     final result = await showDialog<TaskPlacementDraft>(
       context: context,
       builder: (context) {
-        return TaskPlacementDialog(
-          goals: widget.goals,
-          milestones: widget.milestones,
-        );
+        return TaskPlacementDialog(goals: goals, milestones: milestones);
       },
     );
 
@@ -154,14 +119,17 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
       return;
     }
 
-    _controller.attachTaskToGoal(
+    onTaskAttachedToGoal(
       taskId: task.id,
       goalId: result.goalId,
       milestoneId: result.milestoneId,
     );
   }
 
-  Future<void> _showScheduleTaskDatePicker(PlannerTask task) async {
+  Future<void> _showScheduleTaskDatePicker(
+    BuildContext context,
+    PlannerTask task,
+  ) async {
     final selectedDate = await showScheduleTaskDatePicker(
       context,
       initialDate: task.scheduledDate,
@@ -171,19 +139,14 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
       return;
     }
 
-    _controller.scheduleTaskForDate(
-      taskId: task.id,
-      scheduledDate: selectedDate,
-    );
+    onScheduleTaskForDate(taskId: task.id, scheduledDate: selectedDate);
   }
 
   @override
   Widget build(BuildContext context) {
-    final visibleTasks = _controller.tasks
-        .where(_shouldShowTaskInAllTasks)
-        .toList();
+    final visibleTasks = tasks.where(_shouldShowTaskInAllTasks).toList();
     final hasVisibleTasks = visibleTasks.isNotEmpty;
-    final hasRecurringRules = widget.recurringRules.isNotEmpty;
+    final hasRecurringRules = recurringRules.isNotEmpty;
 
     if (!hasVisibleTasks && !hasRecurringRules) {
       return Scaffold(
@@ -216,7 +179,7 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
-            for (final rule in widget.recurringRules) ...[
+            for (final rule in recurringRules) ...[
               RecurringTaskRuleCard(rule: rule),
               const SizedBox(height: 8),
             ],
@@ -238,33 +201,33 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
         handleTaskCompletionWithDateFlow(
           context,
           task: task,
-          onToggleTaskCompleted: _controller.toggleTaskCompleted,
-          onCompleteTaskOnDate: _controller.completeTaskOnDate,
+          onToggleTaskCompleted: onToggleTaskCompleted,
+          onCompleteTaskOnDate: onCompleteTaskOnDate,
         );
       },
       onEdit: () {
-        _showEditTaskDialog(task);
+        _showEditTaskDialog(context, task);
       },
       onAttachToGoal: isStandaloneTask
           ? () {
-              _showAttachTaskToGoalDialog(task);
+              _showAttachTaskToGoalDialog(context, task);
             }
           : null,
       onDetachFromGoal: isGoalLinkedTask
           ? () {
-              _controller.detachTaskFromGoal(task.id);
+              onTaskDetachedFromGoal(task.id);
             }
           : null,
       onScheduleForToday: task.isScheduledForToday
           ? null
           : () {
-              _controller.scheduleTaskForToday(task.id);
+              onScheduleTaskForToday(task.id);
             },
       onScheduleDate: () {
-        _showScheduleTaskDatePicker(task);
+        _showScheduleTaskDatePicker(context, task);
       },
       onDelete: () {
-        _controller.deleteTask(task.id);
+        onDeleteTask(task.id);
       },
     );
   }
@@ -274,7 +237,7 @@ class _AllTasksScreenState extends State<AllTasksScreen> {
       return null;
     }
 
-    for (final goal in widget.goals) {
+    for (final goal in goals) {
       if (goal.id == goalId) {
         return goal;
       }
