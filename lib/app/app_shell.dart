@@ -270,24 +270,34 @@ class _AppShellState extends State<AppShell> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          return GoalDetailsScreen(
-            goal: goal,
-            milestones: _store.milestones,
-            tasks: _store.tasks,
-            onToggleTaskCompleted: _store.toggleTaskCompleted,
-            onDeleteTask: _store.deleteTask,
-            onTaskCreated: _store.addTask,
-            onTaskUpdated: _store.updateTask,
-            onTaskMovedToDirectGoal: _store.moveTaskToDirectGoal,
-            onTaskAssignedToMilestone: _store.assignTaskToMilestone,
-            onMilestoneCreated: _store.addMilestone,
-            onMilestoneUpdated: _store.updateMilestone,
-            onMilestoneDeletedAndTasksMovedToDirect:
-                _store.deleteMilestoneAndMoveTasksToDirect,
-            onMilestoneDeletedWithTasks: _store.deleteMilestoneWithTasks,
-            onScheduleTaskForToday: _store.scheduleTaskForToday,
-            onScheduleTaskForDate: _store.scheduleTaskForDate,
-            onCompleteTaskOnDate: _store.completeTaskOnDate,
+          return AnimatedBuilder(
+            animation: _store,
+            builder: (context, _) {
+              final currentGoal = _store.goals.firstWhere(
+                (item) => item.id == goal.id,
+                orElse: () => goal,
+              );
+
+              return GoalDetailsScreen(
+                goal: currentGoal,
+                milestones: _store.milestones,
+                tasks: _store.tasks,
+                onToggleTaskCompleted: _store.toggleTaskCompleted,
+                onDeleteTask: _store.deleteTask,
+                onTaskCreated: _store.addTask,
+                onTaskUpdated: _store.updateTask,
+                onTaskMovedToDirectGoal: _store.moveTaskToDirectGoal,
+                onTaskAssignedToMilestone: _store.assignTaskToMilestone,
+                onMilestoneCreated: _store.addMilestone,
+                onMilestoneUpdated: _store.updateMilestone,
+                onMilestoneDeletedAndTasksMovedToDirect:
+                    _store.deleteMilestoneAndMoveTasksToDirect,
+                onMilestoneDeletedWithTasks: _store.deleteMilestoneWithTasks,
+                onScheduleTaskForToday: _store.scheduleTaskForToday,
+                onScheduleTaskForDate: _store.scheduleTaskForDate,
+                onCompleteTaskOnDate: _store.completeTaskOnDate,
+              );
+            },
           );
         },
       ),
