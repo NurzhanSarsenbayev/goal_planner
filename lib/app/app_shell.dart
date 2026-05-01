@@ -7,10 +7,7 @@ import 'actions/goal_dialog_actions.dart';
 import 'actions/task_dialog_actions.dart';
 import 'composition/app_dependencies.dart';
 import 'navigation/app_navigation_actions.dart';
-import '../screens/calendar_screen.dart';
-import '../screens/goals_screen.dart';
-import '../screens/more_screen.dart';
-import '../screens/today_screen.dart';
+import 'navigation/main_tab_builder.dart';
 import '../state/planner_store.dart';
 
 class AppShell extends StatefulWidget {
@@ -27,6 +24,7 @@ class _AppShellState extends State<AppShell> {
   late final TaskDialogActions _taskDialogActions;
   late final RecurringRuleDialogActions _recurringRuleDialogActions;
   late final AppNavigationActions _navigationActions;
+  late final MainTabBuilder _mainTabBuilder;
 
   int _selectedIndex = 0;
 
@@ -47,6 +45,14 @@ class _AppShellState extends State<AppShell> {
       store: _store,
       taskDialogActions: _taskDialogActions,
       recurringRuleDialogActions: _recurringRuleDialogActions,
+    );
+
+    _mainTabBuilder = MainTabBuilder(
+      store: _store,
+      goalDialogActions: _goalDialogActions,
+      taskDialogActions: _taskDialogActions,
+      recurringRuleDialogActions: _recurringRuleDialogActions,
+      navigationActions: _navigationActions,
     );
 
     _store.addListener(_onStoreChanged);
@@ -73,77 +79,7 @@ class _AppShellState extends State<AppShell> {
 
   @override
   Widget build(BuildContext context) {
-    final screens = [
-      TodayScreen(
-        goals: _store.goals,
-        tasks: _store.tasks,
-        onToggleTaskCompleted: _store.toggleTaskCompleted,
-        onCompleteTaskOnDate: _store.completeTaskOnDate,
-        onEditTask: (task) {
-          _taskDialogActions.showEditDialog(context, task);
-        },
-        onAttachTaskToGoal: (task) {
-          _taskDialogActions.showAttachToGoalDialog(context, task);
-        },
-        onAddTask: () {
-          _taskDialogActions.showAddForTodayDialog(context);
-        },
-        onDetachTaskFromGoal: _store.detachTaskFromGoal,
-        onRemoveTaskFromToday: _store.unscheduleTask,
-        onScheduleTaskForDate: _store.scheduleTaskForDate,
-        onDeleteTask: _store.deleteTask,
-        onAddRecurringTask: () {
-          _recurringRuleDialogActions.showAddDialog(context);
-        },
-      ),
-      GoalsScreen(
-        goals: _store.goals,
-        tasks: _store.tasks,
-        onGoalSelected: (goal) {
-          _navigationActions.openGoalDetails(context, goal);
-        },
-        onEditGoal: (goal) {
-          _goalDialogActions.showEditDialog(context, goal);
-        },
-        onDeleteGoal: (goal) {
-          _goalDialogActions.showDeleteDialog(context, goal);
-        },
-        onAddGoal: () {
-          _goalDialogActions.showAddDialog(context);
-        },
-      ),
-      CalendarScreen(
-        goals: _store.goals,
-        tasks: _store.tasks,
-        onToggleTaskCompleted: _store.toggleTaskCompleted,
-        onCompleteTaskOnDate: _store.completeTaskOnDate,
-        onEditTask: (task) {
-          _taskDialogActions.showEditDialog(context, task);
-        },
-        onAddTaskForDate: (date) {
-          _taskDialogActions.showAddForDateDialog(context, date);
-        },
-        onScheduleTaskForDate: _store.scheduleTaskForDate,
-        onRemoveTaskFromSchedule: _store.unscheduleTask,
-        onDeleteTask: _store.deleteTask,
-        onEnsureRecurringTasksForMonth:
-            _store.ensureRecurringTaskOccurrencesForMonth,
-        onAddRecurringTaskForDate: (date) {
-          _recurringRuleDialogActions.showAddDialog(context, startDate: date);
-        },
-      ),
-      MoreScreen(
-        onOpenAllTasks: () {
-          _navigationActions.openAllTasks(context);
-        },
-        onOpenReports: () {
-          _navigationActions.openReports(context);
-        },
-        onOpenRecurringTasks: () {
-          _navigationActions.openRecurringTasks(context);
-        },
-      ),
-    ];
+    final screens = _mainTabBuilder.buildScreens(context);
 
     return Scaffold(
       appBar: AppBar(title: Text(_titles[_selectedIndex])),
