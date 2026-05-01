@@ -3,12 +3,18 @@ import '../../../models/recurring_task_exception.dart';
 import '../../../models/recurring_task_rule.dart';
 import '../../../recurring/recurring_rule_lifecycle.dart';
 import '../../../recurring/recurring_task_generator.dart';
+import '../../../recurring/recurring_occurrence_lifecycle.dart';
 
 class RecurringTaskApplicationService {
-  RecurringTaskApplicationService({RecurringRuleLifecycle? ruleLifecycle})
-    : _ruleLifecycle = ruleLifecycle ?? RecurringRuleLifecycle();
+  RecurringTaskApplicationService({
+    RecurringRuleLifecycle? ruleLifecycle,
+    RecurringOccurrenceLifecycle? occurrenceLifecycle,
+  }) : _ruleLifecycle = ruleLifecycle ?? RecurringRuleLifecycle(),
+       _occurrenceLifecycle =
+           occurrenceLifecycle ?? RecurringOccurrenceLifecycle();
 
   final RecurringRuleLifecycle _ruleLifecycle;
+  final RecurringOccurrenceLifecycle _occurrenceLifecycle;
 
   RecurringRuleLifecycleResult addRule({
     required RecurringTaskRule rule,
@@ -92,6 +98,50 @@ class RecurringTaskApplicationService {
       tasks: tasks,
       exceptions: exceptions,
       today: today,
+    );
+  }
+
+  RecurringOccurrenceLifecycleResult deleteOccurrence({
+    required PlannerTask task,
+    required List<PlannerTask> tasks,
+    required List<RecurringTaskException> exceptions,
+    required DateTime now,
+  }) {
+    return _occurrenceLifecycle.deleteOccurrence(
+      task: task,
+      tasks: tasks,
+      exceptions: exceptions,
+      now: now,
+    );
+  }
+
+  RecurringOccurrenceLifecycleResult rescheduleOccurrence({
+    required PlannerTask task,
+    required DateTime scheduledDate,
+    required List<PlannerTask> tasks,
+    required List<RecurringTaskException> exceptions,
+    required DateTime now,
+  }) {
+    return _occurrenceLifecycle.rescheduleOccurrence(
+      task: task,
+      scheduledDate: scheduledDate,
+      tasks: tasks,
+      exceptions: exceptions,
+      now: now,
+    );
+  }
+
+  RecurringOccurrenceLifecycleResult unscheduleOccurrence({
+    required PlannerTask task,
+    required List<PlannerTask> tasks,
+    required List<RecurringTaskException> exceptions,
+    required DateTime now,
+  }) {
+    return _occurrenceLifecycle.unscheduleOccurrence(
+      task: task,
+      tasks: tasks,
+      exceptions: exceptions,
+      now: now,
     );
   }
 

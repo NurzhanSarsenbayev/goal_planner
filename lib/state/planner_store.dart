@@ -9,7 +9,6 @@ import '../models/milestone.dart';
 import '../models/planner_task.dart';
 import '../models/recurring_task_exception.dart';
 import '../models/recurring_task_rule.dart';
-import '../recurring/recurring_occurrence_lifecycle.dart';
 import '../shared/planner_dates.dart';
 
 class PlannerStore extends ChangeNotifier {
@@ -21,8 +20,6 @@ class PlannerStore extends ChangeNotifier {
   final TaskApplicationService _taskApplicationService =
       const TaskApplicationService();
 
-  final RecurringOccurrenceLifecycle _recurringOccurrenceLifecycle =
-      RecurringOccurrenceLifecycle();
   final RecurringTaskApplicationService _recurringTaskApplicationService =
       RecurringTaskApplicationService();
 
@@ -360,7 +357,7 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void _deleteRecurringOccurrence(PlannerTask task) {
-    final result = _recurringOccurrenceLifecycle.deleteOccurrence(
+    final result = _recurringTaskApplicationService.deleteOccurrence(
       task: task,
       tasks: _tasks,
       exceptions: _recurringExceptions,
@@ -391,7 +388,7 @@ class PlannerStore extends ChangeNotifier {
     required PlannerTask task,
     required DateTime scheduledDate,
   }) {
-    final result = _recurringOccurrenceLifecycle.rescheduleOccurrence(
+    final result = _recurringTaskApplicationService.rescheduleOccurrence(
       task: task,
       scheduledDate: scheduledDate,
       tasks: _tasks,
@@ -420,7 +417,7 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void _unscheduleRecurringOccurrence(PlannerTask task) {
-    final result = _recurringOccurrenceLifecycle.unscheduleOccurrence(
+    final result = _recurringTaskApplicationService.unscheduleOccurrence(
       task: task,
       tasks: _tasks,
       exceptions: _recurringExceptions,
