@@ -351,7 +351,7 @@ Not implemented yet:
 
 ## Phase 6.5: Recurring task planning MVP
 
-Status: in progress.
+Status: done.
 
 Goal:
 
@@ -402,7 +402,7 @@ Implemented:
   - Sunday.
 - Support monthly day selection.
 - Support monthly day fallback:
-  - if the selected day does not exist in a month, occurrence is created on the last day of that month.
+  - if the selected day does not exist in a month, occurrence is created on the last day of that month;
   - example: day 31 -> February 28/29, April 30.
 - Add `RecurringTaskException`.
 - Add `recurringRuleId` to `PlannerTask`.
@@ -417,6 +417,15 @@ Implemented:
 - Add tests for recurring exceptions.
 - Add tests for recurring occurrence generation.
 - Add tests preventing duplicate generated occurrences.
+- Add tests for recurring occurrence lifecycle:
+  - delete occurrence;
+  - reschedule occurrence;
+  - unschedule occurrence.
+- Add tests for recurring rule lifecycle:
+  - activate rule;
+  - deactivate rule;
+  - delete rule;
+  - update rule and rebuild future occurrences.
 
 ### Persistence
 
@@ -428,6 +437,13 @@ Implemented:
 - Add repository mapping for recurring rules.
 - Add repository mapping for recurring exceptions.
 - Persist generated recurring task occurrences as normal tasks.
+- Persist recurring rule creation transactionally:
+  - save rule;
+  - save generated occurrences.
+- Clean recurring data when deleting goals and milestones:
+  - deleting a goal removes related recurring rules and exceptions;
+  - deleting a milestone with tasks removes related recurring rules and exceptions;
+  - deleting a milestone while moving tasks to direct goal detaches related recurring rules from the milestone.
 
 ### Recurring occurrence generation
 
@@ -442,14 +458,25 @@ Implemented:
   - `endDate`.
 - Keep upcoming generation for near-term Today usage.
 - Generate recurring occurrences for visible Calendar month.
+- Refresh visible Calendar month after creating a recurring rule from Calendar.
 
-### Store integration
+### Store and lifecycle integration
 
 - Load recurring rules into `PlannerStore`.
 - Load recurring exceptions into `PlannerStore`.
 - Add recurring rule creation to `PlannerStore`.
 - Generate and persist upcoming occurrences when a rule is created.
 - Generate and persist missing occurrences when Calendar opens a visible month.
+- Extract recurring occurrence lifecycle:
+  - delete occurrence;
+  - reschedule occurrence;
+  - unschedule occurrence.
+- Extract recurring rule lifecycle:
+  - activate rule;
+  - deactivate rule;
+  - delete rule;
+  - update rule and rebuild future occurrences.
+- Keep `PlannerStore` as state coordinator while recurring lifecycle decisions move into dedicated recurring lifecycle classes.
 
 ### UI
 
@@ -458,6 +485,9 @@ Implemented:
 - Add recurring rule list.
 - Add reusable recurring rule card.
 - Add recurring rule creation dialog from Recurring Tasks screen.
+- Add recurring rule editing flow.
+- Add recurring rule activate/deactivate actions.
+- Add recurring rule delete action.
 - Support recurring rule placement:
   - standalone recurring task;
   - direct goal recurring task;
@@ -467,13 +497,57 @@ Implemented:
 - Disable Add button until recurring rule form is valid.
 - Allow monthly day 1-31.
 - Show helper text explaining monthly last-day fallback.
+- Split recurring rule dialog into smaller sections:
+  - placement section;
+  - schedule section.
 - Show recurring rules in All Tasks instead of flooding All Tasks with future generated occurrences.
 - Hide future uncompleted recurring occurrences from default All Tasks view.
 - Keep today / overdue / completed recurring occurrences visible in All Tasks.
+- Add recurring task creation from Today.
+- Add recurring task creation from Calendar.
+- For Calendar recurring creation:
+  - use selected date as recurring rule start date;
+  - preselect weekday based on selected date;
+  - preselect monthly day based on selected date;
+  - show past-date warning when creating from a past date.
+
+### Occurrence behavior
+
+- Deleting one generated recurring occurrence:
+  - creates a `RecurringTaskException`;
+  - deletes only the selected occurrence;
+  - prevents that occurrence from being regenerated after Calendar month regeneration or app restart.
+- Rescheduling one generated recurring occurrence:
+  - creates a `RecurringTaskException` for the old date;
+  - detaches the moved task from the recurring rule;
+  - keeps the moved task as a one-off scheduled task.
+- Unscheduling one generated recurring occurrence:
+  - creates a `RecurringTaskException` for the old date;
+  - detaches the task from the recurring rule;
+  - keeps the task as a one-off unscheduled task.
+- Completing one occurrence affects only that occurrence.
+- Editing a recurring rule:
+  - updates the rule;
+  - removes future unfinished generated occurrences from the old rule shape;
+  - generates future occurrences from the updated rule;
+  - keeps completed history.
+- Deactivating a recurring rule:
+  - marks the rule inactive;
+  - removes unfinished generated occurrences;
+  - keeps completed history.
+- Activating a recurring rule:
+  - marks the rule active;
+  - regenerates upcoming occurrences;
+  - still respects existing exceptions.
+- Deleting a recurring rule:
+  - deletes the rule;
+  - removes unfinished generated occurrences;
+  - keeps completed occurrences as detached history;
+  - removes exceptions for the deleted rule.
 
 Current result:
 
-A user can create a recurring task rule from More -> Recurring tasks.
+A user can create, edit, deactivate, activate, and delete recurring task rules.
 
 Examples:
 
@@ -490,53 +564,7 @@ Generated occurrences appear in:
 - Reports, as planned/completed tasks;
 - All Tasks only when actionable/history-relevant.
 
-All Tasks now shows recurring rules separately, instead of being flooded with future generated occurrences.
-
-Still to do:
-
-### Recurring occurrence deletion
-
-- When deleting a generated recurring occurrence, create a `RecurringTaskException`.
-- Delete only the selected occurrence.
-- Ensure the occurrence does not reappear after:
-  - Calendar month regeneration;
-  - app restart;
-  - rule sync.
-
-### Recurring rule deletion / deactivation
-
-- Add ability to deactivate a recurring rule.
-- Decide deletion behavior:
-  - deactivate rule;
-  - delete future uncompleted occurrences;
-  - keep completed history.
-- Add UI action from Recurring Tasks screen.
-
-### Creation entry points
-
-- Add recurring task creation from Today.
-- Add recurring task creation from Calendar.
-- For Calendar creation:
-  - preselect weekday based on selected date for weekly recurrence.
-  - optionally preselect month day for monthly recurrence.
-
-### Rule editing
-
-- Add edit recurring rule flow.
-- Sync future occurrences when rule changes.
-- Example:
-  - old: Monday / Wednesday / Friday
-  - new: Tuesday / Wednesday / Friday
-  - delete future uncompleted Monday occurrences;
-  - generate future Tuesday occurrences;
-  - keep completed history.
-
-### Occurrence behavior polish
-
-- Decide how rescheduling a generated occurrence should behave.
-- For MVP:
-  - editing/rescheduling an occurrence should affect only that occurrence.
-  - editing the rule should affect future generated occurrences.
+All Tasks shows recurring rules separately, instead of being flooded with future generated occurrences.
 
 Expected result for Phase 6.5 done:
 
@@ -545,13 +573,20 @@ A user can:
 - create weekly recurring tasks;
 - create monthly recurring tasks;
 - link recurring tasks to goals/milestones;
+- create recurring tasks from More;
+- create recurring tasks from Today;
+- create recurring tasks from Calendar;
 - see generated occurrences in Today and Calendar;
 - complete one occurrence without completing the whole series;
 - delete one occurrence without it being regenerated;
-- deactivate a recurring rule;
+- reschedule one occurrence without changing the whole series;
+- unschedule one occurrence without it being regenerated;
+- edit a recurring rule and rebuild future unfinished occurrences;
+- deactivate and reactivate a recurring rule;
+- delete a recurring rule while keeping completed history;
 - avoid All Tasks being flooded with future generated occurrences.
 
-Not doing initially:
+Not doing in recurring MVP:
 
 - complex RRULE support;
 - yearly recurrence;
@@ -564,19 +599,167 @@ Not doing initially:
 - habit streaks;
 - full habit system.
 
+## Phase 6.6: Architecture stabilization before Habits
+
+Status: not started.
+
+Goal:
+
+Prepare the codebase for larger feature growth before adding Habits.
+
+The app now has enough real product behavior that continuing with the current MVP structure would make future changes harder, riskier and slower.
+
+This phase is about making the codebase easier to extend, test and reason about.
+
+Reason:
+
+Phase 6.5 added serious recurring task behavior:
+
+- recurring rules;
+- generated task occurrences;
+- occurrence exceptions;
+- rule editing;
+- rule activation/deactivation;
+- rule deletion;
+- recurring creation from Today;
+- recurring creation from Calendar;
+- Calendar month generation;
+- All Tasks filtering;
+- Reports compatibility.
+
+The feature works, but it also exposed architectural pressure.
+
+Main architectural risks:
+
+- `PlannerStore` still coordinates too many domains:
+  - goals;
+  - milestones;
+  - tasks;
+  - recurring rules;
+  - recurring occurrence generation;
+  - persistence orchestration.
+- `PlannerRepository` still owns persistence for multiple aggregates.
+- `AppShell` still owns too many dialog flows and screen callbacks.
+- Large screens still mix rendering, local state, action sheets, dialogs and user intent handling.
+- Some controllers use optimistic local updates that may diverge from recurring-aware store behavior.
+- Future features like Habits, reminders, filters, search and richer Calendar views would increase this complexity if added now.
+
+Architecture direction:
+
+Move toward a practical feature-based structure without a big-bang rewrite.
+
+Target direction:
+
+- `lib/app/`
+  - `app_shell.dart`
+  - `actions/`
+- `lib/core/`
+  - `dates/`
+- `lib/data/`
+  - `local/`
+  - `repositories/`
+- `lib/features/recurring/`
+  - `application/`
+  - `domain/`
+  - `presentation/`
+- `lib/features/tasks/`
+  - `application/`
+  - `presentation/`
+- `lib/features/goals/`
+  - `application/`
+  - `presentation/`
+- `lib/features/calendar/`
+  - `presentation/`
+- `lib/features/reports/`
+  - `application/`
+  - `presentation/`
+
+This is a direction, not a requirement to move every file immediately.
+
+The goal is to reduce coupling and clarify responsibilities step by step.
+
+Initial architecture stabilization scope:
+
+### Recurring architecture
+
+- Extract recurring task application service.
+- Move recurring orchestration out of `PlannerStore`.
+- Keep `PlannerStore` as a thin state coordinator.
+- Extract recurring repository from `PlannerRepository`.
+- Keep recurring lifecycle logic covered by tests.
+- Keep recurring behavior unchanged after refactor.
+
+### Task architecture
+
+- Extract task application service.
+- Separate normal task operations from recurring-aware task operations.
+- Review scheduling, unscheduling, completion, attachment, detachment and deletion flows.
+- Ensure recurring occurrence behavior remains correct.
+
+### Goal and milestone architecture
+
+- Extract goal application service.
+- Extract milestone application service.
+- Keep goal/milestone deletion behavior consistent with recurring data cleanup.
+- Make goal/milestone operations easier to extend later.
+
+### AppShell cleanup
+
+- Extract goal dialog actions from `AppShell`.
+- Extract task dialog actions from `AppShell`.
+- Keep `AppShell` focused on:
+  - app lifecycle;
+  - navigation;
+  - high-level screen wiring.
+
+### Screen cleanup
+
+- Review `AllTasksScreen` and `AllTasksController`.
+- Remove or simplify optimistic local state if it conflicts with store behavior.
+- Split `GoalDetailsScreen` into smaller sections/actions.
+- Split `CalendarScreen` responsibilities where needed.
+- Keep screens focused on rendering state and emitting user intents.
+
+### Repository cleanup
+
+- Split persistence responsibilities where it reduces coupling.
+- Avoid making one repository responsible for every aggregate.
+- Keep cross-aggregate transactions explicit and named clearly.
+
+Definition of done:
+
+- `PlannerStore` is significantly thinner and mostly coordinates state.
+- Recurring application logic is not embedded directly in `PlannerStore`.
+- Recurring persistence is not buried inside one general repository.
+- `AppShell` no longer owns most dialog workflows.
+- Large screens are split where it improves readability and extension.
+- Existing recurring behavior still works after refactor.
+- `flutter analyze` passes.
+- `flutter test` passes.
+- Manual QA for recurring flows passes again.
+
+Not doing in this phase:
+
+- Full rewrite to strict Clean Architecture.
+- Dependency injection framework.
+- Moving every model into feature folders in one big change.
+- Riverpod migration.
+- Backend/sync.
+- New product features.
+
 ## Phase 7: Habits MVP
 
 Status: not started.
 
 Goal:
 
-Add recurring daily behavior tracking only after reports and recurring task planning are stable.
+Add recurring daily behavior tracking only after reports, recurring task planning and architecture stabilization are stable.
 
 Why this is separate from recurring tasks:
 
-Recurring tasks are planned actions that appear as tasks on specific dates.
+Recurring tasks are planned actions that appear as concrete tasks on specific dates.
 
-Habits are routines tracked over time, where the history and consistency matter more than a single task instance.
+Habits are routines tracked over time, where history and consistency matter more than a single task instance.
 
 Initial habit scope:
 
@@ -643,7 +826,8 @@ Success signals:
 - User understands planned vs completed tasks.
 - User uses overdue tasks instead of losing old planned tasks.
 - User can see which goals received real completed actions.
-- User understands the difference between standalone, direct goal, and milestone tasks.
+- User understands the difference between standalone, direct goal and milestone tasks.
+- User understands recurring tasks and uses them for repeated planned actions.
 
 Failure signals:
 
@@ -651,6 +835,7 @@ Failure signals:
 - Goals are ignored.
 - Milestones are ignored.
 - Reports are ignored.
+- Recurring tasks are ignored or misunderstood.
 - User returns to previous planner.
 
 ## Phase 9: Backend and sync
@@ -691,14 +876,16 @@ Main differentiator:
 - connect long-term goals with daily execution;
 - make task placement flexible;
 - keep Today practical;
+- support repeated planned actions without turning the app into a full habit/productivity suite too early;
 - avoid turning the app into a bloated “whole life” tracker too early.
 
 ## Current limitations
 
 - No time-of-day scheduling yet.
-- No recurring task planning yet.
+- Recurring task planning MVP exists, but advanced recurrence rules are not supported yet.
 - No habits.
 - No habit completion history.
+- Architecture stabilization is required before adding Habits.
 - Reports support only Today / Last 7 days / Last 14 days.
 - No custom selected-day report yet.
 - No custom report date ranges.
@@ -714,7 +901,6 @@ Main differentiator:
 - No serious design polish yet.
 - Sample seed data still exists for development.
 - State management is still custom ChangeNotifier-based; Riverpod is not introduced yet.
-
 
 ## Not doing now
 
