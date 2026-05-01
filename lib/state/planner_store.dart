@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 
-import '../data/repositories/planner_repository.dart';
 import '../features/goals/application/goal_repository.dart';
 import '../features/milestones/application/milestone_repository.dart';
 import '../features/tasks/application/task_application_service.dart';
 import '../features/tasks/application/task_repository.dart';
 import '../features/recurring/application/recurring_task_application_service.dart';
 import '../features/recurring/application/recurring_task_repository.dart';
+import '../features/planner/application/planner_cleanup_repository.dart';
 import 'planner_seed_service.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
@@ -17,12 +17,12 @@ import '../shared/planner_dates.dart';
 
 class PlannerStore extends ChangeNotifier {
   PlannerStore(
-    PlannerRepository repository,
+    PlannerCleanupRepository cleanupRepository,
     GoalRepository goalRepository,
     MilestoneRepository milestoneRepository,
     TaskRepository taskRepository,
     RecurringTaskRepository recurringTaskRepository,
-  ) : _repository = repository,
+  ) : _cleanupRepository = cleanupRepository,
       _goalRepository = goalRepository,
       _milestoneRepository = milestoneRepository,
       _taskRepository = taskRepository,
@@ -33,7 +33,7 @@ class PlannerStore extends ChangeNotifier {
         taskRepository: taskRepository,
       );
 
-  final PlannerRepository _repository;
+  final PlannerCleanupRepository _cleanupRepository;
   final GoalRepository _goalRepository;
   final MilestoneRepository _milestoneRepository;
   final TaskRepository _taskRepository;
@@ -137,7 +137,7 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(_repository.deleteGoalWithRelatedData(goalId));
+    _persist(_cleanupRepository.deleteGoalWithRelatedData(goalId));
   }
 
   void addMilestone(Milestone milestone) {
@@ -181,7 +181,9 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(_repository.deleteMilestoneAndMoveTasksToDirect(milestoneId));
+    _persist(
+      _cleanupRepository.deleteMilestoneAndMoveTasksToDirect(milestoneId),
+    );
   }
 
   void deleteMilestoneWithTasks(String milestoneId) {
@@ -206,7 +208,7 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(_repository.deleteMilestoneWithTasks(milestoneId));
+    _persist(_cleanupRepository.deleteMilestoneWithTasks(milestoneId));
   }
 
   void addTask(PlannerTask task) {

@@ -1,12 +1,14 @@
 import 'package:drift/drift.dart' as drift;
 
 import '../local/app_database.dart' as local;
+import '../../features/planner/application/planner_cleanup_repository.dart';
 
-class PlannerRepository {
-  const PlannerRepository(this._database);
+class DriftPlannerCleanupRepository implements PlannerCleanupRepository {
+  const DriftPlannerCleanupRepository(this._database);
 
   final local.AppDatabase _database;
 
+  @override
   Future<void> deleteGoalWithRelatedData(String goalId) async {
     await _database.transaction(() async {
       final recurringRules = await (_database.select(
@@ -39,6 +41,7 @@ class PlannerRepository {
     });
   }
 
+  @override
   Future<void> deleteMilestoneAndMoveTasksToDirect(String milestoneId) async {
     await _database.transaction(() async {
       await (_database.update(_database.tasks)
@@ -57,6 +60,7 @@ class PlannerRepository {
     });
   }
 
+  @override
   Future<void> deleteMilestoneWithTasks(String milestoneId) async {
     await _database.transaction(() async {
       final recurringRules = await (_database.select(
@@ -83,35 +87,5 @@ class PlannerRepository {
         _database.milestones,
       )..where((table) => table.id.equals(milestoneId))).go();
     });
-  }
-
-  Future<void> toggleTaskCompleted(String taskId) async {
-    final task = await (_database.select(
-      _database.tasks,
-    )..where((table) => table.id.equals(taskId))).getSingleOrNull();
-
-    if (task == null) {
-      return;
-    }
-
-    final nextCompletedState = !task.isCompleted;
-
-    await (_database.update(
-      _database.tasks,
-    )..where((table) => table.id.equals(taskId))).write(
-      local.TasksCompanion(
-        isCompleted: drift.Value(nextCompletedState),
-        completedAt: drift.Value(nextCompletedState ? DateTime.now() : null),
-      ),
-    );
-  }
-
-  Future<void> scheduleTaskForToday(String taskId) async {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-
-    await (_database.update(_database.tasks)
-          ..where((table) => table.id.equals(taskId)))
-        .write(local.TasksCompanion(scheduledDate: drift.Value(today)));
   }
 }
