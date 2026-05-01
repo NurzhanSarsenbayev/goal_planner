@@ -5,12 +5,7 @@ import 'package:flutter/material.dart';
 import 'actions/recurring_rule_dialog_actions.dart';
 import 'actions/goal_dialog_actions.dart';
 import 'actions/task_dialog_actions.dart';
-import '../data/local/app_database.dart' as local;
-import '../data/repositories/drift_planner_cleanup_repository.dart';
-import '../data/repositories/drift_task_repository.dart';
-import '../data/repositories/drift_goal_repository.dart';
-import '../data/repositories/drift_recurring_task_repository.dart';
-import '../data/repositories/drift_milestone_repository.dart';
+import 'composition/app_dependencies.dart';
 import '../models/goal.dart';
 import '../screens/calendar_screen.dart';
 import '../screens/goal_details_screen.dart';
@@ -30,12 +25,7 @@ class AppShell extends StatefulWidget {
 }
 
 class _AppShellState extends State<AppShell> {
-  late final local.AppDatabase _database;
-  late final DriftPlannerCleanupRepository _cleanupRepository;
-  late final DriftTaskRepository _taskRepository;
-  late final DriftGoalRepository _goalRepository;
-  late final DriftMilestoneRepository _milestoneRepository;
-  late final DriftRecurringTaskRepository _recurringTaskRepository;
+  late final AppDependencies _dependencies;
   late final PlannerStore _store;
   late final GoalDialogActions _goalDialogActions;
   late final TaskDialogActions _taskDialogActions;
@@ -49,21 +39,8 @@ class _AppShellState extends State<AppShell> {
   void initState() {
     super.initState();
 
-    _database = local.AppDatabase();
-
-    _cleanupRepository = DriftPlannerCleanupRepository(_database);
-    _goalRepository = DriftGoalRepository(_database);
-    _milestoneRepository = DriftMilestoneRepository(_database);
-    _taskRepository = DriftTaskRepository(_database);
-    _recurringTaskRepository = DriftRecurringTaskRepository(_database);
-
-    _store = PlannerStore(
-      _cleanupRepository,
-      _goalRepository,
-      _milestoneRepository,
-      _taskRepository,
-      _recurringTaskRepository,
-    );
+    _dependencies = AppDependencies.create();
+    _store = _dependencies.store;
 
     _goalDialogActions = GoalDialogActions(store: _store);
     _taskDialogActions = TaskDialogActions(store: _store);
@@ -76,8 +53,7 @@ class _AppShellState extends State<AppShell> {
   @override
   void dispose() {
     _store.removeListener(_onStoreChanged);
-    _store.dispose();
-    unawaited(_database.close());
+    unawaited(_dependencies.dispose());
 
     super.dispose();
   }
