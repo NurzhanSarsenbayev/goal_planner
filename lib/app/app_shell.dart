@@ -261,6 +261,7 @@ class _AppShellState extends State<AppShell> {
       context,
       goals: _store.goals,
       milestones: _store.milestones,
+      initialDate: startDate,
     );
 
     if (result == null) {

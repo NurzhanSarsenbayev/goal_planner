@@ -34,11 +34,13 @@ class AddRecurringTaskRuleDialog extends StatefulWidget {
     this.initialRule,
     this.dialogTitle = 'Add recurring task',
     this.submitLabel = 'Add',
+    this.initialDate,
   });
 
   final List<Goal> goals;
   final List<Milestone> milestones;
   final RecurringTaskRule? initialRule;
+  final DateTime? initialDate;
   final String dialogTitle;
   final String submitLabel;
 
@@ -88,6 +90,14 @@ class _AddRecurringTaskRuleDialogState
       _selectedMonthDay = initialRule.monthDay ?? 1;
       _selectedGoalId = initialRule.goalId;
       _selectedMilestoneId = initialRule.milestoneId;
+    } else if (widget.initialDate != null) {
+      final initialDate = widget.initialDate!;
+
+      _selectedWeekdays
+        ..clear()
+        ..add(initialDate.weekday);
+
+      _selectedMonthDay = initialDate.day;
     }
 
     _titleController.addListener(_onFormChanged);

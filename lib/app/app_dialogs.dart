@@ -119,11 +119,16 @@ Future<AddRecurringTaskRuleDraft?> showAddRecurringTaskRuleDialog(
   BuildContext context, {
   required List<Goal> goals,
   required List<Milestone> milestones,
+  DateTime? initialDate,
 }) {
   return showDialog<AddRecurringTaskRuleDraft>(
     context: context,
     builder: (context) {
-      return AddRecurringTaskRuleDialog(goals: goals, milestones: milestones);
+      return AddRecurringTaskRuleDialog(
+        goals: goals,
+        milestones: milestones,
+        initialDate: initialDate,
+      );
     },
   );
 }
