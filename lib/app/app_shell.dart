@@ -2,12 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'actions/recurring_rule_dialog_actions.dart';
 import '../data/local/app_database.dart' as local;
 import '../data/repositories/planner_repository.dart';
 import '../models/goal.dart';
 import '../models/planner_task.dart';
-import '../models/recurring_task_rule.dart';
-import '../shared/planner_dates.dart';
 import '../screens/calendar_screen.dart';
 import '../screens/goal_details_screen.dart';
 import '../screens/goals_screen.dart';
@@ -30,6 +29,7 @@ class _AppShellState extends State<AppShell> {
   late final local.AppDatabase _database;
   late final PlannerRepository _repository;
   late final PlannerStore _store;
+  late final RecurringRuleDialogActions _recurringRuleDialogActions;
 
   int _selectedIndex = 0;
 
@@ -42,6 +42,7 @@ class _AppShellState extends State<AppShell> {
     _database = local.AppDatabase();
     _repository = PlannerRepository(_database);
     _store = PlannerStore(_repository);
+    _recurringRuleDialogActions = RecurringRuleDialogActions(store: _store);
 
     _store.addListener(_onStoreChanged);
     unawaited(_store.initialize());
@@ -237,8 +238,12 @@ class _AppShellState extends State<AppShell> {
             builder: (context, _) {
               return RecurringTasksScreen(
                 rules: _store.recurringRules,
-                onAddRule: _showAddRecurringTaskRuleDialog,
-                onEditRule: _showEditRecurringTaskRuleDialog,
+                onAddRule: () {
+                  _recurringRuleDialogActions.showAddDialog(context);
+                },
+                onEditRule: (rule) {
+                  _recurringRuleDialogActions.showEditDialog(context, rule);
+                },
                 onRuleActiveChanged: (rule, isActive) {
                   _store.setRecurringTaskRuleActive(
                     ruleId: rule.id,
@@ -254,67 +259,6 @@ class _AppShellState extends State<AppShell> {
         },
       ),
     );
-  }
-
-  Future<void> _showAddRecurringTaskRuleDialog({DateTime? startDate}) async {
-    final result = await showAddRecurringTaskRuleDialog(
-      context,
-      goals: _store.goals,
-      milestones: _store.milestones,
-      initialDate: startDate,
-    );
-
-    if (result == null) {
-      return;
-    }
-
-    final now = DateTime.now();
-
-    final rule = RecurringTaskRule(
-      id: 'recurring_rule_${now.microsecondsSinceEpoch}',
-      title: result.title,
-      description: result.description,
-      goalId: result.goalId,
-      milestoneId: result.milestoneId,
-      recurrenceType: result.recurrenceType,
-      weekdays: result.weekdays,
-      monthDay: result.monthDay,
-      startDate: dateOnly(startDate ?? todayDate()),
-      createdAt: now,
-    );
-
-    _store.addRecurringTaskRule(rule);
-
-    if (startDate != null) {
-      _store.ensureRecurringTaskOccurrencesForMonth(
-        DateTime(startDate.year, startDate.month),
-      );
-    }
-  }
-
-  Future<void> _showEditRecurringTaskRuleDialog(RecurringTaskRule rule) async {
-    final result = await showEditRecurringTaskRuleDialog(
-      context,
-      rule: rule,
-      goals: _store.goals,
-      milestones: _store.milestones,
-    );
-
-    if (result == null) {
-      return;
-    }
-
-    final updatedRule = rule.copyWith(
-      title: result.title,
-      description: result.description,
-      goalId: result.goalId,
-      milestoneId: result.milestoneId,
-      recurrenceType: result.recurrenceType,
-      weekdays: result.weekdays,
-      monthDay: result.monthDay,
-    );
-
-    _store.updateRecurringTaskRule(updatedRule);
   }
 
   void _openGoalDetails(Goal goal) {
@@ -361,7 +305,7 @@ class _AppShellState extends State<AppShell> {
         onDeleteTask: _store.deleteTask,
         onAddTask: _showAddTaskForTodayDialog,
         onAddRecurringTask: () {
-          _showAddRecurringTaskRuleDialog();
+          _recurringRuleDialogActions.showAddDialog(context);
         },
       ),
       GoalsScreen(
@@ -385,7 +329,7 @@ class _AppShellState extends State<AppShell> {
         onEnsureRecurringTasksForMonth:
             _store.ensureRecurringTaskOccurrencesForMonth,
         onAddRecurringTaskForDate: (date) {
-          _showAddRecurringTaskRuleDialog(startDate: date);
+          _recurringRuleDialogActions.showAddDialog(context, startDate: date);
         },
       ),
       MoreScreen(
