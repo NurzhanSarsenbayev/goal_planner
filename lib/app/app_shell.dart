@@ -6,15 +6,11 @@ import 'actions/recurring_rule_dialog_actions.dart';
 import 'actions/goal_dialog_actions.dart';
 import 'actions/task_dialog_actions.dart';
 import 'composition/app_dependencies.dart';
-import '../models/goal.dart';
+import 'navigation/app_navigation_actions.dart';
 import '../screens/calendar_screen.dart';
-import '../screens/goal_details_screen.dart';
 import '../screens/goals_screen.dart';
-import '../screens/all_tasks_screen.dart';
 import '../screens/more_screen.dart';
 import '../screens/today_screen.dart';
-import '../screens/reports_screen.dart';
-import '../screens/recurring_tasks_screen.dart';
 import '../state/planner_store.dart';
 
 class AppShell extends StatefulWidget {
@@ -30,6 +26,7 @@ class _AppShellState extends State<AppShell> {
   late final GoalDialogActions _goalDialogActions;
   late final TaskDialogActions _taskDialogActions;
   late final RecurringRuleDialogActions _recurringRuleDialogActions;
+  late final AppNavigationActions _navigationActions;
 
   int _selectedIndex = 0;
 
@@ -45,6 +42,12 @@ class _AppShellState extends State<AppShell> {
     _goalDialogActions = GoalDialogActions(store: _store);
     _taskDialogActions = TaskDialogActions(store: _store);
     _recurringRuleDialogActions = RecurringRuleDialogActions(store: _store);
+
+    _navigationActions = AppNavigationActions(
+      store: _store,
+      taskDialogActions: _taskDialogActions,
+      recurringRuleDialogActions: _recurringRuleDialogActions,
+    );
 
     _store.addListener(_onStoreChanged);
     unawaited(_store.initialize());
@@ -66,127 +69,6 @@ class _AppShellState extends State<AppShell> {
     setState(() {
       _selectedIndex = index;
     });
-  }
-
-  void _openAllTasks() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return AnimatedBuilder(
-            animation: _store,
-            builder: (context, _) {
-              return AllTasksScreen(
-                goals: _store.goals,
-                milestones: _store.milestones,
-                tasks: _store.tasks,
-                recurringRules: _store.recurringRules,
-                onToggleTaskCompleted: _store.toggleTaskCompleted,
-                onTaskUpdated: _store.updateTask,
-                onTaskAttachedToGoal: _store.attachTaskToGoal,
-                onTaskDetachedFromGoal: _store.detachTaskFromGoal,
-                onDeleteTask: _store.deleteTask,
-                onScheduleTaskForToday: _store.scheduleTaskForToday,
-                onScheduleTaskForDate: _store.scheduleTaskForDate,
-                onCompleteTaskOnDate: _store.completeTaskOnDate,
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  void _openReports() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return AnimatedBuilder(
-            animation: _store,
-            builder: (context, _) {
-              return ReportsScreen(
-                goals: _store.goals,
-                tasks: _store.tasks,
-                onToggleTaskCompleted: _store.toggleTaskCompleted,
-                onEditTask: (task) {
-                  _taskDialogActions.showEditDialog(context, task);
-                },
-                onDeleteTask: _store.deleteTask,
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  void _openRecurringTasks() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return AnimatedBuilder(
-            animation: _store,
-            builder: (context, _) {
-              return RecurringTasksScreen(
-                rules: _store.recurringRules,
-                onAddRule: () {
-                  _recurringRuleDialogActions.showAddDialog(context);
-                },
-                onEditRule: (rule) {
-                  _recurringRuleDialogActions.showEditDialog(context, rule);
-                },
-                onRuleActiveChanged: (rule, isActive) {
-                  _store.setRecurringTaskRuleActive(
-                    ruleId: rule.id,
-                    isActive: isActive,
-                  );
-                },
-                onDeleteRule: (rule) {
-                  _store.deleteRecurringTaskRule(rule.id);
-                },
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  void _openGoalDetails(Goal goal) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return AnimatedBuilder(
-            animation: _store,
-            builder: (context, _) {
-              final currentGoal = _store.goals.firstWhere(
-                (item) => item.id == goal.id,
-                orElse: () => goal,
-              );
-
-              return GoalDetailsScreen(
-                goal: currentGoal,
-                milestones: _store.milestones,
-                tasks: _store.tasks,
-                onToggleTaskCompleted: _store.toggleTaskCompleted,
-                onDeleteTask: _store.deleteTask,
-                onTaskCreated: _store.addTask,
-                onTaskUpdated: _store.updateTask,
-                onTaskMovedToDirectGoal: _store.moveTaskToDirectGoal,
-                onTaskAssignedToMilestone: _store.assignTaskToMilestone,
-                onMilestoneCreated: _store.addMilestone,
-                onMilestoneUpdated: _store.updateMilestone,
-                onMilestoneDeletedAndTasksMovedToDirect:
-                    _store.deleteMilestoneAndMoveTasksToDirect,
-                onMilestoneDeletedWithTasks: _store.deleteMilestoneWithTasks,
-                onScheduleTaskForToday: _store.scheduleTaskForToday,
-                onScheduleTaskForDate: _store.scheduleTaskForDate,
-                onCompleteTaskOnDate: _store.completeTaskOnDate,
-              );
-            },
-          );
-        },
-      ),
-    );
   }
 
   @override
@@ -217,7 +99,9 @@ class _AppShellState extends State<AppShell> {
       GoalsScreen(
         goals: _store.goals,
         tasks: _store.tasks,
-        onGoalSelected: _openGoalDetails,
+        onGoalSelected: (goal) {
+          _navigationActions.openGoalDetails(context, goal);
+        },
         onEditGoal: (goal) {
           _goalDialogActions.showEditDialog(context, goal);
         },
@@ -249,9 +133,15 @@ class _AppShellState extends State<AppShell> {
         },
       ),
       MoreScreen(
-        onOpenAllTasks: _openAllTasks,
-        onOpenReports: _openReports,
-        onOpenRecurringTasks: _openRecurringTasks,
+        onOpenAllTasks: () {
+          _navigationActions.openAllTasks(context);
+        },
+        onOpenReports: () {
+          _navigationActions.openReports(context);
+        },
+        onOpenRecurringTasks: () {
+          _navigationActions.openRecurringTasks(context);
+        },
       ),
     ];
 
