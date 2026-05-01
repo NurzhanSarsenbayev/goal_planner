@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../data/repositories/planner_repository.dart';
 import '../features/tasks/application/task_application_service.dart';
+import '../features/tasks/application/task_repository.dart';
 import '../features/recurring/application/recurring_task_application_service.dart';
 import '../features/recurring/application/recurring_task_repository.dart';
 import 'planner_seed_service.dart';
@@ -13,10 +14,14 @@ import '../models/recurring_task_rule.dart';
 import '../shared/planner_dates.dart';
 
 class PlannerStore extends ChangeNotifier {
-  PlannerStore(this._repository, this._recurringTaskRepository)
-    : _seedService = PlannerSeedService(_repository);
+  PlannerStore(
+    this._repository,
+    this._taskRepository,
+    this._recurringTaskRepository,
+  ) : _seedService = PlannerSeedService(_repository);
 
   final PlannerRepository _repository;
+  final TaskRepository _taskRepository;
   final RecurringTaskRepository _recurringTaskRepository;
   final PlannerSeedService _seedService;
   final TaskApplicationService _taskApplicationService =
@@ -59,7 +64,7 @@ class PlannerStore extends ChangeNotifier {
   Future<void> _loadFromDatabase() async {
     _goals = await _repository.loadGoals();
     _milestones = await _repository.loadMilestones();
-    _tasks = await _repository.loadTasks();
+    _tasks = await _taskRepository.loadTasks();
     _recurringRules = await _recurringTaskRepository.loadRecurringTaskRules();
     _recurringExceptions = await _recurringTaskRepository
         .loadRecurringTaskExceptions();
@@ -743,12 +748,12 @@ class PlannerStore extends ChangeNotifier {
 
     final taskToPersist = result.taskToPersist;
     if (taskToPersist != null) {
-      _persist(_repository.saveTask(taskToPersist));
+      _persist(_taskRepository.saveTask(taskToPersist));
     }
 
     final taskIdToDelete = result.taskIdToDelete;
     if (taskIdToDelete != null) {
-      _persist(_repository.deleteTask(taskIdToDelete));
+      _persist(_taskRepository.deleteTask(taskIdToDelete));
     }
   }
 }
