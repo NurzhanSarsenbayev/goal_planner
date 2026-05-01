@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../data/repositories/planner_repository.dart';
 import '../features/tasks/application/task_application_service.dart';
 import '../features/recurring/application/recurring_task_application_service.dart';
+import '../features/recurring/application/recurring_task_repository.dart';
 import 'planner_seed_service.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
@@ -12,10 +13,11 @@ import '../models/recurring_task_rule.dart';
 import '../shared/planner_dates.dart';
 
 class PlannerStore extends ChangeNotifier {
-  PlannerStore(this._repository)
+  PlannerStore(this._repository, this._recurringTaskRepository)
     : _seedService = PlannerSeedService(_repository);
 
   final PlannerRepository _repository;
+  final RecurringTaskRepository _recurringTaskRepository;
   final PlannerSeedService _seedService;
   final TaskApplicationService _taskApplicationService =
       const TaskApplicationService();
@@ -58,8 +60,9 @@ class PlannerStore extends ChangeNotifier {
     _goals = await _repository.loadGoals();
     _milestones = await _repository.loadMilestones();
     _tasks = await _repository.loadTasks();
-    _recurringRules = await _repository.loadRecurringTaskRules();
-    _recurringExceptions = await _repository.loadRecurringTaskExceptions();
+    _recurringRules = await _recurringTaskRepository.loadRecurringTaskRules();
+    _recurringExceptions = await _recurringTaskRepository
+        .loadRecurringTaskExceptions();
   }
 
   void addGoal({required String title, required String description}) {
@@ -247,7 +250,7 @@ class PlannerStore extends ChangeNotifier {
     notifyListeners();
 
     _persist(
-      _repository.saveRecurringTaskRuleWithOccurrences(
+      _recurringTaskRepository.saveRecurringTaskRuleWithOccurrences(
         rule: ruleToPersist,
         generatedTasks: result.generatedTasks,
       ),
@@ -286,7 +289,11 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(_repository.deleteRecurringTaskRuleAndCleanSeries(ruleIdToDelete));
+    _persist(
+      _recurringTaskRepository.deleteRecurringTaskRuleAndCleanSeries(
+        ruleIdToDelete,
+      ),
+    );
   }
 
   void updateRecurringTaskRule(RecurringTaskRule updatedRule) {
@@ -311,10 +318,11 @@ class PlannerStore extends ChangeNotifier {
     notifyListeners();
 
     _persist(
-      _repository.updateRecurringTaskRuleAndReplaceUnfinishedOccurrences(
-        rule: ruleToPersist,
-        generatedTasks: result.generatedTasks,
-      ),
+      _recurringTaskRepository
+          .updateRecurringTaskRuleAndReplaceUnfinishedOccurrences(
+            rule: ruleToPersist,
+            generatedTasks: result.generatedTasks,
+          ),
     );
   }
 
@@ -377,7 +385,7 @@ class PlannerStore extends ChangeNotifier {
     notifyListeners();
 
     _persist(
-      _repository.deleteTaskWithRecurringException(
+      _recurringTaskRepository.deleteTaskWithRecurringException(
         taskId: taskIdToDelete,
         exception: exceptionToPersist,
       ),
@@ -409,7 +417,7 @@ class PlannerStore extends ChangeNotifier {
     notifyListeners();
 
     _persist(
-      _repository.updateTaskWithRecurringException(
+      _recurringTaskRepository.updateTaskWithRecurringException(
         task: taskToPersist,
         exception: exceptionToPersist,
       ),
@@ -437,7 +445,7 @@ class PlannerStore extends ChangeNotifier {
     notifyListeners();
 
     _persist(
-      _repository.updateTaskWithRecurringException(
+      _recurringTaskRepository.updateTaskWithRecurringException(
         task: taskToPersist,
         exception: exceptionToPersist,
       ),
@@ -465,9 +473,10 @@ class PlannerStore extends ChangeNotifier {
     notifyListeners();
 
     _persist(
-      _repository.deactivateRecurringTaskRuleAndDeleteUnfinishedOccurrences(
-        ruleToPersist,
-      ),
+      _recurringTaskRepository
+          .deactivateRecurringTaskRuleAndDeleteUnfinishedOccurrences(
+            ruleToPersist,
+          ),
     );
   }
 
@@ -493,7 +502,7 @@ class PlannerStore extends ChangeNotifier {
     notifyListeners();
 
     _persist(
-      _repository.saveRecurringTaskRuleWithOccurrences(
+      _recurringTaskRepository.saveRecurringTaskRuleWithOccurrences(
         rule: ruleToPersist,
         generatedTasks: result.generatedTasks,
       ),
@@ -649,7 +658,7 @@ class PlannerStore extends ChangeNotifier {
 
     _tasks = [..._tasks, ...generatedTasks];
 
-    await Future.wait(generatedTasks.map(_repository.saveTask));
+    await _recurringTaskRepository.saveGeneratedOccurrences(generatedTasks);
   }
 
   void ensureRecurringTaskOccurrencesForMonth(DateTime visibleMonth) {
@@ -673,9 +682,7 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(
-      Future.wait(generatedTasks.map(_repository.saveTask)).then((_) {}),
-    );
+    _persist(_recurringTaskRepository.saveGeneratedOccurrences(generatedTasks));
   }
 
   void _updateGoalById(String goalId, Goal Function(Goal goal) update) {
