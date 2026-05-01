@@ -2,7 +2,6 @@ import 'package:drift/drift.dart' as drift;
 
 import '../../models/goal.dart' as domain;
 import '../../models/milestone.dart' as domain;
-import '../../models/planner_task.dart' as domain;
 import '../local/app_database.dart' as local;
 import 'planner_mappers.dart';
 
@@ -21,12 +20,6 @@ class PlannerRepository {
     final rows = await _database.select(_database.milestones).get();
 
     return rows.map(mapMilestone).toList();
-  }
-
-  Future<List<domain.PlannerTask>> loadTasks() async {
-    final rows = await _database.select(_database.tasks).get();
-
-    return rows.map(mapTask).toList();
   }
 
   Future<void> saveGoal(domain.Goal goal) async {
@@ -133,49 +126,6 @@ class PlannerRepository {
         _database.milestones,
       )..where((table) => table.id.equals(milestoneId))).go();
     });
-  }
-
-  Future<void> saveTask(domain.PlannerTask task) async {
-    await _database
-        .into(_database.tasks)
-        .insertOnConflictUpdate(
-          local.TasksCompanion.insert(
-            id: task.id,
-            goalId: drift.Value(task.goalId),
-            milestoneId: drift.Value(task.milestoneId),
-            recurringRuleId: drift.Value(task.recurringRuleId),
-            title: task.title,
-            description: drift.Value(task.description),
-            scheduledDate: drift.Value(task.scheduledDate),
-            isCompleted: drift.Value(task.isCompleted),
-            completedAt: drift.Value(task.completedAt),
-            createdAt: task.createdAt,
-          ),
-        );
-  }
-
-  Future<void> deleteTask(String taskId) async {
-    await (_database.delete(
-      _database.tasks,
-    )..where((table) => table.id.equals(taskId))).go();
-  }
-
-  Future<void> updateTask(domain.PlannerTask task) async {
-    await (_database.update(
-      _database.tasks,
-    )..where((table) => table.id.equals(task.id))).write(
-      local.TasksCompanion(
-        goalId: drift.Value(task.goalId),
-        milestoneId: drift.Value(task.milestoneId),
-        recurringRuleId: drift.Value(task.recurringRuleId),
-        title: drift.Value(task.title),
-        description: drift.Value(task.description),
-        scheduledDate: drift.Value(task.scheduledDate),
-        isCompleted: drift.Value(task.isCompleted),
-        completedAt: drift.Value(task.completedAt),
-        createdAt: drift.Value(task.createdAt),
-      ),
-    );
   }
 
   Future<void> toggleTaskCompleted(String taskId) async {

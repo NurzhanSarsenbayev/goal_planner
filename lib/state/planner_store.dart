@@ -18,7 +18,10 @@ class PlannerStore extends ChangeNotifier {
     this._repository,
     this._taskRepository,
     this._recurringTaskRepository,
-  ) : _seedService = PlannerSeedService(_repository);
+  ) : _seedService = PlannerSeedService(
+        repository: _repository,
+        taskRepository: _taskRepository,
+      );
 
   final PlannerRepository _repository;
   final TaskRepository _taskRepository;
