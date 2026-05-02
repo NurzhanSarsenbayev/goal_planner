@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../app/app_dialogs.dart';
+import '../features/calendar/application/calendar_task_view_builder.dart';
 import '../models/goal.dart';
 import '../models/planner_task.dart';
 import '../shared/planner_dates.dart';
@@ -45,6 +46,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
   late DateTime _visibleMonth;
   late DateTime _selectedDate;
 
+  final CalendarTaskViewBuilder _taskViewBuilder =
+      const CalendarTaskViewBuilder();
+
   @override
   void initState() {
     super.initState();
@@ -64,8 +68,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedDateTasks = _tasksForDate(_selectedDate);
-    final datesWithTasks = _datesWithTasks(widget.tasks);
+    final selectedDateTasks = _taskViewBuilder.tasksForDate(
+      tasks: widget.tasks,
+      date: _selectedDate,
+    );
+    final datesWithTasks = _taskViewBuilder.datesWithTasks(widget.tasks);
 
     return Stack(
       children: [
@@ -95,7 +102,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
               for (final task in selectedDateTasks) ...[
                 TaskCard(
                   task: task,
-                  goal: _findGoalById(task.goalId),
+                  goal: _taskViewBuilder.findGoalById(
+                    goals: widget.goals,
+                    goalId: task.goalId,
+                  ),
                   onToggleCompleted: () {
                     handleTaskCompletionWithDateFlow(
                       context,
@@ -246,49 +256,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
     widget.onScheduleTaskForDate(taskId: task.id, scheduledDate: selectedDate);
   }
 
-  List<PlannerTask> _tasksForDate(DateTime date) {
-    final selectedDate = dateOnly(date);
-
-    final selectedTasks = widget.tasks.where((task) {
-      final scheduledDate = task.scheduledDate;
-
-      if (scheduledDate == null) {
-        return false;
-      }
-
-      return dateOnly(scheduledDate) == selectedDate;
-    }).toList()..sort((first, second) => first.title.compareTo(second.title));
-
-    return selectedTasks;
-  }
-
-  Set<DateTime> _datesWithTasks(List<PlannerTask> sourceTasks) {
-    return sourceTasks
-        .where((task) => task.scheduledDate != null)
-        .map((task) => dateOnly(task.scheduledDate!))
-        .toSet();
-  }
-
   String _selectedDateTitle(DateTime date) {
     return 'Selected day: ${_dateGroupTitle(date)}';
   }
 
   String _dateGroupTitle(DateTime date) {
     return relativePlannerDateTitle(date);
-  }
-
-  Goal? _findGoalById(String? goalId) {
-    if (goalId == null) {
-      return null;
-    }
-
-    for (final goal in widget.goals) {
-      if (goal.id == goalId) {
-        return goal;
-      }
-    }
-
-    return null;
   }
 }
 
