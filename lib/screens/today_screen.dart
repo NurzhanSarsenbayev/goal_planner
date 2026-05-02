@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../app/app_dialogs.dart';
+import '../features/today/application/today_task_view_builder.dart';
 import '../models/goal.dart';
 import '../models/planner_task.dart';
 import '../widgets/common/placeholder_screen.dart';
 import '../widgets/tasks/task_card.dart';
-import '../shared/planner_dates.dart';
 
 class TodayScreen extends StatelessWidget {
   const TodayScreen({
@@ -38,6 +38,7 @@ class TodayScreen extends StatelessWidget {
   final void Function(String taskId) onDeleteTask;
   final VoidCallback onAddTask;
   final VoidCallback onAddRecurringTask;
+  final TodayTaskViewBuilder _viewBuilder = const TodayTaskViewBuilder();
 
   Future<void> _showScheduleTaskDatePicker(
     BuildContext context,
@@ -97,22 +98,11 @@ class TodayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final overdueTasks = tasks.where(_isOverdue).toList()
-      ..sort((first, second) {
-        return first.scheduledDate!.compareTo(second.scheduledDate!);
-      });
-
-    final pendingTodayTasks = tasks
-        .where((task) => task.isScheduledForToday && !task.isCompleted)
-        .toList();
-
-    final doneTodayTasks = tasks.where(_wasCompletedToday).toList();
+    final view = _viewBuilder.build(goals: goals, tasks: tasks);
 
     return Stack(
       children: [
-        if (overdueTasks.isEmpty &&
-            pendingTodayTasks.isEmpty &&
-            doneTodayTasks.isEmpty)
+        if (view.isEmpty)
           const PlaceholderScreen(
             title: 'Today',
             description: 'No tasks scheduled for today yet.',
@@ -122,11 +112,11 @@ class TodayScreen extends StatelessWidget {
           ListView(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
             children: [
-              if (overdueTasks.isNotEmpty) ...[
+              if (view.overdueTasks.isNotEmpty) ...[
                 Text('Overdue', style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
-                for (final task in overdueTasks) ...[
-                  _buildTaskCard(context, task),
+                for (final task in view.overdueTasks) ...[
+                  _buildTaskCard(context, view, task),
                   const SizedBox(height: 8),
                 ],
                 const SizedBox(height: 24),
@@ -136,26 +126,26 @@ class TodayScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
-              if (pendingTodayTasks.isEmpty)
+              if (view.pendingTodayTasks.isEmpty)
                 Text(
                   'No tasks left for today.',
                   style: Theme.of(context).textTheme.bodyMedium,
                 )
               else
-                for (final task in pendingTodayTasks) ...[
-                  _buildTaskCard(context, task),
+                for (final task in view.pendingTodayTasks) ...[
+                  _buildTaskCard(context, view, task),
                   const SizedBox(height: 8),
                 ],
 
-              if (doneTodayTasks.isNotEmpty) ...[
+              if (view.doneTodayTasks.isNotEmpty) ...[
                 const SizedBox(height: 24),
                 Text(
                   'Done today',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(height: 8),
-                for (final task in doneTodayTasks) ...[
-                  _buildTaskCard(context, task),
+                for (final task in view.doneTodayTasks) ...[
+                  _buildTaskCard(context, view, task),
                   const SizedBox(height: 8),
                 ],
               ],
@@ -176,42 +166,12 @@ class TodayScreen extends StatelessWidget {
     );
   }
 
-  Goal? _findGoalById(String? goalId) {
-    if (goalId == null) {
-      return null;
-    }
-
-    for (final goal in goals) {
-      if (goal.id == goalId) {
-        return goal;
-      }
-    }
-
-    return null;
-  }
-
-  bool _wasCompletedToday(PlannerTask task) {
-    final completedAt = task.completedAt;
-
-    if (completedAt == null) {
-      return false;
-    }
-
-    return dateOnly(completedAt) == todayDate();
-  }
-
-  bool _isOverdue(PlannerTask task) {
-    final scheduledDate = task.scheduledDate;
-
-    if (scheduledDate == null || task.isCompleted) {
-      return false;
-    }
-
-    return dateOnly(scheduledDate).isBefore(todayDate());
-  }
-
-  Widget _buildTaskCard(BuildContext context, PlannerTask task) {
-    final goal = _findGoalById(task.goalId);
+  Widget _buildTaskCard(
+    BuildContext context,
+    TodayTaskView view,
+    PlannerTask task,
+  ) {
+    final goal = view.findGoalById(task.goalId);
     final isStandaloneTask = task.goalId == null;
     final isGoalLinkedTask = task.goalId != null;
 
@@ -235,7 +195,7 @@ class TodayScreen extends StatelessWidget {
       onRemoveFromToday: task.isScheduledForToday
           ? () => onRemoveTaskFromToday(task.id)
           : null,
-      onUnschedule: _isOverdue(task)
+      onUnschedule: view.isOverdue(task)
           ? () => onRemoveTaskFromToday(task.id)
           : null,
       onScheduleDate: () {
