@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../features/goals/application/goal_details_view_builder.dart';
-import '../features/goals/presentation/goal_details_dialog_actions.dart';
-import '../models/goal.dart';
-import '../models/milestone.dart';
-import '../models/planner_task.dart';
-import '../widgets/tasks/direct_goal_tasks_section.dart';
-import '../widgets/goals/goal_header.dart';
-import '../widgets/milestones/milestones_section.dart';
+import '../../../../models/goal.dart';
+import '../../../../models/milestone.dart';
+import '../../../../models/planner_task.dart';
+import '../../application/goal_details_view_builder.dart';
+import '../goal_details_dialog_actions.dart';
+import '../widgets/direct_goal_tasks_section.dart';
+import '../widgets/goal_header.dart';
+import '../../../milestones/presentation/widgets/milestones_section.dart';
 
 class GoalDetailsScreen extends StatelessWidget {
   const GoalDetailsScreen({

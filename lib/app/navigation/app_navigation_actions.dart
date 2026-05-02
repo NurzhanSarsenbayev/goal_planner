@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../models/goal.dart';
+import '../../features/goals/presentation/screens/goal_details_screen.dart';
 import '../../screens/all_tasks_screen.dart';
-import '../../screens/goal_details_screen.dart';
 import '../../screens/recurring_tasks_screen.dart';
 import '../../screens/reports_screen.dart';
 import '../../state/planner_store.dart';

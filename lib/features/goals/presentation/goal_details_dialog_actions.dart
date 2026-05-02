@@ -227,7 +227,6 @@ class GoalDetailsDialogActions {
       task: task,
       onToggleTaskCompleted: onToggleTaskCompleted,
       onCompleteTaskOnDate: onCompleteTaskOnDate,
-    );git add .
-    git commit -m "Extract goal details dialog actions"
+    );
   }
 }

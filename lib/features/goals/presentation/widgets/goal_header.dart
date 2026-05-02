@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/goal.dart';
+import '../../../../models/goal.dart';
 
 class GoalHeader extends StatelessWidget {
   const GoalHeader({

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../models/goal.dart';
-import '../../models/milestone.dart';
-import '../../models/planner_task.dart';
+import '../../../../models/goal.dart';
+import '../../../../models/milestone.dart';
+import '../../../../models/planner_task.dart';
+import '../../../../widgets/common/placeholder_screen.dart';
+import '../../../../widgets/common/section_header.dart';
 import 'milestone_card.dart';
-import '../common/placeholder_screen.dart';
-import '../common/section_header.dart';
 
 class MilestonesSection extends StatelessWidget {
   const MilestonesSection({
