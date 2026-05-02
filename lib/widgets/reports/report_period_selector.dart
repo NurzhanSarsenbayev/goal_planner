@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../reports/report_period.dart';
+import '../../features/reports/domain/report_period.dart';
 
 class ReportPeriodSelector extends StatelessWidget {
   const ReportPeriodSelector({

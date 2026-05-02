@@ -1,8 +1,8 @@
-import '../models/goal.dart';
-import '../models/planner_task.dart';
-import '../shared/planner_dates.dart';
-import 'report_period.dart';
-import 'report_summary.dart';
+import '../../../models/goal.dart';
+import '../../../models/planner_task.dart';
+import '../../../shared/planner_dates.dart';
+import '../domain/report_period.dart';
+import '../domain/report_summary.dart';
 
 ReportSummary buildReportSummary({
   required List<Goal> goals,

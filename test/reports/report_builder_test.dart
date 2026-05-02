@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:goal_planner/models/goal.dart';
 import 'package:goal_planner/models/planner_task.dart';
-import 'package:goal_planner/reports/report_builder.dart';
-import 'package:goal_planner/reports/report_period.dart';
+import 'package:goal_planner/features/reports/application/report_builder.dart';
+import 'package:goal_planner/features/reports/domain/report_period.dart';
 
 void main() {
   group('buildReportSummary', () {

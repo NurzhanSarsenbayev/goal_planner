@@ -1,5 +1,5 @@
-import '../models/goal.dart';
-import '../models/planner_task.dart';
+import '../../../models/goal.dart';
+import '../../../models/planner_task.dart';
 import 'report_period.dart';
 
 class ReportSummary {

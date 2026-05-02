@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../models/goal.dart';
 import '../models/planner_task.dart';
-import '../reports/report_builder.dart';
-import '../reports/report_period.dart';
+import '../features/reports/application/report_builder.dart';
+import '../features/reports/domain/report_period.dart';
 import '../widgets/reports/day_report_section.dart';
 import '../widgets/reports/empty_report_card.dart';
 import '../widgets/reports/goal_report_section.dart';
