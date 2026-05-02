@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../features/goals/application/goal_details_view_builder.dart';
+import '../features/goals/presentation/goal_details_dialog_actions.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
-import '../widgets/milestones/delete_milestone_dialog.dart';
 import '../widgets/tasks/direct_goal_tasks_section.dart';
 import '../widgets/goals/goal_header.dart';
-import '../widgets/milestones/milestone_dialog.dart';
 import '../widgets/milestones/milestones_section.dart';
-import '../widgets/milestones/move_task_to_milestone_dialog.dart';
-import '../widgets/tasks/task_dialog.dart';
-import '../app/app_dialogs.dart';
 
 class GoalDetailsScreen extends StatelessWidget {
   const GoalDetailsScreen({
@@ -71,199 +67,8 @@ class GoalDetailsScreen extends StatelessWidget {
   final void Function({required String taskId, required DateTime completedAt})
   onCompleteTaskOnDate;
   final GoalDetailsViewBuilder _viewBuilder = const GoalDetailsViewBuilder();
-
-  Future<void> _showAddTaskDialog(
-    BuildContext context, {
-    String? milestoneId,
-  }) async {
-    final result = await showDialog<TaskDraft>(
-      context: context,
-      builder: (context) {
-        return const TaskDialog();
-      },
-    );
-
-    if (result == null) {
-      return;
-    }
-
-    final now = DateTime.now();
-
-    final task = PlannerTask(
-      id: 'task_${now.microsecondsSinceEpoch}',
-      goalId: goal.id,
-      milestoneId: milestoneId,
-      title: result.title,
-      description: result.description,
-      createdAt: now,
-    );
-
-    onTaskCreated(task);
-  }
-
-  Future<void> _showEditTaskDialog(
-    BuildContext context,
-    PlannerTask task,
-  ) async {
-    final result = await showDialog<TaskDraft>(
-      context: context,
-      builder: (context) {
-        return TaskDialog(
-          initialTitle: task.title,
-          initialDescription: task.description,
-          title: 'Edit task',
-          submitLabel: 'Save',
-        );
-      },
-    );
-
-    if (result == null) {
-      return;
-    }
-
-    onTaskUpdated(
-      taskId: task.id,
-      title: result.title,
-      description: result.description,
-    );
-  }
-
-  Future<void> _showMoveTaskToMilestoneDialog(
-    BuildContext context,
-    PlannerTask task,
-  ) async {
-    final view = _viewBuilder.build(
-      goal: goal,
-      milestones: milestones,
-      tasks: tasks,
-    );
-    final result = await showDialog<Milestone>(
-      context: context,
-      builder: (context) {
-        return MoveTaskToMilestoneDialog(milestones: view.goalMilestones);
-      },
-    );
-
-    if (result == null) {
-      return;
-    }
-
-    onTaskAssignedToMilestone(taskId: task.id, milestoneId: result.id);
-  }
-
-  Future<void> _showScheduleTaskDatePicker(
-    BuildContext context,
-    PlannerTask task,
-  ) async {
-    final selectedDate = await showScheduleTaskDatePicker(
-      context,
-      initialDate: task.scheduledDate,
-    );
-
-    if (selectedDate == null) {
-      return;
-    }
-
-    onScheduleTaskForDate(taskId: task.id, scheduledDate: selectedDate);
-  }
-
-  Future<void> _showAddMilestoneDialog(BuildContext context) async {
-    final result = await showDialog<MilestoneDraft>(
-      context: context,
-      builder: (context) {
-        return const MilestoneDialog();
-      },
-    );
-
-    if (result == null) {
-      return;
-    }
-
-    final now = DateTime.now();
-
-    final milestone = Milestone(
-      id: 'milestone_${now.microsecondsSinceEpoch}',
-      goalId: goal.id,
-      title: result.title,
-      description: result.description,
-      createdAt: now,
-    );
-
-    onMilestoneCreated(milestone);
-  }
-
-  Future<void> _showEditMilestoneDialog(
-    BuildContext context,
-    Milestone milestone,
-  ) async {
-    final result = await showDialog<MilestoneDraft>(
-      context: context,
-      builder: (context) {
-        return MilestoneDialog(
-          initialTitle: milestone.title,
-          initialDescription: milestone.description,
-          title: 'Edit milestone',
-          submitLabel: 'Save',
-        );
-      },
-    );
-
-    if (result == null) {
-      return;
-    }
-
-    onMilestoneUpdated(
-      milestoneId: milestone.id,
-      title: result.title,
-      description: result.description,
-    );
-  }
-
-  Future<void> _showDeleteMilestoneDialog(
-    BuildContext context,
-    Milestone milestone,
-  ) async {
-    final view = _viewBuilder.build(
-      goal: goal,
-      milestones: milestones,
-      tasks: tasks,
-    );
-
-    final milestoneTasks = view.tasksForMilestone(milestone.id);
-
-    final result = await showDialog<DeleteMilestoneAction>(
-      context: context,
-      builder: (context) {
-        return DeleteMilestoneDialog(
-          milestoneTitle: milestone.title,
-          taskCount: milestoneTasks.length,
-        );
-      },
-    );
-
-    if (result == null) {
-      return;
-    }
-
-    switch (result) {
-      case DeleteMilestoneAction.moveTasksToDirect:
-        onMilestoneDeletedAndTasksMovedToDirect(milestone.id);
-      case DeleteMilestoneAction.deleteTasks:
-        onMilestoneDeletedWithTasks(milestone.id);
-    }
-  }
-
-  void _toggleTaskCompletedWithDateFlow(
-    BuildContext context,
-    PlannerTask task,
-  ) {
-    handleTaskCompletionWithDateFlow(
-      context,
-      task: task,
-      onToggleTaskCompleted: onToggleTaskCompleted,
-      onCompleteTaskOnDate: onCompleteTaskOnDate,
-    );
-  }
+  final GoalDetailsDialogActions _dialogActions =
+      const GoalDetailsDialogActions();
 
   @override
   Widget build(BuildContext context) {
@@ -287,26 +92,60 @@ class GoalDetailsScreen extends StatelessWidget {
             goal: goal,
             milestones: view.goalMilestones,
             goalTasks: view.goalTasks,
-            onAddMilestone: () => _showAddMilestoneDialog(context),
+            onAddMilestone: () {
+              _dialogActions.showAddMilestoneDialog(
+                context,
+                goal: goal,
+                onMilestoneCreated: onMilestoneCreated,
+              );
+            },
             onEditMilestone: (milestone) {
-              _showEditMilestoneDialog(context, milestone);
+              _dialogActions.showEditMilestoneDialog(
+                context,
+                milestone: milestone,
+                onMilestoneUpdated: onMilestoneUpdated,
+              );
             },
             onDeleteMilestone: (milestone) {
-              _showDeleteMilestoneDialog(context, milestone);
+              _dialogActions.showDeleteMilestoneDialog(
+                context,
+                milestone: milestone,
+                taskCount: view.tasksForMilestone(milestone.id).length,
+                onMoveTasksToDirect: onMilestoneDeletedAndTasksMovedToDirect,
+                onDeleteTasks: onMilestoneDeletedWithTasks,
+              );
             },
             onAddTaskToMilestone: (milestoneId) {
-              _showAddTaskDialog(context, milestoneId: milestoneId);
+              _dialogActions.showAddTaskDialog(
+                context,
+                goal: goal,
+                milestoneId: milestoneId,
+                onTaskCreated: onTaskCreated,
+              );
             },
             onToggleTaskCompleted: (task) {
-              _toggleTaskCompletedWithDateFlow(context, task);
+              _dialogActions.toggleTaskCompletedWithDateFlow(
+                context,
+                task: task,
+                onToggleTaskCompleted: onToggleTaskCompleted,
+                onCompleteTaskOnDate: onCompleteTaskOnDate,
+              );
             },
             onEditTask: (task) {
-              _showEditTaskDialog(context, task);
+              _dialogActions.showEditTaskDialog(
+                context,
+                task: task,
+                onTaskUpdated: onTaskUpdated,
+              );
             },
             onMoveTaskToDirectGoal: onTaskMovedToDirectGoal,
             onScheduleTaskForToday: onScheduleTaskForToday,
             onScheduleTaskForDate: (task) {
-              _showScheduleTaskDatePicker(context, task);
+              _dialogActions.showScheduleTaskDatePicker(
+                context,
+                task: task,
+                onScheduleTaskForDate: onScheduleTaskForDate,
+              );
             },
             onDeleteTask: onDeleteTask,
           ),
@@ -314,19 +153,43 @@ class GoalDetailsScreen extends StatelessWidget {
           DirectGoalTasksSection(
             goal: goal,
             tasks: view.directGoalTasks,
-            onAddTask: () => _showAddTaskDialog(context),
+            onAddTask: () {
+              _dialogActions.showAddTaskDialog(
+                context,
+                goal: goal,
+                onTaskCreated: onTaskCreated,
+              );
+            },
             onToggleTaskCompleted: (task) {
-              _toggleTaskCompletedWithDateFlow(context, task);
+              _dialogActions.toggleTaskCompletedWithDateFlow(
+                context,
+                task: task,
+                onToggleTaskCompleted: onToggleTaskCompleted,
+                onCompleteTaskOnDate: onCompleteTaskOnDate,
+              );
             },
             onEditTask: (task) {
-              _showEditTaskDialog(context, task);
+              _dialogActions.showEditTaskDialog(
+                context,
+                task: task,
+                onTaskUpdated: onTaskUpdated,
+              );
             },
             onMoveTaskToMilestone: (task) {
-              _showMoveTaskToMilestoneDialog(context, task);
+              _dialogActions.showMoveTaskToMilestoneDialog(
+                context,
+                task: task,
+                milestones: view.goalMilestones,
+                onTaskAssignedToMilestone: onTaskAssignedToMilestone,
+              );
             },
             onScheduleTaskForToday: onScheduleTaskForToday,
             onScheduleTaskForDate: (task) {
-              _showScheduleTaskDatePicker(context, task);
+              _dialogActions.showScheduleTaskDatePicker(
+                context,
+                task: task,
+                onScheduleTaskForDate: onScheduleTaskForDate,
+              );
             },
             onDeleteTask: onDeleteTask,
           ),
