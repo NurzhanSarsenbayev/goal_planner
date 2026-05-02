@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../features/goals/application/goal_details_view_builder.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
@@ -69,38 +70,7 @@ class GoalDetailsScreen extends StatelessWidget {
   onScheduleTaskForDate;
   final void Function({required String taskId, required DateTime completedAt})
   onCompleteTaskOnDate;
-
-  List<PlannerTask> get goalTasks {
-    return tasks.where((task) => task.goalId == goal.id).toList();
-  }
-
-  List<Milestone> get goalMilestones {
-    return milestones
-        .where((milestone) => milestone.goalId == goal.id)
-        .toList();
-  }
-
-  List<PlannerTask> get directGoalTasks {
-    final milestoneIds = goalMilestones
-        .map((milestone) => milestone.id)
-        .toSet();
-
-    return goalTasks
-        .where(
-          (task) =>
-              task.milestoneId == null ||
-              !milestoneIds.contains(task.milestoneId),
-        )
-        .toList();
-  }
-
-  int get completedTasks {
-    return goalTasks.where((task) => task.isCompleted).length;
-  }
-
-  List<PlannerTask> tasksForMilestone(String milestoneId) {
-    return tasks.where((task) => task.milestoneId == milestoneId).toList();
-  }
+  final GoalDetailsViewBuilder _viewBuilder = const GoalDetailsViewBuilder();
 
   Future<void> _showAddTaskDialog(
     BuildContext context, {
@@ -162,10 +132,15 @@ class GoalDetailsScreen extends StatelessWidget {
     BuildContext context,
     PlannerTask task,
   ) async {
+    final view = _viewBuilder.build(
+      goal: goal,
+      milestones: milestones,
+      tasks: tasks,
+    );
     final result = await showDialog<Milestone>(
       context: context,
       builder: (context) {
-        return MoveTaskToMilestoneDialog(milestones: goalMilestones);
+        return MoveTaskToMilestoneDialog(milestones: view.goalMilestones);
       },
     );
 
@@ -248,7 +223,13 @@ class GoalDetailsScreen extends StatelessWidget {
     BuildContext context,
     Milestone milestone,
   ) async {
-    final milestoneTasks = tasksForMilestone(milestone.id);
+    final view = _viewBuilder.build(
+      goal: goal,
+      milestones: milestones,
+      tasks: tasks,
+    );
+
+    final milestoneTasks = view.tasksForMilestone(milestone.id);
 
     final result = await showDialog<DeleteMilestoneAction>(
       context: context,
@@ -286,6 +267,11 @@ class GoalDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final view = _viewBuilder.build(
+      goal: goal,
+      milestones: milestones,
+      tasks: tasks,
+    );
     return Scaffold(
       appBar: AppBar(title: Text(goal.title)),
       body: ListView(
@@ -293,14 +279,14 @@ class GoalDetailsScreen extends StatelessWidget {
         children: [
           GoalHeader(
             goal: goal,
-            totalTasks: goalTasks.length,
-            completedTasks: completedTasks,
+            totalTasks: view.goalTasks.length,
+            completedTasks: view.completedTasks,
           ),
           const SizedBox(height: 16),
           MilestonesSection(
             goal: goal,
-            milestones: goalMilestones,
-            goalTasks: goalTasks,
+            milestones: view.goalMilestones,
+            goalTasks: view.goalTasks,
             onAddMilestone: () => _showAddMilestoneDialog(context),
             onEditMilestone: (milestone) {
               _showEditMilestoneDialog(context, milestone);
@@ -327,7 +313,7 @@ class GoalDetailsScreen extends StatelessWidget {
           const SizedBox(height: 16),
           DirectGoalTasksSection(
             goal: goal,
-            tasks: directGoalTasks,
+            tasks: view.directGoalTasks,
             onAddTask: () => _showAddTaskDialog(context),
             onToggleTaskCompleted: (task) {
               _toggleTaskCompletedWithDateFlow(context, task);
