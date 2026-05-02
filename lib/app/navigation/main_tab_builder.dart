@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../screens/calendar_screen.dart';
+import '../../features/calendar/presentation/screens/calendar_screen.dart';
 import '../../screens/goals_screen.dart';
 import '../../screens/more_screen.dart';
 import '../../screens/today_screen.dart';

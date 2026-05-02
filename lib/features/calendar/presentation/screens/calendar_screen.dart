@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../app/app_dialogs.dart';
-import '../features/calendar/application/calendar_task_view_builder.dart';
-import '../models/goal.dart';
-import '../models/planner_task.dart';
-import '../shared/planner_dates.dart';
-import '../widgets/tasks/task_card.dart';
-import '../widgets/calendar/calendar_month_grid.dart';
+import '../../../../app/app_dialogs.dart';
+import '../../../../models/goal.dart';
+import '../../../../models/planner_task.dart';
+import '../../../../shared/planner_dates.dart';
+import '../../../../widgets/tasks/task_card.dart';
+import '../../application/calendar_task_view_builder.dart';
+import '../widgets/calendar_month_grid.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({
