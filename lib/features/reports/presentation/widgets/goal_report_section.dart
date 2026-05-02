@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../models/goal.dart';
-import '../../models/planner_task.dart';
+import '../../../../models/goal.dart';
+import '../../../../models/planner_task.dart';
 
 class GoalReportSection extends StatelessWidget {
   const GoalReportSection({super.key, required this.goal, required this.tasks});

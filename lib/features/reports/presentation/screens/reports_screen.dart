@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../models/goal.dart';
-import '../models/planner_task.dart';
-import '../features/reports/application/report_builder.dart';
-import '../features/reports/domain/report_period.dart';
-import '../widgets/reports/day_report_section.dart';
-import '../widgets/reports/empty_report_card.dart';
-import '../widgets/reports/goal_report_section.dart';
-import '../widgets/reports/report_period_selector.dart';
-import '../widgets/reports/report_summary_card.dart';
-import '../widgets/reports/standalone_report_section.dart';
+import '../../../../models/goal.dart';
+import '../../../../models/planner_task.dart';
+import '../../application/report_builder.dart';
+import '../../domain/report_period.dart';
+import '../widgets/day_report_section.dart';
+import '../widgets/empty_report_card.dart';
+import '../widgets/goal_report_section.dart';
+import '../widgets/report_period_selector.dart';
+import '../widgets/report_summary_card.dart';
+import '../widgets/standalone_report_section.dart';
 
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({

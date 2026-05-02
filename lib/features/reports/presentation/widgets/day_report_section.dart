@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../models/goal.dart';
-import '../../models/planner_task.dart';
-import '../../shared/planner_dates.dart';
-import '../tasks/task_card.dart';
+import '../../../../models/goal.dart';
+import '../../../../models/planner_task.dart';
+import '../../../../shared/planner_dates.dart';
+import '../../../../widgets/tasks/task_card.dart';
 
 class DayReportSection extends StatelessWidget {
   const DayReportSection({
