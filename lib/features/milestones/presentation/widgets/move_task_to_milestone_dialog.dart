@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/milestone.dart';
+import '../../../../models/milestone.dart';
 
 class MoveTaskToMilestoneDialog extends StatelessWidget {
   const MoveTaskToMilestoneDialog({super.key, required this.milestones});

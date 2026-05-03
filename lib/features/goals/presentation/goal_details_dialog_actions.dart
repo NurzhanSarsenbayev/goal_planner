@@ -4,9 +4,9 @@ import '../../../app/app_dialogs.dart' as app_dialogs;
 import '../../../models/goal.dart';
 import '../../../models/milestone.dart';
 import '../../../models/planner_task.dart';
-import '../../../widgets/milestones/delete_milestone_dialog.dart';
-import '../../../widgets/milestones/milestone_dialog.dart';
-import '../../../widgets/milestones/move_task_to_milestone_dialog.dart';
+import '../../milestones/presentation/widgets/delete_milestone_dialog.dart';
+import '../../milestones/presentation/widgets/milestone_dialog.dart';
+import '../../milestones/presentation/widgets/move_task_to_milestone_dialog.dart';
 import '../../tasks/presentation/widgets/task_dialog.dart';
 
 class GoalDetailsDialogActions {
