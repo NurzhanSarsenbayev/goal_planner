@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../app/app_dialogs.dart';
+import 'task_dialogs.dart';
 import '../../../models/planner_task.dart';
 import '../../../state/planner_store.dart';
 
