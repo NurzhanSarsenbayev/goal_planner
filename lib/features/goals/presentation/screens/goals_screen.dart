@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../models/goal.dart';
-import '../models/planner_task.dart';
-import '../widgets/goals/goal_card.dart';
-import '../widgets/common/placeholder_screen.dart';
+import '../../../../models/goal.dart';
+import '../../../../models/planner_task.dart';
+import '../../../../widgets/common/placeholder_screen.dart';
+import '../../../../widgets/goals/goal_card.dart';
 
 class GoalsScreen extends StatelessWidget {
   const GoalsScreen({
