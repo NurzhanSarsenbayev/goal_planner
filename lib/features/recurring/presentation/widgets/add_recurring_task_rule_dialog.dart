@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../models/goal.dart';
-import '../../models/milestone.dart';
-import '../../models/recurring_task_rule.dart';
+import '../../../../models/goal.dart';
+import '../../../../models/milestone.dart';
+import '../../../../models/recurring_task_rule.dart';
 import 'recurring_rule_placement_section.dart';
 import 'recurring_rule_schedule_section.dart';
 

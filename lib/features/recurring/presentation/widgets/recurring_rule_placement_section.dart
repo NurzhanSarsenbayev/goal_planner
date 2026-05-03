@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../models/goal.dart';
-import '../../models/milestone.dart';
+import '../../../../models/goal.dart';
+import '../../../../models/milestone.dart';
 
 class RecurringRulePlacementSection extends StatelessWidget {
   const RecurringRulePlacementSection({
