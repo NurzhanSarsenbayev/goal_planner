@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../app/app_dialogs.dart';
+import 'recurring_rule_dialogs.dart';
 import '../../../models/recurring_task_rule.dart';
 import '../../../shared/planner_dates.dart';
 import '../../../state/planner_store.dart';

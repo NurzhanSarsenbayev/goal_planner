@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../models/goal.dart';
-import '../models/milestone.dart';
 import '../models/planner_task.dart';
-import '../models/recurring_task_rule.dart';
 import '../shared/planner_dates.dart';
-import '../features/recurring/presentation/widgets/add_recurring_task_rule_dialog.dart';
 
 Future<DateTime?> showScheduleTaskDatePicker(
   BuildContext context, {
@@ -18,44 +14,6 @@ Future<DateTime?> showScheduleTaskDatePicker(
     initialDate: initialDate ?? today,
     firstDate: DateTime(today.year - 1),
     lastDate: DateTime(today.year + 5),
-  );
-}
-
-Future<AddRecurringTaskRuleDraft?> showAddRecurringTaskRuleDialog(
-  BuildContext context, {
-  required List<Goal> goals,
-  required List<Milestone> milestones,
-  DateTime? initialDate,
-}) {
-  return showDialog<AddRecurringTaskRuleDraft>(
-    context: context,
-    builder: (context) {
-      return AddRecurringTaskRuleDialog(
-        goals: goals,
-        milestones: milestones,
-        initialDate: initialDate,
-      );
-    },
-  );
-}
-
-Future<AddRecurringTaskRuleDraft?> showEditRecurringTaskRuleDialog(
-  BuildContext context, {
-  required RecurringTaskRule rule,
-  required List<Goal> goals,
-  required List<Milestone> milestones,
-}) {
-  return showDialog<AddRecurringTaskRuleDraft>(
-    context: context,
-    builder: (context) {
-      return AddRecurringTaskRuleDialog(
-        goals: goals,
-        milestones: milestones,
-        initialRule: rule,
-        dialogTitle: 'Edit recurring task',
-        submitLabel: 'Save',
-      );
-    },
   );
 }
 
