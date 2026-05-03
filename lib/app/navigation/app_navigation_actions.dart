@@ -7,7 +7,7 @@ import '../../features/recurring/presentation/screens/recurring_tasks_screen.dar
 import '../../features/reports/presentation/screens/reports_screen.dart';
 import '../../state/planner_store.dart';
 import '../actions/recurring_rule_dialog_actions.dart';
-import '../actions/task_dialog_actions.dart';
+import '../../features/tasks/presentation/task_dialog_actions.dart';
 
 class AppNavigationActions {
   const AppNavigationActions({

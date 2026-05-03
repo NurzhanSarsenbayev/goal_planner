@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../models/planner_task.dart';
-import '../../state/planner_store.dart';
-import '../app_dialogs.dart';
+import '../../../app/app_dialogs.dart';
+import '../../../models/planner_task.dart';
+import '../../../state/planner_store.dart';
 
 class TaskDialogActions {
   const TaskDialogActions({required PlannerStore store}) : _store = store;

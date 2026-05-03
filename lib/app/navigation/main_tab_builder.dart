@@ -7,7 +7,7 @@ import 'screens/more_screen.dart';
 import '../../state/planner_store.dart';
 import '../../features/goals/presentation/goal_dialog_actions.dart';
 import '../actions/recurring_rule_dialog_actions.dart';
-import '../actions/task_dialog_actions.dart';
+import '../../features/tasks/presentation/task_dialog_actions.dart';
 import 'app_navigation_actions.dart';
 
 class MainTabBuilder {
