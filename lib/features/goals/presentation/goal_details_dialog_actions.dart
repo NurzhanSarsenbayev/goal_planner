@@ -7,7 +7,7 @@ import '../../../models/planner_task.dart';
 import '../../../widgets/milestones/delete_milestone_dialog.dart';
 import '../../../widgets/milestones/milestone_dialog.dart';
 import '../../../widgets/milestones/move_task_to_milestone_dialog.dart';
-import '../../../widgets/tasks/task_dialog.dart';
+import '../../tasks/presentation/widgets/task_dialog.dart';
 
 class GoalDetailsDialogActions {
   const GoalDetailsDialogActions();
