@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../features/calendar/presentation/screens/calendar_screen.dart';
 import '../../features/today/presentation/screens/today_screen.dart';
 import '../../features/goals/presentation/screens/goals_screen.dart';
-import '../../screens/more_screen.dart';
+import 'screens/more_screen.dart';
 import '../../state/planner_store.dart';
 import '../actions/goal_dialog_actions.dart';
 import '../actions/recurring_rule_dialog_actions.dart';
