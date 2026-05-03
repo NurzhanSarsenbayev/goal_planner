@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
-import '../../../../widgets/common/placeholder_screen.dart';
+import '../../../../shared/presentation/widgets/placeholder_screen.dart';
 import '../widgets/goal_card.dart';
 
 class GoalsScreen extends StatelessWidget {

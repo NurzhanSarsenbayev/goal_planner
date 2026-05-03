@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/milestone.dart';
 import '../../../../models/planner_task.dart';
-import '../../../../widgets/common/placeholder_screen.dart';
+import '../../../../shared/presentation/widgets/placeholder_screen.dart';
 import '../../../../widgets/common/section_header.dart';
 import 'milestone_card.dart';
 

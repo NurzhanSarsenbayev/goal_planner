@@ -5,7 +5,7 @@ import '../../../../models/goal.dart';
 import '../../../../models/milestone.dart';
 import '../../../../models/planner_task.dart';
 import '../../../../models/recurring_task_rule.dart';
-import '../../../../widgets/common/placeholder_screen.dart';
+import '../../../../shared/presentation/widgets/placeholder_screen.dart';
 import '../../../recurring/presentation/widgets/recurring_task_rule_card.dart';
 import '../widgets/task_card.dart';
 import '../widgets/task_dialog.dart';

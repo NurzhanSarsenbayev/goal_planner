@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../app/app_dialogs.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
-import '../../../../widgets/common/placeholder_screen.dart';
+import '../../../../shared/presentation/widgets/placeholder_screen.dart';
 import '../../../tasks/presentation/widgets/task_card.dart';
 import '../../application/today_task_view_builder.dart';
 
