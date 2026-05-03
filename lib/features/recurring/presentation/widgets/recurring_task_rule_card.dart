@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/recurring_task_rule.dart';
+import '../../../../models/recurring_task_rule.dart';
 
 class RecurringTaskRuleCard extends StatelessWidget {
   const RecurringTaskRuleCard({
