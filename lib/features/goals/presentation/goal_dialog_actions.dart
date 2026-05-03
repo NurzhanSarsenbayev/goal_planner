@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../models/goal.dart';
-import '../../state/planner_store.dart';
-import '../app_dialogs.dart';
+import '../../../app/app_dialogs.dart';
+import '../../../models/goal.dart';
+import '../../../state/planner_store.dart';
 
 class GoalDialogActions {
   const GoalDialogActions({required PlannerStore store}) : _store = store;

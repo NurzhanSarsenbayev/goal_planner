@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'actions/recurring_rule_dialog_actions.dart';
-import 'actions/goal_dialog_actions.dart';
+import '../features/goals/presentation/goal_dialog_actions.dart';
 import 'actions/task_dialog_actions.dart';
 import 'composition/app_dependencies.dart';
 import 'navigation/app_navigation_actions.dart';
