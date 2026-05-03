@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../app/app_dialogs.dart';
-import '../features/today/application/today_task_view_builder.dart';
-import '../models/goal.dart';
-import '../models/planner_task.dart';
-import '../widgets/common/placeholder_screen.dart';
-import '../widgets/tasks/task_card.dart';
+import '../../../../app/app_dialogs.dart';
+import '../../../../models/goal.dart';
+import '../../../../models/planner_task.dart';
+import '../../../../widgets/common/placeholder_screen.dart';
+import '../../../../widgets/tasks/task_card.dart';
+import '../../application/today_task_view_builder.dart';
 
 class TodayScreen extends StatelessWidget {
   const TodayScreen({
