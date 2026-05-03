@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../models/recurring_task_rule.dart';
-import '../widgets/common/placeholder_screen.dart';
-import '../widgets/recurring/recurring_task_rule_card.dart';
+import '../../../../models/recurring_task_rule.dart';
+import '../../../../widgets/common/placeholder_screen.dart';
+import '../../../../widgets/recurring/recurring_task_rule_card.dart';
 
 class RecurringTasksScreen extends StatelessWidget {
   const RecurringTasksScreen({

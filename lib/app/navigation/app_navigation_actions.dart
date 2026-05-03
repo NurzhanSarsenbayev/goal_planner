@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/goal.dart';
 import '../../features/goals/presentation/screens/goal_details_screen.dart';
 import '../../features/tasks/presentation/screens/all_tasks_screen.dart';
-import '../../screens/recurring_tasks_screen.dart';
+import '../../features/recurring/presentation/screens/recurring_tasks_screen.dart';
 import '../../features/reports/presentation/screens/reports_screen.dart';
 import '../../state/planner_store.dart';
 import '../actions/recurring_rule_dialog_actions.dart';
