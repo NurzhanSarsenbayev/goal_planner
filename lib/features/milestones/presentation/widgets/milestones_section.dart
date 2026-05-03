@@ -4,7 +4,7 @@ import '../../../../models/goal.dart';
 import '../../../../models/milestone.dart';
 import '../../../../models/planner_task.dart';
 import '../../../../shared/presentation/widgets/placeholder_screen.dart';
-import '../../../../widgets/common/section_header.dart';
+import '../../../../shared/presentation/widgets/section_header.dart';
 import 'milestone_card.dart';
 
 class MilestonesSection extends StatelessWidget {

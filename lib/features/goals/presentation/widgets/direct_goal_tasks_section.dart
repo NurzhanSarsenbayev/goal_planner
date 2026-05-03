@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
 import '../../../tasks/presentation/widgets/task_card.dart';
-import '../../../../widgets/common/section_header.dart';
+import '../../../../shared/presentation/widgets/section_header.dart';
 
 class DirectGoalTasksSection extends StatelessWidget {
   const DirectGoalTasksSection({
