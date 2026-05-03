@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../models/recurring_task_rule.dart';
-import '../../shared/planner_dates.dart';
-import '../../state/planner_store.dart';
-import '../app_dialogs.dart';
+import '../../../app/app_dialogs.dart';
+import '../../../models/recurring_task_rule.dart';
+import '../../../shared/planner_dates.dart';
+import '../../../state/planner_store.dart';
 
 class RecurringRuleDialogActions {
   const RecurringRuleDialogActions({required PlannerStore store})
