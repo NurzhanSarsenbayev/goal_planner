@@ -9,7 +9,7 @@ import '../features/goals/presentation/widgets/delete_goal_dialog.dart';
 import '../features/goals/presentation/widgets/goal_dialog.dart';
 import '../features/tasks/presentation/widgets/task_dialog.dart';
 import '../features/tasks/presentation/widgets/task_placement_dialog.dart';
-import '../widgets/tasks/add_task_with_placement_dialog.dart';
+import '../features/tasks/presentation/widgets/add_task_with_placement_dialog.dart';
 import '../widgets/recurring/add_recurring_task_rule_dialog.dart';
 
 Future<GoalDraft?> showAddGoalDialog(BuildContext context) {
