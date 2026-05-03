@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../app/app_dialogs.dart';
+import '../features/tasks/application/all_tasks_view_builder.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
 import '../models/recurring_task_rule.dart';
 import '../widgets/common/placeholder_screen.dart';
+import '../widgets/recurring/recurring_task_rule_card.dart';
 import '../widgets/tasks/task_card.dart';
 import '../widgets/tasks/task_dialog.dart';
 import '../widgets/tasks/task_placement_dialog.dart';
-import '../widgets/recurring/recurring_task_rule_card.dart';
-import '../shared/planner_dates.dart';
-import '../app/app_dialogs.dart';
 
 class AllTasksScreen extends StatelessWidget {
   const AllTasksScreen({
@@ -39,6 +39,7 @@ class AllTasksScreen extends StatelessWidget {
   onScheduleTaskForDate;
   final void Function({required String taskId, required DateTime completedAt})
   onCompleteTaskOnDate;
+  final AllTasksViewBuilder _viewBuilder = const AllTasksViewBuilder();
 
   final void Function({
     required String taskId,
@@ -84,26 +85,6 @@ class AllTasksScreen extends StatelessWidget {
     );
   }
 
-  bool _shouldShowTaskInAllTasks(PlannerTask task) {
-    if (task.recurringRuleId == null) {
-      return true;
-    }
-
-    if (task.isCompleted) {
-      return true;
-    }
-
-    final scheduledDate = task.scheduledDate;
-
-    if (scheduledDate == null) {
-      return true;
-    }
-
-    final normalizedScheduledDate = dateOnly(scheduledDate);
-
-    return !normalizedScheduledDate.isAfter(todayDate());
-  }
-
   Future<void> _showAttachTaskToGoalDialog(
     BuildContext context,
     PlannerTask task,
@@ -144,11 +125,13 @@ class AllTasksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final visibleTasks = tasks.where(_shouldShowTaskInAllTasks).toList();
-    final hasVisibleTasks = visibleTasks.isNotEmpty;
-    final hasRecurringRules = recurringRules.isNotEmpty;
+    final view = _viewBuilder.build(
+      goals: goals,
+      tasks: tasks,
+      recurringRules: recurringRules,
+    );
 
-    if (!hasVisibleTasks && !hasRecurringRules) {
+    if (view.isEmpty) {
       return Scaffold(
         appBar: AppBar(title: const Text('All tasks')),
         body: const PlaceholderScreen(
@@ -164,22 +147,22 @@ class AllTasksScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          if (hasVisibleTasks) ...[
+          if (view.hasVisibleTasks) ...[
             Text('Tasks', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
-            for (final task in visibleTasks) ...[
-              _buildTaskCard(context, task),
+            for (final task in view.visibleTasks) ...[
+              _buildTaskCard(context, view, task),
               const SizedBox(height: 8),
             ],
           ],
-          if (hasRecurringRules) ...[
-            if (hasVisibleTasks) const SizedBox(height: 24),
+          if (view.hasRecurringRules) ...[
+            if (view.hasVisibleTasks) const SizedBox(height: 24),
             Text(
               'Recurring rules',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
-            for (final rule in recurringRules) ...[
+            for (final rule in view.recurringRules) ...[
               RecurringTaskRuleCard(rule: rule),
               const SizedBox(height: 8),
             ],
@@ -189,8 +172,12 @@ class AllTasksScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTaskCard(BuildContext context, PlannerTask task) {
-    final goal = _findGoalById(task.goalId);
+  Widget _buildTaskCard(
+    BuildContext context,
+    AllTasksView view,
+    PlannerTask task,
+  ) {
+    final goal = view.findGoalById(task.goalId);
     final isStandaloneTask = task.goalId == null;
     final isGoalLinkedTask = task.goalId != null;
 
@@ -230,19 +217,5 @@ class AllTasksScreen extends StatelessWidget {
         onDeleteTask(task.id);
       },
     );
-  }
-
-  Goal? _findGoalById(String? goalId) {
-    if (goalId == null) {
-      return null;
-    }
-
-    for (final goal in goals) {
-      if (goal.id == goalId) {
-        return goal;
-      }
-    }
-
-    return null;
   }
 }
