@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../app/app_dialogs.dart';
-import '../features/tasks/application/all_tasks_view_builder.dart';
-import '../models/goal.dart';
-import '../models/milestone.dart';
-import '../models/planner_task.dart';
-import '../models/recurring_task_rule.dart';
-import '../widgets/common/placeholder_screen.dart';
-import '../widgets/recurring/recurring_task_rule_card.dart';
-import '../widgets/tasks/task_card.dart';
-import '../widgets/tasks/task_dialog.dart';
-import '../widgets/tasks/task_placement_dialog.dart';
+import '../../../../app/app_dialogs.dart';
+import '../../../../models/goal.dart';
+import '../../../../models/milestone.dart';
+import '../../../../models/planner_task.dart';
+import '../../../../models/recurring_task_rule.dart';
+import '../../../../widgets/common/placeholder_screen.dart';
+import '../../../../widgets/recurring/recurring_task_rule_card.dart';
+import '../../../../widgets/tasks/task_card.dart';
+import '../../../../widgets/tasks/task_dialog.dart';
+import '../../../../widgets/tasks/task_placement_dialog.dart';
+import '../../application/all_tasks_view_builder.dart';
 
 class AllTasksScreen extends StatelessWidget {
   const AllTasksScreen({
