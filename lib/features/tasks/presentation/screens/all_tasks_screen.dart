@@ -7,7 +7,7 @@ import '../../../../models/planner_task.dart';
 import '../../../../models/recurring_task_rule.dart';
 import '../../../../widgets/common/placeholder_screen.dart';
 import '../../../../widgets/recurring/recurring_task_rule_card.dart';
-import '../../../../widgets/tasks/task_card.dart';
+import '../widgets/task_card.dart';
 import '../widgets/task_dialog.dart';
 import '../widgets/task_placement_dialog.dart';
 import '../../application/all_tasks_view_builder.dart';

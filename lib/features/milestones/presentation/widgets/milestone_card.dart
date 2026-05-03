@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/milestone.dart';
 import '../../../../models/planner_task.dart';
-import '../../../../widgets/tasks/task_card.dart';
+import '../../../tasks/presentation/widgets/task_card.dart';
 
 class MilestoneCard extends StatelessWidget {
   const MilestoneCard({

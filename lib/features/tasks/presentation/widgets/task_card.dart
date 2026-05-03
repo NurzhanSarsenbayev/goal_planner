@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../models/goal.dart';
-import '../../models/planner_task.dart';
-import '../../shared/planner_dates.dart';
+import '../../../../models/goal.dart';
+import '../../../../models/planner_task.dart';
+import '../../../../shared/planner_dates.dart';
 
 class TaskCard extends StatelessWidget {
   const TaskCard({

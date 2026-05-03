@@ -4,7 +4,7 @@ import '../../../../app/app_dialogs.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
 import '../../../../shared/planner_dates.dart';
-import '../../../../widgets/tasks/task_card.dart';
+import '../../../tasks/presentation/widgets/task_card.dart';
 import '../../application/calendar_task_view_builder.dart';
 import '../widgets/calendar_month_grid.dart';
 
