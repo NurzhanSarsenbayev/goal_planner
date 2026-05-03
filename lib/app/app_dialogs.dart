@@ -5,38 +5,10 @@ import '../models/milestone.dart';
 import '../models/planner_task.dart';
 import '../models/recurring_task_rule.dart';
 import '../shared/planner_dates.dart';
-import '../features/goals/presentation/widgets/delete_goal_dialog.dart';
-import '../features/goals/presentation/widgets/goal_dialog.dart';
 import '../features/tasks/presentation/widgets/task_dialog.dart';
 import '../features/tasks/presentation/widgets/task_placement_dialog.dart';
 import '../features/tasks/presentation/widgets/add_task_with_placement_dialog.dart';
 import '../features/recurring/presentation/widgets/add_recurring_task_rule_dialog.dart';
-
-Future<GoalDraft?> showAddGoalDialog(BuildContext context) {
-  return showDialog<GoalDraft>(
-    context: context,
-    builder: (context) {
-      return const GoalDialog();
-    },
-  );
-}
-
-Future<GoalDraft?> showEditGoalDialog(
-  BuildContext context, {
-  required Goal goal,
-}) {
-  return showDialog<GoalDraft>(
-    context: context,
-    builder: (context) {
-      return GoalDialog(
-        initialTitle: goal.title,
-        initialDescription: goal.description,
-        title: 'Edit goal',
-        submitLabel: 'Save',
-      );
-    },
-  );
-}
 
 Future<TaskDraft?> showEditTaskDialog(
   BuildContext context, {
@@ -79,26 +51,6 @@ Future<TaskPlacementDraft?> showTaskPlacementDialog(
       return TaskPlacementDialog(goals: goals, milestones: milestones);
     },
   );
-}
-
-Future<bool> showDeleteGoalDialog(
-  BuildContext context, {
-  required Goal goal,
-  required int milestoneCount,
-  required int taskCount,
-}) async {
-  final result = await showDialog<bool>(
-    context: context,
-    builder: (context) {
-      return DeleteGoalDialog(
-        goalTitle: goal.title,
-        milestoneCount: milestoneCount,
-        taskCount: taskCount,
-      );
-    },
-  );
-
-  return result ?? false;
 }
 
 Future<DateTime?> showScheduleTaskDatePicker(
