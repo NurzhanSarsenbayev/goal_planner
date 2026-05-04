@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../tasks/presentation/task_date_dialogs.dart' as task_date_dialogs;
 import '../../tasks/presentation/task_dialogs.dart' as task_dialogs;
+import '../../milestones/presentation/milestone_dialogs.dart'
+    as milestone_dialogs;
 import '../../../models/goal.dart';
 import '../../../models/milestone.dart';
 import '../../../models/planner_task.dart';
-import '../../milestones/presentation/widgets/delete_milestone_dialog.dart';
-import '../../milestones/presentation/widgets/milestone_dialog.dart';
-import '../../milestones/presentation/widgets/move_task_to_milestone_dialog.dart';
 
 class GoalDetailsDialogActions {
   const GoalDetailsDialogActions();
@@ -71,11 +70,9 @@ class GoalDetailsDialogActions {
     })
     onTaskAssignedToMilestone,
   }) async {
-    final result = await showDialog<Milestone>(
-      context: context,
-      builder: (context) {
-        return MoveTaskToMilestoneDialog(milestones: milestones);
-      },
+    final result = await milestone_dialogs.showMoveTaskToMilestoneDialog(
+      context,
+      milestones: milestones,
     );
 
     if (result == null) {
@@ -111,12 +108,7 @@ class GoalDetailsDialogActions {
     required Goal goal,
     required void Function(Milestone milestone) onMilestoneCreated,
   }) async {
-    final result = await showDialog<MilestoneDraft>(
-      context: context,
-      builder: (context) {
-        return const MilestoneDialog();
-      },
-    );
+    final result = await milestone_dialogs.showAddMilestoneDialog(context);
 
     if (result == null) {
       return;
@@ -145,16 +137,9 @@ class GoalDetailsDialogActions {
     })
     onMilestoneUpdated,
   }) async {
-    final result = await showDialog<MilestoneDraft>(
-      context: context,
-      builder: (context) {
-        return MilestoneDialog(
-          initialTitle: milestone.title,
-          initialDescription: milestone.description,
-          title: 'Edit milestone',
-          submitLabel: 'Save',
-        );
-      },
+    final result = await milestone_dialogs.showEditMilestoneDialog(
+      context,
+      milestone: milestone,
     );
 
     if (result == null) {
@@ -175,14 +160,10 @@ class GoalDetailsDialogActions {
     required void Function(String milestoneId) onMoveTasksToDirect,
     required void Function(String milestoneId) onDeleteTasks,
   }) async {
-    final result = await showDialog<DeleteMilestoneAction>(
-      context: context,
-      builder: (context) {
-        return DeleteMilestoneDialog(
-          milestoneTitle: milestone.title,
-          taskCount: taskCount,
-        );
-      },
+    final result = await milestone_dialogs.showDeleteMilestoneDialog(
+      context,
+      milestone: milestone,
+      taskCount: taskCount,
     );
 
     if (result == null) {
@@ -190,9 +171,9 @@ class GoalDetailsDialogActions {
     }
 
     switch (result) {
-      case DeleteMilestoneAction.moveTasksToDirect:
+      case milestone_dialogs.DeleteMilestoneAction.moveTasksToDirect:
         onMoveTasksToDirect(milestone.id);
-      case DeleteMilestoneAction.deleteTasks:
+      case milestone_dialogs.DeleteMilestoneAction.deleteTasks:
         onDeleteTasks(milestone.id);
     }
   }
