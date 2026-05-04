@@ -12,6 +12,7 @@ import '../features/planner/application/planner_cleanup_repository.dart';
 import '../features/planner/application/planner_initialization_service.dart';
 import '../features/planner/application/planner_persistence_runner.dart';
 import '../features/recurring/application/recurring_rule_store_coordinator.dart';
+import '../features/recurring/application/recurring_occurrence_store_coordinator.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
@@ -40,6 +41,9 @@ class PlannerStore extends ChangeNotifier {
     _recurringRuleStoreCoordinator = RecurringRuleStoreCoordinator(
       recurringTaskRepository: recurringTaskRepository,
     );
+    _recurringOccurrenceStoreCoordinator = RecurringOccurrenceStoreCoordinator(
+      recurringTaskRepository: recurringTaskRepository,
+    );
   }
 
   final PlannerCleanupRepository _cleanupRepository;
@@ -51,6 +55,8 @@ class PlannerStore extends ChangeNotifier {
   final PlannerPersistenceRunner _persistenceRunner =
       const PlannerPersistenceRunner();
   late final RecurringRuleStoreCoordinator _recurringRuleStoreCoordinator;
+  late final RecurringOccurrenceStoreCoordinator
+  _recurringOccurrenceStoreCoordinator;
 
   final TaskApplicationService _taskApplicationService =
       const TaskApplicationService();
@@ -342,38 +348,21 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void _deleteRecurringOccurrence(PlannerTask task) {
-    final result = _recurringTaskApplicationService.deleteOccurrence(
+    final mutation = _recurringOccurrenceStoreCoordinator.deleteOccurrence(
       task: task,
       tasks: _tasks,
       exceptions: _recurringExceptions,
       now: DateTime.now(),
     );
 
-    final taskIdToDelete = result.taskIdToDelete;
-    final exceptionToPersist = result.exceptionToPersist;
-
-    if (taskIdToDelete == null || exceptionToPersist == null) {
-      return;
-    }
-
-    _tasks = result.tasks;
-    _recurringExceptions = result.exceptions;
-
-    notifyListeners();
-
-    _persistenceRunner.run(
-      () => _recurringTaskRepository.deleteTaskWithRecurringException(
-        taskId: taskIdToDelete,
-        exception: exceptionToPersist,
-      ),
-    );
+    _applyRecurringOccurrenceStoreMutation(mutation);
   }
 
   void _rescheduleRecurringOccurrence({
     required PlannerTask task,
     required DateTime scheduledDate,
   }) {
-    final result = _recurringTaskApplicationService.rescheduleOccurrence(
+    final mutation = _recurringOccurrenceStoreCoordinator.rescheduleOccurrence(
       task: task,
       scheduledDate: scheduledDate,
       tasks: _tasks,
@@ -381,52 +370,18 @@ class PlannerStore extends ChangeNotifier {
       now: DateTime.now(),
     );
 
-    final taskToPersist = result.taskToPersist;
-    final exceptionToPersist = result.exceptionToPersist;
-
-    if (taskToPersist == null || exceptionToPersist == null) {
-      return;
-    }
-
-    _tasks = result.tasks;
-    _recurringExceptions = result.exceptions;
-
-    notifyListeners();
-
-    _persistenceRunner.run(
-      () => _recurringTaskRepository.updateTaskWithRecurringException(
-        task: taskToPersist,
-        exception: exceptionToPersist,
-      ),
-    );
+    _applyRecurringOccurrenceStoreMutation(mutation);
   }
 
   void _unscheduleRecurringOccurrence(PlannerTask task) {
-    final result = _recurringTaskApplicationService.unscheduleOccurrence(
+    final mutation = _recurringOccurrenceStoreCoordinator.unscheduleOccurrence(
       task: task,
       tasks: _tasks,
       exceptions: _recurringExceptions,
       now: DateTime.now(),
     );
 
-    final taskToPersist = result.taskToPersist;
-    final exceptionToPersist = result.exceptionToPersist;
-
-    if (taskToPersist == null || exceptionToPersist == null) {
-      return;
-    }
-
-    _tasks = result.tasks;
-    _recurringExceptions = result.exceptions;
-
-    notifyListeners();
-
-    _persistenceRunner.run(
-      () => _recurringTaskRepository.updateTaskWithRecurringException(
-        task: taskToPersist,
-        exception: exceptionToPersist,
-      ),
-    );
+    _applyRecurringOccurrenceStoreMutation(mutation);
   }
 
   void updateTask({
@@ -644,6 +599,21 @@ class PlannerStore extends ChangeNotifier {
     }
 
     _recurringRules = mutation.rules;
+    _tasks = mutation.tasks;
+    _recurringExceptions = mutation.exceptions;
+
+    notifyListeners();
+
+    _persistenceRunner.run(mutation.persistOperation);
+  }
+
+  void _applyRecurringOccurrenceStoreMutation(
+    RecurringOccurrenceStoreMutation? mutation,
+  ) {
+    if (mutation == null) {
+      return;
+    }
+
     _tasks = mutation.tasks;
     _recurringExceptions = mutation.exceptions;
 
