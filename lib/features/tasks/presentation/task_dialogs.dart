@@ -7,6 +7,15 @@ import 'widgets/add_task_with_placement_dialog.dart';
 import 'widgets/task_dialog.dart';
 import 'widgets/task_placement_dialog.dart';
 
+Future<TaskDraft?> showAddTaskDialog(BuildContext context) {
+  return showDialog<TaskDraft>(
+    context: context,
+    builder: (context) {
+      return const TaskDialog();
+    },
+  );
+}
+
 Future<TaskDraft?> showEditTaskDialog(
   BuildContext context, {
   required PlannerTask task,

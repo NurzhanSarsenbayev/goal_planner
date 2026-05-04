@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../task_dialogs.dart' as task_dialogs;
 import '../../../tasks/presentation/task_date_dialogs.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/milestone.dart';
@@ -8,8 +9,6 @@ import '../../../../models/recurring_task_rule.dart';
 import '../../../../shared/presentation/widgets/placeholder_screen.dart';
 import '../../../recurring/presentation/widgets/recurring_task_rule_card.dart';
 import '../widgets/task_card.dart';
-import '../widgets/task_dialog.dart';
-import '../widgets/task_placement_dialog.dart';
 import '../../application/all_tasks_view_builder.dart';
 
 class AllTasksScreen extends StatelessWidget {
@@ -62,17 +61,7 @@ class AllTasksScreen extends StatelessWidget {
     BuildContext context,
     PlannerTask task,
   ) async {
-    final result = await showDialog<TaskDraft>(
-      context: context,
-      builder: (context) {
-        return TaskDialog(
-          initialTitle: task.title,
-          initialDescription: task.description,
-          title: 'Edit task',
-          submitLabel: 'Save',
-        );
-      },
-    );
+    final result = await task_dialogs.showEditTaskDialog(context, task: task);
 
     if (result == null) {
       return;
@@ -89,11 +78,10 @@ class AllTasksScreen extends StatelessWidget {
     BuildContext context,
     PlannerTask task,
   ) async {
-    final result = await showDialog<TaskPlacementDraft>(
-      context: context,
-      builder: (context) {
-        return TaskPlacementDialog(goals: goals, milestones: milestones);
-      },
+    final result = await task_dialogs.showTaskPlacementDialog(
+      context,
+      goals: goals,
+      milestones: milestones,
     );
 
     if (result == null) {

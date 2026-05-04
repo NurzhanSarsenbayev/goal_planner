@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../tasks/presentation/task_date_dialogs.dart' as task_date_dialogs;
+import '../../tasks/presentation/task_dialogs.dart' as task_dialogs;
 import '../../../models/goal.dart';
 import '../../../models/milestone.dart';
 import '../../../models/planner_task.dart';
 import '../../milestones/presentation/widgets/delete_milestone_dialog.dart';
 import '../../milestones/presentation/widgets/milestone_dialog.dart';
 import '../../milestones/presentation/widgets/move_task_to_milestone_dialog.dart';
-import '../../tasks/presentation/widgets/task_dialog.dart';
 
 class GoalDetailsDialogActions {
   const GoalDetailsDialogActions();
@@ -18,12 +18,7 @@ class GoalDetailsDialogActions {
     required void Function(PlannerTask task) onTaskCreated,
     String? milestoneId,
   }) async {
-    final result = await showDialog<TaskDraft>(
-      context: context,
-      builder: (context) {
-        return const TaskDialog();
-      },
-    );
+    final result = await task_dialogs.showAddTaskDialog(context);
 
     if (result == null) {
       return;
@@ -53,17 +48,7 @@ class GoalDetailsDialogActions {
     })
     onTaskUpdated,
   }) async {
-    final result = await showDialog<TaskDraft>(
-      context: context,
-      builder: (context) {
-        return TaskDialog(
-          initialTitle: task.title,
-          initialDescription: task.description,
-          title: 'Edit task',
-          submitLabel: 'Save',
-        );
-      },
-    );
+    final result = await task_dialogs.showEditTaskDialog(context, task: task);
 
     if (result == null) {
       return;
