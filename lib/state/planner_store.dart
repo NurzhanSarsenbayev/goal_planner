@@ -6,7 +6,6 @@ import '../features/milestones/application/milestone_repository.dart';
 import '../features/milestones/application/milestone_application_service.dart';
 import '../features/tasks/application/task_application_service.dart';
 import '../features/tasks/application/task_repository.dart';
-import '../features/recurring/application/recurring_task_repository.dart';
 import '../features/planner/application/planner_cleanup_repository.dart';
 import '../features/planner/application/planner_initialization_service.dart';
 import '../features/planner/application/planner_persistence_runner.dart';
@@ -20,29 +19,23 @@ import '../models/recurring_task_rule.dart';
 import '../shared/planner_dates.dart';
 
 class PlannerStore extends ChangeNotifier {
-  PlannerStore(
-    PlannerCleanupRepository cleanupRepository,
-    GoalRepository goalRepository,
-    MilestoneRepository milestoneRepository,
-    TaskRepository taskRepository,
-    RecurringTaskRepository recurringTaskRepository,
-  ) : _cleanupRepository = cleanupRepository,
-      _goalRepository = goalRepository,
-      _milestoneRepository = milestoneRepository,
-      _taskRepository = taskRepository,
-      _initializationService = PlannerInitializationService(
-        goalRepository: goalRepository,
-        milestoneRepository: milestoneRepository,
-        taskRepository: taskRepository,
-        recurringTaskRepository: recurringTaskRepository,
-      ) {
-    _recurringRuleStoreCoordinator = RecurringRuleStoreCoordinator(
-      recurringTaskRepository: recurringTaskRepository,
-    );
-    _recurringOccurrenceStoreCoordinator = RecurringOccurrenceStoreCoordinator(
-      recurringTaskRepository: recurringTaskRepository,
-    );
-  }
+  PlannerStore({
+    required PlannerCleanupRepository cleanupRepository,
+    required GoalRepository goalRepository,
+    required MilestoneRepository milestoneRepository,
+    required TaskRepository taskRepository,
+    required PlannerInitializationService initializationService,
+    required RecurringRuleStoreCoordinator recurringRuleStoreCoordinator,
+    required RecurringOccurrenceStoreCoordinator
+    recurringOccurrenceStoreCoordinator,
+  }) : _cleanupRepository = cleanupRepository,
+       _goalRepository = goalRepository,
+       _milestoneRepository = milestoneRepository,
+       _taskRepository = taskRepository,
+       _initializationService = initializationService,
+       _recurringRuleStoreCoordinator = recurringRuleStoreCoordinator,
+       _recurringOccurrenceStoreCoordinator =
+           recurringOccurrenceStoreCoordinator;
 
   final PlannerCleanupRepository _cleanupRepository;
   final GoalRepository _goalRepository;
@@ -51,8 +44,8 @@ class PlannerStore extends ChangeNotifier {
   final PlannerInitializationService _initializationService;
   final PlannerPersistenceRunner _persistenceRunner =
       const PlannerPersistenceRunner();
-  late final RecurringRuleStoreCoordinator _recurringRuleStoreCoordinator;
-  late final RecurringOccurrenceStoreCoordinator
+  final RecurringRuleStoreCoordinator _recurringRuleStoreCoordinator;
+  final RecurringOccurrenceStoreCoordinator
   _recurringOccurrenceStoreCoordinator;
 
   final TaskApplicationService _taskApplicationService =

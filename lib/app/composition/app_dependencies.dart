@@ -6,6 +6,9 @@ import '../../data/repositories/drift_milestone_repository.dart';
 import '../../data/repositories/drift_planner_cleanup_repository.dart';
 import '../../data/repositories/drift_recurring_task_repository.dart';
 import '../../data/repositories/drift_task_repository.dart';
+import '../../features/planner/application/planner_initialization_service.dart';
+import '../../features/recurring/application/recurring_occurrence_store_coordinator.dart';
+import '../../features/recurring/application/recurring_rule_store_coordinator.dart';
 import '../../state/planner_store.dart';
 
 class AppDependencies {
@@ -28,12 +31,30 @@ class AppDependencies {
     final taskRepository = DriftTaskRepository(database);
     final recurringTaskRepository = DriftRecurringTaskRepository(database);
 
+    final initializationService = PlannerInitializationService(
+      goalRepository: goalRepository,
+      milestoneRepository: milestoneRepository,
+      taskRepository: taskRepository,
+      recurringTaskRepository: recurringTaskRepository,
+    );
+
+    final recurringRuleStoreCoordinator = RecurringRuleStoreCoordinator(
+      recurringTaskRepository: recurringTaskRepository,
+    );
+
+    final recurringOccurrenceStoreCoordinator =
+        RecurringOccurrenceStoreCoordinator(
+          recurringTaskRepository: recurringTaskRepository,
+        );
+
     final store = PlannerStore(
-      cleanupRepository,
-      goalRepository,
-      milestoneRepository,
-      taskRepository,
-      recurringTaskRepository,
+      cleanupRepository: cleanupRepository,
+      goalRepository: goalRepository,
+      milestoneRepository: milestoneRepository,
+      taskRepository: taskRepository,
+      initializationService: initializationService,
+      recurringRuleStoreCoordinator: recurringRuleStoreCoordinator,
+      recurringOccurrenceStoreCoordinator: recurringOccurrenceStoreCoordinator,
     );
 
     return AppDependencies._(
