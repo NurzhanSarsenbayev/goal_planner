@@ -15,15 +15,8 @@ import '../../features/tasks/application/task_store_coordinator.dart';
 import '../../state/planner_store.dart';
 
 class AppDependencies {
-  AppDependencies._({
-    required this.database,
-    required this.cleanupRepository,
-    required this.goalRepository,
-    required this.milestoneRepository,
-    required this.taskRepository,
-    required this.recurringTaskRepository,
-    required this.store,
-  });
+  AppDependencies._({required local.AppDatabase database, required this.store})
+    : _database = database;
 
   factory AppDependencies.create() {
     final database = local.AppDatabase();
@@ -74,27 +67,14 @@ class AppDependencies {
       recurringOccurrenceStoreCoordinator: recurringOccurrenceStoreCoordinator,
     );
 
-    return AppDependencies._(
-      database: database,
-      cleanupRepository: cleanupRepository,
-      goalRepository: goalRepository,
-      milestoneRepository: milestoneRepository,
-      taskRepository: taskRepository,
-      recurringTaskRepository: recurringTaskRepository,
-      store: store,
-    );
+    return AppDependencies._(database: database, store: store);
   }
 
-  final local.AppDatabase database;
-  final DriftPlannerCleanupRepository cleanupRepository;
-  final DriftGoalRepository goalRepository;
-  final DriftMilestoneRepository milestoneRepository;
-  final DriftTaskRepository taskRepository;
-  final DriftRecurringTaskRepository recurringTaskRepository;
+  final local.AppDatabase _database;
   final PlannerStore store;
 
   Future<void> dispose() async {
     store.dispose();
-    await database.close();
+    await _database.close();
   }
 }
