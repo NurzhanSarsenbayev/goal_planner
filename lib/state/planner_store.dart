@@ -2,8 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../features/goals/application/goal_store_coordinator.dart';
 import '../features/milestones/application/milestone_store_coordinator.dart';
-import '../features/tasks/application/task_application_service.dart';
-import '../features/tasks/application/task_repository.dart';
+import '../features/tasks/application/task_store_coordinator.dart';
 import '../features/planner/application/planner_initialization_service.dart';
 import '../features/planner/application/planner_persistence_runner.dart';
 import '../features/recurring/application/recurring_rule_store_coordinator.dart';
@@ -19,31 +18,28 @@ class PlannerStore extends ChangeNotifier {
   PlannerStore({
     required GoalStoreCoordinator goalStoreCoordinator,
     required MilestoneStoreCoordinator milestoneStoreCoordinator,
-    required TaskRepository taskRepository,
+    required TaskStoreCoordinator taskStoreCoordinator,
     required PlannerInitializationService initializationService,
     required RecurringRuleStoreCoordinator recurringRuleStoreCoordinator,
     required RecurringOccurrenceStoreCoordinator
     recurringOccurrenceStoreCoordinator,
   }) : _goalStoreCoordinator = goalStoreCoordinator,
        _milestoneStoreCoordinator = milestoneStoreCoordinator,
-       _taskRepository = taskRepository,
+       _taskStoreCoordinator = taskStoreCoordinator,
        _initializationService = initializationService,
        _recurringRuleStoreCoordinator = recurringRuleStoreCoordinator,
        _recurringOccurrenceStoreCoordinator =
            recurringOccurrenceStoreCoordinator;
 
   final GoalStoreCoordinator _goalStoreCoordinator;
-  final TaskRepository _taskRepository;
+  final MilestoneStoreCoordinator _milestoneStoreCoordinator;
+  final TaskStoreCoordinator _taskStoreCoordinator;
   final PlannerInitializationService _initializationService;
   final PlannerPersistenceRunner _persistenceRunner =
       const PlannerPersistenceRunner();
   final RecurringRuleStoreCoordinator _recurringRuleStoreCoordinator;
   final RecurringOccurrenceStoreCoordinator
   _recurringOccurrenceStoreCoordinator;
-
-  final TaskApplicationService _taskApplicationService =
-      const TaskApplicationService();
-  final MilestoneStoreCoordinator _milestoneStoreCoordinator;
 
   List<Goal> _goals = [];
   List<Milestone> _milestones = [];
@@ -176,9 +172,13 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void addTask(PlannerTask task) {
-    final result = _taskApplicationService.addTask(tasks: _tasks, task: task);
+    final mutation = _taskStoreCoordinator.addTask(
+      tasks: _tasks,
+      recurringExceptions: _recurringExceptions,
+      task: task,
+    );
 
-    _applyTaskMutationResult(result);
+    _applyTaskStoreMutation(mutation);
   }
 
   void addTaskForDate({
@@ -188,15 +188,17 @@ class PlannerStore extends ChangeNotifier {
     String? goalId,
     String? milestoneId,
   }) {
-    final task = _taskApplicationService.createTask(
+    final mutation = _taskStoreCoordinator.addTaskForDate(
+      tasks: _tasks,
+      recurringExceptions: _recurringExceptions,
       title: title,
       description: description,
+      scheduledDate: scheduledDate,
       goalId: goalId,
       milestoneId: milestoneId,
-      scheduledDate: scheduledDate,
     );
 
-    addTask(task);
+    _applyTaskStoreMutation(mutation);
   }
 
   void addTaskForToday({
@@ -271,79 +273,14 @@ class PlannerStore extends ChangeNotifier {
     _applyRecurringRuleStoreMutation(mutation);
   }
 
-  void _deleteRegularTask(String taskId) {
-    final result = _taskApplicationService.deleteTask(
+  void deleteTask(String taskId) {
+    final mutation = _taskStoreCoordinator.deleteTask(
       tasks: _tasks,
+      recurringExceptions: _recurringExceptions,
       taskId: taskId,
     );
 
-    _applyTaskMutationResult(result);
-  }
-
-  void deleteTask(String taskId) {
-    final taskToDelete = _findTaskById(taskId);
-
-    if (taskToDelete == null) {
-      return;
-    }
-
-    if (_isRecurringOccurrence(taskToDelete)) {
-      _deleteRecurringOccurrence(taskToDelete);
-      return;
-    }
-
-    _deleteRegularTask(taskId);
-  }
-
-  PlannerTask? _findTaskById(String taskId) {
-    for (final task in _tasks) {
-      if (task.id == taskId) {
-        return task;
-      }
-    }
-
-    return null;
-  }
-
-  bool _isRecurringOccurrence(PlannerTask task) {
-    return task.recurringRuleId != null && task.scheduledDate != null;
-  }
-
-  void _deleteRecurringOccurrence(PlannerTask task) {
-    final mutation = _recurringOccurrenceStoreCoordinator.deleteOccurrence(
-      task: task,
-      tasks: _tasks,
-      exceptions: _recurringExceptions,
-      now: DateTime.now(),
-    );
-
-    _applyRecurringOccurrenceStoreMutation(mutation);
-  }
-
-  void _rescheduleRecurringOccurrence({
-    required PlannerTask task,
-    required DateTime scheduledDate,
-  }) {
-    final mutation = _recurringOccurrenceStoreCoordinator.rescheduleOccurrence(
-      task: task,
-      scheduledDate: scheduledDate,
-      tasks: _tasks,
-      exceptions: _recurringExceptions,
-      now: DateTime.now(),
-    );
-
-    _applyRecurringOccurrenceStoreMutation(mutation);
-  }
-
-  void _unscheduleRecurringOccurrence(PlannerTask task) {
-    final mutation = _recurringOccurrenceStoreCoordinator.unscheduleOccurrence(
-      task: task,
-      tasks: _tasks,
-      exceptions: _recurringExceptions,
-      now: DateTime.now(),
-    );
-
-    _applyRecurringOccurrenceStoreMutation(mutation);
+    _applyTaskStoreMutation(mutation);
   }
 
   void updateTask({
@@ -351,14 +288,15 @@ class PlannerStore extends ChangeNotifier {
     required String title,
     required String description,
   }) {
-    final result = _taskApplicationService.updateTaskDetails(
+    final mutation = _taskStoreCoordinator.updateTask(
       tasks: _tasks,
+      recurringExceptions: _recurringExceptions,
       taskId: taskId,
       title: title,
       description: description,
     );
 
-    _applyTaskMutationResult(result);
+    _applyTaskStoreMutation(mutation);
   }
 
   void attachTaskToGoal({
@@ -366,45 +304,49 @@ class PlannerStore extends ChangeNotifier {
     required String goalId,
     String? milestoneId,
   }) {
-    final result = _taskApplicationService.attachTaskToGoal(
+    final mutation = _taskStoreCoordinator.attachTaskToGoal(
       tasks: _tasks,
+      recurringExceptions: _recurringExceptions,
       taskId: taskId,
       goalId: goalId,
       milestoneId: milestoneId,
     );
 
-    _applyTaskMutationResult(result);
+    _applyTaskStoreMutation(mutation);
   }
 
   void detachTaskFromGoal(String taskId) {
-    final result = _taskApplicationService.detachTaskFromGoal(
+    final mutation = _taskStoreCoordinator.detachTaskFromGoal(
       tasks: _tasks,
+      recurringExceptions: _recurringExceptions,
       taskId: taskId,
     );
 
-    _applyTaskMutationResult(result);
+    _applyTaskStoreMutation(mutation);
   }
 
   void toggleTaskCompleted(String taskId) {
-    final result = _taskApplicationService.toggleTaskCompleted(
+    final mutation = _taskStoreCoordinator.toggleTaskCompleted(
       tasks: _tasks,
+      recurringExceptions: _recurringExceptions,
       taskId: taskId,
     );
 
-    _applyTaskMutationResult(result);
+    _applyTaskStoreMutation(mutation);
   }
 
   void completeTaskOnDate({
     required String taskId,
     required DateTime completedAt,
   }) {
-    final result = _taskApplicationService.completeTaskOnDate(
+    final mutation = _taskStoreCoordinator.completeTaskOnDate(
       tasks: _tasks,
+      recurringExceptions: _recurringExceptions,
       taskId: taskId,
       completedAt: completedAt,
     );
 
-    _applyTaskMutationResult(result);
+    _applyTaskStoreMutation(mutation);
   }
 
   void scheduleTaskForToday(String taskId) {
@@ -415,69 +357,48 @@ class PlannerStore extends ChangeNotifier {
     required String taskId,
     required DateTime scheduledDate,
   }) {
-    final taskToUpdate = _findTaskById(taskId);
-
-    if (taskToUpdate == null) {
-      return;
-    }
-
-    if (_isRecurringOccurrence(taskToUpdate)) {
-      _rescheduleRecurringOccurrence(
-        task: taskToUpdate,
-        scheduledDate: scheduledDate,
-      );
-      return;
-    }
-
-    final result = _taskApplicationService.scheduleTaskForDate(
+    final mutation = _taskStoreCoordinator.scheduleTaskForDate(
       tasks: _tasks,
+      recurringExceptions: _recurringExceptions,
       taskId: taskId,
       scheduledDate: scheduledDate,
     );
 
-    _applyTaskMutationResult(result);
+    _applyTaskStoreMutation(mutation);
   }
 
   void unscheduleTask(String taskId) {
-    final taskToUpdate = _findTaskById(taskId);
-
-    if (taskToUpdate == null) {
-      return;
-    }
-
-    if (_isRecurringOccurrence(taskToUpdate)) {
-      _unscheduleRecurringOccurrence(taskToUpdate);
-      return;
-    }
-
-    final result = _taskApplicationService.unscheduleTask(
+    final mutation = _taskStoreCoordinator.unscheduleTask(
       tasks: _tasks,
+      recurringExceptions: _recurringExceptions,
       taskId: taskId,
     );
 
-    _applyTaskMutationResult(result);
+    _applyTaskStoreMutation(mutation);
   }
 
   void moveTaskToDirectGoal(String taskId) {
-    final result = _taskApplicationService.moveTaskToDirectGoal(
+    final mutation = _taskStoreCoordinator.moveTaskToDirectGoal(
       tasks: _tasks,
+      recurringExceptions: _recurringExceptions,
       taskId: taskId,
     );
 
-    _applyTaskMutationResult(result);
+    _applyTaskStoreMutation(mutation);
   }
 
   void assignTaskToMilestone({
     required String taskId,
     required String milestoneId,
   }) {
-    final result = _taskApplicationService.assignTaskToMilestone(
+    final mutation = _taskStoreCoordinator.assignTaskToMilestone(
       tasks: _tasks,
+      recurringExceptions: _recurringExceptions,
       taskId: taskId,
       milestoneId: milestoneId,
     );
 
-    _applyTaskMutationResult(result);
+    _applyTaskStoreMutation(mutation);
   }
 
   void ensureRecurringTaskOccurrencesForMonth(DateTime visibleMonth) {
@@ -523,23 +444,17 @@ class PlannerStore extends ChangeNotifier {
     _persistenceRunner.run(mutation.persistOperation);
   }
 
-  void _applyTaskMutationResult(TaskMutationResult result) {
-    if (!result.hasChange) {
+  void _applyTaskStoreMutation(TaskStoreMutation? mutation) {
+    if (mutation == null) {
       return;
     }
 
-    _tasks = result.tasks;
+    _tasks = mutation.tasks;
+    _recurringExceptions = mutation.recurringExceptions;
+
     notifyListeners();
 
-    final taskToPersist = result.taskToPersist;
-    if (taskToPersist != null) {
-      _persistenceRunner.run(() => _taskRepository.saveTask(taskToPersist));
-    }
-
-    final taskIdToDelete = result.taskIdToDelete;
-    if (taskIdToDelete != null) {
-      _persistenceRunner.run(() => _taskRepository.deleteTask(taskIdToDelete));
-    }
+    _persistenceRunner.run(mutation.persistOperation);
   }
 
   void _applyRecurringRuleStoreMutation(RecurringRuleStoreMutation? mutation) {
