@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../features/goals/application/goal_repository.dart';
-import '../features/goals/application/goal_application_service.dart';
+import '../features/goals/application/goal_store_coordinator.dart';
 import '../features/milestones/application/milestone_repository.dart';
 import '../features/milestones/application/milestone_application_service.dart';
 import '../features/tasks/application/task_application_service.dart';
@@ -21,7 +20,7 @@ import '../shared/planner_dates.dart';
 class PlannerStore extends ChangeNotifier {
   PlannerStore({
     required PlannerCleanupRepository cleanupRepository,
-    required GoalRepository goalRepository,
+    required GoalStoreCoordinator goalStoreCoordinator,
     required MilestoneRepository milestoneRepository,
     required TaskRepository taskRepository,
     required PlannerInitializationService initializationService,
@@ -29,7 +28,7 @@ class PlannerStore extends ChangeNotifier {
     required RecurringOccurrenceStoreCoordinator
     recurringOccurrenceStoreCoordinator,
   }) : _cleanupRepository = cleanupRepository,
-       _goalRepository = goalRepository,
+       _goalStoreCoordinator = goalStoreCoordinator,
        _milestoneRepository = milestoneRepository,
        _taskRepository = taskRepository,
        _initializationService = initializationService,
@@ -38,7 +37,7 @@ class PlannerStore extends ChangeNotifier {
            recurringOccurrenceStoreCoordinator;
 
   final PlannerCleanupRepository _cleanupRepository;
-  final GoalRepository _goalRepository;
+  final GoalStoreCoordinator _goalStoreCoordinator;
   final MilestoneRepository _milestoneRepository;
   final TaskRepository _taskRepository;
   final PlannerInitializationService _initializationService;
@@ -50,8 +49,6 @@ class PlannerStore extends ChangeNotifier {
 
   final TaskApplicationService _taskApplicationService =
       const TaskApplicationService();
-  final GoalApplicationService _goalApplicationService =
-      const GoalApplicationService();
   final MilestoneApplicationService _milestoneApplicationService =
       const MilestoneApplicationService();
 
@@ -85,13 +82,17 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void addGoal({required String title, required String description}) {
-    final result = _goalApplicationService.createGoal(
+    final mutation = _goalStoreCoordinator.createGoal(
       goals: _goals,
+      milestones: _milestones,
+      tasks: _tasks,
+      recurringRules: _recurringRules,
+      recurringExceptions: _recurringExceptions,
       title: title,
       description: description,
     );
 
-    _applyGoalMutationResult(result);
+    _applyGoalStoreMutation(mutation);
   }
 
   void updateGoal({
@@ -99,18 +100,22 @@ class PlannerStore extends ChangeNotifier {
     required String title,
     required String description,
   }) {
-    final result = _goalApplicationService.updateGoalDetails(
+    final mutation = _goalStoreCoordinator.updateGoal(
       goals: _goals,
+      milestones: _milestones,
+      tasks: _tasks,
+      recurringRules: _recurringRules,
+      recurringExceptions: _recurringExceptions,
       goalId: goalId,
       title: title,
       description: description,
     );
 
-    _applyGoalMutationResult(result);
+    _applyGoalStoreMutation(mutation);
   }
 
   void deleteGoalWithRelatedData(String goalId) {
-    final result = _goalApplicationService.deleteGoalWithRelatedData(
+    final mutation = _goalStoreCoordinator.deleteGoalWithRelatedData(
       goalId: goalId,
       goals: _goals,
       milestones: _milestones,
@@ -119,17 +124,7 @@ class PlannerStore extends ChangeNotifier {
       recurringExceptions: _recurringExceptions,
     );
 
-    _goals = result.goals;
-    _milestones = result.milestones;
-    _tasks = result.tasks;
-    _recurringRules = result.recurringRules;
-    _recurringExceptions = result.recurringExceptions;
-
-    notifyListeners();
-
-    _persistenceRunner.run(
-      () => _cleanupRepository.deleteGoalWithRelatedData(result.goalIdToDelete),
-    );
+    _applyGoalStoreMutation(mutation);
   }
 
   void addMilestone(Milestone milestone) {
@@ -518,18 +513,20 @@ class PlannerStore extends ChangeNotifier {
     _applyRecurringOccurrenceStoreMutation(mutation);
   }
 
-  void _applyGoalMutationResult(GoalMutationResult result) {
-    if (!result.hasChange) {
+  void _applyGoalStoreMutation(GoalStoreMutation? mutation) {
+    if (mutation == null) {
       return;
     }
 
-    _goals = result.goals;
+    _goals = mutation.goals;
+    _milestones = mutation.milestones;
+    _tasks = mutation.tasks;
+    _recurringRules = mutation.recurringRules;
+    _recurringExceptions = mutation.recurringExceptions;
+
     notifyListeners();
 
-    final goalToPersist = result.goalToPersist;
-    if (goalToPersist != null) {
-      _persistenceRunner.run(() => _goalRepository.saveGoal(goalToPersist));
-    }
+    _persistenceRunner.run(mutation.persistOperation);
   }
 
   void _applyMilestoneMutationResult(MilestoneMutationResult result) {
