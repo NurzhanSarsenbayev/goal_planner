@@ -6,7 +6,6 @@ import '../features/milestones/application/milestone_repository.dart';
 import '../features/milestones/application/milestone_application_service.dart';
 import '../features/tasks/application/task_application_service.dart';
 import '../features/tasks/application/task_repository.dart';
-import '../features/recurring/application/recurring_task_application_service.dart';
 import '../features/recurring/application/recurring_task_repository.dart';
 import '../features/planner/application/planner_cleanup_repository.dart';
 import '../features/planner/application/planner_initialization_service.dart';
@@ -31,7 +30,6 @@ class PlannerStore extends ChangeNotifier {
       _goalRepository = goalRepository,
       _milestoneRepository = milestoneRepository,
       _taskRepository = taskRepository,
-      _recurringTaskRepository = recurringTaskRepository,
       _initializationService = PlannerInitializationService(
         goalRepository: goalRepository,
         milestoneRepository: milestoneRepository,
@@ -50,7 +48,6 @@ class PlannerStore extends ChangeNotifier {
   final GoalRepository _goalRepository;
   final MilestoneRepository _milestoneRepository;
   final TaskRepository _taskRepository;
-  final RecurringTaskRepository _recurringTaskRepository;
   final PlannerInitializationService _initializationService;
   final PlannerPersistenceRunner _persistenceRunner =
       const PlannerPersistenceRunner();
@@ -64,8 +61,6 @@ class PlannerStore extends ChangeNotifier {
       const GoalApplicationService();
   final MilestoneApplicationService _milestoneApplicationService =
       const MilestoneApplicationService();
-  final RecurringTaskApplicationService _recurringTaskApplicationService =
-      RecurringTaskApplicationService();
 
   List<Goal> _goals = [];
   List<Milestone> _milestones = [];
@@ -519,29 +514,15 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void ensureRecurringTaskOccurrencesForMonth(DateTime visibleMonth) {
-    final monthStart = DateTime(visibleMonth.year, visibleMonth.month);
-    final monthEnd = DateTime(visibleMonth.year, visibleMonth.month + 1, 0);
-
-    final generatedTasks = _recurringTaskApplicationService
-        .generateOccurrencesForRange(
+    final mutation = _recurringOccurrenceStoreCoordinator
+        .ensureOccurrencesForMonth(
+          visibleMonth: visibleMonth,
           rules: _recurringRules,
+          tasks: _tasks,
           exceptions: _recurringExceptions,
-          existingTasks: _tasks,
-          startDate: monthStart,
-          endDate: monthEnd,
         );
 
-    if (generatedTasks.isEmpty) {
-      return;
-    }
-
-    _tasks = [..._tasks, ...generatedTasks];
-
-    notifyListeners();
-
-    _persistenceRunner.run(
-      () => _recurringTaskRepository.saveGeneratedOccurrences(generatedTasks),
-    );
+    _applyRecurringOccurrenceStoreMutation(mutation);
   }
 
   void _applyGoalMutationResult(GoalMutationResult result) {

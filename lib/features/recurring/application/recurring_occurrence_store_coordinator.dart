@@ -1,5 +1,6 @@
 import '../../../models/planner_task.dart';
 import '../../../models/recurring_task_exception.dart';
+import '../../../models/recurring_task_rule.dart';
 import 'recurring_task_application_service.dart';
 import 'recurring_task_repository.dart';
 
@@ -25,6 +26,36 @@ class RecurringOccurrenceStoreCoordinator {
 
   final RecurringTaskRepository _recurringTaskRepository;
   final RecurringTaskApplicationService _recurringTaskApplicationService;
+
+  RecurringOccurrenceStoreMutation? ensureOccurrencesForMonth({
+    required DateTime visibleMonth,
+    required List<RecurringTaskRule> rules,
+    required List<PlannerTask> tasks,
+    required List<RecurringTaskException> exceptions,
+  }) {
+    final monthStart = DateTime(visibleMonth.year, visibleMonth.month);
+    final monthEnd = DateTime(visibleMonth.year, visibleMonth.month + 1, 0);
+
+    final generatedTasks = _recurringTaskApplicationService
+        .generateOccurrencesForRange(
+          rules: rules,
+          exceptions: exceptions,
+          existingTasks: tasks,
+          startDate: monthStart,
+          endDate: monthEnd,
+        );
+
+    if (generatedTasks.isEmpty) {
+      return null;
+    }
+
+    return RecurringOccurrenceStoreMutation(
+      tasks: [...tasks, ...generatedTasks],
+      exceptions: exceptions,
+      persistOperation: () =>
+          _recurringTaskRepository.saveGeneratedOccurrences(generatedTasks),
+    );
+  }
 
   RecurringOccurrenceStoreMutation? deleteOccurrence({
     required PlannerTask task,
