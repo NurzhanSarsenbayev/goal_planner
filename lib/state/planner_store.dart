@@ -11,6 +11,7 @@ import '../features/recurring/application/recurring_task_repository.dart';
 import '../features/planner/application/planner_cleanup_repository.dart';
 import '../features/planner/application/planner_initialization_service.dart';
 import '../features/planner/application/planner_persistence_runner.dart';
+import '../features/recurring/application/recurring_rule_store_coordinator.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
@@ -35,7 +36,11 @@ class PlannerStore extends ChangeNotifier {
         milestoneRepository: milestoneRepository,
         taskRepository: taskRepository,
         recurringTaskRepository: recurringTaskRepository,
-      );
+      ) {
+    _recurringRuleStoreCoordinator = RecurringRuleStoreCoordinator(
+      recurringTaskRepository: recurringTaskRepository,
+    );
+  }
 
   final PlannerCleanupRepository _cleanupRepository;
   final GoalRepository _goalRepository;
@@ -45,6 +50,7 @@ class PlannerStore extends ChangeNotifier {
   final PlannerInitializationService _initializationService;
   final PlannerPersistenceRunner _persistenceRunner =
       const PlannerPersistenceRunner();
+  late final RecurringRuleStoreCoordinator _recurringRuleStoreCoordinator;
 
   final TaskApplicationService _taskApplicationService =
       const TaskApplicationService();
@@ -241,7 +247,7 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void addRecurringTaskRule(RecurringTaskRule rule) {
-    final result = _recurringTaskApplicationService.addRule(
+    final mutation = _recurringRuleStoreCoordinator.addRule(
       rule: rule,
       rules: _recurringRules,
       exceptions: _recurringExceptions,
@@ -249,93 +255,52 @@ class PlannerStore extends ChangeNotifier {
       today: todayDate(),
     );
 
-    final ruleToPersist = result.ruleToPersist;
-
-    if (ruleToPersist == null) {
-      return;
-    }
-
-    _recurringRules = result.rules;
-    _tasks = result.tasks;
-    _recurringExceptions = result.exceptions;
-
-    notifyListeners();
-
-    _persistenceRunner.run(
-      () => _recurringTaskRepository.saveRecurringTaskRuleWithOccurrences(
-        rule: ruleToPersist,
-        generatedTasks: result.generatedTasks,
-      ),
-    );
+    _applyRecurringRuleStoreMutation(mutation);
   }
 
   void setRecurringTaskRuleActive({
     required String ruleId,
     required bool isActive,
   }) {
-    if (isActive) {
-      _activateRecurringTaskRule(ruleId);
-      return;
-    }
+    final mutation = isActive
+        ? _recurringRuleStoreCoordinator.activateRule(
+            ruleId: ruleId,
+            rules: _recurringRules,
+            exceptions: _recurringExceptions,
+            tasks: _tasks,
+            today: todayDate(),
+          )
+        : _recurringRuleStoreCoordinator.deactivateRule(
+            ruleId: ruleId,
+            rules: _recurringRules,
+            exceptions: _recurringExceptions,
+            tasks: _tasks,
+          );
 
-    _deactivateRecurringTaskRule(ruleId);
+    _applyRecurringRuleStoreMutation(mutation);
   }
 
   void deleteRecurringTaskRule(String ruleId) {
-    final result = _recurringTaskApplicationService.deleteRule(
+    final mutation = _recurringRuleStoreCoordinator.deleteRule(
       ruleId: ruleId,
       rules: _recurringRules,
-      tasks: _tasks,
       exceptions: _recurringExceptions,
+      tasks: _tasks,
     );
 
-    final ruleIdToDelete = result.ruleIdToDelete;
-
-    if (ruleIdToDelete == null) {
-      return;
-    }
-
-    _recurringRules = result.rules;
-    _tasks = result.tasks;
-    _recurringExceptions = result.exceptions;
-
-    notifyListeners();
-
-    _persistenceRunner.run(
-      () => _recurringTaskRepository.deleteRecurringTaskRuleAndCleanSeries(
-        ruleIdToDelete,
-      ),
-    );
+    _applyRecurringRuleStoreMutation(mutation);
   }
 
   void updateRecurringTaskRule(RecurringTaskRule updatedRule) {
-    final result = _recurringTaskApplicationService.updateRule(
+    final mutation = _recurringRuleStoreCoordinator.updateRule(
       updatedRule: updatedRule,
       rules: _recurringRules,
-      tasks: _tasks,
       exceptions: _recurringExceptions,
+      tasks: _tasks,
       today: todayDate(),
     );
 
-    final ruleToPersist = result.ruleToPersist;
-
-    if (ruleToPersist == null) {
-      return;
-    }
-
-    _recurringRules = result.rules;
-    _tasks = result.tasks;
-    _recurringExceptions = result.exceptions;
-
-    notifyListeners();
-
-    _persistenceRunner.run(
-      () => _recurringTaskRepository
-          .updateRecurringTaskRuleAndReplaceUnfinishedOccurrences(
-            rule: ruleToPersist,
-            generatedTasks: result.generatedTasks,
-          ),
-    );
+    _applyRecurringRuleStoreMutation(mutation);
   }
 
   void _deleteRegularTask(String taskId) {
@@ -460,63 +425,6 @@ class PlannerStore extends ChangeNotifier {
       () => _recurringTaskRepository.updateTaskWithRecurringException(
         task: taskToPersist,
         exception: exceptionToPersist,
-      ),
-    );
-  }
-
-  void _deactivateRecurringTaskRule(String ruleId) {
-    final result = _recurringTaskApplicationService.deactivateRule(
-      ruleId: ruleId,
-      rules: _recurringRules,
-      tasks: _tasks,
-      exceptions: _recurringExceptions,
-    );
-
-    final ruleToPersist = result.ruleToPersist;
-
-    if (ruleToPersist == null) {
-      return;
-    }
-
-    _recurringRules = result.rules;
-    _tasks = result.tasks;
-    _recurringExceptions = result.exceptions;
-
-    notifyListeners();
-
-    _persistenceRunner.run(
-      () => _recurringTaskRepository
-          .deactivateRecurringTaskRuleAndDeleteUnfinishedOccurrences(
-            ruleToPersist,
-          ),
-    );
-  }
-
-  void _activateRecurringTaskRule(String ruleId) {
-    final result = _recurringTaskApplicationService.activateRule(
-      ruleId: ruleId,
-      rules: _recurringRules,
-      tasks: _tasks,
-      exceptions: _recurringExceptions,
-      today: todayDate(),
-    );
-
-    final ruleToPersist = result.ruleToPersist;
-
-    if (ruleToPersist == null) {
-      return;
-    }
-
-    _recurringRules = result.rules;
-    _tasks = result.tasks;
-    _recurringExceptions = result.exceptions;
-
-    notifyListeners();
-
-    _persistenceRunner.run(
-      () => _recurringTaskRepository.saveRecurringTaskRuleWithOccurrences(
-        rule: ruleToPersist,
-        generatedTasks: result.generatedTasks,
       ),
     );
   }
@@ -728,5 +636,19 @@ class PlannerStore extends ChangeNotifier {
     if (taskIdToDelete != null) {
       _persistenceRunner.run(() => _taskRepository.deleteTask(taskIdToDelete));
     }
+  }
+
+  void _applyRecurringRuleStoreMutation(RecurringRuleStoreMutation? mutation) {
+    if (mutation == null) {
+      return;
+    }
+
+    _recurringRules = mutation.rules;
+    _tasks = mutation.tasks;
+    _recurringExceptions = mutation.exceptions;
+
+    notifyListeners();
+
+    _persistenceRunner.run(mutation.persistOperation);
   }
 }
