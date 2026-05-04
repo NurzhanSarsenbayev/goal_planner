@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../app/app_dialogs.dart' as app_dialogs;
+import '../../tasks/presentation/task_date_dialogs.dart' as task_date_dialogs;
 import '../../../models/goal.dart';
 import '../../../models/milestone.dart';
 import '../../../models/planner_task.dart';
@@ -109,7 +109,7 @@ class GoalDetailsDialogActions {
     })
     onScheduleTaskForDate,
   }) async {
-    final selectedDate = await app_dialogs.showScheduleTaskDatePicker(
+    final selectedDate = await task_date_dialogs.showScheduleTaskDatePicker(
       context,
       initialDate: task.scheduledDate,
     );
@@ -222,7 +222,7 @@ class GoalDetailsDialogActions {
     })
     onCompleteTaskOnDate,
   }) {
-    app_dialogs.handleTaskCompletionWithDateFlow(
+    task_date_dialogs.handleTaskCompletionWithDateFlow(
       context,
       task: task,
       onToggleTaskCompleted: onToggleTaskCompleted,

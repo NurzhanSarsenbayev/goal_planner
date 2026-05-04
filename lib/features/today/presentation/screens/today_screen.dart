@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../app/app_dialogs.dart';
+import '../../../tasks/presentation/task_date_dialogs.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
 import '../../../../shared/presentation/widgets/placeholder_screen.dart';
