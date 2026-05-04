@@ -10,6 +10,7 @@ import '../features/recurring/application/recurring_task_application_service.dar
 import '../features/recurring/application/recurring_task_repository.dart';
 import '../features/planner/application/planner_cleanup_repository.dart';
 import '../features/planner/application/planner_initialization_service.dart';
+import '../features/planner/application/planner_persistence_runner.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
@@ -35,12 +36,15 @@ class PlannerStore extends ChangeNotifier {
         taskRepository: taskRepository,
         recurringTaskRepository: recurringTaskRepository,
       );
+
   final PlannerCleanupRepository _cleanupRepository;
   final GoalRepository _goalRepository;
   final MilestoneRepository _milestoneRepository;
   final TaskRepository _taskRepository;
   final RecurringTaskRepository _recurringTaskRepository;
   final PlannerInitializationService _initializationService;
+  final PlannerPersistenceRunner _persistenceRunner =
+      const PlannerPersistenceRunner();
 
   final TaskApplicationService _taskApplicationService =
       const TaskApplicationService();
@@ -123,8 +127,8 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(
-      _cleanupRepository.deleteGoalWithRelatedData(result.goalIdToDelete),
+    _persistenceRunner.run(
+      () => _cleanupRepository.deleteGoalWithRelatedData(result.goalIdToDelete),
     );
   }
 
@@ -167,8 +171,8 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(
-      _cleanupRepository.deleteMilestoneAndMoveTasksToDirect(
+    _persistenceRunner.run(
+      () => _cleanupRepository.deleteMilestoneAndMoveTasksToDirect(
         result.milestoneIdToDelete,
       ),
     );
@@ -190,8 +194,10 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(
-      _cleanupRepository.deleteMilestoneWithTasks(result.milestoneIdToDelete),
+    _persistenceRunner.run(
+      () => _cleanupRepository.deleteMilestoneWithTasks(
+        result.milestoneIdToDelete,
+      ),
     );
   }
 
@@ -255,8 +261,8 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(
-      _recurringTaskRepository.saveRecurringTaskRuleWithOccurrences(
+    _persistenceRunner.run(
+      () => _recurringTaskRepository.saveRecurringTaskRuleWithOccurrences(
         rule: ruleToPersist,
         generatedTasks: result.generatedTasks,
       ),
@@ -295,8 +301,8 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(
-      _recurringTaskRepository.deleteRecurringTaskRuleAndCleanSeries(
+    _persistenceRunner.run(
+      () => _recurringTaskRepository.deleteRecurringTaskRuleAndCleanSeries(
         ruleIdToDelete,
       ),
     );
@@ -323,8 +329,8 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(
-      _recurringTaskRepository
+    _persistenceRunner.run(
+      () => _recurringTaskRepository
           .updateRecurringTaskRuleAndReplaceUnfinishedOccurrences(
             rule: ruleToPersist,
             generatedTasks: result.generatedTasks,
@@ -390,8 +396,8 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(
-      _recurringTaskRepository.deleteTaskWithRecurringException(
+    _persistenceRunner.run(
+      () => _recurringTaskRepository.deleteTaskWithRecurringException(
         taskId: taskIdToDelete,
         exception: exceptionToPersist,
       ),
@@ -422,8 +428,8 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(
-      _recurringTaskRepository.updateTaskWithRecurringException(
+    _persistenceRunner.run(
+      () => _recurringTaskRepository.updateTaskWithRecurringException(
         task: taskToPersist,
         exception: exceptionToPersist,
       ),
@@ -450,8 +456,8 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(
-      _recurringTaskRepository.updateTaskWithRecurringException(
+    _persistenceRunner.run(
+      () => _recurringTaskRepository.updateTaskWithRecurringException(
         task: taskToPersist,
         exception: exceptionToPersist,
       ),
@@ -478,8 +484,8 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(
-      _recurringTaskRepository
+    _persistenceRunner.run(
+      () => _recurringTaskRepository
           .deactivateRecurringTaskRuleAndDeleteUnfinishedOccurrences(
             ruleToPersist,
           ),
@@ -507,8 +513,8 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(
-      _recurringTaskRepository.saveRecurringTaskRuleWithOccurrences(
+    _persistenceRunner.run(
+      () => _recurringTaskRepository.saveRecurringTaskRuleWithOccurrences(
         rule: ruleToPersist,
         generatedTasks: result.generatedTasks,
       ),
@@ -670,14 +676,9 @@ class PlannerStore extends ChangeNotifier {
 
     notifyListeners();
 
-    _persist(_recurringTaskRepository.saveGeneratedOccurrences(generatedTasks));
-  }
-
-  void _persist(Future<void> operation) {
-    operation.catchError((Object error, StackTrace stackTrace) {
-      debugPrint('Persistence error: $error');
-      debugPrintStack(stackTrace: stackTrace);
-    });
+    _persistenceRunner.run(
+      () => _recurringTaskRepository.saveGeneratedOccurrences(generatedTasks),
+    );
   }
 
   void _applyGoalMutationResult(GoalMutationResult result) {
@@ -690,7 +691,7 @@ class PlannerStore extends ChangeNotifier {
 
     final goalToPersist = result.goalToPersist;
     if (goalToPersist != null) {
-      _persist(_goalRepository.saveGoal(goalToPersist));
+      _persistenceRunner.run(() => _goalRepository.saveGoal(goalToPersist));
     }
   }
 
@@ -704,7 +705,9 @@ class PlannerStore extends ChangeNotifier {
 
     final milestoneToPersist = result.milestoneToPersist;
     if (milestoneToPersist != null) {
-      _persist(_milestoneRepository.saveMilestone(milestoneToPersist));
+      _persistenceRunner.run(
+        () => _milestoneRepository.saveMilestone(milestoneToPersist),
+      );
     }
   }
 
@@ -718,12 +721,12 @@ class PlannerStore extends ChangeNotifier {
 
     final taskToPersist = result.taskToPersist;
     if (taskToPersist != null) {
-      _persist(_taskRepository.saveTask(taskToPersist));
+      _persistenceRunner.run(() => _taskRepository.saveTask(taskToPersist));
     }
 
     final taskIdToDelete = result.taskIdToDelete;
     if (taskIdToDelete != null) {
-      _persist(_taskRepository.deleteTask(taskIdToDelete));
+      _persistenceRunner.run(() => _taskRepository.deleteTask(taskIdToDelete));
     }
   }
 }
