@@ -601,15 +601,15 @@ Not doing in recurring MVP:
 
 ## Phase 6.6: Architecture stabilization before Habits
 
-Status: not started.
+Status: done.
 
 Goal:
 
 Prepare the codebase for larger feature growth before adding Habits.
 
-The app now has enough real product behavior that continuing with the current MVP structure would make future changes harder, riskier and slower.
+The app had enough real product behavior that continuing with the previous MVP structure would have made future changes harder, riskier and slower.
 
-This phase is about making the codebase easier to extend, test and reason about.
+This phase focused on reducing `PlannerStore` responsibilities, clarifying feature boundaries, and making the codebase safer to extend without a big-bang rewrite.
 
 Reason:
 
@@ -627,125 +627,185 @@ Phase 6.5 added serious recurring task behavior:
 - All Tasks filtering;
 - Reports compatibility.
 
-The feature works, but it also exposed architectural pressure.
+The feature worked, but it exposed architectural pressure.
 
-Main architectural risks:
+Main architectural risks addressed:
 
-- `PlannerStore` still coordinates too many domains:
+- `PlannerStore` coordinated too many domains:
   - goals;
   - milestones;
   - tasks;
   - recurring rules;
   - recurring occurrence generation;
   - persistence orchestration.
-- `PlannerRepository` still owns persistence for multiple aggregates.
-- `AppShell` still owns too many dialog flows and screen callbacks.
-- Large screens still mix rendering, local state, action sheets, dialogs and user intent handling.
-- Some controllers use optimistic local updates that may diverge from recurring-aware store behavior.
-- Future features like Habits, reminders, filters, search and richer Calendar views would increase this complexity if added now.
+- Persistence responsibilities were too broad.
+- `AppShell` owned too many dialog flows and screen callbacks.
+- Presentation files were becoming harder to extend safely.
+- Adding Habits directly into the same store would have made the architecture worse.
 
-Architecture direction:
+Implemented:
 
-Move toward a practical feature-based structure without a big-bang rewrite.
+### Store and application orchestration
 
-Target direction:
+- Extracted `TaskApplicationService`.
+- Extracted `GoalApplicationService`.
+- Extracted `MilestoneApplicationService`.
+- Extracted `RecurringTaskApplicationService`.
+- Extracted `PlannerInitializationService`.
+- Extracted `PlannerPersistenceRunner`.
+- Extracted `GoalStoreCoordinator`.
+- Extracted `MilestoneStoreCoordinator`.
+- Extracted `TaskStoreCoordinator`.
+- Extracted `RecurringRuleStoreCoordinator`.
+- Extracted `RecurringOccurrenceStoreCoordinator`.
+- Moved recurring month occurrence generation into the occurrence coordinator.
+- Removed direct repository/application-service orchestration from `PlannerStore`.
 
-- `lib/app/`
-  - `app_shell.dart`
-  - `actions/`
-- `lib/core/`
-  - `dates/`
-- `lib/data/`
-  - `local/`
-  - `repositories/`
-- `lib/features/recurring/`
-  - `application/`
-  - `domain/`
-  - `presentation/`
-- `lib/features/tasks/`
-  - `application/`
-  - `presentation/`
-- `lib/features/goals/`
-  - `application/`
-  - `presentation/`
-- `lib/features/calendar/`
-  - `presentation/`
-- `lib/features/reports/`
-  - `application/`
-  - `presentation/`
+Current `PlannerStore` role:
 
-This is a direction, not a requirement to move every file immediately.
+- holds the main planning state;
+- exposes read-only getters;
+- acts as UI-facing facade for the existing planning loop;
+- delegates goal/milestone/task/recurring operations to feature coordinators;
+- applies returned state mutations;
+- calls `notifyListeners`;
+- runs persistence operations through `PlannerPersistenceRunner`.
 
-The goal is to reduce coupling and clarify responsibilities step by step.
+Important result:
 
-Initial architecture stabilization scope:
+`PlannerStore` was reduced from a god object into a central state facade.
 
-### Recurring architecture
+It is still intentionally kept as the central store for the existing goal/task planning loop, but it no longer owns most business orchestration or persistence details.
 
-- Extract recurring task application service.
-- Move recurring orchestration out of `PlannerStore`.
-- Keep `PlannerStore` as a thin state coordinator.
-- Extract recurring repository from `PlannerRepository`.
-- Keep recurring lifecycle logic covered by tests.
-- Keep recurring behavior unchanged after refactor.
-
-### Task architecture
-
-- Extract task application service.
-- Separate normal task operations from recurring-aware task operations.
-- Review scheduling, unscheduling, completion, attachment, detachment and deletion flows.
-- Ensure recurring occurrence behavior remains correct.
-
-### Goal and milestone architecture
-
-- Extract goal application service.
-- Extract milestone application service.
-- Keep goal/milestone deletion behavior consistent with recurring data cleanup.
-- Make goal/milestone operations easier to extend later.
-
-### AppShell cleanup
-
-- Extract goal dialog actions from `AppShell`.
-- Extract task dialog actions from `AppShell`.
-- Keep `AppShell` focused on:
-  - app lifecycle;
-  - navigation;
-  - high-level screen wiring.
-
-### Screen cleanup
-
-- Review `AllTasksScreen` and `AllTasksController`.
-- Remove or simplify optimistic local state if it conflicts with store behavior.
-- Split `GoalDetailsScreen` into smaller sections/actions.
-- Split `CalendarScreen` responsibilities where needed.
-- Keep screens focused on rendering state and emitting user intents.
+Further decomposition into multiple feature stores is deferred.
 
 ### Repository cleanup
 
-- Split persistence responsibilities where it reduces coupling.
-- Avoid making one repository responsible for every aggregate.
-- Keep cross-aggregate transactions explicit and named clearly.
+- Split persistence responsibilities from the old broad planner repository.
+- Extracted:
+  - `DriftGoalRepository`;
+  - `DriftMilestoneRepository`;
+  - `DriftTaskRepository`;
+  - `DriftRecurringTaskRepository`;
+  - `DriftPlannerCleanupRepository`.
+- Replaced broad planner cleanup usage with a dedicated cleanup boundary.
+- Kept cross-aggregate cleanup operations explicit and named.
+
+### Recurring architecture
+
+- Moved recurring domain logic into `features/recurring/domain`.
+- Kept recurring application orchestration in `features/recurring/application`.
+- Kept recurring presentation in `features/recurring/presentation`.
+- Extracted recurring lifecycle logic away from `PlannerStore`.
+- Kept recurring occurrence generation outside the store.
+- Kept recurring behavior covered by unit tests.
+
+### Reports architecture
+
+- Moved report calculation into `features/reports/application`.
+- Moved report domain models into `features/reports/domain`.
+- Moved Reports presentation into `features/reports/presentation`.
+- Kept Reports screen focused on presentation orchestration.
+
+### Presentation and app shell cleanup
+
+- Extracted `GoalDialogActions`.
+- Extracted `TaskDialogActions`.
+- Extracted recurring task dialog helpers.
+- Extracted goal/task/recurring/task-date dialog helpers from app layer.
+- Deleted old `app_dialogs.dart`.
+- Extracted `AppNavigationActions`.
+- Extracted `MainTabBuilder`.
+- Moved `MoreScreen` into `app/navigation/screens`.
+- Moved Today presentation into `features/today/presentation`.
+- Moved Calendar presentation into `features/calendar/presentation`.
+- Moved Goals presentation into `features/goals/presentation`.
+- Moved Goal Details presentation into feature folders.
+- Moved All Tasks presentation into `features/tasks/presentation`.
+- Moved Recurring Tasks presentation into `features/recurring/presentation`.
+- Moved shared reusable widgets into `shared/presentation/widgets`.
+
+### View builders and screen simplification
+
+- Extracted `TodayTaskViewBuilder`.
+- Extracted `CalendarTaskViewBuilder`.
+- Extracted `GoalDetailsViewBuilder`.
+- Extracted `AllTasksViewBuilder`.
+- Removed shadow-state from `AllTasksController`.
+- Removed shadow-state from `GoalDetailsController`.
+- Kept screens closer to rendering state and emitting user intents.
+
+### Composition cleanup
+
+- Extracted `AppDependencies` as the app composition root.
+- Moved store dependency composition out of `PlannerStore`.
+- Kept concrete repository wiring in `AppDependencies`.
+- Cleaned `AppDependencies` public API so external code only needs:
+  - `store`;
+  - `dispose()`.
+
+### Old structure cleanup
+
+- Removed old `lib/screens`.
+- Removed old root widget files from `lib/widgets`.
+- Removed old app action/dialog leftovers.
+
+Current result:
+
+The app architecture is now safer for the next feature phase.
+
+The main planning loop still uses one central `PlannerStore`, but feature operations are routed through dedicated coordinators:
+
+- `GoalStoreCoordinator`;
+- `MilestoneStoreCoordinator`;
+- `TaskStoreCoordinator`;
+- `RecurringRuleStoreCoordinator`;
+- `RecurringOccurrenceStoreCoordinator`.
+
+This makes the current MVP easier to reason about and reduces the risk of adding new behavior directly into one giant store.
+
+Manual architecture rule after this phase:
+
+> New major features must not be added directly into `PlannerStore`.
+
+Especially for Habits:
+
+> Habits should use their own feature folder, application layer, repository and store/coordinator instead of becoming another section inside `PlannerStore`.
 
 Definition of done:
 
-- `PlannerStore` is significantly thinner and mostly coordinates state.
-- Recurring application logic is not embedded directly in `PlannerStore`.
-- Recurring persistence is not buried inside one general repository.
+- `PlannerStore` is significantly thinner and mostly acts as a state facade.
+- Goal lifecycle orchestration is outside `PlannerStore`.
+- Milestone lifecycle orchestration is outside `PlannerStore`.
+- Task lifecycle orchestration is outside `PlannerStore`.
+- Recurring rule and occurrence orchestration are outside `PlannerStore`.
+- Direct repository dependencies are removed from `PlannerStore`.
+- Direct application service dependencies are removed from `PlannerStore`.
 - `AppShell` no longer owns most dialog workflows.
-- Large screens are split where it improves readability and extension.
+- Feature presentation folders are clearer.
 - Existing recurring behavior still works after refactor.
 - `flutter analyze` passes.
 - `flutter test` passes.
-- Manual QA for recurring flows passes again.
+- Manual run passes.
+
+Known remaining technical debt:
+
+- `PlannerStore` is still a central app facade for the current planning loop.
+- `TaskStoreCoordinator` is large because task behavior is the most complex part of the app.
+- Store coordinators should get focused unit tests before large future changes.
+- Further state-management cleanup may be useful later.
+- Riverpod migration is deferred until there is a clear need and better feature-store boundaries.
 
 Not doing in this phase:
 
 - Full rewrite to strict Clean Architecture.
+- Riverpod migration.
 - Dependency injection framework.
 - Moving every model into feature folders in one big change.
-- Riverpod migration.
+- Splitting `PlannerStore` into multiple stores immediately.
 - Backend/sync.
 - New product features.
+
 
 ## Phase 7: Habits MVP
 
@@ -885,7 +945,7 @@ Main differentiator:
 - Recurring task planning MVP exists, but advanced recurrence rules are not supported yet.
 - No habits.
 - No habit completion history.
-- Architecture stabilization is required before adding Habits.
+- Architecture stabilization before Habits is completed, but further feature-store decomposition remains a later improvement.
 - Reports support only Today / Last 7 days / Last 14 days.
 - No custom selected-day report yet.
 - No custom report date ranges.
