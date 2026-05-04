@@ -9,7 +9,7 @@ import '../features/tasks/application/task_repository.dart';
 import '../features/recurring/application/recurring_task_application_service.dart';
 import '../features/recurring/application/recurring_task_repository.dart';
 import '../features/planner/application/planner_cleanup_repository.dart';
-import 'planner_seed_service.dart';
+import '../features/planner/application/planner_initialization_service.dart';
 import '../models/goal.dart';
 import '../models/milestone.dart';
 import '../models/planner_task.dart';
@@ -29,18 +29,18 @@ class PlannerStore extends ChangeNotifier {
       _milestoneRepository = milestoneRepository,
       _taskRepository = taskRepository,
       _recurringTaskRepository = recurringTaskRepository,
-      _seedService = PlannerSeedService(
+      _initializationService = PlannerInitializationService(
         goalRepository: goalRepository,
         milestoneRepository: milestoneRepository,
         taskRepository: taskRepository,
+        recurringTaskRepository: recurringTaskRepository,
       );
-
   final PlannerCleanupRepository _cleanupRepository;
   final GoalRepository _goalRepository;
   final MilestoneRepository _milestoneRepository;
   final TaskRepository _taskRepository;
   final RecurringTaskRepository _recurringTaskRepository;
-  final PlannerSeedService _seedService;
+  final PlannerInitializationService _initializationService;
 
   final TaskApplicationService _taskApplicationService =
       const TaskApplicationService();
@@ -63,32 +63,21 @@ class PlannerStore extends ChangeNotifier {
   List<PlannerTask> get tasks => List.unmodifiable(_tasks);
   List<RecurringTaskRule> get recurringRules =>
       List.unmodifiable(_recurringRules);
-
   List<RecurringTaskException> get recurringExceptions =>
       List.unmodifiable(_recurringExceptions);
   bool get isInitialized => _isInitialized;
 
   Future<void> initialize() async {
-    await _loadFromDatabase();
+    final initialState = await _initializationService.initialize();
 
-    if (_goals.isEmpty && _milestones.isEmpty && _tasks.isEmpty) {
-      await _seedService.seedInitialData();
-      await _loadFromDatabase();
-    }
-
-    await _ensureUpcomingRecurringTaskOccurrences();
+    _goals = initialState.goals;
+    _milestones = initialState.milestones;
+    _tasks = initialState.tasks;
+    _recurringRules = initialState.recurringRules;
+    _recurringExceptions = initialState.recurringExceptions;
 
     _isInitialized = true;
     notifyListeners();
-  }
-
-  Future<void> _loadFromDatabase() async {
-    _goals = await _goalRepository.loadGoals();
-    _milestones = await _milestoneRepository.loadMilestones();
-    _tasks = await _taskRepository.loadTasks();
-    _recurringRules = await _recurringTaskRepository.loadRecurringTaskRules();
-    _recurringExceptions = await _recurringTaskRepository
-        .loadRecurringTaskExceptions();
   }
 
   void addGoal({required String title, required String description}) {
@@ -658,24 +647,6 @@ class PlannerStore extends ChangeNotifier {
     );
 
     _applyTaskMutationResult(result);
-  }
-
-  Future<void> _ensureUpcomingRecurringTaskOccurrences() async {
-    final generatedTasks = _recurringTaskApplicationService
-        .generateUpcomingOccurrences(
-          rules: _recurringRules,
-          exceptions: _recurringExceptions,
-          existingTasks: _tasks,
-          today: todayDate(),
-        );
-
-    if (generatedTasks.isEmpty) {
-      return;
-    }
-
-    _tasks = [..._tasks, ...generatedTasks];
-
-    await _recurringTaskRepository.saveGeneratedOccurrences(generatedTasks);
   }
 
   void ensureRecurringTaskOccurrencesForMonth(DateTime visibleMonth) {

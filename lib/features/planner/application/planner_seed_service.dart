@@ -1,7 +1,7 @@
-import '../features/tasks/application/task_repository.dart';
-import '../features/goals/application/goal_repository.dart';
-import '../features/milestones/application/milestone_repository.dart';
-import '../data/sample_data.dart';
+import '../../../data/sample_data.dart';
+import '../../goals/application/goal_repository.dart';
+import '../../milestones/application/milestone_repository.dart';
+import '../../tasks/application/task_repository.dart';
 
 class PlannerSeedService {
   const PlannerSeedService({
