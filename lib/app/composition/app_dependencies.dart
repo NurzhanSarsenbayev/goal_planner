@@ -10,6 +10,7 @@ import '../../features/planner/application/planner_initialization_service.dart';
 import '../../features/recurring/application/recurring_occurrence_store_coordinator.dart';
 import '../../features/recurring/application/recurring_rule_store_coordinator.dart';
 import '../../features/goals/application/goal_store_coordinator.dart';
+import '../../features/milestones/application/milestone_store_coordinator.dart';
 import '../../state/planner_store.dart';
 
 class AppDependencies {
@@ -36,6 +37,11 @@ class AppDependencies {
       cleanupRepository: cleanupRepository,
     );
 
+    final milestoneStoreCoordinator = MilestoneStoreCoordinator(
+      milestoneRepository: milestoneRepository,
+      cleanupRepository: cleanupRepository,
+    );
+
     final initializationService = PlannerInitializationService(
       goalRepository: goalRepository,
       milestoneRepository: milestoneRepository,
@@ -53,9 +59,8 @@ class AppDependencies {
         );
 
     final store = PlannerStore(
-      cleanupRepository: cleanupRepository,
       goalStoreCoordinator: goalStoreCoordinator,
-      milestoneRepository: milestoneRepository,
+      milestoneStoreCoordinator: milestoneStoreCoordinator,
       taskRepository: taskRepository,
       initializationService: initializationService,
       recurringRuleStoreCoordinator: recurringRuleStoreCoordinator,

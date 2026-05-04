@@ -1,11 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 import '../features/goals/application/goal_store_coordinator.dart';
-import '../features/milestones/application/milestone_repository.dart';
-import '../features/milestones/application/milestone_application_service.dart';
+import '../features/milestones/application/milestone_store_coordinator.dart';
 import '../features/tasks/application/task_application_service.dart';
 import '../features/tasks/application/task_repository.dart';
-import '../features/planner/application/planner_cleanup_repository.dart';
 import '../features/planner/application/planner_initialization_service.dart';
 import '../features/planner/application/planner_persistence_runner.dart';
 import '../features/recurring/application/recurring_rule_store_coordinator.dart';
@@ -19,26 +17,22 @@ import '../shared/planner_dates.dart';
 
 class PlannerStore extends ChangeNotifier {
   PlannerStore({
-    required PlannerCleanupRepository cleanupRepository,
     required GoalStoreCoordinator goalStoreCoordinator,
-    required MilestoneRepository milestoneRepository,
+    required MilestoneStoreCoordinator milestoneStoreCoordinator,
     required TaskRepository taskRepository,
     required PlannerInitializationService initializationService,
     required RecurringRuleStoreCoordinator recurringRuleStoreCoordinator,
     required RecurringOccurrenceStoreCoordinator
     recurringOccurrenceStoreCoordinator,
-  }) : _cleanupRepository = cleanupRepository,
-       _goalStoreCoordinator = goalStoreCoordinator,
-       _milestoneRepository = milestoneRepository,
+  }) : _goalStoreCoordinator = goalStoreCoordinator,
+       _milestoneStoreCoordinator = milestoneStoreCoordinator,
        _taskRepository = taskRepository,
        _initializationService = initializationService,
        _recurringRuleStoreCoordinator = recurringRuleStoreCoordinator,
        _recurringOccurrenceStoreCoordinator =
            recurringOccurrenceStoreCoordinator;
 
-  final PlannerCleanupRepository _cleanupRepository;
   final GoalStoreCoordinator _goalStoreCoordinator;
-  final MilestoneRepository _milestoneRepository;
   final TaskRepository _taskRepository;
   final PlannerInitializationService _initializationService;
   final PlannerPersistenceRunner _persistenceRunner =
@@ -49,8 +43,7 @@ class PlannerStore extends ChangeNotifier {
 
   final TaskApplicationService _taskApplicationService =
       const TaskApplicationService();
-  final MilestoneApplicationService _milestoneApplicationService =
-      const MilestoneApplicationService();
+  final MilestoneStoreCoordinator _milestoneStoreCoordinator;
 
   List<Goal> _goals = [];
   List<Milestone> _milestones = [];
@@ -128,12 +121,15 @@ class PlannerStore extends ChangeNotifier {
   }
 
   void addMilestone(Milestone milestone) {
-    final result = _milestoneApplicationService.addMilestone(
+    final mutation = _milestoneStoreCoordinator.addMilestone(
       milestones: _milestones,
+      tasks: _tasks,
+      recurringRules: _recurringRules,
+      recurringExceptions: _recurringExceptions,
       milestone: milestone,
     );
 
-    _applyMilestoneMutationResult(result);
+    _applyMilestoneStoreMutation(mutation);
   }
 
   void updateMilestone({
@@ -141,40 +137,34 @@ class PlannerStore extends ChangeNotifier {
     required String title,
     required String description,
   }) {
-    final result = _milestoneApplicationService.updateMilestoneDetails(
+    final mutation = _milestoneStoreCoordinator.updateMilestone(
       milestones: _milestones,
+      tasks: _tasks,
+      recurringRules: _recurringRules,
+      recurringExceptions: _recurringExceptions,
       milestoneId: milestoneId,
       title: title,
       description: description,
     );
 
-    _applyMilestoneMutationResult(result);
+    _applyMilestoneStoreMutation(mutation);
   }
 
   void deleteMilestoneAndMoveTasksToDirect(String milestoneId) {
-    final result = _milestoneApplicationService
+    final mutation = _milestoneStoreCoordinator
         .deleteMilestoneAndMoveTasksToDirect(
           milestoneId: milestoneId,
           milestones: _milestones,
           tasks: _tasks,
           recurringRules: _recurringRules,
+          recurringExceptions: _recurringExceptions,
         );
 
-    _milestones = result.milestones;
-    _tasks = result.tasks;
-    _recurringRules = result.recurringRules;
-
-    notifyListeners();
-
-    _persistenceRunner.run(
-      () => _cleanupRepository.deleteMilestoneAndMoveTasksToDirect(
-        result.milestoneIdToDelete,
-      ),
-    );
+    _applyMilestoneStoreMutation(mutation);
   }
 
   void deleteMilestoneWithTasks(String milestoneId) {
-    final result = _milestoneApplicationService.deleteMilestoneWithTasks(
+    final mutation = _milestoneStoreCoordinator.deleteMilestoneWithTasks(
       milestoneId: milestoneId,
       milestones: _milestones,
       tasks: _tasks,
@@ -182,18 +172,7 @@ class PlannerStore extends ChangeNotifier {
       recurringExceptions: _recurringExceptions,
     );
 
-    _milestones = result.milestones;
-    _tasks = result.tasks;
-    _recurringRules = result.recurringRules;
-    _recurringExceptions = result.recurringExceptions;
-
-    notifyListeners();
-
-    _persistenceRunner.run(
-      () => _cleanupRepository.deleteMilestoneWithTasks(
-        result.milestoneIdToDelete,
-      ),
-    );
+    _applyMilestoneStoreMutation(mutation);
   }
 
   void addTask(PlannerTask task) {
@@ -529,20 +508,19 @@ class PlannerStore extends ChangeNotifier {
     _persistenceRunner.run(mutation.persistOperation);
   }
 
-  void _applyMilestoneMutationResult(MilestoneMutationResult result) {
-    if (!result.hasChange) {
+  void _applyMilestoneStoreMutation(MilestoneStoreMutation? mutation) {
+    if (mutation == null) {
       return;
     }
 
-    _milestones = result.milestones;
+    _milestones = mutation.milestones;
+    _tasks = mutation.tasks;
+    _recurringRules = mutation.recurringRules;
+    _recurringExceptions = mutation.recurringExceptions;
+
     notifyListeners();
 
-    final milestoneToPersist = result.milestoneToPersist;
-    if (milestoneToPersist != null) {
-      _persistenceRunner.run(
-        () => _milestoneRepository.saveMilestone(milestoneToPersist),
-      );
-    }
+    _persistenceRunner.run(mutation.persistOperation);
   }
 
   void _applyTaskMutationResult(TaskMutationResult result) {
