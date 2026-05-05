@@ -43,6 +43,7 @@ class _AppShellState extends State<AppShell> {
 
     _navigationActions = AppNavigationActions(
       store: _store,
+      habitStore: _dependencies.habitStore,
       taskDialogActions: _taskDialogActions,
       recurringRuleDialogActions: _recurringRuleDialogActions,
     );
