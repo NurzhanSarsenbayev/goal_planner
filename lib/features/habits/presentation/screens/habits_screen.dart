@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../application/habit_store.dart';
+import '../../domain/habit_entry_status.dart';
 import '../widgets/add_habit_dialog.dart';
 import '../widgets/habit_week_grid.dart';
 
@@ -38,6 +39,24 @@ class _HabitsScreenState extends State<HabitsScreen> {
     );
   }
 
+  Future<void> _toggleHabitCell({
+    required String habitId,
+    required DateTime date,
+    required HabitEntryStatus status,
+  }) async {
+    if (status == HabitEntryStatus.done) {
+      await widget.habitStore.clearEntry(habitId: habitId, date: date);
+
+      return;
+    }
+
+    await widget.habitStore.markEntry(
+      habitId: habitId,
+      date: date,
+      status: HabitEntryStatus.done,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -47,7 +66,10 @@ class _HabitsScreenState extends State<HabitsScreen> {
 
         return Scaffold(
           appBar: AppBar(title: const Text('Habits')),
-          body: _HabitsBody(habitStore: habitStore),
+          body: _HabitsBody(
+            habitStore: habitStore,
+            onToggleCell: _toggleHabitCell,
+          ),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: _showAddHabitDialog,
             icon: const Icon(Icons.add),
@@ -60,9 +82,10 @@ class _HabitsScreenState extends State<HabitsScreen> {
 }
 
 class _HabitsBody extends StatelessWidget {
-  const _HabitsBody({required this.habitStore});
+  const _HabitsBody({required this.habitStore, required this.onToggleCell});
 
   final HabitStore habitStore;
+  final HabitCellToggleCallback onToggleCell;
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +131,7 @@ class _HabitsBody extends StatelessWidget {
       onCurrentWeek: () {
         habitStore.goToCurrentWeek();
       },
+      onToggleCell: onToggleCell,
     );
   }
 }

@@ -4,6 +4,13 @@ import '../../../../shared/planner_dates.dart';
 import '../../application/habit_week_view_builder.dart';
 import '../../domain/habit_entry_status.dart';
 
+typedef HabitCellToggleCallback =
+    Future<void> Function({
+      required String habitId,
+      required DateTime date,
+      required HabitEntryStatus status,
+    });
+
 class HabitWeekGrid extends StatelessWidget {
   const HabitWeekGrid({
     required this.weekView,
@@ -11,6 +18,7 @@ class HabitWeekGrid extends StatelessWidget {
     required this.onPreviousWeek,
     required this.onNextWeek,
     required this.onCurrentWeek,
+    required this.onToggleCell,
     super.key,
   });
 
@@ -19,6 +27,7 @@ class HabitWeekGrid extends StatelessWidget {
   final VoidCallback onPreviousWeek;
   final VoidCallback onNextWeek;
   final VoidCallback onCurrentWeek;
+  final HabitCellToggleCallback onToggleCell;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +71,10 @@ class HabitWeekGrid extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: _HabitWeekTable(weekView: weekView),
+              child: _HabitWeekTable(
+                weekView: weekView,
+                onToggleCell: onToggleCell,
+              ),
             ),
           ),
         ),
@@ -72,9 +84,10 @@ class HabitWeekGrid extends StatelessWidget {
 }
 
 class _HabitWeekTable extends StatelessWidget {
-  const _HabitWeekTable({required this.weekView});
+  const _HabitWeekTable({required this.weekView, required this.onToggleCell});
 
   final HabitWeekView weekView;
+  final HabitCellToggleCallback onToggleCell;
 
   static const double _habitColumnWidth = 160;
   static const double _dayColumnWidth = 48;
@@ -94,6 +107,7 @@ class _HabitWeekTable extends StatelessWidget {
             row: row,
             habitColumnWidth: _habitColumnWidth,
             dayColumnWidth: _dayColumnWidth,
+            onToggleCell: onToggleCell,
           ),
           const SizedBox(height: 8),
         ],
@@ -158,11 +172,13 @@ class _HabitRow extends StatelessWidget {
     required this.row,
     required this.habitColumnWidth,
     required this.dayColumnWidth,
+    required this.onToggleCell,
   });
 
   final HabitWeekRow row;
   final double habitColumnWidth;
   final double dayColumnWidth;
+  final HabitCellToggleCallback onToggleCell;
 
   @override
   Widget build(BuildContext context) {
@@ -197,7 +213,22 @@ class _HabitRow extends StatelessWidget {
             for (final cell in row.cells)
               SizedBox(
                 width: dayColumnWidth,
-                child: Center(child: _HabitStatusIcon(status: cell.status)),
+                child: Center(
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(999),
+                    onTap: () {
+                      onToggleCell(
+                        habitId: row.habit.id,
+                        date: cell.date,
+                        status: cell.status,
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: _HabitStatusIcon(status: cell.status),
+                    ),
+                  ),
+                ),
               ),
           ],
         ),
