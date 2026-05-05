@@ -13,6 +13,8 @@ abstract interface class HabitRepository {
 
   Future<void> saveEntry(HabitEntry entry);
 
+  Future<void> deleteEntry(String entryId);
+
   Future<void> archiveHabit(String habitId);
 
   Future<void> deleteHabit(String habitId);

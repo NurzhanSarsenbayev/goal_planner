@@ -80,6 +80,13 @@ class DriftHabitRepository implements HabitRepository {
   }
 
   @override
+  Future<void> deleteEntry(String entryId) async {
+    await (_database.delete(
+      _database.habitEntries,
+    )..where((table) => table.id.equals(entryId))).go();
+  }
+
+  @override
   Future<void> archiveHabit(String habitId) async {
     await (_database.update(
       _database.habits,
