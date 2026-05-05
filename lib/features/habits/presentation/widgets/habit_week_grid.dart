@@ -31,31 +31,84 @@ class HabitWeekGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final weekEnd = weekView.dates.last;
-
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-          child: Row(
+        _WeekHeader(
+          weekView: weekView,
+          onPreviousWeek: onPreviousWeek,
+          onNextWeek: onNextWeek,
+          onCurrentWeek: onCurrentWeek,
+        ),
+        if (isLoading) const LinearProgressIndicator(),
+        Expanded(
+          child: ListView.separated(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 96),
+            itemCount: weekView.rows.length + 1,
+            separatorBuilder: (_, index) {
+              if (index == 0) {
+                return const SizedBox(height: 18);
+              }
+
+              return const SizedBox(height: 24);
+            },
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return _DayLabelsRow(dates: weekView.dates);
+              }
+
+              final row = weekView.rows[index - 1];
+
+              return _HabitJournalCard(row: row, onToggleCell: onToggleCell);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _WeekHeader extends StatelessWidget {
+  const _WeekHeader({
+    required this.weekView,
+    required this.onPreviousWeek,
+    required this.onNextWeek,
+    required this.onCurrentWeek,
+  });
+
+  final HabitWeekView weekView;
+  final VoidCallback onPreviousWeek;
+  final VoidCallback onNextWeek;
+  final VoidCallback onCurrentWeek;
+
+  @override
+  Widget build(BuildContext context) {
+    final weekEnd = weekView.dates.last;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+      child: Column(
+        children: [
+          Text(
+            '${formatPlannerDate(weekView.weekStart)} — '
+            '${formatPlannerDate(weekEnd)}',
+            textAlign: TextAlign.center,
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 4),
+          Row(
             children: [
               IconButton(
                 onPressed: onPreviousWeek,
                 icon: const Icon(Icons.chevron_left),
               ),
               Expanded(
-                child: Column(
-                  children: [
-                    Text(
-                      '${formatPlannerDate(weekView.weekStart)} — ${formatPlannerDate(weekEnd)}',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    TextButton(
-                      onPressed: onCurrentWeek,
-                      child: const Text('Current week'),
-                    ),
-                  ],
+                child: Center(
+                  child: TextButton(
+                    onPressed: onCurrentWeek,
+                    child: const Text('Current week'),
+                  ),
                 ),
               ),
               IconButton(
@@ -64,89 +117,29 @@ class HabitWeekGrid extends StatelessWidget {
               ),
             ],
           ),
-        ),
-        if (isLoading) const LinearProgressIndicator(),
-        Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: _HabitWeekTable(
-                  weekView: weekView,
-                  onToggleCell: onToggleCell,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _HabitWeekTable extends StatelessWidget {
-  const _HabitWeekTable({required this.weekView, required this.onToggleCell});
-
-  final HabitWeekView weekView;
-  final HabitCellToggleCallback onToggleCell;
-
-  static const double _habitColumnWidth = 172;
-  static const double _dayColumnWidth = 44;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _HeaderRow(
-          dates: weekView.dates,
-          habitColumnWidth: _habitColumnWidth,
-          dayColumnWidth: _dayColumnWidth,
-        ),
-        const SizedBox(height: 8),
-        for (final row in weekView.rows) ...[
-          _HabitRow(
-            row: row,
-            habitColumnWidth: _habitColumnWidth,
-            dayColumnWidth: _dayColumnWidth,
-            onToggleCell: onToggleCell,
-          ),
-          const SizedBox(height: 8),
         ],
-      ],
+      ),
     );
   }
 }
 
-class _HeaderRow extends StatelessWidget {
-  const _HeaderRow({
-    required this.dates,
-    required this.habitColumnWidth,
-    required this.dayColumnWidth,
-  });
+class _DayLabelsRow extends StatelessWidget {
+  const _DayLabelsRow({required this.dates});
 
   final List<DateTime> dates;
-  final double habitColumnWidth;
-  final double dayColumnWidth;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(width: habitColumnWidth),
-        for (final date in dates)
-          SizedBox(
-            width: dayColumnWidth,
-            child: _DayHeader(date: date),
-          ),
+        for (final date in dates) Expanded(child: _DayLabel(date: date)),
       ],
     );
   }
 }
 
-class _DayHeader extends StatelessWidget {
-  const _DayHeader({required this.date});
+class _DayLabel extends StatelessWidget {
+  const _DayLabel({required this.date});
 
   final DateTime date;
 
@@ -156,7 +149,8 @@ class _DayHeader extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      margin: const EdgeInsets.symmetric(horizontal: 2),
+      padding: const EdgeInsets.symmetric(vertical: 7),
       decoration: BoxDecoration(
         color: isToday ? colorScheme.primaryContainer : null,
         borderRadius: BorderRadius.circular(14),
@@ -165,9 +159,9 @@ class _DayHeader extends StatelessWidget {
         children: [
           Text(
             _weekdayLabel(date),
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
               color: isToday ? colorScheme.onPrimaryContainer : null,
-              fontWeight: isToday ? FontWeight.w700 : null,
+              fontWeight: isToday ? FontWeight.w700 : FontWeight.w500,
             ),
           ),
           const SizedBox(height: 2),
@@ -175,148 +169,183 @@ class _DayHeader extends StatelessWidget {
             date.day.toString(),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: isToday ? colorScheme.onPrimaryContainer : null,
-              fontWeight: isToday ? FontWeight.w700 : null,
+              fontWeight: isToday ? FontWeight.w700 : FontWeight.w500,
             ),
           ),
         ],
       ),
     );
   }
-
-  static String _weekdayLabel(DateTime date) {
-    return switch (date.weekday) {
-      DateTime.monday => 'Mon',
-      DateTime.tuesday => 'Tue',
-      DateTime.wednesday => 'Wed',
-      DateTime.thursday => 'Thu',
-      DateTime.friday => 'Fri',
-      DateTime.saturday => 'Sat',
-      DateTime.sunday => 'Sun',
-      _ => '',
-    };
-  }
-
-  static bool _isSameDate(DateTime left, DateTime right) {
-    return left.year == right.year &&
-        left.month == right.month &&
-        left.day == right.day;
-  }
 }
 
-class _HabitRow extends StatelessWidget {
-  const _HabitRow({
-    required this.row,
-    required this.habitColumnWidth,
-    required this.dayColumnWidth,
-    required this.onToggleCell,
-  });
+class _HabitJournalCard extends StatelessWidget {
+  const _HabitJournalCard({required this.row, required this.onToggleCell});
 
   final HabitWeekRow row;
-  final double habitColumnWidth;
-  final double dayColumnWidth;
   final HabitCellToggleCallback onToggleCell;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
-        borderRadius: BorderRadius.circular(18),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      child: Row(
-        children: [
-          SizedBox(
-            width: habitColumnWidth,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  row.habit.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                ),
-                if (row.habit.description.isNotEmpty) ...[
-                  const SizedBox(height: 3),
-                  Text(
-                    row.habit.description,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          row.habit.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+        ),
+        if (row.habit.description.isNotEmpty) ...[
+          const SizedBox(height: 3),
+          Text(
+            row.habit.description,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
-          for (final cell in row.cells)
-            SizedBox(
-              width: dayColumnWidth,
-              child: Center(
-                child: _HabitCellButton(
-                  status: cell.status,
-                  onTap: () {
-                    onToggleCell(
-                      habitId: row.habit.id,
-                      date: cell.date,
-                      status: cell.status,
-                    );
-                  },
-                ),
-              ),
-            ),
         ],
-      ),
+        const SizedBox(height: 10),
+        _HabitSegmentsRow(row: row, onToggleCell: onToggleCell),
+      ],
     );
   }
 }
 
-class _HabitCellButton extends StatelessWidget {
-  const _HabitCellButton({required this.status, required this.onTap});
+class _HabitSegmentsRow extends StatelessWidget {
+  const _HabitSegmentsRow({required this.row, required this.onToggleCell});
+
+  final HabitWeekRow row;
+  final HabitCellToggleCallback onToggleCell;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        for (var index = 0; index < row.cells.length; index += 1)
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(
+                right: index == row.cells.length - 1 ? 0 : 2,
+              ),
+              child: _HabitSegmentCell(
+                status: row.cells[index].status,
+                borderRadius: _borderRadiusForIndex(
+                  index: index,
+                  total: row.cells.length,
+                ),
+                onTap: () {
+                  onToggleCell(
+                    habitId: row.habit.id,
+                    date: row.cells[index].date,
+                    status: row.cells[index].status,
+                  );
+                },
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  BorderRadius _borderRadiusForIndex({required int index, required int total}) {
+    const radius = Radius.circular(12);
+
+    if (total == 1) {
+      return const BorderRadius.all(radius);
+    }
+
+    return BorderRadius.horizontal(
+      left: index == 0 ? radius : Radius.zero,
+      right: index == total - 1 ? radius : Radius.zero,
+    );
+  }
+}
+
+class _HabitSegmentCell extends StatelessWidget {
+  const _HabitSegmentCell({
+    required this.status,
+    required this.borderRadius,
+    required this.onTap,
+  });
 
   final HabitEntryStatus status;
+  final BorderRadius borderRadius;
   final VoidCallback onTap;
-
-  bool get _isDone => status == HabitEntryStatus.done;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Material(
-      color: _isDone ? colorScheme.primary : colorScheme.surface,
-      shape: const CircleBorder(),
+      color: _backgroundColor(colorScheme),
+      borderRadius: borderRadius,
       child: InkWell(
-        customBorder: const CircleBorder(),
+        borderRadius: borderRadius,
         onTap: onTap,
         child: SizedBox(
-          width: 32,
-          height: 32,
-          child: Icon(
-            _icon,
-            size: 20,
-            color: _isDone
-                ? colorScheme.onPrimary
-                : colorScheme.onSurfaceVariant,
+          height: 42,
+          child: Center(
+            child: _icon == null
+                ? null
+                : Icon(_icon, size: 20, color: _foregroundColor(colorScheme)),
           ),
         ),
       ),
     );
   }
 
-  IconData get _icon {
+  Color _backgroundColor(ColorScheme colorScheme) {
     return switch (status) {
-      HabitEntryStatus.none => Icons.add,
+      HabitEntryStatus.none => colorScheme.surfaceContainerHighest,
+      HabitEntryStatus.done => colorScheme.primary,
+      HabitEntryStatus.incomplete => colorScheme.secondaryContainer,
+      HabitEntryStatus.failed => colorScheme.errorContainer,
+      HabitEntryStatus.skipped => colorScheme.surfaceContainerHigh,
+    };
+  }
+
+  Color _foregroundColor(ColorScheme colorScheme) {
+    return switch (status) {
+      HabitEntryStatus.done => colorScheme.onPrimary,
+      HabitEntryStatus.failed => colorScheme.onErrorContainer,
+      HabitEntryStatus.incomplete => colorScheme.onSecondaryContainer,
+      HabitEntryStatus.skipped => colorScheme.onSurfaceVariant,
+      HabitEntryStatus.none => colorScheme.onSurfaceVariant,
+    };
+  }
+
+  IconData? get _icon {
+    return switch (status) {
+      HabitEntryStatus.none => null,
       HabitEntryStatus.done => Icons.check,
       HabitEntryStatus.incomplete => Icons.remove,
       HabitEntryStatus.failed => Icons.close,
       HabitEntryStatus.skipped => Icons.do_not_disturb_on_outlined,
     };
   }
+}
+
+String _weekdayLabel(DateTime date) {
+  return switch (date.weekday) {
+    DateTime.monday => 'Mon',
+    DateTime.tuesday => 'Tue',
+    DateTime.wednesday => 'Wed',
+    DateTime.thursday => 'Thu',
+    DateTime.friday => 'Fri',
+    DateTime.saturday => 'Sat',
+    DateTime.sunday => 'Sun',
+    _ => '',
+  };
+}
+
+bool _isSameDate(DateTime left, DateTime right) {
+  return left.year == right.year &&
+      left.month == right.month &&
+      left.day == right.day;
 }
