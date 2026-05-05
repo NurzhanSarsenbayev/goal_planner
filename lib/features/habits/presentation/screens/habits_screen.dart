@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../application/habit_store.dart';
 import '../widgets/add_habit_dialog.dart';
+import '../widgets/habit_week_grid.dart';
 
 class HabitsScreen extends StatefulWidget {
   const HabitsScreen({required this.habitStore, super.key});
@@ -95,21 +96,17 @@ class _HabitsBody extends StatelessWidget {
       );
     }
 
-    return ListView.separated(
-      padding: const EdgeInsets.all(16),
-      itemCount: activeHabits.length,
-      separatorBuilder: (context, index) => const SizedBox(height: 8),
-      itemBuilder: (context, index) {
-        final habit = activeHabits[index];
-
-        return Card(
-          child: ListTile(
-            title: Text(habit.title),
-            subtitle: habit.description.isEmpty
-                ? null
-                : Text(habit.description),
-          ),
-        );
+    return HabitWeekGrid(
+      weekView: habitStore.weekView,
+      isLoading: habitStore.isLoading,
+      onPreviousWeek: () {
+        habitStore.goToPreviousWeek();
+      },
+      onNextWeek: () {
+        habitStore.goToNextWeek();
+      },
+      onCurrentWeek: () {
+        habitStore.goToCurrentWeek();
       },
     );
   }
