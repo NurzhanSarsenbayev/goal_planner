@@ -93,6 +93,9 @@ class MainTabBuilder {
         onOpenAllTasks: () {
           _navigationActions.openAllTasks(context);
         },
+        onOpenHabits: () {
+          _navigationActions.openHabits(context);
+        },
         onOpenReports: () {
           _navigationActions.openReports(context);
         },

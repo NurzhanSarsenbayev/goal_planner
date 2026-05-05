@@ -6,11 +6,13 @@ class MoreScreen extends StatelessWidget {
     required this.onOpenAllTasks,
     required this.onOpenReports,
     required this.onOpenRecurringTasks,
+    required this.onOpenHabits,
   });
 
   final VoidCallback onOpenAllTasks;
   final VoidCallback onOpenReports;
   final VoidCallback onOpenRecurringTasks;
+  final VoidCallback onOpenHabits;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,16 @@ class MoreScreen extends StatelessWidget {
             subtitle: const Text('View all tasks in one place.'),
             trailing: const Icon(Icons.chevron_right),
             onTap: onOpenAllTasks,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Card(
+          child: ListTile(
+            leading: const Icon(Icons.check_circle_outline),
+            title: const Text('Habits'),
+            subtitle: const Text('Track repeated daily behavior.'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: onOpenHabits,
           ),
         ),
         const SizedBox(height: 8),

@@ -5,6 +5,7 @@ import '../../features/goals/presentation/screens/goal_details_screen.dart';
 import '../../features/tasks/presentation/screens/all_tasks_screen.dart';
 import '../../features/recurring/presentation/screens/recurring_tasks_screen.dart';
 import '../../features/reports/presentation/screens/reports_screen.dart';
+import '../../features/habits/presentation/screens/habits_screen.dart';
 import '../../state/planner_store.dart';
 import '../../features/recurring/presentation/recurring_rule_dialog_actions.dart';
 import '../../features/tasks/presentation/task_dialog_actions.dart';
@@ -100,6 +101,16 @@ class AppNavigationActions {
               );
             },
           );
+        },
+      ),
+    );
+  }
+
+  void openHabits(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) {
+          return const HabitsScreen();
         },
       ),
     );
