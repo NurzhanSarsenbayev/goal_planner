@@ -105,6 +105,51 @@ class Tasks extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+class Habits extends Table {
+  TextColumn get id => text()();
+
+  TextColumn get title => text()();
+
+  TextColumn get description => text().withDefault(const Constant(''))();
+
+  TextColumn get trackingType => text()();
+
+  IntColumn get targetCount => integer().nullable()();
+
+  IntColumn get sortOrder => integer()();
+
+  BoolColumn get isArchived => boolean().withDefault(const Constant(false))();
+
+  DateTimeColumn get createdAt => dateTime()();
+
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+class HabitEntries extends Table {
+  TextColumn get id => text()();
+
+  TextColumn get habitId =>
+      text().references(Habits, #id, onDelete: KeyAction.cascade)();
+
+  DateTimeColumn get date => dateTime()();
+
+  TextColumn get status => text()();
+
+  IntColumn get completedCount => integer().withDefault(const Constant(0))();
+
+  TextColumn get note => text().nullable()();
+
+  DateTimeColumn get createdAt => dateTime()();
+
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 @DriftDatabase(
   tables: [
     Goals,
@@ -112,13 +157,15 @@ class Tasks extends Table {
     RecurringTaskRules,
     RecurringTaskExceptions,
     Tasks,
+    Habits,
+    HabitEntries,
   ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
@@ -128,6 +175,11 @@ class AppDatabase extends _$AppDatabase {
           await migrator.createTable(recurringTaskRules);
           await migrator.createTable(recurringTaskExceptions);
           await migrator.addColumn(tasks, tasks.recurringRuleId);
+        }
+
+        if (from < 3) {
+          await migrator.createTable(habits);
+          await migrator.createTable(habitEntries);
         }
       },
     );
