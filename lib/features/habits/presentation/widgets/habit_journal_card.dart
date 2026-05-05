@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'habit_week_summary_row.dart';
 import '../../application/habit_week_view_builder.dart';
 import 'habit_presentation_callbacks.dart';
 import 'habit_segment_cell.dart';
@@ -53,6 +54,8 @@ class HabitJournalCard extends StatelessWidget {
                       ),
                     ),
                   ],
+                  const SizedBox(height: 4),
+                  HabitWeekSummaryRow(summary: row.summary),
                 ],
               ),
             ),

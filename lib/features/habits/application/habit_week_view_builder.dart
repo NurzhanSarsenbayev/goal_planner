@@ -1,3 +1,4 @@
+import 'habit_week_summary.dart';
 import '../../../shared/planner_dates.dart';
 import '../domain/habit.dart';
 import '../domain/habit_entry.dart';
@@ -16,10 +17,15 @@ class HabitWeekView {
 }
 
 class HabitWeekRow {
-  const HabitWeekRow({required this.habit, required this.cells});
+  const HabitWeekRow({
+    required this.habit,
+    required this.cells,
+    required this.summary,
+  });
 
   final Habit habit;
   final List<HabitWeekCell> cells;
+  final HabitWeekSummary summary;
 }
 
 class HabitWeekCell {
@@ -33,7 +39,12 @@ class HabitWeekCell {
 }
 
 class HabitWeekViewBuilder {
-  const HabitWeekViewBuilder();
+  const HabitWeekViewBuilder({
+    HabitWeekSummaryCalculator summaryCalculator =
+        const HabitWeekSummaryCalculator(),
+  }) : _summaryCalculator = summaryCalculator;
+
+  final HabitWeekSummaryCalculator _summaryCalculator;
 
   HabitWeekView build({
     required List<Habit> habits,
@@ -55,16 +66,10 @@ class HabitWeekViewBuilder {
 
     final rows = [
       for (final habit in activeHabits)
-        HabitWeekRow(
+        _buildRow(
           habit: habit,
-          cells: [
-            for (final date in dates)
-              _buildCell(
-                habitId: habit.id,
-                date: date,
-                entriesByHabitAndDate: entriesByHabitAndDate,
-              ),
-          ],
+          dates: dates,
+          entriesByHabitAndDate: entriesByHabitAndDate,
         ),
     ];
 
@@ -72,6 +77,27 @@ class HabitWeekViewBuilder {
       weekStart: normalizedWeekStart,
       dates: dates,
       rows: rows,
+    );
+  }
+
+  HabitWeekRow _buildRow({
+    required Habit habit,
+    required List<DateTime> dates,
+    required Map<String, HabitEntry> entriesByHabitAndDate,
+  }) {
+    final cells = [
+      for (final date in dates)
+        _buildCell(
+          habitId: habit.id,
+          date: date,
+          entriesByHabitAndDate: entriesByHabitAndDate,
+        ),
+    ];
+
+    return HabitWeekRow(
+      habit: habit,
+      cells: cells,
+      summary: _summaryCalculator.calculate(cells),
     );
   }
 
