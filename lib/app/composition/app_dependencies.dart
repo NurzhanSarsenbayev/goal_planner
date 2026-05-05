@@ -6,17 +6,22 @@ import '../../data/repositories/drift_milestone_repository.dart';
 import '../../data/repositories/drift_planner_cleanup_repository.dart';
 import '../../data/repositories/drift_recurring_task_repository.dart';
 import '../../data/repositories/drift_task_repository.dart';
+import '../../data/repositories/drift_habit_repository.dart';
 import '../../features/planner/application/planner_initialization_service.dart';
 import '../../features/recurring/application/recurring_occurrence_store_coordinator.dart';
 import '../../features/recurring/application/recurring_rule_store_coordinator.dart';
 import '../../features/goals/application/goal_store_coordinator.dart';
 import '../../features/milestones/application/milestone_store_coordinator.dart';
 import '../../features/tasks/application/task_store_coordinator.dart';
+import '../../features/habits/application/habit_store.dart';
 import '../../state/planner_store.dart';
 
 class AppDependencies {
-  AppDependencies._({required local.AppDatabase database, required this.store})
-    : _database = database;
+  AppDependencies._({
+    required local.AppDatabase database,
+    required this.store,
+    required this.habitStore,
+  }) : _database = database;
 
   factory AppDependencies.create() {
     final database = local.AppDatabase();
@@ -26,6 +31,7 @@ class AppDependencies {
     final milestoneRepository = DriftMilestoneRepository(database);
     final taskRepository = DriftTaskRepository(database);
     final recurringTaskRepository = DriftRecurringTaskRepository(database);
+    final habitRepository = DriftHabitRepository(database);
 
     final goalStoreCoordinator = GoalStoreCoordinator(
       goalRepository: goalRepository,
@@ -67,14 +73,22 @@ class AppDependencies {
       recurringOccurrenceStoreCoordinator: recurringOccurrenceStoreCoordinator,
     );
 
-    return AppDependencies._(database: database, store: store);
+    final habitStore = HabitStore(habitRepository: habitRepository);
+
+    return AppDependencies._(
+      database: database,
+      store: store,
+      habitStore: habitStore,
+    );
   }
 
   final local.AppDatabase _database;
   final PlannerStore store;
+  final HabitStore habitStore;
 
   Future<void> dispose() async {
     store.dispose();
+    habitStore.dispose();
     await _database.close();
   }
 }
