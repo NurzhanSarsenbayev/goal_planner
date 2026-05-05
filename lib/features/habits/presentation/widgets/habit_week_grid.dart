@@ -4,7 +4,7 @@ import '../../../../shared/planner_dates.dart';
 import '../../application/habit_week_view_builder.dart';
 import '../../domain/habit_entry_status.dart';
 
-typedef HabitCellToggleCallback =
+typedef HabitCellTapCallback =
     Future<void> Function({
       required String habitId,
       required DateTime date,
@@ -18,7 +18,7 @@ class HabitWeekGrid extends StatelessWidget {
     required this.onPreviousWeek,
     required this.onNextWeek,
     required this.onCurrentWeek,
-    required this.onToggleCell,
+    required this.onCellTap,
     super.key,
   });
 
@@ -27,7 +27,7 @@ class HabitWeekGrid extends StatelessWidget {
   final VoidCallback onPreviousWeek;
   final VoidCallback onNextWeek;
   final VoidCallback onCurrentWeek;
-  final HabitCellToggleCallback onToggleCell;
+  final HabitCellTapCallback onCellTap;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class HabitWeekGrid extends StatelessWidget {
 
               final row = weekView.rows[index - 1];
 
-              return _HabitJournalCard(row: row, onToggleCell: onToggleCell);
+              return _HabitJournalCard(row: row, onCellTap: onCellTap);
             },
           ),
         ),
@@ -179,10 +179,10 @@ class _DayLabel extends StatelessWidget {
 }
 
 class _HabitJournalCard extends StatelessWidget {
-  const _HabitJournalCard({required this.row, required this.onToggleCell});
+  const _HabitJournalCard({required this.row, required this.onCellTap});
 
   final HabitWeekRow row;
-  final HabitCellToggleCallback onToggleCell;
+  final HabitCellTapCallback onCellTap;
 
   @override
   Widget build(BuildContext context) {
@@ -211,17 +211,17 @@ class _HabitJournalCard extends StatelessWidget {
           ),
         ],
         const SizedBox(height: 10),
-        _HabitSegmentsRow(row: row, onToggleCell: onToggleCell),
+        _HabitSegmentsRow(row: row, onCellTap: onCellTap),
       ],
     );
   }
 }
 
 class _HabitSegmentsRow extends StatelessWidget {
-  const _HabitSegmentsRow({required this.row, required this.onToggleCell});
+  const _HabitSegmentsRow({required this.row, required this.onCellTap});
 
   final HabitWeekRow row;
-  final HabitCellToggleCallback onToggleCell;
+  final HabitCellTapCallback onCellTap;
 
   @override
   Widget build(BuildContext context) {
@@ -240,7 +240,7 @@ class _HabitSegmentsRow extends StatelessWidget {
                   total: row.cells.length,
                 ),
                 onTap: () {
-                  onToggleCell(
+                  onCellTap(
                     habitId: row.habit.id,
                     date: row.cells[index].date,
                     status: row.cells[index].status,

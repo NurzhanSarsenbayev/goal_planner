@@ -4,6 +4,7 @@ import '../../application/habit_store.dart';
 import '../../domain/habit_entry_status.dart';
 import '../widgets/add_habit_dialog.dart';
 import '../widgets/habit_week_grid.dart';
+import '../widgets/habit_status_bottom_sheet.dart';
 
 class HabitsScreen extends StatefulWidget {
   const HabitsScreen({required this.habitStore, super.key});
@@ -39,12 +40,21 @@ class _HabitsScreenState extends State<HabitsScreen> {
     );
   }
 
-  Future<void> _toggleHabitCell({
+  Future<void> _showHabitStatusSheet({
     required String habitId,
     required DateTime date,
     required HabitEntryStatus status,
   }) async {
-    if (status == HabitEntryStatus.done) {
+    final selectedStatus = await showHabitStatusBottomSheet(
+      context: context,
+      currentStatus: status,
+    );
+
+    if (!mounted || selectedStatus == null) {
+      return;
+    }
+
+    if (selectedStatus == HabitEntryStatus.none) {
       await widget.habitStore.clearEntry(habitId: habitId, date: date);
 
       return;
@@ -53,7 +63,7 @@ class _HabitsScreenState extends State<HabitsScreen> {
     await widget.habitStore.markEntry(
       habitId: habitId,
       date: date,
-      status: HabitEntryStatus.done,
+      status: selectedStatus,
     );
   }
 
@@ -68,7 +78,7 @@ class _HabitsScreenState extends State<HabitsScreen> {
           appBar: AppBar(title: const Text('Habits')),
           body: _HabitsBody(
             habitStore: habitStore,
-            onToggleCell: _toggleHabitCell,
+            onCellTap: _showHabitStatusSheet,
           ),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: _showAddHabitDialog,
@@ -82,10 +92,10 @@ class _HabitsScreenState extends State<HabitsScreen> {
 }
 
 class _HabitsBody extends StatelessWidget {
-  const _HabitsBody({required this.habitStore, required this.onToggleCell});
+  const _HabitsBody({required this.habitStore, required this.onCellTap});
 
   final HabitStore habitStore;
-  final HabitCellToggleCallback onToggleCell;
+  final HabitCellTapCallback onCellTap;
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +141,7 @@ class _HabitsBody extends StatelessWidget {
       onCurrentWeek: () {
         habitStore.goToCurrentWeek();
       },
-      onToggleCell: onToggleCell,
+      onCellTap: onCellTap,
     );
   }
 }
