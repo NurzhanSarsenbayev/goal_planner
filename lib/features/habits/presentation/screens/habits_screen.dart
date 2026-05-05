@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../application/habit_store.dart';
-import '../../domain/habit_entry_status.dart';
 import '../../domain/habit.dart';
+import '../../domain/habit_entry_status.dart';
 import '../widgets/add_habit_dialog.dart';
-import '../widgets/habit_week_grid.dart';
+import '../widgets/habit_presentation_callbacks.dart';
 import '../widgets/habit_status_bottom_sheet.dart';
+import '../widgets/habit_week_grid.dart';
 
 class HabitsScreen extends StatefulWidget {
   const HabitsScreen({required this.habitStore, super.key});
