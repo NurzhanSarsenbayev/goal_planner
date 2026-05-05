@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../application/habit_store.dart';
-import '../../domain/habit.dart';
-import '../../domain/habit_entry_status.dart';
-import '../widgets/add_habit_dialog.dart';
+import '../habit_dialog_actions.dart';
 import '../widgets/habit_presentation_callbacks.dart';
-import '../widgets/habit_status_bottom_sheet.dart';
 import '../widgets/habit_week_grid.dart';
 
 class HabitsScreen extends StatefulWidget {
@@ -18,147 +15,14 @@ class HabitsScreen extends StatefulWidget {
 }
 
 class _HabitsScreenState extends State<HabitsScreen> {
+  late final HabitDialogActions _habitDialogActions;
+
   @override
   void initState() {
     super.initState();
+
+    _habitDialogActions = HabitDialogActions(habitStore: widget.habitStore);
     widget.habitStore.initialize();
-  }
-
-  Future<void> _showAddHabitDialog() async {
-    final draft = await showDialog<AddHabitDraft>(
-      context: context,
-      builder: (context) {
-        return const AddHabitDialog();
-      },
-    );
-
-    if (!mounted || draft == null) {
-      return;
-    }
-
-    await widget.habitStore.createHabit(
-      title: draft.title,
-      description: draft.description,
-    );
-  }
-
-  Future<void> _showEditHabitDialog(Habit habit) async {
-    final draft = await showDialog<AddHabitDraft>(
-      context: context,
-      builder: (context) {
-        return AddHabitDialog(
-          initialTitle: habit.title,
-          initialDescription: habit.description,
-          dialogTitle: 'Edit habit',
-          actionLabel: 'Save',
-        );
-      },
-    );
-
-    if (!mounted || draft == null) {
-      return;
-    }
-
-    await widget.habitStore.updateHabit(
-      habitId: habit.id,
-      title: draft.title,
-      description: draft.description,
-    );
-  }
-
-  Future<void> _archiveHabit(Habit habit) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Archive habit?'),
-          content: Text(
-            '“${habit.title}” will be hidden from the active habit list.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: const Text('Cancel'),
-            ),
-            FilledButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: const Text('Archive'),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (!mounted || confirmed != true) {
-      return;
-    }
-
-    await widget.habitStore.archiveHabit(habit.id);
-  }
-
-  Future<void> _deleteHabit(Habit habit) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Delete habit?'),
-          content: Text(
-            '“${habit.title}” and its tracked entries will be deleted.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: const Text('Cancel'),
-            ),
-            FilledButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: const Text('Delete'),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (!mounted || confirmed != true) {
-      return;
-    }
-
-    await widget.habitStore.deleteHabit(habit.id);
-  }
-
-  Future<void> _showHabitStatusSheet({
-    required String habitId,
-    required DateTime date,
-    required HabitEntryStatus status,
-  }) async {
-    final selectedStatus = await showHabitStatusBottomSheet(
-      context: context,
-      currentStatus: status,
-    );
-
-    if (!mounted || selectedStatus == null) {
-      return;
-    }
-
-    if (selectedStatus == HabitEntryStatus.none) {
-      await widget.habitStore.clearEntry(habitId: habitId, date: date);
-
-      return;
-    }
-
-    await widget.habitStore.markEntry(
-      habitId: habitId,
-      date: date,
-      status: selectedStatus,
-    );
   }
 
   @override
@@ -172,13 +36,28 @@ class _HabitsScreenState extends State<HabitsScreen> {
           appBar: AppBar(title: const Text('Habits')),
           body: _HabitsBody(
             habitStore: habitStore,
-            onCellTap: _showHabitStatusSheet,
-            onEditHabit: _showEditHabitDialog,
-            onArchiveHabit: _archiveHabit,
-            onDeleteHabit: _deleteHabit,
+            onCellTap: ({required habitId, required date, required status}) {
+              return _habitDialogActions.showStatusSheet(
+                context,
+                habitId: habitId,
+                date: date,
+                status: status,
+              );
+            },
+            onEditHabit: (habit) {
+              return _habitDialogActions.showEditDialog(context, habit);
+            },
+            onArchiveHabit: (habit) {
+              return _habitDialogActions.showArchiveDialog(context, habit);
+            },
+            onDeleteHabit: (habit) {
+              return _habitDialogActions.showDeleteDialog(context, habit);
+            },
           ),
           floatingActionButton: FloatingActionButton.extended(
-            onPressed: _showAddHabitDialog,
+            onPressed: () {
+              _habitDialogActions.showAddDialog(context);
+            },
             icon: const Icon(Icons.add),
             label: const Text('Habit'),
           ),
