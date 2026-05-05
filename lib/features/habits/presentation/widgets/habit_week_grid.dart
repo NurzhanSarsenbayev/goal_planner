@@ -68,12 +68,15 @@ class HabitWeekGrid extends StatelessWidget {
         if (isLoading) const LinearProgressIndicator(),
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: _HabitWeekTable(
-                weekView: weekView,
-                onToggleCell: onToggleCell,
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: _HabitWeekTable(
+                  weekView: weekView,
+                  onToggleCell: onToggleCell,
+                ),
               ),
             ),
           ),
@@ -89,8 +92,8 @@ class _HabitWeekTable extends StatelessWidget {
   final HabitWeekView weekView;
   final HabitCellToggleCallback onToggleCell;
 
-  static const double _habitColumnWidth = 160;
-  static const double _dayColumnWidth = 48;
+  static const double _habitColumnWidth = 172;
+  static const double _dayColumnWidth = 44;
 
   @override
   Widget build(BuildContext context) {
@@ -135,25 +138,52 @@ class _HeaderRow extends StatelessWidget {
         for (final date in dates)
           SizedBox(
             width: dayColumnWidth,
-            child: Column(
-              children: [
-                Text(
-                  _weekdayLabel(date),
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  date.day.toString(),
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
-            ),
+            child: _DayHeader(date: date),
           ),
       ],
     );
   }
+}
 
-  String _weekdayLabel(DateTime date) {
+class _DayHeader extends StatelessWidget {
+  const _DayHeader({required this.date});
+
+  final DateTime date;
+
+  @override
+  Widget build(BuildContext context) {
+    final isToday = _isSameDate(date, DateTime.now());
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      decoration: BoxDecoration(
+        color: isToday ? colorScheme.primaryContainer : null,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Column(
+        children: [
+          Text(
+            _weekdayLabel(date),
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: isToday ? colorScheme.onPrimaryContainer : null,
+              fontWeight: isToday ? FontWeight.w700 : null,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            date.day.toString(),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: isToday ? colorScheme.onPrimaryContainer : null,
+              fontWeight: isToday ? FontWeight.w700 : null,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static String _weekdayLabel(DateTime date) {
     return switch (date.weekday) {
       DateTime.monday => 'Mon',
       DateTime.tuesday => 'Tue',
@@ -164,6 +194,12 @@ class _HeaderRow extends StatelessWidget {
       DateTime.sunday => 'Sun',
       _ => '',
     };
+  }
+
+  static bool _isSameDate(DateTime left, DateTime right) {
+    return left.year == right.year &&
+        left.month == right.month &&
+        left.day == right.day;
   }
 }
 
@@ -182,81 +218,104 @@ class _HabitRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-        child: Row(
-          children: [
-            SizedBox(
-              width: habitColumnWidth,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      child: Row(
+        children: [
+          SizedBox(
+            width: habitColumnWidth,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  row.habit.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                if (row.habit.description.isNotEmpty) ...[
+                  const SizedBox(height: 3),
                   Text(
-                    row.habit.title,
-                    maxLines: 2,
+                    row.habit.description,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  if (row.habit.description.isNotEmpty) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      row.habit.description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
                     ),
-                  ],
+                  ),
                 ],
-              ),
+              ],
             ),
-            for (final cell in row.cells)
-              SizedBox(
-                width: dayColumnWidth,
-                child: Center(
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(999),
-                    onTap: () {
-                      onToggleCell(
-                        habitId: row.habit.id,
-                        date: cell.date,
-                        status: cell.status,
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(6),
-                      child: _HabitStatusIcon(status: cell.status),
-                    ),
-                  ),
+          ),
+          for (final cell in row.cells)
+            SizedBox(
+              width: dayColumnWidth,
+              child: Center(
+                child: _HabitCellButton(
+                  status: cell.status,
+                  onTap: () {
+                    onToggleCell(
+                      habitId: row.habit.id,
+                      date: cell.date,
+                      status: cell.status,
+                    );
+                  },
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
 }
 
-class _HabitStatusIcon extends StatelessWidget {
-  const _HabitStatusIcon({required this.status});
+class _HabitCellButton extends StatelessWidget {
+  const _HabitCellButton({required this.status, required this.onTap});
 
   final HabitEntryStatus status;
+  final VoidCallback onTap;
+
+  bool get _isDone => status == HabitEntryStatus.done;
 
   @override
   Widget build(BuildContext context) {
-    return Icon(
-      _icon,
-      size: 22,
-      color: Theme.of(context).colorScheme.onSurfaceVariant,
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Material(
+      color: _isDone ? colorScheme.primary : colorScheme.surface,
+      shape: const CircleBorder(),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: SizedBox(
+          width: 32,
+          height: 32,
+          child: Icon(
+            _icon,
+            size: 20,
+            color: _isDone
+                ? colorScheme.onPrimary
+                : colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ),
     );
   }
 
   IconData get _icon {
     return switch (status) {
-      HabitEntryStatus.none => Icons.radio_button_unchecked,
-      HabitEntryStatus.done => Icons.check_circle,
-      HabitEntryStatus.incomplete => Icons.remove_circle_outline,
-      HabitEntryStatus.failed => Icons.cancel_outlined,
+      HabitEntryStatus.none => Icons.add,
+      HabitEntryStatus.done => Icons.check,
+      HabitEntryStatus.incomplete => Icons.remove,
+      HabitEntryStatus.failed => Icons.close,
       HabitEntryStatus.skipped => Icons.do_not_disturb_on_outlined,
     };
   }
