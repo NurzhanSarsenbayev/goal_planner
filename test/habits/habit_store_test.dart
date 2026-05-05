@@ -245,11 +245,6 @@ class _FakeHabitRepository implements HabitRepository {
   }
 
   @override
-  Future<void> archiveHabit(String habitId) async {
-    throw UnimplementedError('Use saveHabit for archive in HabitStore tests.');
-  }
-
-  @override
   Future<void> deleteHabit(String habitId) async {
     deletedHabitIds.add(habitId);
   }

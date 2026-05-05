@@ -87,18 +87,6 @@ class DriftHabitRepository implements HabitRepository {
   }
 
   @override
-  Future<void> archiveHabit(String habitId) async {
-    await (_database.update(
-      _database.habits,
-    )..where((table) => table.id.equals(habitId))).write(
-      local.HabitsCompanion(
-        isArchived: const drift.Value(true),
-        updatedAt: drift.Value(DateTime.now()),
-      ),
-    );
-  }
-
-  @override
   Future<void> deleteHabit(String habitId) async {
     await (_database.delete(
       _database.habits,
