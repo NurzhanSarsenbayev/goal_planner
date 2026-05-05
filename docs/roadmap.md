@@ -809,11 +809,11 @@ Not doing in this phase:
 
 ## Phase 7: Habits MVP
 
-Status: not started.
+Status: Phase 7A done.
 
 Goal:
 
-Add recurring daily behavior tracking only after reports, recurring task planning and architecture stabilization are stable.
+Add recurring behavior tracking as a separate product loop without turning habits into recurring tasks and without adding habit state to `PlannerStore`.
 
 Why this is separate from recurring tasks:
 
@@ -821,43 +821,111 @@ Recurring tasks are planned actions that appear as concrete tasks on specific da
 
 Habits are routines tracked over time, where history and consistency matter more than a single task instance.
 
-Initial habit scope:
+Implemented in Phase 7A:
 
-- Create habit.
-- Edit habit.
-- Delete habit.
-- Habit title.
-- Optional description.
-- Daily checkbox.
-- Optional weekdays.
-- Optional time.
-- Show timed habits in Today.
-- Show untimed habits in a simple habit list.
-- Mark habit complete for a day.
-- Store habit completion history.
-- Show simple habit completion history.
+- Add habit domain model.
+- Add habit entry domain model.
+- Add habit entry statuses:
+  - none;
+  - done;
+  - incomplete;
+  - failed;
+  - skipped.
+- Add habit tracking type model:
+  - binary;
+  - count-ready domain support.
+- Add `HabitProgressCalculator`.
+- Add Drift tables:
+  - `habits`;
+  - `habit_entries`.
+- Increase local database schema version to 3.
+- Add habit mappers.
+- Add `HabitRepository`.
+- Add `DriftHabitRepository`.
+- Add `HabitApplicationService`.
+- Add `HabitWeekViewBuilder`.
+- Add `HabitStore`.
+- Keep habits outside `PlannerStore`.
+- Wire `HabitStore` through `AppDependencies`.
+- Open Habits from More screen.
+- Add Habits screen.
+- Add habit creation UI.
+- Add weekly journal-style habit layout.
+- Add week navigation:
+  - previous week;
+  - next week;
+  - current week.
+- Add habit status picker:
+  - Done;
+  - No / Failed;
+  - Skip;
+  - Clear.
+- Add edit habit action.
+- Add archive habit action.
+- Add delete habit action.
+- Persist habit data locally.
+- Cover core habit domain/application/store/repository behavior with tests.
 
-Expected result:
+Current result:
 
 A user can track routines like:
 
-- 10,000 steps;
 - meditation;
 - drink water;
 - reading;
-- stretching.
+- stretching;
+- walking;
+- workouts.
 
-Not doing initially:
+The main habit loop is now:
 
-- complex streak gamification;
-- habit analytics;
+> Create habit -> mark days in weekly journal -> review current week -> adjust previous days -> persist locally
+
+Architecture result:
+
+Habits are implemented as a separate feature boundary:
+
+```text
+lib/features/habits/
+  domain/
+  application/
+  presentation/
+```
+
+Habits use their own store and repository:
+
+```text
+HabitStore
+HabitApplicationService
+HabitRepository
+DriftHabitRepository
+```
+
+`PlannerStore` remains responsible for the goal/task planning loop only.
+
+Not implemented in Phase 7A:
+
+- reminders;
+- habit notes;
+- timed habits;
+- optional weekdays;
+- habit display in Today;
+- count-based habit UI;
+- advanced statistics;
+- streak analytics;
 - habit templates;
 - habit categories;
-- penalties;
-- social features;
-- reminders;
-- weight tracker;
-- expense tracker.
+- habit groups/journals;
+- backend/sync.
+
+Possible Phase 7B:
+
+- add lightweight weekly summary;
+- add empty-state guidance for first habit;
+- improve habit status picker visuals;
+- add unarchive flow;
+- add basic habit notes;
+- decide whether timed habits belong in Today.
 
 ## Phase 8: Product validation
 
@@ -943,8 +1011,7 @@ Main differentiator:
 
 - No time-of-day scheduling yet.
 - Recurring task planning MVP exists, but advanced recurrence rules are not supported yet.
-- No habits.
-- No habit completion history.
+- Habits Phase 7A exists, but there are no reminders, notes, timed habits or advanced habit analytics yet.
 - Architecture stabilization before Habits is completed, but further feature-store decomposition remains a later improvement.
 - Reports support only Today / Last 7 days / Last 14 days.
 - No custom selected-day report yet.

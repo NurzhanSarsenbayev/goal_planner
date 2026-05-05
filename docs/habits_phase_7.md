@@ -2,7 +2,20 @@
 
 ## Status
 
-Planned.
+Phase 7A implemented.
+
+The first habit tracking loop is now available locally:
+
+- create habit;
+- edit habit;
+- archive/delete habit;
+- show active habits in a weekly journal layout;
+- mark a habit date as done, failed or skipped;
+- clear an existing mark;
+- navigate between weeks;
+- persist habits and habit entries locally.
+
+Phase 7B is not started.
 
 This document defines the first Habits implementation scope before writing code.
 
