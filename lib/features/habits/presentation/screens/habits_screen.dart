@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../application/habit_store.dart';
+import '../widgets/add_habit_dialog.dart';
 
 class HabitsScreen extends StatefulWidget {
   const HabitsScreen({required this.habitStore, super.key});
@@ -18,6 +19,24 @@ class _HabitsScreenState extends State<HabitsScreen> {
     widget.habitStore.initialize();
   }
 
+  Future<void> _showAddHabitDialog() async {
+    final draft = await showDialog<AddHabitDraft>(
+      context: context,
+      builder: (context) {
+        return const AddHabitDialog();
+      },
+    );
+
+    if (!mounted || draft == null) {
+      return;
+    }
+
+    await widget.habitStore.createHabit(
+      title: draft.title,
+      description: draft.description,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -28,6 +47,11 @@ class _HabitsScreenState extends State<HabitsScreen> {
         return Scaffold(
           appBar: AppBar(title: const Text('Habits')),
           body: _HabitsBody(habitStore: habitStore),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: _showAddHabitDialog,
+            icon: const Icon(Icons.add),
+            label: const Text('Habit'),
+          ),
         );
       },
     );
