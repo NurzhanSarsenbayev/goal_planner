@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 
 class AddHabitDialog extends StatefulWidget {
-  const AddHabitDialog({super.key});
+  const AddHabitDialog({
+    this.initialTitle = '',
+    this.initialDescription = '',
+    this.dialogTitle = 'Add habit',
+    this.actionLabel = 'Add',
+    super.key,
+  });
+
+  final String initialTitle;
+  final String initialDescription;
+  final String dialogTitle;
+  final String actionLabel;
 
   @override
   State<AddHabitDialog> createState() => _AddHabitDialogState();
@@ -15,8 +26,10 @@ class _AddHabitDialogState extends State<AddHabitDialog> {
   void initState() {
     super.initState();
 
-    _titleController = TextEditingController();
-    _descriptionController = TextEditingController();
+    _titleController = TextEditingController(text: widget.initialTitle);
+    _descriptionController = TextEditingController(
+      text: widget.initialDescription,
+    );
   }
 
   @override
@@ -43,7 +56,7 @@ class _AddHabitDialogState extends State<AddHabitDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add habit'),
+      title: Text(widget.dialogTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -76,7 +89,7 @@ class _AddHabitDialogState extends State<AddHabitDialog> {
           },
           child: const Text('Cancel'),
         ),
-        FilledButton(onPressed: _submit, child: const Text('Add')),
+        FilledButton(onPressed: _submit, child: Text(widget.actionLabel)),
       ],
     );
   }

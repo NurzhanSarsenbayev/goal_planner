@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../shared/planner_dates.dart';
 import '../../application/habit_week_view_builder.dart';
 import '../../domain/habit_entry_status.dart';
+import '../../domain/habit.dart';
 
 typedef HabitCellTapCallback =
     Future<void> Function({
@@ -10,6 +11,8 @@ typedef HabitCellTapCallback =
       required DateTime date,
       required HabitEntryStatus status,
     });
+
+typedef HabitActionCallback = Future<void> Function(Habit habit);
 
 class HabitWeekGrid extends StatelessWidget {
   const HabitWeekGrid({
@@ -19,6 +22,9 @@ class HabitWeekGrid extends StatelessWidget {
     required this.onNextWeek,
     required this.onCurrentWeek,
     required this.onCellTap,
+    required this.onEditHabit,
+    required this.onArchiveHabit,
+    required this.onDeleteHabit,
     super.key,
   });
 
@@ -28,6 +34,9 @@ class HabitWeekGrid extends StatelessWidget {
   final VoidCallback onNextWeek;
   final VoidCallback onCurrentWeek;
   final HabitCellTapCallback onCellTap;
+  final HabitActionCallback onEditHabit;
+  final HabitActionCallback onArchiveHabit;
+  final HabitActionCallback onDeleteHabit;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +67,13 @@ class HabitWeekGrid extends StatelessWidget {
 
               final row = weekView.rows[index - 1];
 
-              return _HabitJournalCard(row: row, onCellTap: onCellTap);
+              return _HabitJournalCard(
+                row: row,
+                onCellTap: onCellTap,
+                onEditHabit: onEditHabit,
+                onArchiveHabit: onArchiveHabit,
+                onDeleteHabit: onDeleteHabit,
+              );
             },
           ),
         ),
@@ -179,10 +194,19 @@ class _DayLabel extends StatelessWidget {
 }
 
 class _HabitJournalCard extends StatelessWidget {
-  const _HabitJournalCard({required this.row, required this.onCellTap});
+  const _HabitJournalCard({
+    required this.row,
+    required this.onCellTap,
+    required this.onEditHabit,
+    required this.onArchiveHabit,
+    required this.onDeleteHabit,
+  });
 
   final HabitWeekRow row;
   final HabitCellTapCallback onCellTap;
+  final HabitActionCallback onEditHabit;
+  final HabitActionCallback onArchiveHabit;
+  final HabitActionCallback onDeleteHabit;
 
   @override
   Widget build(BuildContext context) {
@@ -191,25 +215,48 @@ class _HabitJournalCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          row.habit.title,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
-        ),
-        if (row.habit.description.isNotEmpty) ...[
-          const SizedBox(height: 3),
-          Text(
-            row.habit.description,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: colorScheme.onSurfaceVariant,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    row.habit.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  if (row.habit.description.isNotEmpty) ...[
+                    const SizedBox(height: 3),
+                    Text(
+                      row.habit.description,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
-          ),
-        ],
+            _HabitActionsMenu(
+              onEdit: () {
+                onEditHabit(row.habit);
+              },
+              onArchive: () {
+                onArchiveHabit(row.habit);
+              },
+              onDelete: () {
+                onDeleteHabit(row.habit);
+              },
+            ),
+          ],
+        ),
         const SizedBox(height: 10),
         _HabitSegmentsRow(row: row, onCellTap: onCellTap),
       ],
@@ -263,6 +310,65 @@ class _HabitSegmentsRow extends StatelessWidget {
     return BorderRadius.horizontal(
       left: index == 0 ? radius : Radius.zero,
       right: index == total - 1 ? radius : Radius.zero,
+    );
+  }
+}
+
+enum _HabitMenuAction { edit, archive, delete }
+
+class _HabitActionsMenu extends StatelessWidget {
+  const _HabitActionsMenu({
+    required this.onEdit,
+    required this.onArchive,
+    required this.onDelete,
+  });
+
+  final VoidCallback onEdit;
+  final VoidCallback onArchive;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<_HabitMenuAction>(
+      tooltip: 'Habit actions',
+      onSelected: (action) {
+        switch (action) {
+          case _HabitMenuAction.edit:
+            onEdit();
+          case _HabitMenuAction.archive:
+            onArchive();
+          case _HabitMenuAction.delete:
+            onDelete();
+        }
+      },
+      itemBuilder: (context) {
+        return const [
+          PopupMenuItem(
+            value: _HabitMenuAction.edit,
+            child: ListTile(
+              leading: Icon(Icons.edit_outlined),
+              title: Text('Edit'),
+              contentPadding: EdgeInsets.zero,
+            ),
+          ),
+          PopupMenuItem(
+            value: _HabitMenuAction.archive,
+            child: ListTile(
+              leading: Icon(Icons.archive_outlined),
+              title: Text('Archive'),
+              contentPadding: EdgeInsets.zero,
+            ),
+          ),
+          PopupMenuItem(
+            value: _HabitMenuAction.delete,
+            child: ListTile(
+              leading: Icon(Icons.delete_outline),
+              title: Text('Delete'),
+              contentPadding: EdgeInsets.zero,
+            ),
+          ),
+        ];
+      },
     );
   }
 }
