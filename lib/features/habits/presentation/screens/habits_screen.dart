@@ -4,6 +4,7 @@ import '../../application/habit_store.dart';
 import '../habit_dialog_actions.dart';
 import '../widgets/habit_presentation_callbacks.dart';
 import '../widgets/habit_week_grid.dart';
+import '../widgets/habits_empty_state.dart';
 
 class HabitsScreen extends StatefulWidget {
   const HabitsScreen({required this.habitStore, super.key});
@@ -36,6 +37,9 @@ class _HabitsScreenState extends State<HabitsScreen> {
           appBar: AppBar(title: const Text('Habits')),
           body: _HabitsBody(
             habitStore: habitStore,
+            onCreateHabit: () {
+              return _habitDialogActions.showAddDialog(context);
+            },
             onCellTap: ({required habitId, required date, required status}) {
               return _habitDialogActions.showStatusSheet(
                 context,
@@ -70,6 +74,7 @@ class _HabitsScreenState extends State<HabitsScreen> {
 class _HabitsBody extends StatelessWidget {
   const _HabitsBody({
     required this.habitStore,
+    required this.onCreateHabit,
     required this.onCellTap,
     required this.onEditHabit,
     required this.onArchiveHabit,
@@ -77,6 +82,7 @@ class _HabitsBody extends StatelessWidget {
   });
 
   final HabitStore habitStore;
+  final Future<void> Function() onCreateHabit;
   final HabitCellTapCallback onCellTap;
   final HabitActionCallback onEditHabit;
   final HabitActionCallback onArchiveHabit;
@@ -89,15 +95,7 @@ class _HabitsBody extends StatelessWidget {
     }
 
     if (habitStore.habits.isEmpty) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.all(24),
-          child: Text(
-            'No habits yet.\nCreate your first habit soon.',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
+      return HabitsEmptyState(onCreateHabit: onCreateHabit);
     }
 
     final activeHabits = [
@@ -106,11 +104,14 @@ class _HabitsBody extends StatelessWidget {
     ];
 
     if (activeHabits.isEmpty) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.all(24),
-          child: Text('All habits are archived.', textAlign: TextAlign.center),
-        ),
+      return HabitsEmptyState(
+        title: 'All habits are archived',
+        description:
+            'Create a new habit now, or restore archived habits later.',
+        buttonLabel: 'Create new habit',
+        icon: Icons.archive_outlined,
+        showExamples: false,
+        onCreateHabit: onCreateHabit,
       );
     }
 
