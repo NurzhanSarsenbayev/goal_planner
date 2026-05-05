@@ -1,0 +1,1 @@
+enum HabitTrackingType { binary, count }
