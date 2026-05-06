@@ -29,7 +29,7 @@ class HabitStatusBottomSheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Mark habit',
+              'How did it go?',
               style: Theme.of(
                 context,
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
@@ -48,7 +48,7 @@ class HabitStatusBottomSheet extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _StatusActionButton(
-                    label: 'No',
+                    label: 'Missed',
                     icon: Icons.close,
                     status: HabitEntryStatus.failed,
                     currentStatus: currentStatus,
