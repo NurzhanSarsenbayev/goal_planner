@@ -17,17 +17,23 @@ void main() {
       );
       final store = HabitStore(
         habitRepository: repository,
+        todayProvider: () => DateTime(2026, 5, 6),
         initialWeekStart: DateTime(2026, 5, 4),
       );
-
       await store.initialize();
 
       expect(store.isInitialized, isTrue);
       expect(store.isLoading, isFalse);
       expect(store.habits, [habit]);
       expect(store.visibleWeekEntries, [entry]);
-      expect(repository.loadedEntryStartDate, DateTime(2026, 5, 4));
-      expect(repository.loadedEntryEndDate, DateTime(2026, 5, 10));
+      expect(repository.loadedEntryStartDates, [
+        DateTime(2026, 5, 4),
+        DateTime(2026, 5, 6),
+      ]);
+      expect(repository.loadedEntryEndDates, [
+        DateTime(2026, 5, 10),
+        DateTime(2026, 5, 6),
+      ]);
     });
 
     test('builds week view from current state', () async {
@@ -172,6 +178,31 @@ void main() {
       expect(repository.savedEntries, [store.visibleWeekEntries.single]);
     });
 
+    test('updates today summary when today entry is marked', () async {
+      final habit = _habit();
+      final repository = _FakeHabitRepository(habits: [habit]);
+      final store = HabitStore(
+        habitRepository: repository,
+        todayProvider: () => DateTime(2026, 5, 6),
+        initialWeekStart: DateTime(2026, 5, 4),
+      );
+
+      await store.initialize();
+
+      expect(store.todaySummary.totalHabitCount, 1);
+      expect(store.todaySummary.doneCount, 0);
+      expect(store.todaySummary.unmarkedCount, 1);
+
+      await store.markEntry(
+        habitId: habit.id,
+        date: DateTime(2026, 5, 6),
+        status: HabitEntryStatus.done,
+      );
+
+      expect(store.todaySummary.doneCount, 1);
+      expect(store.todaySummary.unmarkedCount, 0);
+    });
+
     test('does not mark entry for missing habit', () async {
       final repository = _FakeHabitRepository();
       final store = HabitStore(
@@ -228,6 +259,8 @@ class _FakeHabitRepository implements HabitRepository {
 
   DateTime? loadedEntryStartDate;
   DateTime? loadedEntryEndDate;
+  final loadedEntryStartDates = <DateTime>[];
+  final loadedEntryEndDates = <DateTime>[];
 
   @override
   Future<List<Habit>> loadHabits() async {
@@ -241,6 +274,8 @@ class _FakeHabitRepository implements HabitRepository {
   }) async {
     loadedEntryStartDate = startDate;
     loadedEntryEndDate = endDate;
+    loadedEntryStartDates.add(startDate);
+    loadedEntryEndDates.add(endDate);
     return _entries;
   }
 

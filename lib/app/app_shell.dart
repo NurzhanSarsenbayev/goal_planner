@@ -63,6 +63,9 @@ class _AppShellState extends State<AppShell> {
       taskDialogActions: _taskDialogActions,
       recurringRuleDialogActions: _recurringRuleDialogActions,
       navigationActions: _navigationActions,
+      onOpenHabits: () {
+        _onDestinationSelected(3);
+      },
     );
 
     _store.addListener(_onStoreChanged);

@@ -20,8 +20,10 @@ class MainTabBuilder {
     required TaskDialogActions taskDialogActions,
     required RecurringRuleDialogActions recurringRuleDialogActions,
     required AppNavigationActions navigationActions,
+    required VoidCallback onOpenHabits,
   }) : _store = store,
        _habitStore = habitStore,
+       _onOpenHabits = onOpenHabits,
        _goalDialogActions = goalDialogActions,
        _taskDialogActions = taskDialogActions,
        _recurringRuleDialogActions = recurringRuleDialogActions,
@@ -33,12 +35,15 @@ class MainTabBuilder {
   final TaskDialogActions _taskDialogActions;
   final RecurringRuleDialogActions _recurringRuleDialogActions;
   final AppNavigationActions _navigationActions;
+  final VoidCallback _onOpenHabits;
 
   List<Widget> buildScreens(BuildContext context) {
     return [
       TodayScreen(
         goals: _store.goals,
         tasks: _store.tasks,
+        habitSummary: _habitStore.todaySummary,
+        onOpenHabits: _onOpenHabits,
         onToggleTaskCompleted: _store.toggleTaskCompleted,
         onCompleteTaskOnDate: _store.completeTaskOnDate,
         onEditTask: (task) {

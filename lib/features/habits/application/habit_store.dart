@@ -8,6 +8,7 @@ import '../domain/habit_tracking_type.dart';
 import 'habit_application_service.dart';
 import 'habit_repository.dart';
 import 'habit_week_view_builder.dart';
+import 'habit_today_summary.dart';
 
 class HabitStore extends ChangeNotifier {
   HabitStore({
@@ -15,10 +16,15 @@ class HabitStore extends ChangeNotifier {
     HabitApplicationService habitApplicationService =
         const HabitApplicationService(),
     HabitWeekViewBuilder habitWeekViewBuilder = const HabitWeekViewBuilder(),
+    HabitTodaySummaryBuilder habitTodaySummaryBuilder =
+        const HabitTodaySummaryBuilder(),
+    DateTime Function() todayProvider = todayDate,
     DateTime? initialWeekStart,
   }) : _habitRepository = habitRepository,
        _habitApplicationService = habitApplicationService,
        _habitWeekViewBuilder = habitWeekViewBuilder,
+       _habitTodaySummaryBuilder = habitTodaySummaryBuilder,
+       _todayProvider = todayProvider,
        _visibleWeekStart = dateOnly(
          initialWeekStart ?? _startOfWeek(DateTime.now()),
        );
@@ -26,9 +32,12 @@ class HabitStore extends ChangeNotifier {
   final HabitRepository _habitRepository;
   final HabitApplicationService _habitApplicationService;
   final HabitWeekViewBuilder _habitWeekViewBuilder;
+  final HabitTodaySummaryBuilder _habitTodaySummaryBuilder;
+  final DateTime Function() _todayProvider;
 
   List<Habit> _habits = [];
   List<HabitEntry> _visibleWeekEntries = [];
+  List<HabitEntry> _todayEntries = [];
   DateTime _visibleWeekStart;
   bool _isInitialized = false;
   bool _isLoading = false;
@@ -37,6 +46,8 @@ class HabitStore extends ChangeNotifier {
 
   List<HabitEntry> get visibleWeekEntries =>
       List.unmodifiable(_visibleWeekEntries);
+
+  List<HabitEntry> get todayEntries => List.unmodifiable(_todayEntries);
 
   DateTime get visibleWeekStart => _visibleWeekStart;
 
@@ -52,6 +63,14 @@ class HabitStore extends ChangeNotifier {
     );
   }
 
+  HabitTodaySummary get todaySummary {
+    return _habitTodaySummaryBuilder.build(
+      habits: _habits,
+      entries: _todayEntries,
+      date: _todayDate,
+    );
+  }
+
   Future<void> initialize() async {
     if (_isInitialized || _isLoading) {
       return;
@@ -64,6 +83,10 @@ class HabitStore extends ChangeNotifier {
     _visibleWeekEntries = await _habitRepository.loadEntriesForRange(
       startDate: _visibleWeekStart,
       endDate: _visibleWeekEnd,
+    );
+    _todayEntries = await _habitRepository.loadEntriesForRange(
+      startDate: _todayDate,
+      endDate: _todayDate,
     );
 
     _isInitialized = true;
@@ -186,7 +209,7 @@ class HabitStore extends ChangeNotifier {
       completedCount: completedCount,
     );
 
-    await _applyEntryMutation(result);
+    await _applyEntryMutation(result, affectedDate: date);
   }
 
   Future<void> clearEntry({
@@ -199,7 +222,7 @@ class HabitStore extends ChangeNotifier {
       date: date,
     );
 
-    await _applyEntryMutation(result);
+    await _applyEntryMutation(result, affectedDate: date);
   }
 
   Habit? _findHabit(String habitId) {
@@ -233,16 +256,31 @@ class HabitStore extends ChangeNotifier {
         for (final entry in _visibleWeekEntries)
           if (entry.habitId != habitIdToDelete) entry,
       ];
+      _todayEntries = [
+        for (final entry in _todayEntries)
+          if (entry.habitId != habitIdToDelete) entry,
+      ];
       notifyListeners();
     }
   }
 
-  Future<void> _applyEntryMutation(HabitEntryMutationResult result) async {
+  Future<void> _applyEntryMutation(
+    HabitEntryMutationResult result, {
+    required DateTime affectedDate,
+  }) async {
     if (!result.hasChange) {
       return;
     }
 
     _visibleWeekEntries = result.entries;
+
+    if (dateOnly(affectedDate) == _todayDate) {
+      _todayEntries = [
+        for (final entry in result.entries)
+          if (entry.date == _todayDate) entry,
+      ];
+    }
+
     notifyListeners();
 
     final entryToPersist = result.entryToPersist;
@@ -259,6 +297,10 @@ class HabitStore extends ChangeNotifier {
 
   DateTime get _visibleWeekEnd {
     return _visibleWeekStart.add(const Duration(days: 6));
+  }
+
+  DateTime get _todayDate {
+    return dateOnly(_todayProvider());
   }
 
   static DateTime _startOfWeek(DateTime date) {

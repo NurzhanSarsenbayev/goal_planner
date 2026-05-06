@@ -4,16 +4,20 @@ import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
 import '../../../tasks/presentation/task_date_dialogs.dart';
 import '../../../tasks/presentation/widgets/task_card.dart';
+import '../../../habits/application/habit_today_summary.dart';
 import '../../application/today_task_view_builder.dart';
 import '../widgets/today_empty_panel.dart';
 import '../widgets/today_summary_card.dart';
 import '../widgets/today_task_section.dart';
+import '../widgets/today_habits_summary_card.dart';
 
 class TodayScreen extends StatelessWidget {
   const TodayScreen({
     super.key,
     required this.goals,
     required this.tasks,
+    required this.habitSummary,
+    required this.onOpenHabits,
     required this.onToggleTaskCompleted,
     required this.onCompleteTaskOnDate,
     required this.onEditTask,
@@ -28,6 +32,8 @@ class TodayScreen extends StatelessWidget {
 
   final List<Goal> goals;
   final List<PlannerTask> tasks;
+  final HabitTodaySummary habitSummary;
+  final VoidCallback onOpenHabits;
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function({required String taskId, required DateTime completedAt})
   onCompleteTaskOnDate;
@@ -109,6 +115,11 @@ class TodayScreen extends StatelessWidget {
           children: [
             TodaySummaryCard(view: view),
             const SizedBox(height: 16),
+            TodayHabitsSummaryCard(
+              summary: habitSummary,
+              onOpenHabits: onOpenHabits,
+            ),
+            if (habitSummary.hasHabits) const SizedBox(height: 16),
             if (view.isEmpty)
               TodayEmptyPanel(
                 onPlanToday: () {
