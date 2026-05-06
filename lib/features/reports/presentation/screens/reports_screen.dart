@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
 import '../../application/report_builder.dart';
+import '../../application/habit_report_loader.dart';
+import '../../domain/habit_report_summary.dart';
 import '../../domain/report_period.dart';
 import '../widgets/day_report_section.dart';
 import '../widgets/empty_report_card.dart';
 import '../widgets/goal_report_section.dart';
 import '../widgets/report_period_selector.dart';
 import '../widgets/report_summary_card.dart';
+
 import '../widgets/standalone_report_section.dart';
 
 class ReportsScreen extends StatefulWidget {
@@ -19,10 +22,12 @@ class ReportsScreen extends StatefulWidget {
     required this.onToggleTaskCompleted,
     required this.onEditTask,
     required this.onDeleteTask,
+    required this.habitReportLoader,
   });
 
   final List<Goal> goals;
   final List<PlannerTask> tasks;
+  final HabitReportLoader habitReportLoader;
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function(PlannerTask task) onEditTask;
   final void Function(String taskId) onDeleteTask;
@@ -33,6 +38,47 @@ class ReportsScreen extends StatefulWidget {
 
 class _ReportsScreenState extends State<ReportsScreen> {
   ReportPeriod _selectedPeriod = ReportPeriod.today;
+  HabitReportSummary? _habitReport;
+  bool _isHabitReportLoading = false;
+  int _habitReportRequestId = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _loadHabitReport();
+  }
+
+  @override
+  void didUpdateWidget(covariant ReportsScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.habitReportLoader != widget.habitReportLoader ||
+        oldWidget.goals != widget.goals ||
+        oldWidget.tasks != widget.tasks) {
+      _loadHabitReport();
+    }
+  }
+
+  Future<void> _loadHabitReport() async {
+    final requestId = _habitReportRequestId + 1;
+    _habitReportRequestId = requestId;
+
+    setState(() {
+      _isHabitReportLoading = true;
+    });
+
+    final habitReport = await widget.habitReportLoader.load(_selectedPeriod);
+
+    if (!mounted || requestId != _habitReportRequestId) {
+      return;
+    }
+
+    setState(() {
+      _habitReport = habitReport;
+      _isHabitReportLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,9 +105,14 @@ class _ReportsScreenState extends State<ReportsScreen> {
               setState(() {
                 _selectedPeriod = period;
               });
+              _loadHabitReport();
             },
           ),
           const SizedBox(height: 16),
+          if (_isHabitReportLoading)
+            const LinearProgressIndicator()
+          else if (_habitReport != null && _habitReport!.hasHabitData)
+            const SizedBox.shrink(),
           if (report.completedTasks.isEmpty)
             EmptyReportCard(periodTitle: _selectedPeriod.title)
           else ...[

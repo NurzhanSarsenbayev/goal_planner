@@ -225,6 +225,16 @@ class HabitStore extends ChangeNotifier {
     await _applyEntryMutation(result, affectedDate: date);
   }
 
+  Future<List<HabitEntry>> loadEntriesForRange({
+    required DateTime startDate,
+    required DateTime endDate,
+  }) {
+    return _habitRepository.loadEntriesForRange(
+      startDate: dateOnly(startDate),
+      endDate: dateOnly(endDate),
+    );
+  }
+
   Habit? _findHabit(String habitId) {
     for (final habit in _habits) {
       if (habit.id == habitId) {

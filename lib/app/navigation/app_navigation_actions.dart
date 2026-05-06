@@ -8,17 +8,21 @@ import '../../features/reports/presentation/screens/reports_screen.dart';
 import '../../state/planner_store.dart';
 import '../../features/recurring/presentation/recurring_rule_dialog_actions.dart';
 import '../../features/tasks/presentation/task_dialog_actions.dart';
+import '../../features/reports/application/habit_report_loader.dart';
 
 class AppNavigationActions {
   const AppNavigationActions({
     required PlannerStore store,
     required TaskDialogActions taskDialogActions,
     required RecurringRuleDialogActions recurringRuleDialogActions,
+    required HabitReportLoader habitReportLoader,
   }) : _store = store,
        _taskDialogActions = taskDialogActions,
+       _habitReportLoader = habitReportLoader,
        _recurringRuleDialogActions = recurringRuleDialogActions;
 
   final PlannerStore _store;
+  final HabitReportLoader _habitReportLoader;
   final TaskDialogActions _taskDialogActions;
   final RecurringRuleDialogActions _recurringRuleDialogActions;
 
@@ -60,6 +64,7 @@ class AppNavigationActions {
               return ReportsScreen(
                 goals: _store.goals,
                 tasks: _store.tasks,
+                habitReportLoader: _habitReportLoader,
                 onToggleTaskCompleted: _store.toggleTaskCompleted,
                 onEditTask: (task) {
                   _taskDialogActions.showEditDialog(context, task);

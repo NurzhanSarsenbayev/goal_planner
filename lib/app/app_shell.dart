@@ -10,6 +10,7 @@ import 'navigation/app_navigation_actions.dart';
 import 'navigation/main_tab_builder.dart';
 import '../state/planner_store.dart';
 import '../features/habits/application/habit_store.dart';
+import '../features/reports/application/habit_report_loader.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -27,6 +28,7 @@ class _AppShellState extends State<AppShell> {
   late final RecurringRuleDialogActions _recurringRuleDialogActions;
   late final AppNavigationActions _navigationActions;
   late final MainTabBuilder _mainTabBuilder;
+  late final HabitReportLoader _habitReportLoader;
 
   int _selectedIndex = 0;
 
@@ -45,6 +47,7 @@ class _AppShellState extends State<AppShell> {
     _dependencies = AppDependencies.create();
     _store = _dependencies.store;
     _habitStore = _dependencies.habitStore;
+    _habitReportLoader = HabitReportLoader(habitStore: _habitStore);
 
     _goalDialogActions = GoalDialogActions(store: _store);
     _taskDialogActions = TaskDialogActions(store: _store);
@@ -54,6 +57,7 @@ class _AppShellState extends State<AppShell> {
       store: _store,
       taskDialogActions: _taskDialogActions,
       recurringRuleDialogActions: _recurringRuleDialogActions,
+      habitReportLoader: _habitReportLoader,
     );
 
     _mainTabBuilder = MainTabBuilder(

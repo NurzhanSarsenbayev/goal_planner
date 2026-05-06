@@ -203,6 +203,38 @@ void main() {
       expect(store.todaySummary.unmarkedCount, 0);
     });
 
+    test(
+      'loads entries for arbitrary range without changing visible week state',
+      () async {
+        final habit = _habit();
+        final entry = _entry(habitId: habit.id, date: DateTime(2026, 5, 6));
+        final repository = _FakeHabitRepository(
+          habits: [habit],
+          entries: [entry],
+        );
+        final store = HabitStore(
+          habitRepository: repository,
+          initialWeekStart: DateTime(2026, 5, 4),
+        );
+
+        await store.initialize();
+
+        final visibleWeekStart = store.visibleWeekStart;
+        final visibleWeekEntries = store.visibleWeekEntries;
+
+        final entries = await store.loadEntriesForRange(
+          startDate: DateTime(2026, 5, 1, 12),
+          endDate: DateTime(2026, 5, 3, 23),
+        );
+
+        expect(entries, [entry]);
+        expect(store.visibleWeekStart, visibleWeekStart);
+        expect(store.visibleWeekEntries, visibleWeekEntries);
+        expect(repository.loadedEntryStartDates.last, DateTime(2026, 5, 1));
+        expect(repository.loadedEntryEndDates.last, DateTime(2026, 5, 3));
+      },
+    );
+
     test('does not mark entry for missing habit', () async {
       final repository = _FakeHabitRepository();
       final store = HabitStore(
