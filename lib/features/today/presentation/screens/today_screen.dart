@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../../../tasks/presentation/task_date_dialogs.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
-import '../../../../shared/presentation/widgets/placeholder_screen.dart';
+import '../../../tasks/presentation/task_date_dialogs.dart';
 import '../../../tasks/presentation/widgets/task_card.dart';
 import '../../application/today_task_view_builder.dart';
+import '../widgets/today_empty_panel.dart';
+import '../widgets/today_summary_card.dart';
+import '../widgets/today_task_section.dart';
 
 class TodayScreen extends StatelessWidget {
   const TodayScreen({
@@ -102,55 +104,52 @@ class TodayScreen extends StatelessWidget {
 
     return Stack(
       children: [
-        if (view.isEmpty)
-          const PlaceholderScreen(
-            title: 'Today',
-            description: 'No tasks scheduled for today yet.',
-            icon: Icons.today,
-          )
-        else
-          ListView(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
-            children: [
+        ListView(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
+          children: [
+            TodaySummaryCard(view: view),
+            const SizedBox(height: 16),
+            if (view.isEmpty)
+              TodayEmptyPanel(
+                onPlanToday: () {
+                  _showAddActionSheet(context);
+                },
+              )
+            else ...[
               if (view.overdueTasks.isNotEmpty) ...[
-                Text('Overdue', style: Theme.of(context).textTheme.titleMedium),
-                const SizedBox(height: 8),
-                for (final task in view.overdueTasks) ...[
-                  _buildTaskCard(context, view, task),
-                  const SizedBox(height: 8),
-                ],
+                TodayTaskSection(
+                  title: 'Overdue',
+                  icon: Icons.warning_amber_outlined,
+                  tasks: view.overdueTasks,
+                  itemBuilder: (task) {
+                    return _buildTaskCard(context, view, task);
+                  },
+                ),
                 const SizedBox(height: 24),
               ],
-              Text(
-                'To do today',
-                style: Theme.of(context).textTheme.titleMedium,
+              TodayTaskSection(
+                title: 'To do today',
+                icon: Icons.radio_button_unchecked,
+                tasks: view.pendingTodayTasks,
+                emptyText: 'No tasks left for today.',
+                itemBuilder: (task) {
+                  return _buildTaskCard(context, view, task);
+                },
               ),
-              const SizedBox(height: 8),
-              if (view.pendingTodayTasks.isEmpty)
-                Text(
-                  'No tasks left for today.',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                )
-              else
-                for (final task in view.pendingTodayTasks) ...[
-                  _buildTaskCard(context, view, task),
-                  const SizedBox(height: 8),
-                ],
-
               if (view.doneTodayTasks.isNotEmpty) ...[
                 const SizedBox(height: 24),
-                Text(
-                  'Done today',
-                  style: Theme.of(context).textTheme.titleMedium,
+                TodayTaskSection(
+                  title: 'Done today',
+                  icon: Icons.check_circle_outline,
+                  tasks: view.doneTodayTasks,
+                  itemBuilder: (task) {
+                    return _buildTaskCard(context, view, task);
+                  },
                 ),
-                const SizedBox(height: 8),
-                for (final task in view.doneTodayTasks) ...[
-                  _buildTaskCard(context, view, task),
-                  const SizedBox(height: 8),
-                ],
               ],
             ],
-          ),
+          ],
+        ),
         Positioned(
           right: 16,
           bottom: 16,
