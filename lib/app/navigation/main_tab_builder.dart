@@ -8,22 +8,27 @@ import '../../state/planner_store.dart';
 import '../../features/goals/presentation/goal_dialog_actions.dart';
 import '../../features/recurring/presentation/recurring_rule_dialog_actions.dart';
 import '../../features/tasks/presentation/task_dialog_actions.dart';
+import '../../features/habits/application/habit_store.dart';
+import '../../features/habits/presentation/screens/habits_screen.dart';
 import 'app_navigation_actions.dart';
 
 class MainTabBuilder {
   const MainTabBuilder({
     required PlannerStore store,
+    required HabitStore habitStore,
     required GoalDialogActions goalDialogActions,
     required TaskDialogActions taskDialogActions,
     required RecurringRuleDialogActions recurringRuleDialogActions,
     required AppNavigationActions navigationActions,
   }) : _store = store,
+       _habitStore = habitStore,
        _goalDialogActions = goalDialogActions,
        _taskDialogActions = taskDialogActions,
        _recurringRuleDialogActions = recurringRuleDialogActions,
        _navigationActions = navigationActions;
 
   final PlannerStore _store;
+  final HabitStore _habitStore;
   final GoalDialogActions _goalDialogActions;
   final TaskDialogActions _taskDialogActions;
   final RecurringRuleDialogActions _recurringRuleDialogActions;
@@ -89,12 +94,10 @@ class MainTabBuilder {
           _recurringRuleDialogActions.showAddDialog(context, startDate: date);
         },
       ),
+      HabitsScreen(habitStore: _habitStore),
       MoreScreen(
         onOpenAllTasks: () {
           _navigationActions.openAllTasks(context);
-        },
-        onOpenHabits: () {
-          _navigationActions.openHabits(context);
         },
         onOpenReports: () {
           _navigationActions.openReports(context);

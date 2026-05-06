@@ -5,25 +5,20 @@ import '../../features/goals/presentation/screens/goal_details_screen.dart';
 import '../../features/tasks/presentation/screens/all_tasks_screen.dart';
 import '../../features/recurring/presentation/screens/recurring_tasks_screen.dart';
 import '../../features/reports/presentation/screens/reports_screen.dart';
-import '../../features/habits/presentation/screens/habits_screen.dart';
 import '../../state/planner_store.dart';
-import '../../features/habits/application/habit_store.dart';
 import '../../features/recurring/presentation/recurring_rule_dialog_actions.dart';
 import '../../features/tasks/presentation/task_dialog_actions.dart';
 
 class AppNavigationActions {
   const AppNavigationActions({
     required PlannerStore store,
-    required HabitStore habitStore,
     required TaskDialogActions taskDialogActions,
     required RecurringRuleDialogActions recurringRuleDialogActions,
   }) : _store = store,
-       _habitStore = habitStore,
        _taskDialogActions = taskDialogActions,
        _recurringRuleDialogActions = recurringRuleDialogActions;
 
   final PlannerStore _store;
-  final HabitStore _habitStore;
   final TaskDialogActions _taskDialogActions;
   final RecurringRuleDialogActions _recurringRuleDialogActions;
 
@@ -105,16 +100,6 @@ class AppNavigationActions {
               );
             },
           );
-        },
-      ),
-    );
-  }
-
-  void openHabits(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (context) {
-          return HabitsScreen(habitStore: _habitStore);
         },
       ),
     );

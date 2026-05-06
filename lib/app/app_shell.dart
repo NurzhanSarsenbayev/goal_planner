@@ -28,7 +28,13 @@ class _AppShellState extends State<AppShell> {
 
   int _selectedIndex = 0;
 
-  static const List<String> _titles = ['Today', 'Goals', 'Calendar', 'More'];
+  static const List<String> _titles = [
+    'Today',
+    'Goals',
+    'Calendar',
+    'Habits',
+    'More',
+  ];
 
   @override
   void initState() {
@@ -43,13 +49,13 @@ class _AppShellState extends State<AppShell> {
 
     _navigationActions = AppNavigationActions(
       store: _store,
-      habitStore: _dependencies.habitStore,
       taskDialogActions: _taskDialogActions,
       recurringRuleDialogActions: _recurringRuleDialogActions,
     );
 
     _mainTabBuilder = MainTabBuilder(
       store: _store,
+      habitStore: _dependencies.habitStore,
       goalDialogActions: _goalDialogActions,
       taskDialogActions: _taskDialogActions,
       recurringRuleDialogActions: _recurringRuleDialogActions,
@@ -105,6 +111,11 @@ class _AppShellState extends State<AppShell> {
             icon: Icon(Icons.calendar_month_outlined),
             selectedIcon: Icon(Icons.calendar_month),
             label: 'Calendar',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.track_changes_outlined),
+            selectedIcon: Icon(Icons.track_changes),
+            label: 'Habits',
           ),
           NavigationDestination(
             icon: Icon(Icons.more_horiz),
