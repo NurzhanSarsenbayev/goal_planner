@@ -27,4 +27,12 @@ enum HabitEntryStatus {
       HabitEntryStatus.none => false,
     };
   }
+
+  bool get isSkipped {
+    return this == HabitEntryStatus.skipped;
+  }
+
+  bool get isPartial {
+    return this == HabitEntryStatus.incomplete;
+  }
 }
