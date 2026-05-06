@@ -133,6 +133,44 @@ void main() {
       expect(result.habits, same(habits));
     });
 
+    test('unarchives habit', () {
+      final now = DateTime(2026, 5, 6);
+      final habit = _habit(isArchived: true);
+
+      final result = service.unarchiveHabit(
+        habits: [habit],
+        habitId: habit.id,
+        now: now,
+      );
+
+      final unarchived = result.habitToPersist!;
+
+      expect(unarchived.isArchived, isFalse);
+      expect(unarchived.updatedAt, now);
+      expect(result.habits.single.isArchived, isFalse);
+    });
+
+    test('does not unarchive active habit', () {
+      final habits = [_habit(isArchived: false)];
+
+      final result = service.unarchiveHabit(
+        habits: habits,
+        habitId: habits.single.id,
+      );
+
+      expect(result.hasChange, isFalse);
+      expect(result.habits, same(habits));
+    });
+
+    test('does not unarchive missing habit', () {
+      final habits = [_habit(isArchived: true)];
+
+      final result = service.unarchiveHabit(habits: habits, habitId: 'missing');
+
+      expect(result.hasChange, isFalse);
+      expect(result.habits, same(habits));
+    });
+
     test('deletes habit from list', () {
       final habit = _habit();
 

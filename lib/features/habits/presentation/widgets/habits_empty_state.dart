@@ -7,6 +7,8 @@ class HabitsEmptyState extends StatelessWidget {
     this.description =
         'Pick something simple that you want to notice every week.',
     this.buttonLabel = 'Create first habit',
+    this.secondaryButtonLabel,
+    this.onSecondaryAction,
     this.icon = Icons.track_changes_outlined,
     this.showExamples = true,
     super.key,
@@ -16,6 +18,8 @@ class HabitsEmptyState extends StatelessWidget {
   final String title;
   final String description;
   final String buttonLabel;
+  final String? secondaryButtonLabel;
+  final Future<void> Function()? onSecondaryAction;
   final IconData icon;
   final bool showExamples;
 
@@ -58,6 +62,15 @@ class HabitsEmptyState extends StatelessWidget {
                 icon: const Icon(Icons.add),
                 label: Text(buttonLabel),
               ),
+              if (secondaryButtonLabel != null &&
+                  onSecondaryAction != null) ...[
+                const SizedBox(height: 8),
+                TextButton.icon(
+                  onPressed: onSecondaryAction,
+                  icon: const Icon(Icons.archive_outlined),
+                  label: Text(secondaryButtonLabel!),
+                ),
+              ],
             ],
           ),
         ),

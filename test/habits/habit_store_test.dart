@@ -117,6 +117,21 @@ void main() {
       expect(repository.savedHabits.single.isArchived, isTrue);
     });
 
+    test('unarchives habit and persists it', () async {
+      final habit = _habit(isArchived: true);
+      final repository = _FakeHabitRepository(habits: [habit]);
+      final store = HabitStore(
+        habitRepository: repository,
+        initialWeekStart: DateTime(2026, 5, 4),
+      );
+
+      await store.initialize();
+      await store.unarchiveHabit(habit.id);
+
+      expect(store.habits.single.isArchived, isFalse);
+      expect(repository.savedHabits.single.isArchived, isFalse);
+    });
+
     test('deletes habit and removes visible entries for that habit', () async {
       final habit = _habit();
       final entry = _entry(habitId: habit.id);

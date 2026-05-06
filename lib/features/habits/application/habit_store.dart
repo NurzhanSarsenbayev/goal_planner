@@ -148,6 +148,15 @@ class HabitStore extends ChangeNotifier {
     await _applyHabitMutation(result);
   }
 
+  Future<void> unarchiveHabit(String habitId) async {
+    final result = _habitApplicationService.unarchiveHabit(
+      habits: _habits,
+      habitId: habitId,
+    );
+
+    await _applyHabitMutation(result);
+  }
+
   Future<void> deleteHabit(String habitId) async {
     final result = _habitApplicationService.deleteHabit(
       habits: _habits,

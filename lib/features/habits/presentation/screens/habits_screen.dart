@@ -32,13 +32,31 @@ class _HabitsScreenState extends State<HabitsScreen> {
       animation: widget.habitStore,
       builder: (context, _) {
         final habitStore = widget.habitStore;
+        final hasArchivedHabits = habitStore.habits.any(
+          (habit) => habit.isArchived,
+        );
 
         return Scaffold(
-          appBar: AppBar(title: const Text('Habits')),
+          appBar: AppBar(
+            title: const Text('Habits'),
+            actions: [
+              if (hasArchivedHabits)
+                IconButton(
+                  tooltip: 'Archived habits',
+                  onPressed: () {
+                    _habitDialogActions.showArchivedHabitsSheet(context);
+                  },
+                  icon: const Icon(Icons.archive_outlined),
+                ),
+            ],
+          ),
           body: _HabitsBody(
             habitStore: habitStore,
             onCreateHabit: () {
               return _habitDialogActions.showAddDialog(context);
+            },
+            onViewArchivedHabits: () {
+              return _habitDialogActions.showArchivedHabitsSheet(context);
             },
             onCellTap: ({required habitId, required date, required status}) {
               return _habitDialogActions.showStatusSheet(
@@ -79,10 +97,12 @@ class _HabitsBody extends StatelessWidget {
     required this.onEditHabit,
     required this.onArchiveHabit,
     required this.onDeleteHabit,
+    required this.onViewArchivedHabits,
   });
 
   final HabitStore habitStore;
   final Future<void> Function() onCreateHabit;
+  final Future<void> Function() onViewArchivedHabits;
   final HabitCellTapCallback onCellTap;
   final HabitActionCallback onEditHabit;
   final HabitActionCallback onArchiveHabit;
@@ -106,12 +126,13 @@ class _HabitsBody extends StatelessWidget {
     if (activeHabits.isEmpty) {
       return HabitsEmptyState(
         title: 'All habits are archived',
-        description:
-            'Create a new habit now, or restore archived habits later.',
+        description: 'Create a new habit or restore an archived one.',
         buttonLabel: 'Create new habit',
+        secondaryButtonLabel: 'View archived habits',
         icon: Icons.archive_outlined,
         showExamples: false,
         onCreateHabit: onCreateHabit,
+        onSecondaryAction: onViewArchivedHabits,
       );
     }
 

@@ -149,6 +149,37 @@ class HabitApplicationService {
     return HabitMutationResult(habits: updatedHabits, habitToPersist: archived);
   }
 
+  HabitMutationResult unarchiveHabit({
+    required List<Habit> habits,
+    required String habitId,
+    DateTime? now,
+  }) {
+    final index = habits.indexWhere((habit) => habit.id == habitId);
+
+    if (index == -1) {
+      return HabitMutationResult(habits: habits);
+    }
+
+    final current = habits[index];
+
+    if (!current.isArchived) {
+      return HabitMutationResult(habits: habits);
+    }
+
+    final unarchived = current.copyWith(
+      isArchived: false,
+      updatedAt: now ?? DateTime.now(),
+    );
+
+    final updatedHabits = [...habits];
+    updatedHabits[index] = unarchived;
+
+    return HabitMutationResult(
+      habits: updatedHabits,
+      habitToPersist: unarchived,
+    );
+  }
+
   HabitMutationResult deleteHabit({
     required List<Habit> habits,
     required String habitId,

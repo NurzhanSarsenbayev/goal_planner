@@ -5,6 +5,7 @@ import '../domain/habit.dart';
 import '../domain/habit_entry_status.dart';
 import 'widgets/add_habit_dialog.dart';
 import 'widgets/habit_status_bottom_sheet.dart';
+import 'widgets/archived_habits_bottom_sheet.dart';
 
 class HabitDialogActions {
   const HabitDialogActions({required HabitStore habitStore})
@@ -148,5 +149,28 @@ class HabitDialogActions {
       date: date,
       status: selectedStatus,
     );
+  }
+
+  Future<void> showArchivedHabitsSheet(BuildContext context) async {
+    final archivedHabits = [
+      for (final habit in _habitStore.habits)
+        if (habit.isArchived) habit,
+    ];
+
+    final selection = await showArchivedHabitsBottomSheet(
+      context: context,
+      archivedHabits: archivedHabits,
+    );
+
+    if (!context.mounted || selection == null) {
+      return;
+    }
+
+    switch (selection.action) {
+      case ArchivedHabitAction.unarchive:
+        await _habitStore.unarchiveHabit(selection.habit.id);
+      case ArchivedHabitAction.delete:
+        await showDeleteDialog(context, selection.habit);
+    }
   }
 }
