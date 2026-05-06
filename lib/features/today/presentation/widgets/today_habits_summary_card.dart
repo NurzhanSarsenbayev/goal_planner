@@ -52,7 +52,7 @@ class TodayHabitsSummaryCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                '${summary.doneCount}/${summary.totalHabitCount} done',
+                _primaryText(),
                 style: Theme.of(
                   context,
                 ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
@@ -69,6 +69,14 @@ class TodayHabitsSummaryCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _primaryText() {
+    if (summary.actionableHabitCount == 0) {
+      return '${summary.doneCount} done';
+    }
+
+    return '${summary.doneCount}/${summary.actionableHabitCount} done';
   }
 
   String _detailsText() {

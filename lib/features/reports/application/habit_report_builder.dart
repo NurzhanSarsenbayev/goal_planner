@@ -92,16 +92,7 @@ int _expectedMarkCountForHabit({
     return 0;
   }
 
-  final createdDate = dateOnly(habit.createdAt);
-  final firstExpectedDate = createdDate.isAfter(startDate)
-      ? createdDate
-      : startDate;
-
-  if (firstExpectedDate.isAfter(endDate)) {
-    return 0;
-  }
-
-  return endDate.difference(firstExpectedDate).inDays + 1;
+  return endDate.difference(startDate).inDays + 1;
 }
 
 List<HabitDayReportGroup> _groupEntriesByDay(List<HabitEntry> entries) {

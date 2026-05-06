@@ -16,7 +16,7 @@ class EmptyReportCard extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                'No completed tasks for $periodTitle yet.',
+                'No completed tasks or habit marks for $periodTitle yet.',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),

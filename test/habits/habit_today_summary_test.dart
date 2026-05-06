@@ -37,6 +37,32 @@ void main() {
       expect(summary.unmarkedCount, 1);
     });
 
+    test('excludes skipped habits from actionable today count', () {
+      final date = DateTime(2026, 5, 6);
+      final firstHabit = _habit(id: 'habit-1');
+      final secondHabit = _habit(id: 'habit-2');
+      final skippedHabit = _habit(id: 'habit-3');
+
+      final summary = builder.build(
+        habits: [firstHabit, secondHabit, skippedHabit],
+        entries: [
+          _entry(habitId: firstHabit.id, date: date),
+          _entry(habitId: secondHabit.id, date: date),
+          _entry(
+            habitId: skippedHabit.id,
+            date: date,
+            status: HabitEntryStatus.skipped,
+          ),
+        ],
+        date: date,
+      );
+
+      expect(summary.totalHabitCount, 3);
+      expect(summary.doneCount, 2);
+      expect(summary.skippedCount, 1);
+      expect(summary.actionableHabitCount, 2);
+    });
+
     test('ignores entries from another date', () {
       final date = DateTime(2026, 5, 6);
       final habit = _habit();

@@ -49,11 +49,8 @@ void main() {
       expect(summary.markedCount, 5);
     });
 
-    test('counts expected marks from habit creation date', () {
-      final habit = _habit(
-        id: 'new-habit',
-        createdAt: today.subtract(const Duration(days: 2)),
-      );
+    test('counts expected marks for full selected period', () {
+      final habit = _habit(id: 'new-habit', createdAt: today);
 
       final summary = buildHabitReportSummary(
         habits: [habit],
@@ -62,10 +59,39 @@ void main() {
         today: today,
       );
 
-      expect(summary.expectedMarkCount, 3);
+      expect(summary.expectedMarkCount, 7);
       expect(summary.consistencyPercent, 0);
       expect(summary.hasHabitData, isTrue);
     });
+
+    test(
+      'does not produce consistency over 100 when backfilled marks exist',
+      () {
+        final habit = _habit(id: 'habit-1');
+
+        final summary = buildHabitReportSummary(
+          habits: [habit],
+          entries: [
+            _entry(
+              habitId: habit.id,
+              date: today,
+              status: HabitEntryStatus.done,
+            ),
+            _entry(
+              habitId: habit.id,
+              date: today.subtract(const Duration(days: 1)),
+              status: HabitEntryStatus.done,
+            ),
+          ],
+          period: ReportPeriod.today,
+          today: today,
+        );
+
+        expect(summary.expectedMarkCount, 1);
+        expect(summary.doneCount, 1);
+        expect(summary.consistencyPercent, 100);
+      },
+    );
 
     test('calculates consistency percent from done over expected marks', () {
       final habit = _habit(id: 'habit-1');
@@ -113,6 +139,41 @@ void main() {
         expect(summary.hasHabitData, isTrue);
       },
     );
+
+    test('excludes skipped marks from consistency denominator', () {
+      final firstHabit = _habit(id: 'first');
+      final secondHabit = _habit(id: 'second');
+      final skippedHabit = _habit(id: 'skipped');
+
+      final summary = buildHabitReportSummary(
+        habits: [firstHabit, secondHabit, skippedHabit],
+        entries: [
+          _entry(
+            habitId: firstHabit.id,
+            date: today,
+            status: HabitEntryStatus.done,
+          ),
+          _entry(
+            habitId: secondHabit.id,
+            date: today,
+            status: HabitEntryStatus.done,
+          ),
+          _entry(
+            habitId: skippedHabit.id,
+            date: today,
+            status: HabitEntryStatus.skipped,
+          ),
+        ],
+        period: ReportPeriod.today,
+        today: today,
+      );
+
+      expect(summary.expectedMarkCount, 3);
+      expect(summary.skippedCount, 1);
+      expect(summary.actionableExpectedMarkCount, 2);
+      expect(summary.doneCount, 2);
+      expect(summary.consistencyPercent, 100);
+    });
 
     test('groups habit entries by habit and day', () {
       final firstHabit = _habit(id: 'first', sortOrder: 0);

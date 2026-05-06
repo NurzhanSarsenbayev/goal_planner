@@ -46,12 +46,22 @@ class HabitReportSummary {
     return doneCount + missedCount + skippedCount + partialCount;
   }
 
-  int get consistencyPercent {
-    if (expectedMarkCount == 0) {
+  int get actionableExpectedMarkCount {
+    final count = expectedMarkCount - skippedCount;
+
+    if (count < 0) {
       return 0;
     }
 
-    return ((doneCount / expectedMarkCount) * 100).round();
+    return count;
+  }
+
+  int get consistencyPercent {
+    if (actionableExpectedMarkCount == 0) {
+      return 0;
+    }
+
+    return ((doneCount / actionableExpectedMarkCount) * 100).round();
   }
 
   bool get hasHabitData {
@@ -84,6 +94,24 @@ class HabitReportGroup {
 
   int get partialCount {
     return entries.where((entry) => entry.status.isPartial).length;
+  }
+
+  int get actionableExpectedMarkCount {
+    final count = expectedMarkCount - skippedCount;
+
+    if (count < 0) {
+      return 0;
+    }
+
+    return count;
+  }
+
+  int get consistencyPercent {
+    if (actionableExpectedMarkCount == 0) {
+      return 0;
+    }
+
+    return ((doneCount / actionableExpectedMarkCount) * 100).round();
   }
 }
 

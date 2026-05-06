@@ -26,6 +26,16 @@ class HabitTodaySummary {
     return doneCount + failedCount + skippedCount + incompleteCount;
   }
 
+  int get actionableHabitCount {
+    final count = totalHabitCount - skippedCount;
+
+    if (count < 0) {
+      return 0;
+    }
+
+    return count;
+  }
+
   int get unmarkedCount {
     return totalHabitCount - markedCount;
   }
