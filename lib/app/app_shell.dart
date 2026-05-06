@@ -9,6 +9,7 @@ import 'composition/app_dependencies.dart';
 import 'navigation/app_navigation_actions.dart';
 import 'navigation/main_tab_builder.dart';
 import '../state/planner_store.dart';
+import '../features/habits/application/habit_store.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -20,6 +21,7 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   late final AppDependencies _dependencies;
   late final PlannerStore _store;
+  late final HabitStore _habitStore;
   late final GoalDialogActions _goalDialogActions;
   late final TaskDialogActions _taskDialogActions;
   late final RecurringRuleDialogActions _recurringRuleDialogActions;
@@ -42,6 +44,7 @@ class _AppShellState extends State<AppShell> {
 
     _dependencies = AppDependencies.create();
     _store = _dependencies.store;
+    _habitStore = _dependencies.habitStore;
 
     _goalDialogActions = GoalDialogActions(store: _store);
     _taskDialogActions = TaskDialogActions(store: _store);
@@ -55,7 +58,7 @@ class _AppShellState extends State<AppShell> {
 
     _mainTabBuilder = MainTabBuilder(
       store: _store,
-      habitStore: _dependencies.habitStore,
+      habitStore: _habitStore,
       goalDialogActions: _goalDialogActions,
       taskDialogActions: _taskDialogActions,
       recurringRuleDialogActions: _recurringRuleDialogActions,
@@ -63,12 +66,17 @@ class _AppShellState extends State<AppShell> {
     );
 
     _store.addListener(_onStoreChanged);
+    _habitStore.addListener(_onStoreChanged);
+
     unawaited(_store.initialize());
+    unawaited(_habitStore.initialize());
   }
 
   @override
   void dispose() {
     _store.removeListener(_onStoreChanged);
+    _habitStore.removeListener(_onStoreChanged);
+
     unawaited(_dependencies.dispose());
 
     super.dispose();
@@ -87,10 +95,11 @@ class _AppShellState extends State<AppShell> {
   @override
   Widget build(BuildContext context) {
     final screens = _mainTabBuilder.buildScreens(context);
+    final isAppInitialized = _store.isInitialized && _habitStore.isInitialized;
 
     return Scaffold(
       appBar: AppBar(title: Text(_titles[_selectedIndex])),
-      body: _store.isInitialized
+      body: isAppInitialized
           ? screens[_selectedIndex]
           : const Center(child: CircularProgressIndicator()),
       bottomNavigationBar: NavigationBar(

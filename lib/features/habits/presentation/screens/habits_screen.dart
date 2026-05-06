@@ -23,7 +23,6 @@ class _HabitsScreenState extends State<HabitsScreen> {
     super.initState();
 
     _habitDialogActions = HabitDialogActions(habitStore: widget.habitStore);
-    widget.habitStore.initialize();
   }
 
   @override
