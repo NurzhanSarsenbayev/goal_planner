@@ -9,6 +9,7 @@ import '../../application/goal_details_view_builder.dart';
 import '../goal_details_dialog_actions.dart';
 import '../widgets/direct_goal_tasks_section.dart';
 import '../widgets/goal_header.dart';
+import '../../../recurring/presentation/recurring_rule_delete_dialog.dart';
 import '../../../milestones/presentation/widgets/milestones_section.dart';
 
 class GoalDetailsScreen extends StatelessWidget {
@@ -32,6 +33,9 @@ class GoalDetailsScreen extends StatelessWidget {
     required this.onCompleteTaskOnDate,
     required this.onAddDirectRecurringTask,
     required this.onAddRecurringTaskToMilestone,
+    required this.onRecurringRuleActiveChanged,
+    required this.onEditRecurringRule,
+    required this.onDeleteRecurringRule,
     required this.recurringRules,
   });
 
@@ -74,6 +78,11 @@ class GoalDetailsScreen extends StatelessWidget {
   onCompleteTaskOnDate;
   final VoidCallback onAddDirectRecurringTask;
   final void Function(String milestoneId) onAddRecurringTaskToMilestone;
+  final void Function(RecurringTaskRule rule, bool isActive)
+  onRecurringRuleActiveChanged;
+  final ValueChanged<RecurringTaskRule> onEditRecurringRule;
+  final ValueChanged<RecurringTaskRule> onDeleteRecurringRule;
+
   final GoalDetailsViewBuilder _viewBuilder = const GoalDetailsViewBuilder();
   final GoalDetailsDialogActions _dialogActions =
       const GoalDetailsDialogActions();
@@ -164,6 +173,20 @@ class GoalDetailsScreen extends StatelessWidget {
           GoalRecurringTasksSection(
             rules: view.directGoalRecurringRules,
             onAddRule: onAddDirectRecurringTask,
+            onRuleActiveChanged: onRecurringRuleActiveChanged,
+            onEditRule: onEditRecurringRule,
+            onDeleteRule: (rule) async {
+              final shouldDelete = await showDeleteRecurringTaskRuleDialog(
+                context,
+                rule: rule,
+              );
+
+              if (!shouldDelete) {
+                return;
+              }
+
+              onDeleteRecurringRule(rule);
+            },
           ),
           const SizedBox(height: 16),
           DirectGoalTasksSection(

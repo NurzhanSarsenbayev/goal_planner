@@ -153,6 +153,18 @@ class AppNavigationActions {
                     milestoneId: milestoneId,
                   );
                 },
+                onRecurringRuleActiveChanged: (rule, isActive) {
+                  _store.setRecurringTaskRuleActive(
+                    ruleId: rule.id,
+                    isActive: isActive,
+                  );
+                },
+                onEditRecurringRule: (rule) {
+                  _recurringRuleDialogActions.showEditDialog(context, rule);
+                },
+                onDeleteRecurringRule: (rule) {
+                  _store.deleteRecurringTaskRule(rule.id);
+                },
                 recurringRules: _store.recurringRules,
               );
             },
