@@ -130,7 +130,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 completedCount: taskReport.completedCount,
                 plannedCount: taskReport.plannedCount,
                 planCompletionPercent: taskReport.planCompletionPercent,
-                currentStreakDays: taskReport.currentStreakDays,
+                activeDaysCount: taskReport.activeDaysCount,
               ),
               const SizedBox(height: 24),
             ],

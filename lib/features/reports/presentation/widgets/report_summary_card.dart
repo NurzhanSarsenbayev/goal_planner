@@ -6,13 +6,13 @@ class ReportSummaryCard extends StatelessWidget {
     required this.completedCount,
     required this.plannedCount,
     required this.planCompletionPercent,
-    required this.currentStreakDays,
+    required this.activeDaysCount,
   });
 
   final int completedCount;
   final int plannedCount;
   final int planCompletionPercent;
-  final int currentStreakDays;
+  final int activeDaysCount;
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +51,8 @@ class ReportSummaryCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: _MetricPill(
-                    value: _streakValue(),
-                    label: 'current streak',
+                    value: activeDaysCount.toString(),
+                    label: 'active days',
                   ),
                 ),
               ],
@@ -61,18 +61,6 @@ class ReportSummaryCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _streakValue() {
-    if (currentStreakDays == 0) {
-      return '0 days';
-    }
-
-    if (currentStreakDays == 1) {
-      return '🔥 1 day';
-    }
-
-    return '🔥 $currentStreakDays days';
   }
 }
 
