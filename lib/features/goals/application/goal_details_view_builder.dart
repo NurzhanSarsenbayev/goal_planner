@@ -1,6 +1,7 @@
 import '../../../models/goal.dart';
 import '../../../models/milestone.dart';
 import '../../../models/planner_task.dart';
+import '../../../models/recurring_task_rule.dart';
 
 class GoalDetailsViewBuilder {
   const GoalDetailsViewBuilder();
@@ -9,6 +10,7 @@ class GoalDetailsViewBuilder {
     required Goal goal,
     required List<Milestone> milestones,
     required List<PlannerTask> tasks,
+    required List<RecurringTaskRule> recurringRules,
   }) {
     final goalTasks = tasks
         .where((task) => task.goalId == goal.id && task.recurringRuleId == null)
@@ -21,6 +23,10 @@ class GoalDetailsViewBuilder {
     final milestoneIds = goalMilestones
         .map((milestone) => milestone.id)
         .toSet();
+
+    final goalRecurringRules = recurringRules
+        .where((rule) => rule.goalId == goal.id)
+        .toList();
 
     final directGoalTasks = goalTasks
         .where(
@@ -46,6 +52,7 @@ class GoalDetailsViewBuilder {
       directGoalTasks: directGoalTasks,
       completedTasks: completedTasks,
       tasksByMilestoneId: tasksByMilestoneId,
+      goalRecurringRules: goalRecurringRules,
     );
   }
 }
@@ -57,6 +64,7 @@ class GoalDetailsView {
     required this.directGoalTasks,
     required this.completedTasks,
     required this.tasksByMilestoneId,
+    required this.goalRecurringRules,
   });
 
   final List<PlannerTask> goalTasks;
@@ -64,6 +72,7 @@ class GoalDetailsView {
   final List<PlannerTask> directGoalTasks;
   final int completedTasks;
   final Map<String, List<PlannerTask>> tasksByMilestoneId;
+  final List<RecurringTaskRule> goalRecurringRules;
 
   List<PlannerTask> tasksForMilestone(String milestoneId) {
     return tasksByMilestoneId[milestoneId] ?? const [];

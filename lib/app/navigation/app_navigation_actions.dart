@@ -140,6 +140,7 @@ class AppNavigationActions {
                 onScheduleTaskForToday: _store.scheduleTaskForToday,
                 onScheduleTaskForDate: _store.scheduleTaskForDate,
                 onCompleteTaskOnDate: _store.completeTaskOnDate,
+                recurringRules: _store.recurringRules,
               );
             },
           );

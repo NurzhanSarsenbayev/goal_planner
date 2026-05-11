@@ -3,6 +3,7 @@ import 'package:goal_planner/features/goals/application/goal_details_view_builde
 import 'package:goal_planner/models/goal.dart';
 import 'package:goal_planner/models/milestone.dart';
 import 'package:goal_planner/models/planner_task.dart';
+import 'package:goal_planner/models/recurring_task_rule.dart';
 
 void main() {
   group('GoalDetailsViewBuilder', () {
@@ -20,6 +21,7 @@ void main() {
             recurringRuleId: 'rule-1',
           ),
         ],
+        recurringRules: const [],
       );
 
       expect(view.goalTasks.map((task) => task.id), ['direct-task']);
@@ -46,6 +48,7 @@ void main() {
             recurringRuleId: 'rule-1',
           ),
         ],
+        recurringRules: const [],
       );
 
       expect(view.tasksForMilestone(milestone.id).map((task) => task.id), [
@@ -72,10 +75,36 @@ void main() {
             isCompleted: true,
           ),
         ],
+        recurringRules: const [],
       );
 
       expect(view.completedTasks, 1);
       expect(view.goalTasks.length, 1);
+    });
+
+    test('includes recurring rules linked to the goal', () {
+      final goal = _goal(id: 'goal-1');
+
+      final view = const GoalDetailsViewBuilder().build(
+        goal: goal,
+        milestones: const [],
+        tasks: const [],
+        recurringRules: [
+          _recurringRule(id: 'goal-rule', goalId: goal.id),
+          _recurringRule(
+            id: 'milestone-rule',
+            goalId: goal.id,
+            milestoneId: 'm1',
+          ),
+          _recurringRule(id: 'other-goal-rule', goalId: 'other-goal'),
+          _recurringRule(id: 'standalone-rule'),
+        ],
+      );
+
+      expect(view.goalRecurringRules.map((rule) => rule.id), [
+        'goal-rule',
+        'milestone-rule',
+      ]);
     });
   });
 }
@@ -115,6 +144,25 @@ PlannerTask _task({
     milestoneId: milestoneId,
     recurringRuleId: recurringRuleId,
     isCompleted: isCompleted,
+    createdAt: DateTime(2026, 5, 1),
+  );
+}
+
+RecurringTaskRule _recurringRule({
+  required String id,
+  String? goalId,
+  String? milestoneId,
+}) {
+  return RecurringTaskRule(
+    id: id,
+    title: id,
+    description: '',
+    goalId: goalId,
+    milestoneId: milestoneId,
+    recurrenceType: RecurrenceType.weekly,
+    weekdays: const [DateTime.monday],
+    monthDay: null,
+    startDate: DateTime(2026, 5, 1),
     createdAt: DateTime(2026, 5, 1),
   );
 }
