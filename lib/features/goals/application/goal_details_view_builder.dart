@@ -10,7 +10,9 @@ class GoalDetailsViewBuilder {
     required List<Milestone> milestones,
     required List<PlannerTask> tasks,
   }) {
-    final goalTasks = tasks.where((task) => task.goalId == goal.id).toList();
+    final goalTasks = tasks
+        .where((task) => task.goalId == goal.id && task.recurringRuleId == null)
+        .toList();
 
     final goalMilestones = milestones
         .where((milestone) => milestone.goalId == goal.id)
