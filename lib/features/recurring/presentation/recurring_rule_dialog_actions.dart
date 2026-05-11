@@ -14,12 +14,16 @@ class RecurringRuleDialogActions {
   Future<void> showAddDialog(
     BuildContext context, {
     DateTime? startDate,
+    String? goalId,
+    String? milestoneId,
   }) async {
     final result = await showAddRecurringTaskRuleDialog(
       context,
       goals: _store.goals,
       milestones: _store.milestones,
       initialDate: startDate,
+      initialGoalId: goalId,
+      initialMilestoneId: milestoneId,
     );
 
     if (result == null) {

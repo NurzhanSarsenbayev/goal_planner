@@ -10,6 +10,8 @@ Future<AddRecurringTaskRuleDraft?> showAddRecurringTaskRuleDialog(
   required List<Goal> goals,
   required List<Milestone> milestones,
   DateTime? initialDate,
+  String? initialGoalId,
+  String? initialMilestoneId,
 }) {
   return showDialog<AddRecurringTaskRuleDraft>(
     context: context,
@@ -18,6 +20,8 @@ Future<AddRecurringTaskRuleDraft?> showAddRecurringTaskRuleDialog(
         goals: goals,
         milestones: milestones,
         initialDate: initialDate,
+        initialGoalId: initialGoalId,
+        initialMilestoneId: initialMilestoneId,
       );
     },
   );
