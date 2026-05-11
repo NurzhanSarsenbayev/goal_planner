@@ -20,6 +20,9 @@ class MilestonesSection extends StatelessWidget {
     required this.onDeleteMilestone,
     required this.onAddTaskToMilestone,
     required this.onAddRecurringTaskToMilestone,
+    required this.onRecurringRuleActiveChanged,
+    required this.onEditRecurringRule,
+    required this.onDeleteRecurringRule,
     required this.onToggleTaskCompleted,
     required this.onEditTask,
     required this.onMoveTaskToDirectGoal,
@@ -37,6 +40,10 @@ class MilestonesSection extends StatelessWidget {
   final void Function(Milestone milestone) onDeleteMilestone;
   final void Function(String milestoneId) onAddTaskToMilestone;
   final void Function(String milestoneId) onAddRecurringTaskToMilestone;
+  final void Function(RecurringTaskRule rule, bool isActive)
+  onRecurringRuleActiveChanged;
+  final ValueChanged<RecurringTaskRule> onEditRecurringRule;
+  final ValueChanged<RecurringTaskRule> onDeleteRecurringRule;
   final void Function(PlannerTask task) onToggleTaskCompleted;
   final void Function(PlannerTask task) onEditTask;
   final void Function(String taskId) onMoveTaskToDirectGoal;
@@ -80,6 +87,9 @@ class MilestonesSection extends StatelessWidget {
                 onAddTask: () => onAddTaskToMilestone(milestone.id),
                 onAddRecurringTask: () =>
                     onAddRecurringTaskToMilestone(milestone.id),
+                onRecurringRuleActiveChanged: onRecurringRuleActiveChanged,
+                onEditRecurringRule: onEditRecurringRule,
+                onDeleteRecurringRule: onDeleteRecurringRule,
                 onEditMilestone: () => onEditMilestone(milestone),
                 onDeleteMilestone: () => onDeleteMilestone(milestone),
                 onToggleTaskCompleted: onToggleTaskCompleted,

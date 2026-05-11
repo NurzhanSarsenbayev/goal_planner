@@ -143,6 +143,20 @@ class GoalDetailsScreen extends StatelessWidget {
               );
             },
             onAddRecurringTaskToMilestone: onAddRecurringTaskToMilestone,
+            onRecurringRuleActiveChanged: onRecurringRuleActiveChanged,
+            onEditRecurringRule: onEditRecurringRule,
+            onDeleteRecurringRule: (rule) async {
+              final shouldDelete = await showDeleteRecurringTaskRuleDialog(
+                context,
+                rule: rule,
+              );
+
+              if (!shouldDelete) {
+                return;
+              }
+
+              onDeleteRecurringRule(rule);
+            },
             onToggleTaskCompleted: (task) {
               _dialogActions.toggleTaskCompletedWithDateFlow(
                 context,
