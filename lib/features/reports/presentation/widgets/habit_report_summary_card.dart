@@ -45,6 +45,17 @@ class HabitReportSummaryCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: _MetricPill(
+                    value: _streakValue(),
+                    label: 'habit streak',
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: _MetricPill(
                     value: summary.missedCount.toString(),
                     label: 'missed',
                   ),
@@ -90,6 +101,16 @@ class HabitReportSummaryCard extends StatelessWidget {
     }
 
     return '${summary.consistencyPercent}%';
+  }
+
+  String _streakValue() {
+    final streakDays = summary.currentStreakDays;
+
+    if (streakDays == 1) {
+      return '1 day';
+    }
+
+    return '$streakDays days';
   }
 }
 
