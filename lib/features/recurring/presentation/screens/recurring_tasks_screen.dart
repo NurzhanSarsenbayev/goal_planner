@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../recurring_rule_delete_dialog.dart';
 import '../../../../models/recurring_task_rule.dart';
 import '../../../../shared/presentation/widgets/placeholder_screen.dart';
 import '../widgets/recurring_task_rule_card.dart';
@@ -45,8 +46,18 @@ class RecurringTasksScreen extends StatelessWidget {
                   onEdit: () {
                     onEditRule(rule);
                   },
-                  onDelete: () {
-                    _confirmDeleteRule(context, rule);
+                  onDelete: () async {
+                    final shouldDelete =
+                        await showDeleteRecurringTaskRuleDialog(
+                          context,
+                          rule: rule,
+                        );
+
+                    if (!shouldDelete) {
+                      return;
+                    }
+
+                    onDeleteRule(rule);
                   },
                 );
               },
@@ -57,39 +68,5 @@ class RecurringTasksScreen extends StatelessWidget {
         label: const Text('Add rule'),
       ),
     );
-  }
-
-  Future<void> _confirmDeleteRule(
-    BuildContext context,
-    RecurringTaskRule rule,
-  ) async {
-    final shouldDelete = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Delete recurring rule?'),
-          content: const Text(
-            'This will remove all unfinished generated tasks from this series. '
-            'Completed tasks will stay in your history.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: const Text('Delete'),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (shouldDelete != true) {
-      return;
-    }
-
-    onDeleteRule(rule);
   }
 }
