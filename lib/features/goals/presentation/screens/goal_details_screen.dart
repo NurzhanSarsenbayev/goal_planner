@@ -30,6 +30,7 @@ class GoalDetailsScreen extends StatelessWidget {
     required this.onScheduleTaskForToday,
     required this.onScheduleTaskForDate,
     required this.onCompleteTaskOnDate,
+    required this.onAddDirectRecurringTask,
     required this.recurringRules,
   });
 
@@ -70,6 +71,7 @@ class GoalDetailsScreen extends StatelessWidget {
   onScheduleTaskForDate;
   final void Function({required String taskId, required DateTime completedAt})
   onCompleteTaskOnDate;
+  final VoidCallback onAddDirectRecurringTask;
   final GoalDetailsViewBuilder _viewBuilder = const GoalDetailsViewBuilder();
   final GoalDetailsDialogActions _dialogActions =
       const GoalDetailsDialogActions();
@@ -156,9 +158,11 @@ class GoalDetailsScreen extends StatelessWidget {
             onDeleteTask: onDeleteTask,
           ),
           const SizedBox(height: 16),
-          GoalRecurringTasksSection(rules: view.directGoalRecurringRules),
-          if (view.directGoalRecurringRules.isNotEmpty)
-            const SizedBox(height: 16),
+          GoalRecurringTasksSection(
+            rules: view.directGoalRecurringRules,
+            onAddRule: onAddDirectRecurringTask,
+          ),
+          const SizedBox(height: 16),
           DirectGoalTasksSection(
             goal: goal,
             tasks: view.directGoalTasks,

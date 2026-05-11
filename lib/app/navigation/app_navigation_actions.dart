@@ -140,6 +140,12 @@ class AppNavigationActions {
                 onScheduleTaskForToday: _store.scheduleTaskForToday,
                 onScheduleTaskForDate: _store.scheduleTaskForDate,
                 onCompleteTaskOnDate: _store.completeTaskOnDate,
+                onAddDirectRecurringTask: () {
+                  _recurringRuleDialogActions.showAddDialog(
+                    context,
+                    goalId: currentGoal.id,
+                  );
+                },
                 recurringRules: _store.recurringRules,
               );
             },
