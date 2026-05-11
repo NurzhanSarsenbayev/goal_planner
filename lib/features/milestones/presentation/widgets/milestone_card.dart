@@ -15,6 +15,7 @@ class MilestoneCard extends StatelessWidget {
     required this.tasks,
     required this.recurringRules,
     required this.onAddTask,
+    required this.onAddRecurringTask,
     required this.onEditMilestone,
     required this.onDeleteMilestone,
     required this.onToggleTaskCompleted,
@@ -30,6 +31,7 @@ class MilestoneCard extends StatelessWidget {
   final List<PlannerTask> tasks;
   final List<RecurringTaskRule> recurringRules;
   final VoidCallback onAddTask;
+  final VoidCallback onAddRecurringTask;
   final VoidCallback onEditMilestone;
   final VoidCallback onDeleteMilestone;
   final void Function(PlannerTask task) onToggleTaskCompleted;
@@ -129,10 +131,21 @@ class MilestoneCard extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: TextButton.icon(
-                onPressed: onAddTask,
-                icon: const Icon(Icons.add),
-                label: const Text('Add task'),
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: [
+                  TextButton.icon(
+                    onPressed: onAddTask,
+                    icon: const Icon(Icons.add),
+                    label: const Text('Add task'),
+                  ),
+                  TextButton.icon(
+                    onPressed: onAddRecurringTask,
+                    icon: const Icon(Icons.repeat),
+                    label: const Text('Add recurring'),
+                  ),
+                ],
               ),
             ),
           ),

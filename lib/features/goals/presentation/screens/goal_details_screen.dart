@@ -31,6 +31,7 @@ class GoalDetailsScreen extends StatelessWidget {
     required this.onScheduleTaskForDate,
     required this.onCompleteTaskOnDate,
     required this.onAddDirectRecurringTask,
+    required this.onAddRecurringTaskToMilestone,
     required this.recurringRules,
   });
 
@@ -72,6 +73,7 @@ class GoalDetailsScreen extends StatelessWidget {
   final void Function({required String taskId, required DateTime completedAt})
   onCompleteTaskOnDate;
   final VoidCallback onAddDirectRecurringTask;
+  final void Function(String milestoneId) onAddRecurringTaskToMilestone;
   final GoalDetailsViewBuilder _viewBuilder = const GoalDetailsViewBuilder();
   final GoalDetailsDialogActions _dialogActions =
       const GoalDetailsDialogActions();
@@ -131,6 +133,7 @@ class GoalDetailsScreen extends StatelessWidget {
                 onTaskCreated: onTaskCreated,
               );
             },
+            onAddRecurringTaskToMilestone: onAddRecurringTaskToMilestone,
             onToggleTaskCompleted: (task) {
               _dialogActions.toggleTaskCompletedWithDateFlow(
                 context,

@@ -146,6 +146,13 @@ class AppNavigationActions {
                     goalId: currentGoal.id,
                   );
                 },
+                onAddRecurringTaskToMilestone: (milestoneId) {
+                  _recurringRuleDialogActions.showAddDialog(
+                    context,
+                    goalId: currentGoal.id,
+                    milestoneId: milestoneId,
+                  );
+                },
                 recurringRules: _store.recurringRules,
               );
             },
