@@ -1076,7 +1076,7 @@ Main differentiator:
 
 - No time-of-day scheduling yet.
 - Recurring task planning MVP exists, but advanced recurrence rules are not supported yet.
-- Habits Phase 7A exists, but there are no reminders, notes, timed habits or advanced habit analytics yet.
+- Habits MVP exists with Today summary and Reports integration, but there are no reminders, notes, timed habits, optional weekdays, count-based habit UI or advanced graphs yet.
 - Architecture stabilization before Habits is completed, but further feature-store decomposition remains a later improvement.
 - Reports support only Today / Last 7 days / Last 14 days.
 - No custom selected-day report yet.
