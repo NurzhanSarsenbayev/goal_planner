@@ -24,9 +24,20 @@ class GoalDetailsViewBuilder {
         .map((milestone) => milestone.id)
         .toSet();
 
-    final goalRecurringRules = recurringRules
-        .where((rule) => rule.goalId == goal.id)
+    final directGoalRecurringRules = recurringRules
+        .where((rule) => rule.goalId == goal.id && rule.milestoneId == null)
         .toList();
+
+    final recurringRulesByMilestoneId = <String, List<RecurringTaskRule>>{};
+
+    for (final milestone in goalMilestones) {
+      recurringRulesByMilestoneId[milestone.id] = recurringRules
+          .where(
+            (rule) =>
+                rule.goalId == goal.id && rule.milestoneId == milestone.id,
+          )
+          .toList();
+    }
 
     final directGoalTasks = goalTasks
         .where(
@@ -52,7 +63,8 @@ class GoalDetailsViewBuilder {
       directGoalTasks: directGoalTasks,
       completedTasks: completedTasks,
       tasksByMilestoneId: tasksByMilestoneId,
-      goalRecurringRules: goalRecurringRules,
+      directGoalRecurringRules: directGoalRecurringRules,
+      recurringRulesByMilestoneId: recurringRulesByMilestoneId,
     );
   }
 }
@@ -64,7 +76,8 @@ class GoalDetailsView {
     required this.directGoalTasks,
     required this.completedTasks,
     required this.tasksByMilestoneId,
-    required this.goalRecurringRules,
+    required this.directGoalRecurringRules,
+    required this.recurringRulesByMilestoneId,
   });
 
   final List<PlannerTask> goalTasks;
@@ -72,9 +85,14 @@ class GoalDetailsView {
   final List<PlannerTask> directGoalTasks;
   final int completedTasks;
   final Map<String, List<PlannerTask>> tasksByMilestoneId;
-  final List<RecurringTaskRule> goalRecurringRules;
+  final List<RecurringTaskRule> directGoalRecurringRules;
+  final Map<String, List<RecurringTaskRule>> recurringRulesByMilestoneId;
 
   List<PlannerTask> tasksForMilestone(String milestoneId) {
     return tasksByMilestoneId[milestoneId] ?? const [];
+  }
+
+  List<RecurringTaskRule> recurringRulesForMilestone(String milestoneId) {
+    return recurringRulesByMilestoneId[milestoneId] ?? const [];
   }
 }

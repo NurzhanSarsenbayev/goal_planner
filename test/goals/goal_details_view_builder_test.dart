@@ -82,29 +82,39 @@ void main() {
       expect(view.goalTasks.length, 1);
     });
 
-    test('includes recurring rules linked to the goal', () {
+    test('splits direct and milestone recurring rules for the goal', () {
       final goal = _goal(id: 'goal-1');
+      final milestone = _milestone(id: 'm1', goalId: goal.id);
 
       final view = const GoalDetailsViewBuilder().build(
         goal: goal,
-        milestones: const [],
+        milestones: [milestone],
         tasks: const [],
         recurringRules: [
-          _recurringRule(id: 'goal-rule', goalId: goal.id),
+          _recurringRule(id: 'direct-rule', goalId: goal.id),
           _recurringRule(
             id: 'milestone-rule',
             goalId: goal.id,
-            milestoneId: 'm1',
+            milestoneId: milestone.id,
+          ),
+          _recurringRule(
+            id: 'orphan-milestone-rule',
+            goalId: goal.id,
+            milestoneId: 'missing-milestone',
           ),
           _recurringRule(id: 'other-goal-rule', goalId: 'other-goal'),
           _recurringRule(id: 'standalone-rule'),
         ],
       );
 
-      expect(view.goalRecurringRules.map((rule) => rule.id), [
-        'goal-rule',
-        'milestone-rule',
+      expect(view.directGoalRecurringRules.map((rule) => rule.id), [
+        'direct-rule',
       ]);
+
+      expect(
+        view.recurringRulesForMilestone(milestone.id).map((rule) => rule.id),
+        ['milestone-rule'],
+      );
     });
   });
 }

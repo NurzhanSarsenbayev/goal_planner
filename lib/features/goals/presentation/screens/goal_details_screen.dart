@@ -93,12 +93,11 @@ class GoalDetailsScreen extends StatelessWidget {
             completedTasks: view.completedTasks,
           ),
           const SizedBox(height: 16),
-          GoalRecurringTasksSection(rules: view.goalRecurringRules),
-          if (view.goalRecurringRules.isNotEmpty) const SizedBox(height: 16),
           MilestonesSection(
             goal: goal,
             milestones: view.goalMilestones,
             goalTasks: view.goalTasks,
+            recurringRulesByMilestoneId: view.recurringRulesByMilestoneId,
             onAddMilestone: () {
               _dialogActions.showAddMilestoneDialog(
                 context,
@@ -157,6 +156,9 @@ class GoalDetailsScreen extends StatelessWidget {
             onDeleteTask: onDeleteTask,
           ),
           const SizedBox(height: 16),
+          GoalRecurringTasksSection(rules: view.directGoalRecurringRules),
+          if (view.directGoalRecurringRules.isNotEmpty)
+            const SizedBox(height: 16),
           DirectGoalTasksSection(
             goal: goal,
             tasks: view.directGoalTasks,

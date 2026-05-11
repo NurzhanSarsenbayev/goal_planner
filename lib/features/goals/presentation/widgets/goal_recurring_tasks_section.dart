@@ -17,7 +17,10 @@ class GoalRecurringTasksSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Recurring tasks', style: Theme.of(context).textTheme.titleLarge),
+        Text(
+          'Direct recurring tasks',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         const SizedBox(height: 8),
         ...rules.map(
           (rule) => Padding(

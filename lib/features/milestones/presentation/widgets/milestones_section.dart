@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../models/goal.dart';
+import '../../../../models/recurring_task_rule.dart';
 import '../../../../models/milestone.dart';
 import '../../../../models/planner_task.dart';
 import '../../../../shared/presentation/widgets/placeholder_screen.dart';
@@ -13,6 +14,7 @@ class MilestonesSection extends StatelessWidget {
     required this.goal,
     required this.milestones,
     required this.goalTasks,
+    required this.recurringRulesByMilestoneId,
     required this.onAddMilestone,
     required this.onEditMilestone,
     required this.onDeleteMilestone,
@@ -28,6 +30,7 @@ class MilestonesSection extends StatelessWidget {
   final Goal goal;
   final List<Milestone> milestones;
   final List<PlannerTask> goalTasks;
+  final Map<String, List<RecurringTaskRule>> recurringRulesByMilestoneId;
   final VoidCallback onAddMilestone;
   final void Function(Milestone milestone) onEditMilestone;
   final void Function(Milestone milestone) onDeleteMilestone;
@@ -61,6 +64,9 @@ class MilestonesSection extends StatelessWidget {
             final milestoneTasks = goalTasks
                 .where((task) => task.milestoneId == milestone.id)
                 .toList();
+            final milestoneRecurringRules =
+                recurringRulesByMilestoneId[milestone.id] ??
+                const <RecurringTaskRule>[];
 
             return Padding(
               padding: const EdgeInsets.only(bottom: 8),
@@ -68,6 +74,7 @@ class MilestonesSection extends StatelessWidget {
                 goal: goal,
                 milestone: milestone,
                 tasks: milestoneTasks,
+                recurringRules: milestoneRecurringRules,
                 onAddTask: () => onAddTaskToMilestone(milestone.id),
                 onEditMilestone: () => onEditMilestone(milestone),
                 onDeleteMilestone: () => onDeleteMilestone(milestone),

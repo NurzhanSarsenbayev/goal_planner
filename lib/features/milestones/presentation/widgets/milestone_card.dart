@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/milestone.dart';
 import '../../../../models/planner_task.dart';
+import '../../../../models/recurring_task_rule.dart';
+import '../../../recurring/presentation/widgets/recurring_task_rule_card.dart';
 import '../../../tasks/presentation/widgets/task_card.dart';
 
 class MilestoneCard extends StatelessWidget {
@@ -11,6 +13,7 @@ class MilestoneCard extends StatelessWidget {
     required this.goal,
     required this.milestone,
     required this.tasks,
+    required this.recurringRules,
     required this.onAddTask,
     required this.onEditMilestone,
     required this.onDeleteMilestone,
@@ -25,6 +28,7 @@ class MilestoneCard extends StatelessWidget {
   final Goal goal;
   final Milestone milestone;
   final List<PlannerTask> tasks;
+  final List<RecurringTaskRule> recurringRules;
   final VoidCallback onAddTask;
   final VoidCallback onEditMilestone;
   final VoidCallback onDeleteMilestone;
@@ -39,7 +43,7 @@ class MilestoneCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final completedTasks = tasks.where((task) => task.isCompleted).length;
     final progressText = tasks.isEmpty
-        ? 'No tasks yet'
+        ? 'No one-off tasks yet'
         : '$completedTasks / ${tasks.length} tasks completed';
 
     return Card(
@@ -74,6 +78,24 @@ class MilestoneCard extends StatelessWidget {
           },
         ),
         children: [
+          if (recurringRules.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Recurring tasks',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+            ),
+            ...recurringRules.map(
+              (rule) => Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+                child: RecurringTaskRuleCard(rule: rule),
+              ),
+            ),
+          ],
           if (tasks.isEmpty)
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
