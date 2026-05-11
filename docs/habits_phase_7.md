@@ -2,41 +2,42 @@
 
 ## Status
 
-Phase 7A implemented.
+Phase 7C integration done.
 
-The first habit tracking loop is now available locally:
+The habit MVP is implemented as a separate product loop:
 
 - create habit;
 - edit habit;
-- archive/delete habit;
+- archive/unarchive habit;
+- delete habit;
 - show active habits in a weekly journal layout;
-- mark a habit date as done, failed or skipped;
-- clear an existing mark;
+- mark a habit date as done, failed, skipped or clear;
 - navigate between weeks;
-- persist habits and habit entries locally.
+- persist habits and habit entries locally;
+- show Habits as a top-level tab;
+- show lightweight habit summary on Today;
+- show habit summary in Reports;
+- track habit consistency;
+- track skipped and missed marks separately;
+- track current habit streak.
 
-Phase 7B is not started.
-
-This document defines the first Habits implementation scope before writing code.
-
-The goal is to add habit tracking as a separate product loop without growing `PlannerStore` back into a god object.
+The goal of Phase 7 is to add habit tracking without turning habits into recurring tasks and without growing `PlannerStore` back into a god object.
 
 ## Product direction
 
 Habits are not recurring tasks.
 
-A recurring task represents planned work that appears in Today/Calendar and can be completed as a task.
+A recurring task represents planned work that appears in Today/Calendar as concrete task occurrences.
 
-A habit represents repeated behavior tracked over days, usually in a weekly grid, with history and progress.
+A habit represents repeated behavior tracked over time, usually in a weekly grid, where history, consistency and streaks matter more than one generated task instance.
 
-The first Habits version should support a simple and fast daily tracking loop:
+The habit loop is:
 
-- create a habit;
-- see it in a weekly grid;
-- mark a date;
-- change previous dates;
-- persist everything locally;
-- reopen the app and keep the data.
+> Create habit -> mark days in weekly journal -> review week -> review consistency / skipped / missed / streak in Reports
+
+The task planning loop remains separate:
+
+> Goal -> Milestone / Direct task -> Today / Calendar -> Complete -> Reports
 
 ## Architecture rule
 
@@ -50,294 +51,402 @@ Do not add these to `PlannerStore`:
 - `updateHabit`;
 - `deleteHabit`;
 - `markHabitDone`;
-- habit persistence logic.
+- habit persistence logic;
+- habit report calculation.
 
-Habits should have their own feature area and state boundary.
+Habits have their own feature area and state boundary:
 
-Expected structure:
+- `lib/features/habits/domain/`;
+- `lib/features/habits/application/`;
+- `lib/features/habits/presentation/`.
 
-```text
-lib/features/habits/
-  domain/
-  application/
-  presentation/
-```
+Main habit objects:
 
-Expected application objects:
+- `Habit`;
+- `HabitEntry`;
+- `HabitEntryStatus`;
+- `HabitTrackingType`;
+- `HabitStore`;
+- `HabitApplicationService`;
+- `HabitRepository`;
+- `DriftHabitRepository`;
+- `HabitWeekViewBuilder`;
+- `HabitProgressCalculator`.
 
-```text
-HabitStore
-HabitApplicationService
-HabitRepository
-```
+Reports use a separate habit reporting path:
 
-Expected data object:
+- `HabitReportLoader`;
+- `HabitReportSummary`;
+- `HabitReportBuilder`;
+- `HabitStreakCalculator`.
 
-```text
-DriftHabitRepository
-```
+`PlannerStore` remains responsible for the goal/task planning loop only.
 
-`PlannerStore` remains responsible for the existing goal/task planning loop only.
+## Phase 7A: Habit tracking core
 
-## Scope: Phase 7A
-
-Phase 7A focuses on the habit tracking core.
-
-Included:
+Implemented:
 
 - Habit domain model.
-- Habit entry/progress domain model.
+- Habit entry domain model.
 - Habit entry status model.
-- Drift tables for habits and habit entries.
+- Habit tracking type model.
+- Count-ready domain support.
+- Drift tables:
+  - `habits`;
+  - `habit_entries`.
+- Local database schema version increased to 3.
+- Habit mappers.
 - Habit repository interface.
 - Drift habit repository.
 - Habit application service.
 - Habit store.
 - Basic Habits screen.
-- Weekly habit grid.
+- Weekly journal-style habit layout.
 - Create habit.
 - Edit habit.
-- Archive/delete habit.
+- Archive habit.
+- Unarchive habit.
+- Delete habit.
 - Mark habit date as:
-    - done;
-    - failed;
-    - skipped.
-- Change an existing mark.
+  - done;
+  - failed;
+  - skipped.
+- Clear an existing mark.
 - Navigate between weeks.
 - Persist habit data locally.
+- Cover core habit domain/application/store/repository behavior with tests.
 
-Not included:
+## Phase 7B: Habit UX integration
 
-- reminders;
-- graphs;
-- daily diary;
-- habit notes;
-- multiple check-ins UI;
-- advanced statistics;
-- habit groups/journals;
-- backend/sync;
-- Riverpod migration.
+Implemented:
 
-## Journal decision
+- Promote Habits to a top-level bottom navigation tab.
+- Initialize `HabitStore` at `AppShell` level, parallel to `PlannerStore`.
+- Keep bottom navigation as:
+  - Today;
+  - Goals;
+  - Calendar;
+  - Habits;
+  - More.
+- Improve Today screen structure:
+  - `TodaySummaryCard`;
+  - `TodayHabitsSummaryCard`;
+  - `TodayEmptyPanel`;
+  - `TodayTaskSection`.
+- Show lightweight habit summary on Today.
+- Keep habit marking inside Habits screen for now.
+- Do not turn Today into a full habit journal.
 
-For now, "Journal" is not a separate domain entity.
+Current Today decision:
 
-It is treated as the Habits section / All Habits screen.
+- Today may show whether habits need attention.
+- Today does not mark habits directly.
+- Full habit interaction stays in Habits.
 
-Do not create `HabitJournal` in Phase 7A.
+## Phase 7C: Habit reports integration
 
-If real grouping is needed later, it can be introduced after the first habit loop is validated.
+Implemented:
+
+- Add habit report loader.
+- Add habit report summary builder.
+- Add habit report domain summary.
+- Connect habit report data to Reports screen.
+- Show task summary separately from habit summary.
+- Keep task metrics and habit metrics separate.
+- Add habit consistency metric.
+- Add skipped count.
+- Add missed count.
+- Add current habit streak.
+- Replace misleading task current streak UI with active days.
+
+Reports currently show:
+
+Task summary:
+
+- completed tasks;
+- planned tasks;
+- plan completion;
+- active days.
+
+Habit summary:
+
+- consistency;
+- habit streak;
+- missed marks;
+- skipped marks.
 
 ## Habit model
 
 A habit is a tracked repeated behavior.
 
-Initial fields:
+Fields:
 
-```text
-Habit
-  id
-  title
-  description?
-  trackingType
-  targetCount?
-  sortOrder
-  isArchived
-  createdAt
-  updatedAt
-```
+- `id`;
+- `title`;
+- `description`;
+- `trackingType`;
+- `targetCount`;
+- `sortOrder`;
+- `isArchived`;
+- `createdAt`;
+- `updatedAt`.
 
 ## Tracking type
 
-The system should support future expansion beyond simple yes/no habits.
+Supported domain tracking types:
 
-Tracking types:
+- `binary`;
+- `count`.
 
-```text
-binary
-count
-```
+Current UI focuses on binary habits.
 
-Phase 7A UI may only expose binary habits.
-
-However, the domain/database should be designed so count-based habits can be added later without rewriting the model.
+Count-based habits are intentionally supported in the domain/database shape so the model does not need to be rewritten later.
 
 Examples:
 
-```text
-Взвеситься
-  trackingType = binary
-  targetCount = null
+- `Meditate`
+  - `trackingType = binary`
+  - `targetCount = null`
 
-Выпить воду 8 раз
-  trackingType = count
-  targetCount = 8
+- `Drink water 8 times`
+  - `trackingType = count`
+  - `targetCount = 8`
 
-Сделать 3 подхода
-  trackingType = count
-  targetCount = 3
-```
+- `Do 3 sets`
+  - `trackingType = count`
+  - `targetCount = 3`
 
 ## Habit entry / daily progress
 
 A habit entry represents habit progress for a specific date.
 
-Initial fields:
+Fields:
 
-```text
-HabitEntry
-  id
-  habitId
-  date
-  status
-  completedCount
-  note?
-  createdAt
-  updatedAt
-```
+- `id`;
+- `habitId`;
+- `date`;
+- `status`;
+- `completedCount`;
+- `createdAt`;
+- `updatedAt`.
 
-Phase 7A may use one effective entry per habit/date in the UI.
+Current UI uses one effective entry per habit/date.
 
-The model should still leave room for future multiple check-ins per day.
+The model still leaves room for future count-based progress.
 
 ## Entry status
 
 Supported statuses:
 
-```text
-none
-done
-incomplete
-failed
-skipped
-```
+- `none`;
+- `done`;
+- `incomplete`;
+- `failed`;
+- `skipped`.
 
 Meaning:
 
-```text
-none
-  No mark exists for the date.
+- `none`
+  - No mark exists for the date.
 
-done
-  Habit target was completed.
+- `done`
+  - Habit target was completed.
 
-incomplete
-  Count-based habit was partially completed but did not reach target.
+- `incomplete`
+  - Count-based habit was partially completed but did not reach target.
 
-failed
-  User explicitly marked the habit as not completed.
+- `failed`
+  - User explicitly marked the habit as not completed.
 
-skipped
-  User intentionally skipped the habit for a valid reason.
-```
+- `skipped`
+  - User intentionally skipped the habit for a valid reason.
 
-Statistics rule:
+## Statistics rules
 
-```text
-failed counts as a failure.
-skipped does not count as a failure.
-```
+Current rules:
 
-For future completion rate:
+- `done` counts as completion.
+- `failed` counts as failure.
+- `incomplete` counts as failure.
+- `skipped` is neutral.
+- `skipped` is shown separately.
+- `skipped` is excluded from consistency denominator.
+- `skipped` does not break habit streak.
+- Missed expected marks count against consistency.
+- Consistency must not exceed 100%.
 
-```text
-completion rate = done / (done + failed + incomplete)
-```
+Consistency rule:
 
-`skipped` should usually be excluded from the denominator.
+- denominator = expected marks - skipped marks;
+- numerator = done marks;
+- missed/failed/incomplete reduce consistency;
+- skipped does not reduce consistency.
+
+Habit streak rule:
+
+- done extends streak;
+- missed/failed/incomplete breaks streak;
+- skipped is neutral;
+- today without a mark is pending, not failed;
+- days before habit creation are neutral;
+- archived habits are not expected.
 
 ## Count-based habits
 
-Count-based habits are designed now but may be exposed later.
+Count-based habits are designed but not exposed in full UI yet.
 
 Future behavior:
 
-```text
-targetCount = required count per day
-completedCount = current progress for that date
-```
+- `targetCount` = required count per day;
+- `completedCount` = current progress for that date.
 
-Status calculation:
+Future status calculation:
 
-```text
-completedCount >= targetCount
-  status = done
+- `completedCount >= targetCount`
+  - status = `done`
 
-completedCount > 0 and completedCount < targetCount
-  status = incomplete
+- `completedCount > 0 && completedCount < targetCount`
+  - status = `incomplete`
 
-completedCount == 0
-  status = none, unless user explicitly marks failed or skipped
-```
+- `completedCount == 0`
+  - status = `none`, unless user explicitly marks failed or skipped.
 
-Phase 7A UI can ignore this and create only binary habits.
+Do not collapse the model into a boolean-only schema.
 
-Do not block future count-based behavior by using a boolean-only schema.
+## Today integration
+
+Today shows a lightweight habit summary.
+
+Current decision:
+
+- Today should not become the full habit journal.
+- Habit marking stays in Habits.
+- Today should help the user notice habit state without mixing habits into task completion.
+
+This preserves separation:
+
+- tasks are executed in Today;
+- habits are tracked in Habits;
+- both can be reviewed in Reports.
+
+## Reports integration
+
+Reports show tasks and habits as separate sections.
+
+Do not mix habit metrics into task metrics.
+
+Do not use habits to extend task streaks.
+
+Current task activity metric:
+
+- active days.
+
+Current habit metrics:
+
+- consistency;
+- habit streak;
+- missed;
+- skipped.
+
+Future possible metric:
+
+- separate activity streak across tasks + habits.
+
+Do not add a combined streak until the product meaning is clear.
+
+## Store boundary
+
+`HabitStore` owns habit state.
+
+Responsibilities:
+
+- load habits and entries;
+- expose active habits;
+- expose archived habits when needed;
+- expose entries for visible week;
+- create/update/archive/unarchive/delete habits;
+- mark habit entry;
+- clear habit entry;
+- navigate selected week;
+- notify habit UI.
+
+`HabitStore` must not know about:
+
+- goals;
+- tasks;
+- milestones;
+- recurring task rules;
+- planner task reports.
+
+## Repository boundary
+
+`HabitRepository` hides Drift details.
+
+Responsibilities:
+
+- load habits;
+- load entries for date ranges;
+- save habit;
+- save entry;
+- delete/clear entry;
+- archive habit;
+- unarchive habit;
+- delete habit.
+
+## Journal decision
+
+For now, "Journal" is not a separate domain entity.
+
+It is treated as the Habits screen / weekly habit layout.
+
+Do not create `HabitJournal` yet.
+
+If real grouping is needed later, introduce it only after the first habit loop is validated.
 
 ## Reminders
 
-Reminders are not part of Phase 7A.
+Reminders are not part of Phase 7.
 
 They should be a separate future feature, not a habit-only subsystem.
 
-Future reminder model should support targets:
+Future reminder model should support different targets:
 
-```text
-none
-habit
-task
-diary
-```
-
-Possible future fields:
-
-```text
-Reminder
-  id
-  title
-  time
-  recurrenceRule
-  targetType?
-  targetId?
-  isEnabled
-```
+- none;
+- habit;
+- task;
+- diary.
 
 Examples:
 
-```text
-21:30 Внести расходы
-  targetType = none
+- `21:30 Add expenses`
+  - target type = none
 
-07:30 Взвеситься
-  targetType = habit
+- `07:30 Weigh in`
+  - target type = habit
 
-10:00 Сделать задачу
-  targetType = task
+- `10:00 Work on task`
+  - target type = task
 
-22:00 Заполнить дневник
-  targetType = diary
-```
+- `22:00 Fill diary`
+  - target type = diary
 
-Do not design reminders inside Habits in Phase 7A.
+Do not design reminders inside Habits.
 
 ## Daily diary
 
-Daily diary is not part of Phase 7A.
+Daily diary is not part of Phase 7.
 
 It should be a separate future feature.
 
 Diary entry is not the same thing as a habit note.
 
-Future model:
+Future diary model:
 
-```text
-DailyDiaryEntry
-  id
-  date
-  text
-  createdAt
-  updatedAt
-```
+- `id`;
+- `date`;
+- `text`;
+- `createdAt`;
+- `updatedAt`.
 
 Purpose:
 
@@ -348,94 +457,42 @@ Purpose:
 
 Do not mix diary text into habit entries.
 
-## UI direction
+## Testing coverage
 
-The first habit UI should be inspired by the provided reference screenshots, but not copy everything at once.
+Phase 7 has tests for:
 
-Phase 7A screen should focus on:
+- habit entry status behavior;
+- habit progress calculation;
+- habit mappers;
+- habit repository behavior;
+- habit application service behavior;
+- habit store behavior;
+- habit today summary;
+- habit week summary;
+- habit week view builder;
+- habit report builder;
+- habit streak calculator.
 
-- current week;
-- list of habits;
-- one row per habit;
-- seven day cells per row;
-- quick marking for selected habit/date.
+## Definition of Done for Phase 7 MVP
 
-Minimum weekly grid behavior:
-
-```text
-tap empty cell -> choose done / failed / skipped
-tap marked cell -> change status or clear
-week navigation -> previous / current / next week
-```
-
-Advanced UI postponed:
-
-- graphs tab;
-- reminders screen;
-- reorder screen polish;
-- notes screen;
-- archive management screen;
-- animations;
-- custom colors/icons.
-
-## Store boundary
-
-`HabitStore` should own habit state.
-
-Expected responsibilities:
-
-- load habits and entries;
-- expose active habits;
-- expose entries for visible week;
-- create/update/archive habits;
-- mark habit entry;
-- navigate selected week or accept selected week from UI;
-- notify habit UI.
-
-`HabitStore` should not know about:
-
-- goals;
-- tasks;
-- milestones;
-- recurring task rules;
-- planner reports.
-
-## Repository boundary
-
-`HabitRepository` should hide Drift details.
-
-Expected methods may include:
-
-```text
-loadHabits()
-loadEntriesForRange(startDate, endDate)
-saveHabit(habit)
-saveEntry(entry)
-archiveHabit(habitId)
-deleteHabit(habitId)
-```
-
-Exact signatures can be refined during implementation.
-
-## Testing direction
-
-At minimum, Phase 7 should add tests for:
-
-- habit status calculation;
-- binary habit marking;
-- skipped not counting as failure;
-- count-based status calculation, even if UI is postponed;
-- repository/store behavior for creating and marking habits.
-
-## Definition of Done for Phase 7A
+Done:
 
 - Habits are implemented outside `PlannerStore`.
 - User can create a habit.
+- User can edit a habit.
+- User can archive/unarchive a habit.
+- User can delete a habit.
 - User can see habits in a weekly grid.
 - User can mark a habit date as done/failed/skipped.
-- User can change an existing mark.
+- User can clear an existing mark.
 - User can navigate weeks.
 - Habit data persists locally.
+- Habits are available as a top-level tab.
+- Today shows lightweight habit summary.
+- Reports show habit summary separately from task summary.
+- Reports show habit consistency.
+- Reports show skipped/missed marks.
+- Reports show habit streak.
 - Existing planner task/goal flows still work.
 - `flutter analyze` passes.
 - `flutter test` passes.
@@ -447,9 +504,16 @@ At minimum, Phase 7 should add tests for:
 - task reminders;
 - diary reminders;
 - daily diary;
+- habit notes;
+- timed habits;
+- optional weekdays;
+- count-based habit UI;
 - habit graphs;
 - advanced habit statistics;
+- custom habit report date ranges;
 - multiple check-ins UI;
 - habit grouping/journals;
+- habit templates;
+- habit categories;
 - Riverpod migration;
 - backend/sync.

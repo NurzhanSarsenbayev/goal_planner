@@ -272,7 +272,7 @@ Implemented:
   - completed task count;
   - planned task count;
   - plan completion percent;
-  - current completion streak.
+  - active days.
 - Show goal contribution:
   - completed tasks per goal;
   - standalone completed tasks.
@@ -296,7 +296,7 @@ Implemented:
   - day grouping;
   - planned task count;
   - plan completion percent;
-  - current streak.
+  - historical completion streak calculation.
 
 ### Refactoring completed during this phase
 
@@ -319,12 +319,11 @@ A user can see:
 - what was completed over the last 7 / 14 days;
 - how many planned tasks were actually completed;
 - which goals received completed actions;
-- how many days in a row they completed at least one task.
+- how many days in the selected period had completed task activity.
 
 A user can manually test:
 
-> create goal -> add milestone/direct task -> schedule tasks -> complete tasks across days -> open Reports -> switch Today / 7 days / 14 days -> see completed work, plan completion, streak, goal contribution and by-day history
-
+> create goal -> add milestone/direct task -> schedule tasks -> complete tasks across days -> open Reports -> switch Today / 7 days / 14 days -> see completed work, plan completion, active days, goal contribution and by-day history
 Validation value:
 
 This phase helps evaluate whether the app is used as a goal-linked planner or just as a simple todo list.
@@ -488,10 +487,13 @@ Implemented:
 - Add recurring rule editing flow.
 - Add recurring rule activate/deactivate actions.
 - Add recurring rule delete action.
-- Support recurring rule placement:
-  - standalone recurring task;
-  - direct goal recurring task;
-  - milestone recurring task.
+- Show recurring rules in Goal Details where they structurally belong:
+  - direct goal recurring rules in Direct recurring tasks;
+  - milestone recurring rules inside the owning milestone.
+- Hide generated recurring occurrences from Goal Details structural task lists.
+- Support creating direct goal recurring tasks from Goal Details.
+- Support creating milestone recurring tasks from the owning milestone.
+- Support editing, activating/deactivating and deleting recurring rules from Goal Details.
 - Support weekly rule creation.
 - Support monthly rule creation.
 - Disable Add button until recurring rule form is valid.
@@ -564,7 +566,11 @@ Generated occurrences appear in:
 - Reports, as planned/completed tasks;
 - All Tasks only when actionable/history-relevant.
 
-All Tasks shows recurring rules separately, instead of being flooded with future generated occurrences.
+Goal Details shows recurring rules as structure, not as generated task noise:
+
+- direct goal recurring rules appear in Direct recurring tasks;
+- milestone recurring rules appear inside the owning milestone;
+- generated occurrences do not appear as ordinary goal/milestone tasks.
 
 Expected result for Phase 6.5 done:
 
@@ -572,7 +578,8 @@ A user can:
 
 - create weekly recurring tasks;
 - create monthly recurring tasks;
-- link recurring tasks to goals/milestones;
+- create and manage direct goal recurring tasks from Goal Details;
+- create and manage milestone recurring tasks from the owning milestone;
 - create recurring tasks from More;
 - create recurring tasks from Today;
 - create recurring tasks from Calendar;
@@ -809,7 +816,7 @@ Not doing in this phase:
 
 ## Phase 7: Habits MVP
 
-Status: Phase 7A done.
+Status: Phase 7C integration done.
 
 Goal:
 
@@ -819,9 +826,15 @@ Why this is separate from recurring tasks:
 
 Recurring tasks are planned actions that appear as concrete tasks on specific dates.
 
-Habits are routines tracked over time, where history and consistency matter more than a single task instance.
+Habits are routines tracked over time, where history, consistency and streaks matter more than a single generated task instance.
 
-Implemented in Phase 7A:
+Architecture rule:
+
+> Habits must stay outside `PlannerStore`.
+
+Implemented:
+
+### Phase 7A: Habit tracking core
 
 - Add habit domain model.
 - Add habit entry domain model.
@@ -846,8 +859,7 @@ Implemented in Phase 7A:
 - Add `HabitWeekViewBuilder`.
 - Add `HabitStore`.
 - Keep habits outside `PlannerStore`.
-- Wire `HabitStore` through `AppDependencies`.
-- Open Habits from More screen.
+- Wire `HabitStore` through app composition.
 - Add Habits screen.
 - Add habit creation UI.
 - Add weekly journal-style habit layout.
@@ -862,9 +874,46 @@ Implemented in Phase 7A:
   - Clear.
 - Add edit habit action.
 - Add archive habit action.
+- Add unarchive flow.
 - Add delete habit action.
 - Persist habit data locally.
 - Cover core habit domain/application/store/repository behavior with tests.
+
+### Phase 7B: Habit UX integration
+
+- Promote Habits to a top-level bottom navigation tab.
+- Initialize `HabitStore` at `AppShell` level, parallel to `PlannerStore`.
+- Keep Today / Goals / Calendar / Habits / More as top-level navigation.
+- Improve Today screen structure:
+  - `TodaySummaryCard`;
+  - `TodayHabitsSummaryCard`;
+  - `TodayEmptyPanel`;
+  - `TodayTaskSection`.
+- Show lightweight habit summary on Today.
+- Keep habit marking inside Habits screen for now.
+- Do not turn Today into a full habit journal.
+
+### Phase 7C: Habit reports integration
+
+- Add `HabitReportLoader`.
+- Add habit report summary builder.
+- Add habit report domain summary.
+- Connect habit reports to Reports screen.
+- Show task report summary separately from habit report summary.
+- Keep task metrics and habit metrics separate.
+- Add habit consistency metric.
+- Add habit skipped/missed counts.
+- Add habit streak metric.
+- Treat skipped habit marks as neutral:
+  - skipped marks are shown separately;
+  - skipped marks do not hurt consistency;
+  - skipped marks are excluded from the consistency denominator;
+  - skipped marks do not break habit streak.
+- Treat missed/failed/incomplete habit marks as failures.
+- Cap consistency at 100%.
+- Count expected habit marks across the full selected report period.
+- Keep task streak out of habit logic.
+- Replace misleading task current streak UI with active days.
 
 Current result:
 
@@ -880,6 +929,10 @@ A user can track routines like:
 The main habit loop is now:
 
 > Create habit -> mark days in weekly journal -> review current week -> adjust previous days -> persist locally
+
+The habit integration loop is now:
+
+> Open Today -> see habit summary -> open Habits -> mark habit days -> open Reports -> review habit consistency, skipped/missed marks and habit streak
 
 Architecture result:
 
@@ -901,31 +954,32 @@ HabitRepository
 DriftHabitRepository
 ```
 
+Reports read habit data through a dedicated habit report loader/builder path.
+
 `PlannerStore` remains responsible for the goal/task planning loop only.
 
-Not implemented in Phase 7A:
+Product decisions:
+
+- Habits are not recurring tasks.
+- Habits are not added to `PlannerStore`.
+- Habit metrics are not mixed into task metrics.
+- Habit streak is separate from task activity.
+- Skipped means intentionally skipped, not failed.
+- Today shows habit summary only; full habit marking stays in Habits screen for now.
+
+Not implemented yet:
 
 - reminders;
 - habit notes;
 - timed habits;
 - optional weekdays;
-- habit display in Today;
 - count-based habit UI;
-- advanced statistics;
-- streak analytics;
 - habit templates;
 - habit categories;
 - habit groups/journals;
+- advanced graphs;
+- custom habit report date ranges;
 - backend/sync.
-
-Possible Phase 7B:
-
-- add lightweight weekly summary;
-- add empty-state guidance for first habit;
-- improve habit status picker visuals;
-- add unarchive flow;
-- add basic habit notes;
-- decide whether timed habits belong in Today.
 
 ## Phase 8: Product validation
 
@@ -956,6 +1010,9 @@ Success signals:
 - User can see which goals received real completed actions.
 - User understands the difference between standalone, direct goal and milestone tasks.
 - User understands recurring tasks and uses them for repeated planned actions.
+- User uses Habits for routines instead of forcing routines into tasks.
+- User understands skipped vs missed habit marks.
+- User checks habit consistency or habit streak in Reports.
 
 Failure signals:
 
@@ -964,6 +1021,9 @@ Failure signals:
 - Milestones are ignored.
 - Reports are ignored.
 - Recurring tasks are ignored or misunderstood.
+- Habits are ignored.
+- User confuses habits with recurring tasks.
+- Habit reports feel confusing or demotivating.
 - User returns to previous planner.
 
 ## Phase 9: Backend and sync
@@ -999,12 +1059,17 @@ Core loop:
 
 > Goal -> Milestone / Direct task -> Today -> Complete -> Progress / Report
 
+Separate habit loop:
+
+> Habit -> Weekly journal -> Mark day -> Review consistency / streak
+
 Main differentiator:
 
 - connect long-term goals with daily execution;
 - make task placement flexible;
 - keep Today practical;
 - support repeated planned actions without turning the app into a full habit/productivity suite too early;
+- support habits as a separate lightweight routine-tracking loop;
 - avoid turning the app into a bloated “whole life” tracker too early.
 
 ## Current limitations
