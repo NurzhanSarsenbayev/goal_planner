@@ -146,16 +146,7 @@ class GoalDetailsScreen extends StatelessWidget {
             onRecurringRuleActiveChanged: onRecurringRuleActiveChanged,
             onEditRecurringRule: onEditRecurringRule,
             onDeleteRecurringRule: (rule) async {
-              final shouldDelete = await showDeleteRecurringTaskRuleDialog(
-                context,
-                rule: rule,
-              );
-
-              if (!shouldDelete) {
-                return;
-              }
-
-              onDeleteRecurringRule(rule);
+              await _confirmAndDeleteRecurringRule(context, rule);
             },
             onToggleTaskCompleted: (task) {
               _dialogActions.toggleTaskCompletedWithDateFlow(
@@ -190,16 +181,7 @@ class GoalDetailsScreen extends StatelessWidget {
             onRuleActiveChanged: onRecurringRuleActiveChanged,
             onEditRule: onEditRecurringRule,
             onDeleteRule: (rule) async {
-              final shouldDelete = await showDeleteRecurringTaskRuleDialog(
-                context,
-                rule: rule,
-              );
-
-              if (!shouldDelete) {
-                return;
-              }
-
-              onDeleteRecurringRule(rule);
+              await _confirmAndDeleteRecurringRule(context, rule);
             },
           ),
           const SizedBox(height: 16),
@@ -250,5 +232,21 @@ class GoalDetailsScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _confirmAndDeleteRecurringRule(
+    BuildContext context,
+    RecurringTaskRule rule,
+  ) async {
+    final shouldDelete = await showDeleteRecurringTaskRuleDialog(
+      context,
+      rule: rule,
+    );
+
+    if (!shouldDelete) {
+      return;
+    }
+
+    onDeleteRecurringRule(rule);
   }
 }
