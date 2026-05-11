@@ -1,3 +1,4 @@
+import 'habit_streak_calculator.dart';
 import '../../../shared/planner_dates.dart';
 import '../../habits/domain/habit.dart';
 import '../../habits/domain/habit_entry.dart';
@@ -56,6 +57,12 @@ HabitReportSummary buildHabitReportSummary({
     startDate: startDate,
     endDate: endDate,
     activeHabitCount: activeHabits.length,
+    currentStreakDays: calculateCurrentHabitStreakDays(
+      habits: habits,
+      entries: trackedEntries,
+      startDate: startDate,
+      endDate: endDate,
+    ),
     habitGroups: [
       for (final habit in sortedHabits)
         HabitReportGroup(

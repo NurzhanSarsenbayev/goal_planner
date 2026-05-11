@@ -8,6 +8,7 @@ class HabitReportSummary {
     required this.startDate,
     required this.endDate,
     required this.activeHabitCount,
+    required this.currentStreakDays,
     required this.habitGroups,
     required this.dayGroups,
   });
@@ -16,6 +17,7 @@ class HabitReportSummary {
   final DateTime startDate;
   final DateTime endDate;
   final int activeHabitCount;
+  final int currentStreakDays;
   final List<HabitReportGroup> habitGroups;
   final List<HabitDayReportGroup> dayGroups;
 

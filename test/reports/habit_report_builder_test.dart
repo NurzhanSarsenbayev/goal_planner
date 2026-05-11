@@ -115,6 +115,36 @@ void main() {
       expect(summary.consistencyPercent, 29);
     });
 
+    test('includes current habit streak in summary', () {
+      final habit = _habit(id: 'habit-1');
+
+      final summary = buildHabitReportSummary(
+        habits: [habit],
+        entries: [
+          _entry(habitId: habit.id, date: today, status: HabitEntryStatus.done),
+          _entry(
+            habitId: habit.id,
+            date: today.subtract(const Duration(days: 1)),
+            status: HabitEntryStatus.skipped,
+          ),
+          _entry(
+            habitId: habit.id,
+            date: today.subtract(const Duration(days: 2)),
+            status: HabitEntryStatus.done,
+          ),
+          _entry(
+            habitId: habit.id,
+            date: today.subtract(const Duration(days: 3)),
+            status: HabitEntryStatus.failed,
+          ),
+        ],
+        period: ReportPeriod.last7Days,
+        today: today,
+      );
+
+      expect(summary.currentStreakDays, 2);
+    });
+
     test(
       'ignores archived habits for expected marks but keeps their history',
       () {
