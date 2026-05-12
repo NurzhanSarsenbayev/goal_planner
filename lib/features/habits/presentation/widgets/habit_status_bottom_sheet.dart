@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/habit_entry_status.dart';
 
 Future<HabitEntryStatus?> showHabitStatusBottomSheet({
@@ -22,6 +23,8 @@ class HabitStatusBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
@@ -29,7 +32,7 @@ class HabitStatusBottomSheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'How did it go?',
+              l10n.habitStatusSheetTitle,
               style: Theme.of(
                 context,
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
@@ -39,7 +42,7 @@ class HabitStatusBottomSheet extends StatelessWidget {
               children: [
                 Expanded(
                   child: _StatusActionButton(
-                    label: 'Done',
+                    label: l10n.habitStatusDone,
                     icon: Icons.check,
                     status: HabitEntryStatus.done,
                     currentStatus: currentStatus,
@@ -48,7 +51,7 @@ class HabitStatusBottomSheet extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _StatusActionButton(
-                    label: 'Missed',
+                    label: l10n.habitStatusMissed,
                     icon: Icons.close,
                     status: HabitEntryStatus.failed,
                     currentStatus: currentStatus,
@@ -57,7 +60,7 @@ class HabitStatusBottomSheet extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _StatusActionButton(
-                    label: 'Skip',
+                    label: l10n.habitStatusSkip,
                     icon: Icons.do_not_disturb_on_outlined,
                     status: HabitEntryStatus.skipped,
                     currentStatus: currentStatus,
@@ -66,7 +69,7 @@ class HabitStatusBottomSheet extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _StatusActionButton(
-                    label: 'Clear',
+                    label: l10n.habitStatusClear,
                     icon: Icons.radio_button_unchecked,
                     status: HabitEntryStatus.none,
                     currentStatus: currentStatus,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import 'habit_week_summary_row.dart';
 import '../../application/habit_week_view_builder.dart';
 import 'habit_presentation_callbacks.dart';
@@ -144,8 +145,10 @@ class _HabitActionsMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return PopupMenuButton<_HabitMenuAction>(
-      tooltip: 'Habit actions',
+      tooltip: l10n.habitActionsTooltip,
       onSelected: (action) {
         switch (action) {
           case _HabitMenuAction.edit:
@@ -157,12 +160,12 @@ class _HabitActionsMenu extends StatelessWidget {
         }
       },
       itemBuilder: (context) {
-        return const [
+        return [
           PopupMenuItem(
             value: _HabitMenuAction.edit,
             child: ListTile(
               leading: Icon(Icons.edit_outlined),
-              title: Text('Edit'),
+              title: Text(l10n.commonEdit),
               contentPadding: EdgeInsets.zero,
             ),
           ),
@@ -170,7 +173,7 @@ class _HabitActionsMenu extends StatelessWidget {
             value: _HabitMenuAction.archive,
             child: ListTile(
               leading: Icon(Icons.archive_outlined),
-              title: Text('Archive'),
+              title: Text(l10n.commonArchive),
               contentPadding: EdgeInsets.zero,
             ),
           ),
@@ -178,7 +181,7 @@ class _HabitActionsMenu extends StatelessWidget {
             value: _HabitMenuAction.delete,
             child: ListTile(
               leading: Icon(Icons.delete_outline),
-              title: Text('Delete'),
+              title: Text(l10n.commonDelete),
               contentPadding: EdgeInsets.zero,
             ),
           ),

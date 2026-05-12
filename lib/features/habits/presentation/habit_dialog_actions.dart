@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../application/habit_store.dart';
 import '../domain/habit.dart';
 import '../domain/habit_entry_status.dart';
+import '../../../l10n/app_localizations.dart';
 import 'widgets/add_habit_dialog.dart';
 import 'widgets/habit_status_bottom_sheet.dart';
 import 'widgets/archived_habits_bottom_sheet.dart';
@@ -32,14 +33,16 @@ class HabitDialogActions {
   }
 
   Future<void> showEditDialog(BuildContext context, Habit habit) async {
+    final l10n = AppLocalizations.of(context);
+
     final draft = await showDialog<AddHabitDraft>(
       context: context,
       builder: (context) {
         return AddHabitDialog(
           initialTitle: habit.title,
           initialDescription: habit.description,
-          dialogTitle: 'Edit habit',
-          actionLabel: 'Save',
+          dialogTitle: l10n.habitEditDialogTitle,
+          actionLabel: l10n.commonSave,
         );
       },
     );
@@ -56,26 +59,26 @@ class HabitDialogActions {
   }
 
   Future<void> showArchiveDialog(BuildContext context, Habit habit) async {
+    final l10n = AppLocalizations.of(context);
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Archive habit?'),
-          content: Text(
-            '“${habit.title}” will be hidden from the active habit list.',
-          ),
+          title: Text(l10n.habitArchiveDialogTitle),
+          content: Text(l10n.habitArchiveDialogMessage(habit.title)),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: const Text('Cancel'),
+              child: Text(l10n.commonCancel),
             ),
             FilledButton(
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              child: const Text('Archive'),
+              child: Text(l10n.commonArchive),
             ),
           ],
         );
@@ -90,26 +93,26 @@ class HabitDialogActions {
   }
 
   Future<void> showDeleteDialog(BuildContext context, Habit habit) async {
+    final l10n = AppLocalizations.of(context);
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Delete habit?'),
-          content: Text(
-            '“${habit.title}” and its tracked entries will be deleted.',
-          ),
+          title: Text(l10n.habitDeleteDialogTitle),
+          content: Text(l10n.habitDeleteDialogMessage(habit.title)),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: const Text('Cancel'),
+              child: Text(l10n.commonCancel),
             ),
             FilledButton(
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              child: const Text('Delete'),
+              child: Text(l10n.commonDelete),
             ),
           ],
         );

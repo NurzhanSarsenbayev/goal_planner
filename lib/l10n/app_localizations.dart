@@ -301,6 +301,324 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Nothing here.'**
   String get todayEmptySectionFallback;
+
+  /// No description provided for @commonCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get commonCancel;
+
+  /// No description provided for @commonAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get commonAdd;
+
+  /// No description provided for @commonSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get commonSave;
+
+  /// No description provided for @commonEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get commonEdit;
+
+  /// No description provided for @commonArchive.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive'**
+  String get commonArchive;
+
+  /// No description provided for @commonDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get commonDelete;
+
+  /// No description provided for @habitsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Habits'**
+  String get habitsTitle;
+
+  /// No description provided for @habitsArchivedTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived habits'**
+  String get habitsArchivedTooltip;
+
+  /// No description provided for @habitFabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Habit'**
+  String get habitFabLabel;
+
+  /// No description provided for @habitsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start tracking a small routine'**
+  String get habitsEmptyTitle;
+
+  /// No description provided for @habitsEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick something simple that you want to notice every week.'**
+  String get habitsEmptyDescription;
+
+  /// No description provided for @habitsEmptyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Create first habit'**
+  String get habitsEmptyButton;
+
+  /// No description provided for @habitsAllArchivedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All habits are archived'**
+  String get habitsAllArchivedTitle;
+
+  /// No description provided for @habitsAllArchivedDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a new habit or restore an archived one.'**
+  String get habitsAllArchivedDescription;
+
+  /// No description provided for @habitsAllArchivedCreateButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new habit'**
+  String get habitsAllArchivedCreateButton;
+
+  /// No description provided for @habitsAllArchivedViewArchivedButton.
+  ///
+  /// In en, this message translates to:
+  /// **'View archived habits'**
+  String get habitsAllArchivedViewArchivedButton;
+
+  /// No description provided for @habitExampleDrinkWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Drink water'**
+  String get habitExampleDrinkWater;
+
+  /// No description provided for @habitExampleRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read 10 minutes'**
+  String get habitExampleRead;
+
+  /// No description provided for @habitExampleWalk.
+  ///
+  /// In en, this message translates to:
+  /// **'Walk'**
+  String get habitExampleWalk;
+
+  /// No description provided for @habitExampleStretch.
+  ///
+  /// In en, this message translates to:
+  /// **'Stretch'**
+  String get habitExampleStretch;
+
+  /// No description provided for @habitExampleSleep.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep before midnight'**
+  String get habitExampleSleep;
+
+  /// No description provided for @habitAddDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add habit'**
+  String get habitAddDialogTitle;
+
+  /// No description provided for @habitEditDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit habit'**
+  String get habitEditDialogTitle;
+
+  /// No description provided for @habitTitleFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get habitTitleFieldLabel;
+
+  /// No description provided for @habitTitleFieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Drink water'**
+  String get habitTitleFieldHint;
+
+  /// No description provided for @habitDescriptionFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get habitDescriptionFieldLabel;
+
+  /// No description provided for @habitDescriptionFieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get habitDescriptionFieldHint;
+
+  /// No description provided for @habitArchiveDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive habit?'**
+  String get habitArchiveDialogTitle;
+
+  /// No description provided for @habitArchiveDialogMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'“{title}” will be hidden from the active habit list.'**
+  String habitArchiveDialogMessage(String title);
+
+  /// No description provided for @habitDeleteDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete habit?'**
+  String get habitDeleteDialogTitle;
+
+  /// No description provided for @habitDeleteDialogMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'“{title}” and its tracked entries will be deleted.'**
+  String habitDeleteDialogMessage(String title);
+
+  /// No description provided for @habitStatusSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How did it go?'**
+  String get habitStatusSheetTitle;
+
+  /// No description provided for @habitStatusDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get habitStatusDone;
+
+  /// No description provided for @habitStatusMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get habitStatusMissed;
+
+  /// No description provided for @habitStatusSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get habitStatusSkip;
+
+  /// No description provided for @habitStatusClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get habitStatusClear;
+
+  /// No description provided for @habitActionsTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Habit actions'**
+  String get habitActionsTooltip;
+
+  /// No description provided for @habitCurrentWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Current week'**
+  String get habitCurrentWeek;
+
+  /// No description provided for @habitWeekdayMon.
+  ///
+  /// In en, this message translates to:
+  /// **'Mon'**
+  String get habitWeekdayMon;
+
+  /// No description provided for @habitWeekdayTue.
+  ///
+  /// In en, this message translates to:
+  /// **'Tue'**
+  String get habitWeekdayTue;
+
+  /// No description provided for @habitWeekdayWed.
+  ///
+  /// In en, this message translates to:
+  /// **'Wed'**
+  String get habitWeekdayWed;
+
+  /// No description provided for @habitWeekdayThu.
+  ///
+  /// In en, this message translates to:
+  /// **'Thu'**
+  String get habitWeekdayThu;
+
+  /// No description provided for @habitWeekdayFri.
+  ///
+  /// In en, this message translates to:
+  /// **'Fri'**
+  String get habitWeekdayFri;
+
+  /// No description provided for @habitWeekdaySat.
+  ///
+  /// In en, this message translates to:
+  /// **'Sat'**
+  String get habitWeekdaySat;
+
+  /// No description provided for @habitWeekdaySun.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun'**
+  String get habitWeekdaySun;
+
+  /// No description provided for @habitWeekSummaryDone.
+  ///
+  /// In en, this message translates to:
+  /// **'{doneCount}/{totalDays} done'**
+  String habitWeekSummaryDone(int doneCount, int totalDays);
+
+  /// No description provided for @habitWeekSummaryMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} missed'**
+  String habitWeekSummaryMissed(int count);
+
+  /// No description provided for @habitWeekSummarySkipped.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} skipped'**
+  String habitWeekSummarySkipped(int count);
+
+  /// No description provided for @habitWeekSummaryPartial.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} partial'**
+  String habitWeekSummaryPartial(int count);
+
+  /// No description provided for @archivedHabitsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived habits'**
+  String get archivedHabitsTitle;
+
+  /// No description provided for @archivedHabitsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No archived habits.'**
+  String get archivedHabitsEmpty;
+
+  /// No description provided for @archivedHabitRestoreTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore habit'**
+  String get archivedHabitRestoreTooltip;
+
+  /// No description provided for @archivedHabitDeleteTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete habit'**
+  String get archivedHabitDeleteTooltip;
 }
 
 class _AppLocalizationsDelegate

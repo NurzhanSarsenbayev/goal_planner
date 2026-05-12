@@ -168,5 +168,103 @@
   "todayEmptySectionFallback": "Здесь пока ничего нет.",
   "@todayEmptySectionFallback": {
     "description": "Fallback empty text for Today sections"
-  }
+  },
+    "commonCancel": "Отмена",
+    "commonAdd": "Добавить",
+    "commonSave": "Сохранить",
+    "commonEdit": "Изменить",
+    "commonArchive": "В архив",
+    "commonDelete": "Удалить",
+    "habitsTitle": "Привычки",
+    "habitsArchivedTooltip": "Архив привычек",
+    "habitFabLabel": "Привычка",
+    "habitsEmptyTitle": "Начните с простой привычки",
+    "habitsEmptyDescription": "Выберите что-то небольшое, что хотите отслеживать каждую неделю.",
+    "habitsEmptyButton": "Создать первую привычку",
+    "habitsAllArchivedTitle": "Все привычки в архиве",
+    "habitsAllArchivedDescription": "Создайте новую привычку или восстановите одну из архива.",
+    "habitsAllArchivedCreateButton": "Создать новую привычку",
+    "habitsAllArchivedViewArchivedButton": "Показать архив",
+    "habitExampleDrinkWater": "Пить воду",
+    "habitExampleRead": "Читать 10 минут",
+    "habitExampleWalk": "Гулять",
+    "habitExampleStretch": "Растяжка",
+    "habitExampleSleep": "Лечь до полуночи",
+    "habitAddDialogTitle": "Добавить привычку",
+    "habitEditDialogTitle": "Изменить привычку",
+    "habitTitleFieldLabel": "Название",
+    "habitTitleFieldHint": "Например: пить воду",
+    "habitDescriptionFieldLabel": "Описание",
+    "habitDescriptionFieldHint": "Необязательно",
+    "habitArchiveDialogTitle": "Убрать привычку в архив?",
+    "habitArchiveDialogMessage": "«{title}» будет скрыта из списка активных привычек.",
+    "@habitArchiveDialogMessage": {
+      "placeholders": {
+        "title": {
+          "type": "String"
+        }
+      }
+    },
+    "habitDeleteDialogTitle": "Удалить привычку?",
+    "habitDeleteDialogMessage": "«{title}» и все отметки по ней будут удалены.",
+    "@habitDeleteDialogMessage": {
+      "placeholders": {
+        "title": {
+          "type": "String"
+        }
+      }
+    },
+    "habitStatusSheetTitle": "Как прошло?",
+    "habitStatusDone": "Сделано",
+    "habitStatusMissed": "Не сделано",
+    "habitStatusSkip": "Пропустить",
+    "habitStatusClear": "Очистить",
+    "habitActionsTooltip": "Действия с привычкой",
+    "habitCurrentWeek": "Текущая неделя",
+    "habitWeekdayMon": "Пн",
+    "habitWeekdayTue": "Вт",
+    "habitWeekdayWed": "Ср",
+    "habitWeekdayThu": "Чт",
+    "habitWeekdayFri": "Пт",
+    "habitWeekdaySat": "Сб",
+    "habitWeekdaySun": "Вс",
+    "habitWeekSummaryDone": "{doneCount}/{totalDays} сделано",
+    "@habitWeekSummaryDone": {
+      "placeholders": {
+        "doneCount": {
+          "type": "int"
+        },
+        "totalDays": {
+          "type": "int"
+        }
+      }
+    },
+    "habitWeekSummaryMissed": "{count} не сделано",
+    "@habitWeekSummaryMissed": {
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "habitWeekSummarySkipped": "{count} пропущено",
+    "@habitWeekSummarySkipped": {
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "habitWeekSummaryPartial": "{count} частично",
+    "@habitWeekSummaryPartial": {
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "archivedHabitsTitle": "Архив привычек",
+    "archivedHabitsEmpty": "В архиве пока нет привычек.",
+    "archivedHabitRestoreTooltip": "Восстановить привычку",
+    "archivedHabitDeleteTooltip": "Удалить привычку"
 }

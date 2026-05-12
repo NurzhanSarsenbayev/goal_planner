@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class HabitsEmptyState extends StatelessWidget {
   const HabitsEmptyState({
     required this.onCreateHabit,
-    this.title = 'Start tracking a small routine',
-    this.description =
-        'Pick something simple that you want to notice every week.',
-    this.buttonLabel = 'Create first habit',
+    this.title,
+    this.description,
+    this.buttonLabel,
     this.secondaryButtonLabel,
     this.onSecondaryAction,
     this.icon = Icons.track_changes_outlined,
@@ -15,9 +16,9 @@ class HabitsEmptyState extends StatelessWidget {
   });
 
   final Future<void> Function() onCreateHabit;
-  final String title;
-  final String description;
-  final String buttonLabel;
+  final String? title;
+  final String? description;
+  final String? buttonLabel;
   final String? secondaryButtonLabel;
   final Future<void> Function()? onSecondaryAction;
   final IconData icon;
@@ -26,6 +27,10 @@ class HabitsEmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
+    final resolvedTitle = title ?? l10n.habitsEmptyTitle;
+    final resolvedDescription = description ?? l10n.habitsEmptyDescription;
+    final resolvedButtonLabel = buttonLabel ?? l10n.habitsEmptyButton;
 
     return Center(
       child: SingleChildScrollView(
@@ -38,7 +43,7 @@ class HabitsEmptyState extends StatelessWidget {
               Icon(icon, size: 56, color: colorScheme.primary),
               const SizedBox(height: 16),
               Text(
-                title,
+                resolvedTitle,
                 textAlign: TextAlign.center,
                 style: Theme.of(
                   context,
@@ -46,7 +51,7 @@ class HabitsEmptyState extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                description,
+                resolvedDescription,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: colorScheme.onSurfaceVariant,
@@ -60,7 +65,7 @@ class HabitsEmptyState extends StatelessWidget {
               FilledButton.icon(
                 onPressed: onCreateHabit,
                 icon: const Icon(Icons.add),
-                label: Text(buttonLabel),
+                label: Text(resolvedButtonLabel),
               ),
               if (secondaryButtonLabel != null &&
                   onSecondaryAction != null) ...[
@@ -84,12 +89,14 @@ class _HabitExamples extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     final examples = [
-      'Drink water',
-      'Read 10 minutes',
-      'Walk',
-      'Stretch',
-      'Sleep before midnight',
+      l10n.habitExampleDrinkWater,
+      l10n.habitExampleRead,
+      l10n.habitExampleWalk,
+      l10n.habitExampleStretch,
+      l10n.habitExampleSleep,
     ];
 
     return Wrap(

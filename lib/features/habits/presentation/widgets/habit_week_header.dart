@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/planner_dates.dart';
 import '../../application/habit_week_view_builder.dart';
 
@@ -20,6 +21,7 @@ class HabitWeekHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final weekEnd = weekView.dates.last;
+    final l10n = AppLocalizations.of(context);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
@@ -44,7 +46,7 @@ class HabitWeekHeader extends StatelessWidget {
                 child: Center(
                   child: TextButton(
                     onPressed: onCurrentWeek,
-                    child: const Text('Current week'),
+                    child: Text(l10n.habitCurrentWeek),
                   ),
                 ),
               ),

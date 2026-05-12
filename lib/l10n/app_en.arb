@@ -168,5 +168,103 @@
   "todayEmptySectionFallback": "Nothing here.",
   "@todayEmptySectionFallback": {
     "description": "Fallback empty text for Today sections"
-  }
+  },
+    "commonCancel": "Cancel",
+    "commonAdd": "Add",
+    "commonSave": "Save",
+    "commonEdit": "Edit",
+    "commonArchive": "Archive",
+    "commonDelete": "Delete",
+    "habitsTitle": "Habits",
+    "habitsArchivedTooltip": "Archived habits",
+    "habitFabLabel": "Habit",
+    "habitsEmptyTitle": "Start tracking a small routine",
+    "habitsEmptyDescription": "Pick something simple that you want to notice every week.",
+    "habitsEmptyButton": "Create first habit",
+    "habitsAllArchivedTitle": "All habits are archived",
+    "habitsAllArchivedDescription": "Create a new habit or restore an archived one.",
+    "habitsAllArchivedCreateButton": "Create new habit",
+    "habitsAllArchivedViewArchivedButton": "View archived habits",
+    "habitExampleDrinkWater": "Drink water",
+    "habitExampleRead": "Read 10 minutes",
+    "habitExampleWalk": "Walk",
+    "habitExampleStretch": "Stretch",
+    "habitExampleSleep": "Sleep before midnight",
+    "habitAddDialogTitle": "Add habit",
+    "habitEditDialogTitle": "Edit habit",
+    "habitTitleFieldLabel": "Title",
+    "habitTitleFieldHint": "e.g. Drink water",
+    "habitDescriptionFieldLabel": "Description",
+    "habitDescriptionFieldHint": "Optional",
+    "habitArchiveDialogTitle": "Archive habit?",
+    "habitArchiveDialogMessage": "“{title}” will be hidden from the active habit list.",
+    "@habitArchiveDialogMessage": {
+      "placeholders": {
+        "title": {
+          "type": "String"
+        }
+      }
+    },
+    "habitDeleteDialogTitle": "Delete habit?",
+    "habitDeleteDialogMessage": "“{title}” and its tracked entries will be deleted.",
+    "@habitDeleteDialogMessage": {
+      "placeholders": {
+        "title": {
+          "type": "String"
+        }
+      }
+    },
+    "habitStatusSheetTitle": "How did it go?",
+    "habitStatusDone": "Done",
+    "habitStatusMissed": "Missed",
+    "habitStatusSkip": "Skip",
+    "habitStatusClear": "Clear",
+    "habitActionsTooltip": "Habit actions",
+    "habitCurrentWeek": "Current week",
+    "habitWeekdayMon": "Mon",
+    "habitWeekdayTue": "Tue",
+    "habitWeekdayWed": "Wed",
+    "habitWeekdayThu": "Thu",
+    "habitWeekdayFri": "Fri",
+    "habitWeekdaySat": "Sat",
+    "habitWeekdaySun": "Sun",
+    "habitWeekSummaryDone": "{doneCount}/{totalDays} done",
+    "@habitWeekSummaryDone": {
+      "placeholders": {
+        "doneCount": {
+          "type": "int"
+        },
+        "totalDays": {
+          "type": "int"
+        }
+      }
+    },
+    "habitWeekSummaryMissed": "{count} missed",
+    "@habitWeekSummaryMissed": {
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "habitWeekSummarySkipped": "{count} skipped",
+    "@habitWeekSummarySkipped": {
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "habitWeekSummaryPartial": "{count} partial",
+    "@habitWeekSummaryPartial": {
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "archivedHabitsTitle": "Archived habits",
+    "archivedHabitsEmpty": "No archived habits.",
+    "archivedHabitRestoreTooltip": "Restore habit",
+    "archivedHabitDeleteTooltip": "Delete habit"
 }

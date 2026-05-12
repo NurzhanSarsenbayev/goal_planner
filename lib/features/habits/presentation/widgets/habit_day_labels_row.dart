@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class HabitDayLabelsRow extends StatelessWidget {
   const HabitDayLabelsRow({required this.dates, super.key});
 
@@ -24,6 +26,7 @@ class _DayLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     final isToday = _isSameDate(date, DateTime.now());
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 2),
@@ -35,7 +38,7 @@ class _DayLabel extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            _weekdayLabel(date),
+            _weekdayLabel(l10n, date),
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
               color: isToday ? colorScheme.onPrimaryContainer : null,
               fontWeight: isToday ? FontWeight.w700 : FontWeight.w500,
@@ -55,15 +58,15 @@ class _DayLabel extends StatelessWidget {
   }
 }
 
-String _weekdayLabel(DateTime date) {
+String _weekdayLabel(AppLocalizations l10n, DateTime date) {
   return switch (date.weekday) {
-    DateTime.monday => 'Mon',
-    DateTime.tuesday => 'Tue',
-    DateTime.wednesday => 'Wed',
-    DateTime.thursday => 'Thu',
-    DateTime.friday => 'Fri',
-    DateTime.saturday => 'Sat',
-    DateTime.sunday => 'Sun',
+    DateTime.monday => l10n.habitWeekdayMon,
+    DateTime.tuesday => l10n.habitWeekdayTue,
+    DateTime.wednesday => l10n.habitWeekdayWed,
+    DateTime.thursday => l10n.habitWeekdayThu,
+    DateTime.friday => l10n.habitWeekdayFri,
+    DateTime.saturday => l10n.habitWeekdaySat,
+    DateTime.sunday => l10n.habitWeekdaySun,
     _ => '',
   };
 }

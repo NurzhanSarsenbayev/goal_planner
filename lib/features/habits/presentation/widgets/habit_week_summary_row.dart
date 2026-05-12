@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../application/habit_week_summary.dart';
 
 class HabitWeekSummaryRow extends StatelessWidget {
@@ -9,11 +10,16 @@ class HabitWeekSummaryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     final parts = <String>[
-      '${summary.doneCount}/${summary.totalDays} done',
-      if (summary.failedCount > 0) '${summary.failedCount} missed',
-      if (summary.skippedCount > 0) '${summary.skippedCount} skipped',
-      if (summary.incompleteCount > 0) '${summary.incompleteCount} partial',
+      l10n.habitWeekSummaryDone(summary.doneCount, summary.totalDays),
+      if (summary.failedCount > 0)
+        l10n.habitWeekSummaryMissed(summary.failedCount),
+      if (summary.skippedCount > 0)
+        l10n.habitWeekSummarySkipped(summary.skippedCount),
+      if (summary.incompleteCount > 0)
+        l10n.habitWeekSummaryPartial(summary.incompleteCount),
     ];
 
     return Text(

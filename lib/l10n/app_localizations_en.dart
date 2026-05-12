@@ -124,4 +124,177 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get todayEmptySectionFallback => 'Nothing here.';
+
+  @override
+  String get commonCancel => 'Cancel';
+
+  @override
+  String get commonAdd => 'Add';
+
+  @override
+  String get commonSave => 'Save';
+
+  @override
+  String get commonEdit => 'Edit';
+
+  @override
+  String get commonArchive => 'Archive';
+
+  @override
+  String get commonDelete => 'Delete';
+
+  @override
+  String get habitsTitle => 'Habits';
+
+  @override
+  String get habitsArchivedTooltip => 'Archived habits';
+
+  @override
+  String get habitFabLabel => 'Habit';
+
+  @override
+  String get habitsEmptyTitle => 'Start tracking a small routine';
+
+  @override
+  String get habitsEmptyDescription =>
+      'Pick something simple that you want to notice every week.';
+
+  @override
+  String get habitsEmptyButton => 'Create first habit';
+
+  @override
+  String get habitsAllArchivedTitle => 'All habits are archived';
+
+  @override
+  String get habitsAllArchivedDescription =>
+      'Create a new habit or restore an archived one.';
+
+  @override
+  String get habitsAllArchivedCreateButton => 'Create new habit';
+
+  @override
+  String get habitsAllArchivedViewArchivedButton => 'View archived habits';
+
+  @override
+  String get habitExampleDrinkWater => 'Drink water';
+
+  @override
+  String get habitExampleRead => 'Read 10 minutes';
+
+  @override
+  String get habitExampleWalk => 'Walk';
+
+  @override
+  String get habitExampleStretch => 'Stretch';
+
+  @override
+  String get habitExampleSleep => 'Sleep before midnight';
+
+  @override
+  String get habitAddDialogTitle => 'Add habit';
+
+  @override
+  String get habitEditDialogTitle => 'Edit habit';
+
+  @override
+  String get habitTitleFieldLabel => 'Title';
+
+  @override
+  String get habitTitleFieldHint => 'e.g. Drink water';
+
+  @override
+  String get habitDescriptionFieldLabel => 'Description';
+
+  @override
+  String get habitDescriptionFieldHint => 'Optional';
+
+  @override
+  String get habitArchiveDialogTitle => 'Archive habit?';
+
+  @override
+  String habitArchiveDialogMessage(String title) {
+    return '“$title” will be hidden from the active habit list.';
+  }
+
+  @override
+  String get habitDeleteDialogTitle => 'Delete habit?';
+
+  @override
+  String habitDeleteDialogMessage(String title) {
+    return '“$title” and its tracked entries will be deleted.';
+  }
+
+  @override
+  String get habitStatusSheetTitle => 'How did it go?';
+
+  @override
+  String get habitStatusDone => 'Done';
+
+  @override
+  String get habitStatusMissed => 'Missed';
+
+  @override
+  String get habitStatusSkip => 'Skip';
+
+  @override
+  String get habitStatusClear => 'Clear';
+
+  @override
+  String get habitActionsTooltip => 'Habit actions';
+
+  @override
+  String get habitCurrentWeek => 'Current week';
+
+  @override
+  String get habitWeekdayMon => 'Mon';
+
+  @override
+  String get habitWeekdayTue => 'Tue';
+
+  @override
+  String get habitWeekdayWed => 'Wed';
+
+  @override
+  String get habitWeekdayThu => 'Thu';
+
+  @override
+  String get habitWeekdayFri => 'Fri';
+
+  @override
+  String get habitWeekdaySat => 'Sat';
+
+  @override
+  String get habitWeekdaySun => 'Sun';
+
+  @override
+  String habitWeekSummaryDone(int doneCount, int totalDays) {
+    return '$doneCount/$totalDays done';
+  }
+
+  @override
+  String habitWeekSummaryMissed(int count) {
+    return '$count missed';
+  }
+
+  @override
+  String habitWeekSummarySkipped(int count) {
+    return '$count skipped';
+  }
+
+  @override
+  String habitWeekSummaryPartial(int count) {
+    return '$count partial';
+  }
+
+  @override
+  String get archivedHabitsTitle => 'Archived habits';
+
+  @override
+  String get archivedHabitsEmpty => 'No archived habits.';
+
+  @override
+  String get archivedHabitRestoreTooltip => 'Restore habit';
+
+  @override
+  String get archivedHabitDeleteTooltip => 'Delete habit';
 }

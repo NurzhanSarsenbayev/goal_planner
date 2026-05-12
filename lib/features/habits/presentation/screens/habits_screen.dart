@@ -5,6 +5,7 @@ import '../habit_dialog_actions.dart';
 import '../widgets/habit_presentation_callbacks.dart';
 import '../widgets/habit_week_grid.dart';
 import '../widgets/habits_empty_state.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class HabitsScreen extends StatefulWidget {
   const HabitsScreen({required this.habitStore, super.key});
@@ -31,17 +32,18 @@ class _HabitsScreenState extends State<HabitsScreen> {
       animation: widget.habitStore,
       builder: (context, _) {
         final habitStore = widget.habitStore;
+        final l10n = AppLocalizations.of(context);
         final hasArchivedHabits = habitStore.habits.any(
           (habit) => habit.isArchived,
         );
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Habits'),
+            title: Text(l10n.habitsTitle),
             actions: [
               if (hasArchivedHabits)
                 IconButton(
-                  tooltip: 'Archived habits',
+                  tooltip: l10n.habitsArchivedTooltip,
                   onPressed: () {
                     _habitDialogActions.showArchivedHabitsSheet(context);
                   },
@@ -80,7 +82,7 @@ class _HabitsScreenState extends State<HabitsScreen> {
               _habitDialogActions.showAddDialog(context);
             },
             icon: const Icon(Icons.add),
-            label: const Text('Habit'),
+            label: Text(l10n.habitFabLabel),
           ),
         );
       },
@@ -109,6 +111,8 @@ class _HabitsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     if (habitStore.isLoading && !habitStore.isInitialized) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -124,10 +128,10 @@ class _HabitsBody extends StatelessWidget {
 
     if (activeHabits.isEmpty) {
       return HabitsEmptyState(
-        title: 'All habits are archived',
-        description: 'Create a new habit or restore an archived one.',
-        buttonLabel: 'Create new habit',
-        secondaryButtonLabel: 'View archived habits',
+        title: l10n.habitsAllArchivedTitle,
+        description: l10n.habitsAllArchivedDescription,
+        buttonLabel: l10n.habitsAllArchivedCreateButton,
+        secondaryButtonLabel: l10n.habitsAllArchivedViewArchivedButton,
         icon: Icons.archive_outlined,
         showExamples: false,
         onCreateHabit: onCreateHabit,

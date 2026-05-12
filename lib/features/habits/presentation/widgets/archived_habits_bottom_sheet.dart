@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/habit.dart';
 
 Future<ArchivedHabitSelection?> showArchivedHabitsBottomSheet({
@@ -31,6 +32,8 @@ class ArchivedHabitsBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return SafeArea(
       child: ConstrainedBox(
         constraints: BoxConstraints(
@@ -42,16 +45,16 @@ class ArchivedHabitsBottomSheet extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Archived habits',
+                l10n.archivedHabitsTitle,
                 style: Theme.of(
                   context,
                 ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 12),
               if (archivedHabits.isEmpty)
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 32),
-                  child: Text('No archived habits.'),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 32),
+                  child: Text(l10n.archivedHabitsEmpty),
                 )
               else
                 Flexible(
@@ -83,6 +86,8 @@ class _ArchivedHabitTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return ListTile(
       contentPadding: EdgeInsets.zero,
       title: Text(habit.title, maxLines: 1, overflow: TextOverflow.ellipsis),
@@ -97,7 +102,7 @@ class _ArchivedHabitTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            tooltip: 'Restore habit',
+            tooltip: l10n.archivedHabitRestoreTooltip,
             onPressed: () {
               Navigator.of(context).pop(
                 ArchivedHabitSelection(
@@ -109,7 +114,7 @@ class _ArchivedHabitTile extends StatelessWidget {
             icon: const Icon(Icons.unarchive_outlined),
           ),
           IconButton(
-            tooltip: 'Delete habit',
+            tooltip: l10n.archivedHabitDeleteTooltip,
             onPressed: () {
               Navigator.of(context).pop(
                 ArchivedHabitSelection(

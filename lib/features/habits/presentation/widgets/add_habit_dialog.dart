@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class AddHabitDialog extends StatefulWidget {
   const AddHabitDialog({
     this.initialTitle = '',
     this.initialDescription = '',
-    this.dialogTitle = 'Add habit',
-    this.actionLabel = 'Add',
+    this.dialogTitle,
+    this.actionLabel,
     super.key,
   });
 
   final String initialTitle;
   final String initialDescription;
-  final String dialogTitle;
-  final String actionLabel;
+  final String? dialogTitle;
+  final String? actionLabel;
 
   @override
   State<AddHabitDialog> createState() => _AddHabitDialogState();
@@ -55,17 +57,19 @@ class _AddHabitDialogState extends State<AddHabitDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return AlertDialog(
-      title: Text(widget.dialogTitle),
+      title: Text(widget.dialogTitle ?? l10n.habitAddDialogTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
             controller: _titleController,
             autofocus: true,
-            decoration: const InputDecoration(
-              labelText: 'Title',
-              hintText: 'e.g. Drink water',
+            decoration: InputDecoration(
+              labelText: l10n.habitTitleFieldLabel,
+              hintText: l10n.habitTitleFieldHint,
             ),
             textInputAction: TextInputAction.next,
             onSubmitted: (_) => _submit(),
@@ -73,9 +77,9 @@ class _AddHabitDialogState extends State<AddHabitDialog> {
           const SizedBox(height: 12),
           TextField(
             controller: _descriptionController,
-            decoration: const InputDecoration(
-              labelText: 'Description',
-              hintText: 'Optional',
+            decoration: InputDecoration(
+              labelText: l10n.habitDescriptionFieldLabel,
+              hintText: l10n.habitDescriptionFieldHint,
             ),
             minLines: 1,
             maxLines: 3,
@@ -87,9 +91,12 @@ class _AddHabitDialogState extends State<AddHabitDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: Text(l10n.commonCancel),
         ),
-        FilledButton(onPressed: _submit, child: Text(widget.actionLabel)),
+        FilledButton(
+          onPressed: _submit,
+          child: Text(widget.actionLabel ?? l10n.commonAdd),
+        ),
       ],
     );
   }
