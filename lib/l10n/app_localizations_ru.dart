@@ -493,4 +493,29 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get calendarWeekdaySunShort => 'Вс';
+
+  @override
+  String get taskCompletionPastTitle => 'Когда задача была выполнена?';
+
+  @override
+  String get taskCompletionTodayOption => 'Сегодня';
+
+  @override
+  String get taskCompletionYesterdayOption => 'Вчера';
+
+  @override
+  String taskCompletionScheduledDateOption(String date) {
+    return 'Запланированная дата: $date';
+  }
+
+  @override
+  String get taskCompletionFutureTitle => 'Выполнить заранее?';
+
+  @override
+  String taskCompletionFutureMessage(String date) {
+    return 'Эта задача запланирована на $date.';
+  }
+
+  @override
+  String get taskCompletionCompleteTodayButton => 'Выполнить сегодня';
 }

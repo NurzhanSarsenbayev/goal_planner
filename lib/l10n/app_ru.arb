@@ -451,5 +451,29 @@
     "calendarWeekdayThuShort": "Чт",
     "calendarWeekdayFriShort": "Пт",
     "calendarWeekdaySatShort": "Сб",
-    "calendarWeekdaySunShort": "Вс"
+    "calendarWeekdaySunShort": "Вс",
+
+    "taskCompletionPastTitle": "Когда задача была выполнена?",
+    "taskCompletionTodayOption": "Сегодня",
+    "taskCompletionYesterdayOption": "Вчера",
+    "taskCompletionScheduledDateOption": "Запланированная дата: {date}",
+    "@taskCompletionScheduledDateOption": {
+      "description": "Option for completing a past scheduled task on its original scheduled date",
+      "placeholders": {
+        "date": {
+          "type": "String"
+        }
+      }
+    },
+    "taskCompletionFutureTitle": "Выполнить заранее?",
+    "taskCompletionFutureMessage": "Эта задача запланирована на {date}.",
+    "@taskCompletionFutureMessage": {
+      "description": "Message shown when completing a future scheduled task early",
+      "placeholders": {
+        "date": {
+          "type": "String"
+        }
+      }
+    },
+    "taskCompletionCompleteTodayButton": "Выполнить сегодня"
 }

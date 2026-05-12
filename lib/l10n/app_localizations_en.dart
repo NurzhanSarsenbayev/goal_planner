@@ -490,4 +490,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendarWeekdaySunShort => 'Sun';
+
+  @override
+  String get taskCompletionPastTitle => 'When was it completed?';
+
+  @override
+  String get taskCompletionTodayOption => 'Today';
+
+  @override
+  String get taskCompletionYesterdayOption => 'Yesterday';
+
+  @override
+  String taskCompletionScheduledDateOption(String date) {
+    return 'Scheduled date: $date';
+  }
+
+  @override
+  String get taskCompletionFutureTitle => 'Complete early?';
+
+  @override
+  String taskCompletionFutureMessage(String date) {
+    return 'This task is scheduled for $date.';
+  }
+
+  @override
+  String get taskCompletionCompleteTodayButton => 'Complete today';
 }

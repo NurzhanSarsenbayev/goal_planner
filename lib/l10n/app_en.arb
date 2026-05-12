@@ -451,5 +451,29 @@
     "calendarWeekdayThuShort": "Thu",
     "calendarWeekdayFriShort": "Fri",
     "calendarWeekdaySatShort": "Sat",
-    "calendarWeekdaySunShort": "Sun"
+    "calendarWeekdaySunShort": "Sun",
+
+    "taskCompletionPastTitle": "When was it completed?",
+    "taskCompletionTodayOption": "Today",
+    "taskCompletionYesterdayOption": "Yesterday",
+    "taskCompletionScheduledDateOption": "Scheduled date: {date}",
+    "@taskCompletionScheduledDateOption": {
+      "description": "Option for completing a past scheduled task on its original scheduled date",
+      "placeholders": {
+        "date": {
+          "type": "String"
+        }
+      }
+    },
+    "taskCompletionFutureTitle": "Complete early?",
+    "taskCompletionFutureMessage": "This task is scheduled for {date}.",
+    "@taskCompletionFutureMessage": {
+      "description": "Message shown when completing a future scheduled task early",
+      "placeholders": {
+        "date": {
+          "type": "String"
+        }
+      }
+    },
+    "taskCompletionCompleteTodayButton": "Complete today"
 }

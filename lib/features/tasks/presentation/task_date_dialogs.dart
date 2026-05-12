@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../models/planner_task.dart';
 import '../../../shared/planner_dates.dart';
 
@@ -75,14 +76,17 @@ Future<DateTime?> _showPastScheduledTaskCompletionDialog(
   return showDialog<DateTime>(
     context: context,
     builder: (context) {
+      final l10n = AppLocalizations.of(context);
+      final scheduledDateText = formatPlannerDate(scheduledDate);
+
       return SimpleDialog(
-        title: const Text('When was it completed?'),
+        title: Text(l10n.taskCompletionPastTitle),
         children: [
           SimpleDialogOption(
             onPressed: () {
               Navigator.of(context).pop(todayDate());
             },
-            child: const Text('Today'),
+            child: Text(l10n.taskCompletionTodayOption),
           ),
           SimpleDialogOption(
             onPressed: () {
@@ -90,13 +94,15 @@ Future<DateTime?> _showPastScheduledTaskCompletionDialog(
                 context,
               ).pop(todayDate().subtract(const Duration(days: 1)));
             },
-            child: const Text('Yesterday'),
+            child: Text(l10n.taskCompletionYesterdayOption),
           ),
           SimpleDialogOption(
             onPressed: () {
               Navigator.of(context).pop(scheduledDate);
             },
-            child: Text('Scheduled date: ${formatPlannerDate(scheduledDate)}'),
+            child: Text(
+              l10n.taskCompletionScheduledDateOption(scheduledDateText),
+            ),
           ),
         ],
       );
@@ -111,23 +117,24 @@ Future<bool?> _showFutureScheduledTaskCompletionDialog(
   return showDialog<bool>(
     context: context,
     builder: (context) {
+      final l10n = AppLocalizations.of(context);
+      final scheduledDateText = formatPlannerDate(scheduledDate);
+
       return AlertDialog(
-        title: const Text('Complete early?'),
-        content: Text(
-          'This task is scheduled for ${formatPlannerDate(scheduledDate)}.',
-        ),
+        title: Text(l10n.taskCompletionFutureTitle),
+        content: Text(l10n.taskCompletionFutureMessage(scheduledDateText)),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(false);
             },
-            child: const Text('Cancel'),
+            child: Text(l10n.commonCancel),
           ),
           FilledButton(
             onPressed: () {
               Navigator.of(context).pop(true);
             },
-            child: const Text('Complete today'),
+            child: Text(l10n.taskCompletionCompleteTodayButton),
           ),
         ],
       );

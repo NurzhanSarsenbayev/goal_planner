@@ -943,6 +943,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sun'**
   String get calendarWeekdaySunShort;
+
+  /// No description provided for @taskCompletionPastTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'When was it completed?'**
+  String get taskCompletionPastTitle;
+
+  /// No description provided for @taskCompletionTodayOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get taskCompletionTodayOption;
+
+  /// No description provided for @taskCompletionYesterdayOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get taskCompletionYesterdayOption;
+
+  /// Option for completing a past scheduled task on its original scheduled date
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled date: {date}'**
+  String taskCompletionScheduledDateOption(String date);
+
+  /// No description provided for @taskCompletionFutureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete early?'**
+  String get taskCompletionFutureTitle;
+
+  /// Message shown when completing a future scheduled task early
+  ///
+  /// In en, this message translates to:
+  /// **'This task is scheduled for {date}.'**
+  String taskCompletionFutureMessage(String date);
+
+  /// No description provided for @taskCompletionCompleteTodayButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete today'**
+  String get taskCompletionCompleteTodayButton;
 }
 
 class _AppLocalizationsDelegate
