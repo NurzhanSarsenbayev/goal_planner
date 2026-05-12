@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/recurring_task_rule.dart';
 import '../../../../shared/presentation/widgets/section_header.dart';
 import '../../../recurring/presentation/widgets/recurring_task_rule_card.dart';
@@ -23,18 +24,20 @@ class GoalRecurringTasksSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          title: 'Direct recurring tasks',
-          actionLabel: 'Add recurring',
+          title: l10n.goalDetailsDirectRecurringTasksSection,
+          actionLabel: l10n.goalDetailsAddRecurringButton,
           onActionPressed: onAddRule,
         ),
         const SizedBox(height: 8),
         if (rules.isEmpty)
           Text(
-            'No direct recurring tasks.',
+            l10n.goalDetailsNoDirectRecurringTasks,
             style: Theme.of(context).textTheme.bodySmall,
           )
         else

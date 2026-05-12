@@ -652,4 +652,21 @@ class AppLocalizationsRu extends AppLocalizations {
   String goalCardTasksCompleted(int completedCount, int totalCount) {
     return '$completedCount / $totalCount задач выполнено';
   }
+
+  @override
+  String get goalDetailsDirectTasksSection => 'Задачи цели';
+
+  @override
+  String get goalDetailsNoDirectTasks => 'Задач цели пока нет.';
+
+  @override
+  String get goalDetailsDirectRecurringTasksSection =>
+      'Повторяющиеся задачи цели';
+
+  @override
+  String get goalDetailsAddRecurringButton => 'Добавить повтор';
+
+  @override
+  String get goalDetailsNoDirectRecurringTasks =>
+      'Повторяющихся задач цели пока нет.';
 }

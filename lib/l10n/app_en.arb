@@ -550,5 +550,11 @@
           "type": "int"
         }
       }
-    }
+    },
+
+    "goalDetailsDirectTasksSection": "Direct tasks",
+    "goalDetailsNoDirectTasks": "No direct tasks.",
+    "goalDetailsDirectRecurringTasksSection": "Direct recurring tasks",
+    "goalDetailsAddRecurringButton": "Add recurring",
+    "goalDetailsNoDirectRecurringTasks": "No direct recurring tasks."
 }

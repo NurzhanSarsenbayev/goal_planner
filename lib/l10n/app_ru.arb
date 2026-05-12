@@ -550,5 +550,11 @@
           "type": "int"
         }
       }
-    }
+    },
+
+    "goalDetailsDirectTasksSection": "Задачи цели",
+    "goalDetailsNoDirectTasks": "Задач цели пока нет.",
+    "goalDetailsDirectRecurringTasksSection": "Повторяющиеся задачи цели",
+    "goalDetailsAddRecurringButton": "Добавить повтор",
+    "goalDetailsNoDirectRecurringTasks": "Повторяющихся задач цели пока нет."
 }

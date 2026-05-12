@@ -649,4 +649,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String goalCardTasksCompleted(int completedCount, int totalCount) {
     return '$completedCount / $totalCount tasks completed';
   }
+
+  @override
+  String get goalDetailsDirectTasksSection => 'Direct tasks';
+
+  @override
+  String get goalDetailsNoDirectTasks => 'No direct tasks.';
+
+  @override
+  String get goalDetailsDirectRecurringTasksSection => 'Direct recurring tasks';
+
+  @override
+  String get goalDetailsAddRecurringButton => 'Add recurring';
+
+  @override
+  String get goalDetailsNoDirectRecurringTasks => 'No direct recurring tasks.';
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
 import '../../../tasks/presentation/widgets/task_card.dart';
@@ -31,17 +32,22 @@ class DirectGoalTasksSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          title: 'Direct tasks',
-          actionLabel: 'Add task',
+          title: l10n.goalDetailsDirectTasksSection,
+          actionLabel: l10n.taskDialogAddTitle,
           onActionPressed: onAddTask,
         ),
         const SizedBox(height: 8),
         if (tasks.isEmpty)
-          Text('No direct tasks.', style: Theme.of(context).textTheme.bodySmall)
+          Text(
+            l10n.goalDetailsNoDirectTasks,
+            style: Theme.of(context).textTheme.bodySmall,
+          )
         else
           ...tasks.map(
             (task) => Padding(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 
 class GoalHeader extends StatelessWidget {
@@ -16,9 +17,10 @@ class GoalHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final progressText = totalTasks == 0
-        ? 'No tasks yet'
-        : '$completedTasks / $totalTasks tasks completed';
+        ? l10n.goalCardNoTasksYet
+        : l10n.goalCardTasksCompleted(completedTasks, totalTasks);
 
     final progressValue = totalTasks == 0 ? 0.0 : completedTasks / totalTasks;
 

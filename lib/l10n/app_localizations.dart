@@ -1237,6 +1237,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{completedCount} / {totalCount} tasks completed'**
   String goalCardTasksCompleted(int completedCount, int totalCount);
+
+  /// No description provided for @goalDetailsDirectTasksSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Direct tasks'**
+  String get goalDetailsDirectTasksSection;
+
+  /// No description provided for @goalDetailsNoDirectTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'No direct tasks.'**
+  String get goalDetailsNoDirectTasks;
+
+  /// No description provided for @goalDetailsDirectRecurringTasksSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Direct recurring tasks'**
+  String get goalDetailsDirectRecurringTasksSection;
+
+  /// No description provided for @goalDetailsAddRecurringButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add recurring'**
+  String get goalDetailsAddRecurringButton;
+
+  /// No description provided for @goalDetailsNoDirectRecurringTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'No direct recurring tasks.'**
+  String get goalDetailsNoDirectRecurringTasks;
 }
 
 class _AppLocalizationsDelegate
