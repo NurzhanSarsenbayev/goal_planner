@@ -1309,6 +1309,39 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete goal'**
   String get goalDeleteDialogDeleteButton;
+
+  /// No description provided for @milestoneDeleteDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete milestone?'**
+  String get milestoneDeleteDialogTitle;
+
+  /// Milestone delete confirmation message when there are no tasks inside the milestone
+  ///
+  /// In en, this message translates to:
+  /// **'Delete “{milestoneTitle}”?'**
+  String milestoneDeleteDialogEmptyMessage(String milestoneTitle);
+
+  /// Milestone delete confirmation message when there are tasks inside the milestone
+  ///
+  /// In en, this message translates to:
+  /// **'{taskCount, plural, one {This milestone contains 1 task. Choose what should happen to “{milestoneTitle}”.} other {This milestone contains {taskCount} tasks. Choose what should happen to “{milestoneTitle}”.}}'**
+  String milestoneDeleteDialogWithTasksMessage(
+    int taskCount,
+    String milestoneTitle,
+  );
+
+  /// No description provided for @milestoneDeleteDialogMoveTasksToDirectButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Move tasks to Direct tasks'**
+  String get milestoneDeleteDialogMoveTasksToDirectButton;
+
+  /// No description provided for @milestoneDeleteDialogDeleteWithTasksButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete milestone and tasks'**
+  String get milestoneDeleteDialogDeleteWithTasksButton;
 }
 
 class _AppLocalizationsDelegate

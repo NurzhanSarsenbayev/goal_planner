@@ -588,5 +588,30 @@
     },
     "goalDeleteDialogTypeDeleteToConfirm": "Введите DELETE для подтверждения.",
     "goalDeleteDialogConfirmationLabel": "Подтверждение",
-    "goalDeleteDialogDeleteButton": "Удалить цель"
+    "goalDeleteDialogDeleteButton": "Удалить цель",
+
+    "milestoneDeleteDialogTitle": "Удалить этап?",
+    "milestoneDeleteDialogEmptyMessage": "Удалить этап «{milestoneTitle}»?",
+    "@milestoneDeleteDialogEmptyMessage": {
+      "description": "Milestone delete confirmation message when there are no tasks inside the milestone",
+      "placeholders": {
+        "milestoneTitle": {
+          "type": "String"
+        }
+      }
+    },
+    "milestoneDeleteDialogWithTasksMessage": "{taskCount, plural, one {В этом этапе 1 задача. Выберите, что сделать с «{milestoneTitle}».} few {В этом этапе {taskCount} задачи. Выберите, что сделать с «{milestoneTitle}».} many {В этом этапе {taskCount} задач. Выберите, что сделать с «{milestoneTitle}».} other {В этом этапе {taskCount} задачи. Выберите, что сделать с «{milestoneTitle}».}}",
+    "@milestoneDeleteDialogWithTasksMessage": {
+      "description": "Milestone delete confirmation message when there are tasks inside the milestone",
+      "placeholders": {
+        "taskCount": {
+          "type": "int"
+        },
+        "milestoneTitle": {
+          "type": "String"
+        }
+      }
+    },
+    "milestoneDeleteDialogMoveTasksToDirectButton": "Переместить в задачи цели",
+    "milestoneDeleteDialogDeleteWithTasksButton": "Удалить этап и задачи"
 }

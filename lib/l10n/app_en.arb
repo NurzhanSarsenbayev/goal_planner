@@ -588,5 +588,30 @@
     },
     "goalDeleteDialogTypeDeleteToConfirm": "Type DELETE to confirm.",
     "goalDeleteDialogConfirmationLabel": "Confirmation",
-    "goalDeleteDialogDeleteButton": "Delete goal"
+    "goalDeleteDialogDeleteButton": "Delete goal",
+
+    "milestoneDeleteDialogTitle": "Delete milestone?",
+    "milestoneDeleteDialogEmptyMessage": "Delete “{milestoneTitle}”?",
+    "@milestoneDeleteDialogEmptyMessage": {
+      "description": "Milestone delete confirmation message when there are no tasks inside the milestone",
+      "placeholders": {
+        "milestoneTitle": {
+          "type": "String"
+        }
+      }
+    },
+    "milestoneDeleteDialogWithTasksMessage": "{taskCount, plural, one {This milestone contains 1 task. Choose what should happen to “{milestoneTitle}”.} other {This milestone contains {taskCount} tasks. Choose what should happen to “{milestoneTitle}”.}}",
+    "@milestoneDeleteDialogWithTasksMessage": {
+      "description": "Milestone delete confirmation message when there are tasks inside the milestone",
+      "placeholders": {
+        "taskCount": {
+          "type": "int"
+        },
+        "milestoneTitle": {
+          "type": "String"
+        }
+      }
+    },
+    "milestoneDeleteDialogMoveTasksToDirectButton": "Move tasks to Direct tasks",
+    "milestoneDeleteDialogDeleteWithTasksButton": "Delete milestone and tasks"
 }

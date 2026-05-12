@@ -691,4 +691,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get goalDeleteDialogDeleteButton => 'Delete goal';
+
+  @override
+  String get milestoneDeleteDialogTitle => 'Delete milestone?';
+
+  @override
+  String milestoneDeleteDialogEmptyMessage(String milestoneTitle) {
+    return 'Delete “$milestoneTitle”?';
+  }
+
+  @override
+  String milestoneDeleteDialogWithTasksMessage(
+    int taskCount,
+    String milestoneTitle,
+  ) {
+    String _temp0 = intl.Intl.pluralLogic(
+      taskCount,
+      locale: localeName,
+      other:
+          'This milestone contains $taskCount tasks. Choose what should happen to “$milestoneTitle”.',
+      one:
+          'This milestone contains 1 task. Choose what should happen to “$milestoneTitle”.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get milestoneDeleteDialogMoveTasksToDirectButton =>
+      'Move tasks to Direct tasks';
+
+  @override
+  String get milestoneDeleteDialogDeleteWithTasksButton =>
+      'Delete milestone and tasks';
 }

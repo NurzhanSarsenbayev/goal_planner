@@ -697,4 +697,39 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get goalDeleteDialogDeleteButton => 'Удалить цель';
+
+  @override
+  String get milestoneDeleteDialogTitle => 'Удалить этап?';
+
+  @override
+  String milestoneDeleteDialogEmptyMessage(String milestoneTitle) {
+    return 'Удалить этап «$milestoneTitle»?';
+  }
+
+  @override
+  String milestoneDeleteDialogWithTasksMessage(
+    int taskCount,
+    String milestoneTitle,
+  ) {
+    String _temp0 = intl.Intl.pluralLogic(
+      taskCount,
+      locale: localeName,
+      other:
+          'В этом этапе $taskCount задачи. Выберите, что сделать с «$milestoneTitle».',
+      many:
+          'В этом этапе $taskCount задач. Выберите, что сделать с «$milestoneTitle».',
+      few:
+          'В этом этапе $taskCount задачи. Выберите, что сделать с «$milestoneTitle».',
+      one: 'В этом этапе 1 задача. Выберите, что сделать с «$milestoneTitle».',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get milestoneDeleteDialogMoveTasksToDirectButton =>
+      'Переместить в задачи цели';
+
+  @override
+  String get milestoneDeleteDialogDeleteWithTasksButton =>
+      'Удалить этап и задачи';
 }

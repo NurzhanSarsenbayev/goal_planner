@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 enum DeleteMilestoneAction { moveTasksToDirect, deleteTasks }
 
 class DeleteMilestoneDialog extends StatelessWidget {
@@ -14,19 +16,24 @@ class DeleteMilestoneDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return AlertDialog(
-      title: const Text('Delete milestone?'),
+      title: Text(l10n.milestoneDeleteDialogTitle),
       content: Text(
         taskCount == 0
-            ? 'Delete "$milestoneTitle"?'
-            : 'What should happen to $taskCount task(s) inside "$milestoneTitle"?',
+            ? l10n.milestoneDeleteDialogEmptyMessage(milestoneTitle)
+            : l10n.milestoneDeleteDialogWithTasksMessage(
+                taskCount,
+                milestoneTitle,
+              ),
       ),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: Text(l10n.commonCancel),
         ),
         if (taskCount > 0)
           TextButton(
@@ -35,13 +42,17 @@ class DeleteMilestoneDialog extends StatelessWidget {
                 context,
               ).pop(DeleteMilestoneAction.moveTasksToDirect);
             },
-            child: const Text('Move tasks to Direct tasks'),
+            child: Text(l10n.milestoneDeleteDialogMoveTasksToDirectButton),
           ),
         FilledButton(
           onPressed: () {
             Navigator.of(context).pop(DeleteMilestoneAction.deleteTasks);
           },
-          child: Text(taskCount == 0 ? 'Delete' : 'Delete milestone and tasks'),
+          child: Text(
+            taskCount == 0
+                ? l10n.commonDelete
+                : l10n.milestoneDeleteDialogDeleteWithTasksButton,
+          ),
         ),
       ],
     );
