@@ -64,7 +64,7 @@
   "@todaySummaryTodo": {
     "description": "Today summary metric label for pending tasks"
   },
-  "todaySummaryOverdue": "Просроченно",
+  "todaySummaryOverdue": "Просрочено",
   "@todaySummaryOverdue": {
     "description": "Today summary metric label for overdue tasks"
   },
@@ -266,5 +266,97 @@
     "archivedHabitsTitle": "Архив привычек",
     "archivedHabitsEmpty": "В архиве пока нет привычек.",
     "archivedHabitRestoreTooltip": "Восстановить привычку",
-    "archivedHabitDeleteTooltip": "Удалить привычку"
+    "archivedHabitDeleteTooltip": "Удалить привычку",
+
+    "reportsTitle": "Отчёты",
+    "reportsTasksSection": "Задачи",
+    "reportsHabitBreakdownSection": "Разбор привычек",
+    "reportsGoalContributionSection": "Вклад в цели",
+    "reportsByDaySection": "По дням",
+    "reportsNoCompletedTasks": "За этот период выполненных задач нет.",
+    "reportsEmptyMessage": "За период «{periodTitle}» пока нет выполненных задач или отметок привычек.",
+    "@reportsEmptyMessage": {
+      "description": "Reports empty state message for selected period",
+      "placeholders": {
+        "periodTitle": {
+          "type": "String"
+        }
+      }
+    },
+
+    "reportPeriodToday": "Сегодня",
+    "reportPeriodLast7Days": "Последние 7 дней",
+    "reportPeriodLast14Days": "Последние 14 дней",
+    "reportPeriod7DaysShort": "7 дней",
+    "reportPeriod14DaysShort": "14 дней",
+
+    "reportsCompletedLabel": "выполнено",
+    "reportsOutOfPlanned": "из {plannedCount} запланированных",
+    "@reportsOutOfPlanned": {
+      "description": "Reports task summary planned count text",
+      "placeholders": {
+        "plannedCount": {
+          "type": "int"
+        }
+      }
+    },
+    "reportsPlanCompletionMetric": "выполнение плана",
+    "reportsActiveDaysMetric": "активные дни",
+
+    "reportsConsistencyMetric": "регулярность",
+    "reportsHabitStreakMetric": "серия привычек",
+    "reportsMissedMetric": "не сделано",
+    "reportsSkippedMetric": "пропущено",
+
+    "reportsHabitsDoneOnly": "{doneCount} сделано",
+    "@reportsHabitsDoneOnly": {
+      "description": "Reports habit summary when there are no actionable expected marks",
+      "placeholders": {
+        "doneCount": {
+          "type": "int"
+        }
+      }
+    },
+    "reportsHabitsDoneProgress": "{doneCount}/{actionableCount} сделано",
+    "@reportsHabitsDoneProgress": {
+      "description": "Reports habit summary done progress text",
+      "placeholders": {
+        "doneCount": {
+          "type": "int"
+        },
+        "actionableCount": {
+          "type": "int"
+        }
+      }
+    },
+    "reportsArchivedHabitHistory": "История из архивных привычек.",
+    "reportsActiveHabitsNoMarks": "Активных привычек: {activeHabitCount}, отметок пока нет.",
+    "@reportsActiveHabitsNoMarks": {
+      "description": "Reports habit summary when active habits exist but have no marks",
+      "placeholders": {
+        "activeHabitCount": {
+          "type": "int"
+        }
+      }
+    },
+    "reportsActiveHabitsTracked": "Активных привычек: {activeHabitCount}.",
+    "@reportsActiveHabitsTracked": {
+      "description": "Reports habit summary when active habits are tracked",
+      "placeholders": {
+        "activeHabitCount": {
+          "type": "int"
+        }
+      }
+    },
+
+    "reportsOneDay": "1 день",
+    "reportsDays": "{dayCount} дней",
+    "@reportsDays": {
+      "description": "Reports day count value",
+      "placeholders": {
+        "dayCount": {
+          "type": "int"
+        }
+      }
+    }
 }

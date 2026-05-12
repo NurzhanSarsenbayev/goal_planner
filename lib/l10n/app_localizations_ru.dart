@@ -58,7 +58,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get todaySummaryTodo => 'Сделать';
 
   @override
-  String get todaySummaryOverdue => 'Просроченно';
+  String get todaySummaryOverdue => 'Просрочено';
 
   @override
   String get todaySummaryDone => 'Сделано';
@@ -300,4 +300,99 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get archivedHabitDeleteTooltip => 'Удалить привычку';
+
+  @override
+  String get reportsTitle => 'Отчёты';
+
+  @override
+  String get reportsTasksSection => 'Задачи';
+
+  @override
+  String get reportsHabitBreakdownSection => 'Разбор привычек';
+
+  @override
+  String get reportsGoalContributionSection => 'Вклад в цели';
+
+  @override
+  String get reportsByDaySection => 'По дням';
+
+  @override
+  String get reportsNoCompletedTasks => 'За этот период выполненных задач нет.';
+
+  @override
+  String reportsEmptyMessage(String periodTitle) {
+    return 'За период «$periodTitle» пока нет выполненных задач или отметок привычек.';
+  }
+
+  @override
+  String get reportPeriodToday => 'Сегодня';
+
+  @override
+  String get reportPeriodLast7Days => 'Последние 7 дней';
+
+  @override
+  String get reportPeriodLast14Days => 'Последние 14 дней';
+
+  @override
+  String get reportPeriod7DaysShort => '7 дней';
+
+  @override
+  String get reportPeriod14DaysShort => '14 дней';
+
+  @override
+  String get reportsCompletedLabel => 'выполнено';
+
+  @override
+  String reportsOutOfPlanned(int plannedCount) {
+    return 'из $plannedCount запланировано';
+  }
+
+  @override
+  String get reportsPlanCompletionMetric => 'выполнение плана';
+
+  @override
+  String get reportsActiveDaysMetric => 'активные дни';
+
+  @override
+  String get reportsConsistencyMetric => 'регулярность';
+
+  @override
+  String get reportsHabitStreakMetric => 'стрик привычек';
+
+  @override
+  String get reportsMissedMetric => 'не сделано';
+
+  @override
+  String get reportsSkippedMetric => 'пропущено';
+
+  @override
+  String reportsHabitsDoneOnly(int doneCount) {
+    return '$doneCount сделано';
+  }
+
+  @override
+  String reportsHabitsDoneProgress(int doneCount, int actionableCount) {
+    return '$doneCount/$actionableCount сделано';
+  }
+
+  @override
+  String get reportsArchivedHabitHistory => 'История из архивных привычек.';
+
+  @override
+  String reportsActiveHabitsNoMarks(int activeHabitCount) {
+    return 'Активных привычек: $activeHabitCount, отметок пока нет.';
+  }
+
+  @override
+  String reportsActiveHabitsTracked(int activeHabitCount) {
+    return 'Активных привычек отслеживается: $activeHabitCount.';
+  }
+
+  @override
+  String get reportsOneDay => '1 день';
+
+  @override
+  String reportsDays(int dayCount) {
+    return '$dayCount дней';
+  }
 }

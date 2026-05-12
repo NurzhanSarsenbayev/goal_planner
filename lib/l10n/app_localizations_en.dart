@@ -297,4 +297,99 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get archivedHabitDeleteTooltip => 'Delete habit';
+
+  @override
+  String get reportsTitle => 'Reports';
+
+  @override
+  String get reportsTasksSection => 'Tasks';
+
+  @override
+  String get reportsHabitBreakdownSection => 'Habit breakdown';
+
+  @override
+  String get reportsGoalContributionSection => 'Goal contribution';
+
+  @override
+  String get reportsByDaySection => 'By day';
+
+  @override
+  String get reportsNoCompletedTasks => 'No completed tasks in this period.';
+
+  @override
+  String reportsEmptyMessage(String periodTitle) {
+    return 'No completed tasks or habit marks for $periodTitle yet.';
+  }
+
+  @override
+  String get reportPeriodToday => 'Today';
+
+  @override
+  String get reportPeriodLast7Days => 'Last 7 days';
+
+  @override
+  String get reportPeriodLast14Days => 'Last 14 days';
+
+  @override
+  String get reportPeriod7DaysShort => '7 days';
+
+  @override
+  String get reportPeriod14DaysShort => '14 days';
+
+  @override
+  String get reportsCompletedLabel => 'completed';
+
+  @override
+  String reportsOutOfPlanned(int plannedCount) {
+    return 'out of $plannedCount planned';
+  }
+
+  @override
+  String get reportsPlanCompletionMetric => 'plan completion';
+
+  @override
+  String get reportsActiveDaysMetric => 'active days';
+
+  @override
+  String get reportsConsistencyMetric => 'consistency';
+
+  @override
+  String get reportsHabitStreakMetric => 'habit streak';
+
+  @override
+  String get reportsMissedMetric => 'missed';
+
+  @override
+  String get reportsSkippedMetric => 'skipped';
+
+  @override
+  String reportsHabitsDoneOnly(int doneCount) {
+    return '$doneCount done';
+  }
+
+  @override
+  String reportsHabitsDoneProgress(int doneCount, int actionableCount) {
+    return '$doneCount/$actionableCount done';
+  }
+
+  @override
+  String get reportsArchivedHabitHistory => 'History from archived habits.';
+
+  @override
+  String reportsActiveHabitsNoMarks(int activeHabitCount) {
+    return '$activeHabitCount active habits, no marks yet.';
+  }
+
+  @override
+  String reportsActiveHabitsTracked(int activeHabitCount) {
+    return '$activeHabitCount active habits tracked.';
+  }
+
+  @override
+  String get reportsOneDay => '1 day';
+
+  @override
+  String reportsDays(int dayCount) {
+    return '$dayCount days';
+  }
 }

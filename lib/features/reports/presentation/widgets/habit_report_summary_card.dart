@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/habit_report_summary.dart';
 
 class HabitReportSummaryCard extends StatelessWidget {
@@ -10,6 +11,7 @@ class HabitReportSummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context);
 
     return Card(
       child: Padding(
@@ -17,13 +19,13 @@ class HabitReportSummaryCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Habits', style: textTheme.titleMedium),
+            Text(l10n.habitsTab, style: textTheme.titleMedium),
             const SizedBox(height: 8),
             Text.rich(
               TextSpan(
                 children: [
                   TextSpan(
-                    text: _primaryValue(),
+                    text: _primaryValue(l10n),
                     style: textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
@@ -32,21 +34,21 @@ class HabitReportSummaryCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            Text(_subtitle(), style: textTheme.bodyMedium),
+            Text(_subtitle(l10n), style: textTheme.bodyMedium),
             const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
                   child: _MetricPill(
                     value: _consistencyValue(),
-                    label: 'consistency',
+                    label: l10n.reportsConsistencyMetric,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: _MetricPill(
-                    value: _streakValue(),
-                    label: 'habit streak',
+                    value: _streakValue(l10n),
+                    label: l10n.reportsHabitStreakMetric,
                   ),
                 ),
               ],
@@ -57,14 +59,14 @@ class HabitReportSummaryCard extends StatelessWidget {
                 Expanded(
                   child: _MetricPill(
                     value: summary.missedCount.toString(),
-                    label: 'missed',
+                    label: l10n.reportsMissedMetric,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: _MetricPill(
                     value: summary.skippedCount.toString(),
-                    label: 'skipped',
+                    label: l10n.reportsSkippedMetric,
                   ),
                 ),
               ],
@@ -75,24 +77,27 @@ class HabitReportSummaryCard extends StatelessWidget {
     );
   }
 
-  String _primaryValue() {
+  String _primaryValue(AppLocalizations l10n) {
     if (summary.actionableExpectedMarkCount == 0) {
-      return '${summary.doneCount} done';
+      return l10n.reportsHabitsDoneOnly(summary.doneCount);
     }
 
-    return '${summary.doneCount}/${summary.actionableExpectedMarkCount} done';
+    return l10n.reportsHabitsDoneProgress(
+      summary.doneCount,
+      summary.actionableExpectedMarkCount,
+    );
   }
 
-  String _subtitle() {
+  String _subtitle(AppLocalizations l10n) {
     if (summary.activeHabitCount == 0) {
-      return 'History from archived habits.';
+      return l10n.reportsArchivedHabitHistory;
     }
 
     if (summary.markedCount == 0) {
-      return '${summary.activeHabitCount} active habits, no marks yet.';
+      return l10n.reportsActiveHabitsNoMarks(summary.activeHabitCount);
     }
 
-    return '${summary.activeHabitCount} active habits tracked.';
+    return l10n.reportsActiveHabitsTracked(summary.activeHabitCount);
   }
 
   String _consistencyValue() {
@@ -103,14 +108,14 @@ class HabitReportSummaryCard extends StatelessWidget {
     return '${summary.consistencyPercent}%';
   }
 
-  String _streakValue() {
+  String _streakValue(AppLocalizations l10n) {
     final streakDays = summary.currentStreakDays;
 
     if (streakDays == 1) {
-      return '1 day';
+      return l10n.reportsOneDay;
     }
 
-    return '$streakDays days';
+    return l10n.reportsDays(streakDays);
   }
 }
 

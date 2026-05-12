@@ -619,6 +619,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete habit'**
   String get archivedHabitDeleteTooltip;
+
+  /// No description provided for @reportsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports'**
+  String get reportsTitle;
+
+  /// No description provided for @reportsTasksSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks'**
+  String get reportsTasksSection;
+
+  /// No description provided for @reportsHabitBreakdownSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Habit breakdown'**
+  String get reportsHabitBreakdownSection;
+
+  /// No description provided for @reportsGoalContributionSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal contribution'**
+  String get reportsGoalContributionSection;
+
+  /// No description provided for @reportsByDaySection.
+  ///
+  /// In en, this message translates to:
+  /// **'By day'**
+  String get reportsByDaySection;
+
+  /// No description provided for @reportsNoCompletedTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'No completed tasks in this period.'**
+  String get reportsNoCompletedTasks;
+
+  /// Reports empty state message for selected period
+  ///
+  /// In en, this message translates to:
+  /// **'No completed tasks or habit marks for {periodTitle} yet.'**
+  String reportsEmptyMessage(String periodTitle);
+
+  /// No description provided for @reportPeriodToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get reportPeriodToday;
+
+  /// No description provided for @reportPeriodLast7Days.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 7 days'**
+  String get reportPeriodLast7Days;
+
+  /// No description provided for @reportPeriodLast14Days.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 14 days'**
+  String get reportPeriodLast14Days;
+
+  /// No description provided for @reportPeriod7DaysShort.
+  ///
+  /// In en, this message translates to:
+  /// **'7 days'**
+  String get reportPeriod7DaysShort;
+
+  /// No description provided for @reportPeriod14DaysShort.
+  ///
+  /// In en, this message translates to:
+  /// **'14 days'**
+  String get reportPeriod14DaysShort;
+
+  /// No description provided for @reportsCompletedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'completed'**
+  String get reportsCompletedLabel;
+
+  /// Reports task summary planned count text
+  ///
+  /// In en, this message translates to:
+  /// **'out of {plannedCount} planned'**
+  String reportsOutOfPlanned(int plannedCount);
+
+  /// No description provided for @reportsPlanCompletionMetric.
+  ///
+  /// In en, this message translates to:
+  /// **'plan completion'**
+  String get reportsPlanCompletionMetric;
+
+  /// No description provided for @reportsActiveDaysMetric.
+  ///
+  /// In en, this message translates to:
+  /// **'active days'**
+  String get reportsActiveDaysMetric;
+
+  /// No description provided for @reportsConsistencyMetric.
+  ///
+  /// In en, this message translates to:
+  /// **'consistency'**
+  String get reportsConsistencyMetric;
+
+  /// No description provided for @reportsHabitStreakMetric.
+  ///
+  /// In en, this message translates to:
+  /// **'habit streak'**
+  String get reportsHabitStreakMetric;
+
+  /// No description provided for @reportsMissedMetric.
+  ///
+  /// In en, this message translates to:
+  /// **'missed'**
+  String get reportsMissedMetric;
+
+  /// No description provided for @reportsSkippedMetric.
+  ///
+  /// In en, this message translates to:
+  /// **'skipped'**
+  String get reportsSkippedMetric;
+
+  /// Reports habit summary when there are no actionable expected marks
+  ///
+  /// In en, this message translates to:
+  /// **'{doneCount} done'**
+  String reportsHabitsDoneOnly(int doneCount);
+
+  /// Reports habit summary done progress text
+  ///
+  /// In en, this message translates to:
+  /// **'{doneCount}/{actionableCount} done'**
+  String reportsHabitsDoneProgress(int doneCount, int actionableCount);
+
+  /// No description provided for @reportsArchivedHabitHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History from archived habits.'**
+  String get reportsArchivedHabitHistory;
+
+  /// Reports habit summary when active habits exist but have no marks
+  ///
+  /// In en, this message translates to:
+  /// **'{activeHabitCount} active habits, no marks yet.'**
+  String reportsActiveHabitsNoMarks(int activeHabitCount);
+
+  /// Reports habit summary when active habits are tracked
+  ///
+  /// In en, this message translates to:
+  /// **'{activeHabitCount} active habits tracked.'**
+  String reportsActiveHabitsTracked(int activeHabitCount);
+
+  /// No description provided for @reportsOneDay.
+  ///
+  /// In en, this message translates to:
+  /// **'1 day'**
+  String get reportsOneDay;
+
+  /// Reports day count value
+  ///
+  /// In en, this message translates to:
+  /// **'{dayCount} days'**
+  String reportsDays(int dayCount);
 }
 
 class _AppLocalizationsDelegate

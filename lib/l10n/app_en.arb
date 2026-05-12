@@ -266,5 +266,97 @@
     "archivedHabitsTitle": "Archived habits",
     "archivedHabitsEmpty": "No archived habits.",
     "archivedHabitRestoreTooltip": "Restore habit",
-    "archivedHabitDeleteTooltip": "Delete habit"
+    "archivedHabitDeleteTooltip": "Delete habit",
+
+    "reportsTitle": "Reports",
+    "reportsTasksSection": "Tasks",
+    "reportsHabitBreakdownSection": "Habit breakdown",
+    "reportsGoalContributionSection": "Goal contribution",
+    "reportsByDaySection": "By day",
+    "reportsNoCompletedTasks": "No completed tasks in this period.",
+    "reportsEmptyMessage": "No completed tasks or habit marks for {periodTitle} yet.",
+    "@reportsEmptyMessage": {
+      "description": "Reports empty state message for selected period",
+      "placeholders": {
+        "periodTitle": {
+          "type": "String"
+        }
+      }
+    },
+
+    "reportPeriodToday": "Today",
+    "reportPeriodLast7Days": "Last 7 days",
+    "reportPeriodLast14Days": "Last 14 days",
+    "reportPeriod7DaysShort": "7 days",
+    "reportPeriod14DaysShort": "14 days",
+
+    "reportsCompletedLabel": "completed",
+    "reportsOutOfPlanned": "out of {plannedCount} planned",
+    "@reportsOutOfPlanned": {
+      "description": "Reports task summary planned count text",
+      "placeholders": {
+        "plannedCount": {
+          "type": "int"
+        }
+      }
+    },
+    "reportsPlanCompletionMetric": "plan completion",
+    "reportsActiveDaysMetric": "active days",
+
+    "reportsConsistencyMetric": "consistency",
+    "reportsHabitStreakMetric": "habit streak",
+    "reportsMissedMetric": "missed",
+    "reportsSkippedMetric": "skipped",
+
+    "reportsHabitsDoneOnly": "{doneCount} done",
+    "@reportsHabitsDoneOnly": {
+      "description": "Reports habit summary when there are no actionable expected marks",
+      "placeholders": {
+        "doneCount": {
+          "type": "int"
+        }
+      }
+    },
+    "reportsHabitsDoneProgress": "{doneCount}/{actionableCount} done",
+    "@reportsHabitsDoneProgress": {
+      "description": "Reports habit summary done progress text",
+      "placeholders": {
+        "doneCount": {
+          "type": "int"
+        },
+        "actionableCount": {
+          "type": "int"
+        }
+      }
+    },
+    "reportsArchivedHabitHistory": "History from archived habits.",
+    "reportsActiveHabitsNoMarks": "{activeHabitCount} active habits, no marks yet.",
+    "@reportsActiveHabitsNoMarks": {
+      "description": "Reports habit summary when active habits exist but have no marks",
+      "placeholders": {
+        "activeHabitCount": {
+          "type": "int"
+        }
+      }
+    },
+    "reportsActiveHabitsTracked": "{activeHabitCount} active habits tracked.",
+    "@reportsActiveHabitsTracked": {
+      "description": "Reports habit summary when active habits are tracked",
+      "placeholders": {
+        "activeHabitCount": {
+          "type": "int"
+        }
+      }
+    },
+
+    "reportsOneDay": "1 day",
+    "reportsDays": "{dayCount} days",
+    "@reportsDays": {
+      "description": "Reports day count value",
+      "placeholders": {
+        "dayCount": {
+          "type": "int"
+        }
+      }
+    }
 }

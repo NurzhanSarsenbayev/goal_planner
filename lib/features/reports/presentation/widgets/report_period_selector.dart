@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+import '../report_period_l10n.dart';
 import '../../domain/report_period.dart';
 
 class ReportPeriodSelector extends StatelessWidget {
@@ -14,11 +16,22 @@ class ReportPeriodSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return SegmentedButton<ReportPeriod>(
-      segments: const [
-        ButtonSegment(value: ReportPeriod.today, label: Text('Today')),
-        ButtonSegment(value: ReportPeriod.last7Days, label: Text('7 days')),
-        ButtonSegment(value: ReportPeriod.last14Days, label: Text('14 days')),
+      segments: [
+        ButtonSegment(
+          value: ReportPeriod.today,
+          label: Text(ReportPeriod.today.localizedShortLabel(l10n)),
+        ),
+        ButtonSegment(
+          value: ReportPeriod.last7Days,
+          label: Text(ReportPeriod.last7Days.localizedShortLabel(l10n)),
+        ),
+        ButtonSegment(
+          value: ReportPeriod.last14Days,
+          label: Text(ReportPeriod.last14Days.localizedShortLabel(l10n)),
+        ),
       ],
       selected: {selectedPeriod},
       onSelectionChanged: (selection) {

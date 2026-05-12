@@ -6,6 +6,8 @@ import '../../application/habit_report_loader.dart';
 import '../../application/report_builder.dart';
 import '../../domain/habit_report_summary.dart';
 import '../../domain/report_period.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../report_period_l10n.dart';
 import '../widgets/day_report_section.dart';
 import '../widgets/empty_report_card.dart';
 import '../widgets/goal_report_section.dart';
@@ -95,16 +97,15 @@ class _ReportsScreenState extends State<ReportsScreen> {
     final hasHabitReport = habitReport != null && habitReport.hasHabitData;
     final isEmptyReport =
         !hasTaskReport && !hasHabitReport && !_isHabitReportLoading;
+    final l10n = AppLocalizations.of(context);
+    final periodTitle = _selectedPeriod.localizedTitle(l10n);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Reports')),
+      appBar: AppBar(title: Text(l10n.reportsTitle)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text(
-            _selectedPeriod.title,
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
+          Text(periodTitle, style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 16),
           ReportPeriodSelector(
             selectedPeriod: _selectedPeriod,
@@ -121,10 +122,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
             const SizedBox(height: 16),
           ],
           if (isEmptyReport)
-            EmptyReportCard(periodTitle: _selectedPeriod.title)
+            EmptyReportCard(periodTitle: periodTitle)
           else ...[
             if (hasTaskReport) ...[
-              Text('Tasks', style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                l10n.reportsTasksSection,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               const SizedBox(height: 8),
               ReportSummaryCard(
                 completedCount: taskReport.completedCount,
@@ -138,7 +142,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
               HabitReportSummaryCard(summary: habitReport),
               const SizedBox(height: 24),
               Text(
-                'Habit breakdown',
+                l10n.reportsHabitBreakdownSection,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
@@ -147,14 +151,14 @@ class _ReportsScreenState extends State<ReportsScreen> {
             ],
             if (hasTaskReport) ...[
               Text(
-                'Goal contribution',
+                l10n.reportsGoalContributionSection,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
               if (taskReport.goalGroups.isEmpty &&
                   taskReport.standaloneTasks.isEmpty)
                 Text(
-                  'No completed tasks in this period.',
+                  l10n.reportsNoCompletedTasks,
                   style: Theme.of(context).textTheme.bodyMedium,
                 )
               else ...[
@@ -170,7 +174,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 ],
               ],
               const SizedBox(height: 24),
-              Text('By day', style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                l10n.reportsByDaySection,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               const SizedBox(height: 8),
               for (final group in taskReport.dayGroups) ...[
                 DayReportSection(

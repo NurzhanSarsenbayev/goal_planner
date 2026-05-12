@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class EmptyReportCard extends StatelessWidget {
   const EmptyReportCard({super.key, required this.periodTitle});
 
@@ -7,6 +9,8 @@ class EmptyReportCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -16,7 +20,7 @@ class EmptyReportCard extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                'No completed tasks or habit marks for $periodTitle yet.',
+                l10n.reportsEmptyMessage(periodTitle),
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),

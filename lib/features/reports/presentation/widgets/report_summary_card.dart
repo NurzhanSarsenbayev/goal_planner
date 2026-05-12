@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class ReportSummaryCard extends StatelessWidget {
   const ReportSummaryCard({
     super.key,
@@ -17,6 +19,7 @@ class ReportSummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context);
 
     return Card(
       child: Padding(
@@ -33,26 +36,32 @@ class ReportSummaryCard extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  TextSpan(text: ' completed', style: textTheme.titleMedium),
+                  TextSpan(
+                    text: ' ${l10n.reportsCompletedLabel}',
+                    style: textTheme.titleMedium,
+                  ),
                 ],
               ),
             ),
             const SizedBox(height: 4),
-            Text('out of $plannedCount planned', style: textTheme.bodyMedium),
+            Text(
+              l10n.reportsOutOfPlanned(plannedCount),
+              style: textTheme.bodyMedium,
+            ),
             const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
                   child: _MetricPill(
                     value: '$planCompletionPercent%',
-                    label: 'plan completion',
+                    label: l10n.reportsPlanCompletionMetric,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: _MetricPill(
                     value: activeDaysCount.toString(),
-                    label: 'active days',
+                    label: l10n.reportsActiveDaysMetric,
                   ),
                 ),
               ],
