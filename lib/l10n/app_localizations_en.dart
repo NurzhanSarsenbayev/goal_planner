@@ -664,4 +664,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get goalDetailsNoDirectRecurringTasks => 'No direct recurring tasks.';
+
+  @override
+  String get goalDeleteDialogTitle => 'Delete goal?';
+
+  @override
+  String goalDeleteDialogMessage(String goalTitle) {
+    return 'This will permanently delete “$goalTitle”.';
+  }
+
+  @override
+  String goalDeleteDialogMilestonesCount(int count) {
+    return 'Milestones: $count';
+  }
+
+  @override
+  String goalDeleteDialogTasksCount(int count) {
+    return 'Tasks: $count';
+  }
+
+  @override
+  String get goalDeleteDialogTypeDeleteToConfirm => 'Type DELETE to confirm.';
+
+  @override
+  String get goalDeleteDialogConfirmationLabel => 'Confirmation';
+
+  @override
+  String get goalDeleteDialogDeleteButton => 'Delete goal';
 }

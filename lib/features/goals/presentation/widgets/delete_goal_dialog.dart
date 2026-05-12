@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class DeleteGoalDialog extends StatefulWidget {
   const DeleteGoalDialog({
     super.key,
@@ -17,10 +19,12 @@ class DeleteGoalDialog extends StatefulWidget {
 }
 
 class _DeleteGoalDialogState extends State<DeleteGoalDialog> {
+  static const _confirmationPhrase = 'DELETE';
+
   final _confirmationController = TextEditingController();
 
   bool get _canDelete {
-    return _confirmationController.text.trim() == 'DELETE';
+    return _confirmationController.text.trim() == _confirmationPhrase;
   }
 
   @override
@@ -39,25 +43,27 @@ class _DeleteGoalDialogState extends State<DeleteGoalDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return AlertDialog(
-      title: const Text('Delete goal?'),
+      title: Text(l10n.goalDeleteDialogTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('This will permanently delete "${widget.goalTitle}".'),
+          Text(l10n.goalDeleteDialogMessage(widget.goalTitle)),
           const SizedBox(height: 12),
-          Text('Milestones: ${widget.milestoneCount}'),
-          Text('Tasks: ${widget.taskCount}'),
+          Text(l10n.goalDeleteDialogMilestonesCount(widget.milestoneCount)),
+          Text(l10n.goalDeleteDialogTasksCount(widget.taskCount)),
           const SizedBox(height: 16),
-          const Text('Type DELETE to confirm.'),
+          Text(l10n.goalDeleteDialogTypeDeleteToConfirm),
           const SizedBox(height: 8),
           TextField(
             controller: _confirmationController,
             autofocus: true,
-            decoration: const InputDecoration(
-              labelText: 'Confirmation',
-              hintText: 'DELETE',
+            decoration: InputDecoration(
+              labelText: l10n.goalDeleteDialogConfirmationLabel,
+              hintText: _confirmationPhrase,
             ),
             onChanged: (_) {
               setState(() {});
@@ -73,11 +79,11 @@ class _DeleteGoalDialogState extends State<DeleteGoalDialog> {
           onPressed: () {
             Navigator.of(context).pop(false);
           },
-          child: const Text('Cancel'),
+          child: Text(l10n.commonCancel),
         ),
         FilledButton(
           onPressed: _canDelete ? _confirmDelete : null,
-          child: const Text('Delete goal'),
+          child: Text(l10n.goalDeleteDialogDeleteButton),
         ),
       ],
     );

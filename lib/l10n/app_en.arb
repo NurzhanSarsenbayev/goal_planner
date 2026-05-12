@@ -556,5 +556,37 @@
     "goalDetailsNoDirectTasks": "No direct tasks.",
     "goalDetailsDirectRecurringTasksSection": "Direct recurring tasks",
     "goalDetailsAddRecurringButton": "Add recurring",
-    "goalDetailsNoDirectRecurringTasks": "No direct recurring tasks."
+    "goalDetailsNoDirectRecurringTasks": "No direct recurring tasks.",
+
+    "goalDeleteDialogTitle": "Delete goal?",
+    "goalDeleteDialogMessage": "This will permanently delete “{goalTitle}”.",
+    "@goalDeleteDialogMessage": {
+      "description": "Goal delete confirmation message",
+      "placeholders": {
+        "goalTitle": {
+          "type": "String"
+        }
+      }
+    },
+    "goalDeleteDialogMilestonesCount": "Milestones: {count}",
+    "@goalDeleteDialogMilestonesCount": {
+      "description": "Goal delete confirmation milestone count",
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "goalDeleteDialogTasksCount": "Tasks: {count}",
+    "@goalDeleteDialogTasksCount": {
+      "description": "Goal delete confirmation task count",
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "goalDeleteDialogTypeDeleteToConfirm": "Type DELETE to confirm.",
+    "goalDeleteDialogConfirmationLabel": "Confirmation",
+    "goalDeleteDialogDeleteButton": "Delete goal"
 }

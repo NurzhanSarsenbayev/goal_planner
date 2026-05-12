@@ -669,4 +669,32 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get goalDetailsNoDirectRecurringTasks =>
       'Повторяющихся задач цели пока нет.';
+
+  @override
+  String get goalDeleteDialogTitle => 'Удалить цель?';
+
+  @override
+  String goalDeleteDialogMessage(String goalTitle) {
+    return 'Цель «$goalTitle» будет удалена навсегда.';
+  }
+
+  @override
+  String goalDeleteDialogMilestonesCount(int count) {
+    return 'Этапы: $count';
+  }
+
+  @override
+  String goalDeleteDialogTasksCount(int count) {
+    return 'Задачи: $count';
+  }
+
+  @override
+  String get goalDeleteDialogTypeDeleteToConfirm =>
+      'Введите DELETE для подтверждения.';
+
+  @override
+  String get goalDeleteDialogConfirmationLabel => 'Подтверждение';
+
+  @override
+  String get goalDeleteDialogDeleteButton => 'Удалить цель';
 }

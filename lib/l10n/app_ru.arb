@@ -556,5 +556,37 @@
     "goalDetailsNoDirectTasks": "Задач цели пока нет.",
     "goalDetailsDirectRecurringTasksSection": "Повторяющиеся задачи цели",
     "goalDetailsAddRecurringButton": "Добавить повтор",
-    "goalDetailsNoDirectRecurringTasks": "Повторяющихся задач цели пока нет."
+    "goalDetailsNoDirectRecurringTasks": "Повторяющихся задач цели пока нет.",
+
+    "goalDeleteDialogTitle": "Удалить цель?",
+    "goalDeleteDialogMessage": "Цель «{goalTitle}» будет удалена навсегда.",
+    "@goalDeleteDialogMessage": {
+      "description": "Goal delete confirmation message",
+      "placeholders": {
+        "goalTitle": {
+          "type": "String"
+        }
+      }
+    },
+    "goalDeleteDialogMilestonesCount": "Этапы: {count}",
+    "@goalDeleteDialogMilestonesCount": {
+      "description": "Goal delete confirmation milestone count",
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "goalDeleteDialogTasksCount": "Задачи: {count}",
+    "@goalDeleteDialogTasksCount": {
+      "description": "Goal delete confirmation task count",
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "goalDeleteDialogTypeDeleteToConfirm": "Введите DELETE для подтверждения.",
+    "goalDeleteDialogConfirmationLabel": "Подтверждение",
+    "goalDeleteDialogDeleteButton": "Удалить цель"
 }

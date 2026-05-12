@@ -1267,6 +1267,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No direct recurring tasks.'**
   String get goalDetailsNoDirectRecurringTasks;
+
+  /// No description provided for @goalDeleteDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete goal?'**
+  String get goalDeleteDialogTitle;
+
+  /// Goal delete confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'This will permanently delete “{goalTitle}”.'**
+  String goalDeleteDialogMessage(String goalTitle);
+
+  /// Goal delete confirmation milestone count
+  ///
+  /// In en, this message translates to:
+  /// **'Milestones: {count}'**
+  String goalDeleteDialogMilestonesCount(int count);
+
+  /// Goal delete confirmation task count
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks: {count}'**
+  String goalDeleteDialogTasksCount(int count);
+
+  /// No description provided for @goalDeleteDialogTypeDeleteToConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Type DELETE to confirm.'**
+  String get goalDeleteDialogTypeDeleteToConfirm;
+
+  /// No description provided for @goalDeleteDialogConfirmationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmation'**
+  String get goalDeleteDialogConfirmationLabel;
+
+  /// No description provided for @goalDeleteDialogDeleteButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete goal'**
+  String get goalDeleteDialogDeleteButton;
 }
 
 class _AppLocalizationsDelegate
