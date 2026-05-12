@@ -509,5 +509,19 @@
     "taskActionMoveToMilestone": "Переместить в этап",
     "taskActionMoveToDirectGoal": "Переместить в задачи цели",
     "taskActionScheduleDate": "Запланировать дату",
-    "taskActionRemoveScheduledDate": "Убрать дату"
+    "taskActionRemoveScheduledDate": "Убрать дату",
+
+    "taskDialogAddTitle": "Добавить задачу",
+    "taskDialogEditTitle": "Изменить задачу",
+    "taskDialogAddForTodayTitle": "Добавить задачу на сегодня",
+    "taskTitleFieldLabel": "Название",
+    "taskTitleFieldHint": "например, набросать план статьи",
+    "taskDescriptionFieldLabel": "Описание",
+    "taskDescriptionFieldHint": "Необязательно",
+    "taskGoalFieldLabel": "Цель",
+    "taskNoGoalOption": "Без цели",
+    "taskMilestoneFieldLabel": "Этап",
+    "taskNoMilestoneOption": "Без этапа",
+    "taskAttachToGoalTitle": "Привязать задачу к цели",
+    "taskAttachButton": "Привязать"
 }

@@ -509,5 +509,19 @@
     "taskActionMoveToMilestone": "Move to milestone",
     "taskActionMoveToDirectGoal": "Move to Direct tasks",
     "taskActionScheduleDate": "Schedule date",
-    "taskActionRemoveScheduledDate": "Remove scheduled date"
+    "taskActionRemoveScheduledDate": "Remove scheduled date",
+
+    "taskDialogAddTitle": "Add task",
+    "taskDialogEditTitle": "Edit task",
+    "taskDialogAddForTodayTitle": "Add task for today",
+    "taskTitleFieldLabel": "Title",
+    "taskTitleFieldHint": "e.g. Write post outline",
+    "taskDescriptionFieldLabel": "Description",
+    "taskDescriptionFieldHint": "Optional",
+    "taskGoalFieldLabel": "Goal",
+    "taskNoGoalOption": "No goal",
+    "taskMilestoneFieldLabel": "Milestone",
+    "taskNoMilestoneOption": "No milestone",
+    "taskAttachToGoalTitle": "Attach task to goal",
+    "taskAttachButton": "Attach"
 }

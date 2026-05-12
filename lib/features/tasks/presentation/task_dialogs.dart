@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../models/goal.dart';
 import '../../../models/milestone.dart';
 import '../../../models/planner_task.dart';
@@ -11,7 +12,12 @@ Future<TaskDraft?> showAddTaskDialog(BuildContext context) {
   return showDialog<TaskDraft>(
     context: context,
     builder: (context) {
-      return const TaskDialog();
+      final l10n = AppLocalizations.of(context);
+
+      return TaskDialog(
+        title: l10n.taskDialogAddTitle,
+        submitLabel: l10n.commonAdd,
+      );
     },
   );
 }
@@ -23,11 +29,13 @@ Future<TaskDraft?> showEditTaskDialog(
   return showDialog<TaskDraft>(
     context: context,
     builder: (context) {
+      final l10n = AppLocalizations.of(context);
+
       return TaskDialog(
         initialTitle: task.title,
         initialDescription: task.description,
-        title: 'Edit task',
-        submitLabel: 'Save',
+        title: l10n.taskDialogEditTitle,
+        submitLabel: l10n.commonSave,
       );
     },
   );

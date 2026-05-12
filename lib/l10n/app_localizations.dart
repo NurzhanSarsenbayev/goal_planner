@@ -1075,6 +1075,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove scheduled date'**
   String get taskActionRemoveScheduledDate;
+
+  /// No description provided for @taskDialogAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add task'**
+  String get taskDialogAddTitle;
+
+  /// No description provided for @taskDialogEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit task'**
+  String get taskDialogEditTitle;
+
+  /// No description provided for @taskDialogAddForTodayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add task for today'**
+  String get taskDialogAddForTodayTitle;
+
+  /// No description provided for @taskTitleFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get taskTitleFieldLabel;
+
+  /// No description provided for @taskTitleFieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Write post outline'**
+  String get taskTitleFieldHint;
+
+  /// No description provided for @taskDescriptionFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get taskDescriptionFieldLabel;
+
+  /// No description provided for @taskDescriptionFieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get taskDescriptionFieldHint;
+
+  /// No description provided for @taskGoalFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal'**
+  String get taskGoalFieldLabel;
+
+  /// No description provided for @taskNoGoalOption.
+  ///
+  /// In en, this message translates to:
+  /// **'No goal'**
+  String get taskNoGoalOption;
+
+  /// No description provided for @taskMilestoneFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Milestone'**
+  String get taskMilestoneFieldLabel;
+
+  /// No description provided for @taskNoMilestoneOption.
+  ///
+  /// In en, this message translates to:
+  /// **'No milestone'**
+  String get taskNoMilestoneOption;
+
+  /// No description provided for @taskAttachToGoalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach task to goal'**
+  String get taskAttachToGoalTitle;
+
+  /// No description provided for @taskAttachButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach'**
+  String get taskAttachButton;
 }
 
 class _AppLocalizationsDelegate

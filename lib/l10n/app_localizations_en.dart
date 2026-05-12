@@ -564,4 +564,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get taskActionRemoveScheduledDate => 'Remove scheduled date';
+
+  @override
+  String get taskDialogAddTitle => 'Add task';
+
+  @override
+  String get taskDialogEditTitle => 'Edit task';
+
+  @override
+  String get taskDialogAddForTodayTitle => 'Add task for today';
+
+  @override
+  String get taskTitleFieldLabel => 'Title';
+
+  @override
+  String get taskTitleFieldHint => 'e.g. Write post outline';
+
+  @override
+  String get taskDescriptionFieldLabel => 'Description';
+
+  @override
+  String get taskDescriptionFieldHint => 'Optional';
+
+  @override
+  String get taskGoalFieldLabel => 'Goal';
+
+  @override
+  String get taskNoGoalOption => 'No goal';
+
+  @override
+  String get taskMilestoneFieldLabel => 'Milestone';
+
+  @override
+  String get taskNoMilestoneOption => 'No milestone';
+
+  @override
+  String get taskAttachToGoalTitle => 'Attach task to goal';
+
+  @override
+  String get taskAttachButton => 'Attach';
 }

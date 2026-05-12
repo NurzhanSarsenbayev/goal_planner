@@ -567,4 +567,43 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get taskActionRemoveScheduledDate => 'Убрать дату';
+
+  @override
+  String get taskDialogAddTitle => 'Добавить задачу';
+
+  @override
+  String get taskDialogEditTitle => 'Изменить задачу';
+
+  @override
+  String get taskDialogAddForTodayTitle => 'Добавить задачу на сегодня';
+
+  @override
+  String get taskTitleFieldLabel => 'Название';
+
+  @override
+  String get taskTitleFieldHint => 'например, набросать план статьи';
+
+  @override
+  String get taskDescriptionFieldLabel => 'Описание';
+
+  @override
+  String get taskDescriptionFieldHint => 'Необязательно';
+
+  @override
+  String get taskGoalFieldLabel => 'Цель';
+
+  @override
+  String get taskNoGoalOption => 'Без цели';
+
+  @override
+  String get taskMilestoneFieldLabel => 'Этап';
+
+  @override
+  String get taskNoMilestoneOption => 'Без этапа';
+
+  @override
+  String get taskAttachToGoalTitle => 'Привязать задачу к цели';
+
+  @override
+  String get taskAttachButton => 'Привязать';
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/milestone.dart';
 
@@ -64,9 +65,10 @@ class _AddTaskWithPlacementDialogState
   @override
   Widget build(BuildContext context) {
     final availableMilestones = _availableMilestones;
+    final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
-      title: const Text('Add task for today'),
+      title: Text(l10n.taskDialogAddForTodayTitle),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -74,9 +76,9 @@ class _AddTaskWithPlacementDialogState
             TextField(
               controller: _titleController,
               autofocus: true,
-              decoration: const InputDecoration(
-                labelText: 'Title',
-                hintText: 'e.g. Buy milk',
+              decoration: InputDecoration(
+                labelText: l10n.taskTitleFieldLabel,
+                hintText: l10n.taskTitleFieldHint,
               ),
               textInputAction: TextInputAction.next,
               onSubmitted: (_) => _submit(),
@@ -84,9 +86,9 @@ class _AddTaskWithPlacementDialogState
             const SizedBox(height: 12),
             TextField(
               controller: _descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Description',
-                hintText: 'Optional',
+              decoration: InputDecoration(
+                labelText: l10n.taskDescriptionFieldLabel,
+                hintText: l10n.taskDescriptionFieldHint,
               ),
               minLines: 1,
               maxLines: 3,
@@ -94,11 +96,11 @@ class _AddTaskWithPlacementDialogState
             const SizedBox(height: 12),
             DropdownButtonFormField<String?>(
               initialValue: _selectedGoalId,
-              decoration: const InputDecoration(labelText: 'Goal'),
+              decoration: InputDecoration(labelText: l10n.taskGoalFieldLabel),
               items: [
-                const DropdownMenuItem<String?>(
+                DropdownMenuItem<String?>(
                   value: null,
-                  child: Text('No goal'),
+                  child: Text(l10n.taskNoGoalOption),
                 ),
                 ...widget.goals.map(
                   (goal) => DropdownMenuItem<String?>(
@@ -117,11 +119,13 @@ class _AddTaskWithPlacementDialogState
             const SizedBox(height: 12),
             DropdownButtonFormField<String?>(
               initialValue: _selectedMilestoneId,
-              decoration: const InputDecoration(labelText: 'Milestone'),
+              decoration: InputDecoration(
+                labelText: l10n.taskMilestoneFieldLabel,
+              ),
               items: [
-                const DropdownMenuItem<String?>(
+                DropdownMenuItem<String?>(
                   value: null,
-                  child: Text('No milestone'),
+                  child: Text(l10n.taskNoMilestoneOption),
                 ),
                 ...availableMilestones.map(
                   (milestone) => DropdownMenuItem<String?>(
@@ -146,9 +150,9 @@ class _AddTaskWithPlacementDialogState
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: Text(l10n.commonCancel),
         ),
-        FilledButton(onPressed: _submit, child: const Text('Add')),
+        FilledButton(onPressed: _submit, child: Text(l10n.commonAdd)),
       ],
     );
   }

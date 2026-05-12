@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class TaskDialog extends StatefulWidget {
   const TaskDialog({
     super.key,
     this.initialTitle = '',
     this.initialDescription = '',
-    this.title = 'Add task',
-    this.submitLabel = 'Add',
+    required this.title,
+    required this.submitLabel,
   });
 
   final String initialTitle;
@@ -54,6 +56,8 @@ class _TaskDialogState extends State<TaskDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return AlertDialog(
       title: Text(widget.title),
       content: Column(
@@ -62,9 +66,9 @@ class _TaskDialogState extends State<TaskDialog> {
           TextField(
             controller: _titleController,
             autofocus: true,
-            decoration: const InputDecoration(
-              labelText: 'Title',
-              hintText: 'e.g. Write post outline',
+            decoration: InputDecoration(
+              labelText: l10n.taskTitleFieldLabel,
+              hintText: l10n.taskTitleFieldHint,
             ),
             textInputAction: TextInputAction.next,
             onSubmitted: (_) => _submit(),
@@ -72,9 +76,9 @@ class _TaskDialogState extends State<TaskDialog> {
           const SizedBox(height: 12),
           TextField(
             controller: _descriptionController,
-            decoration: const InputDecoration(
-              labelText: 'Description',
-              hintText: 'Optional',
+            decoration: InputDecoration(
+              labelText: l10n.taskDescriptionFieldLabel,
+              hintText: l10n.taskDescriptionFieldHint,
             ),
             minLines: 1,
             maxLines: 3,
@@ -86,7 +90,7 @@ class _TaskDialogState extends State<TaskDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: Text(l10n.commonCancel),
         ),
         FilledButton(onPressed: _submit, child: Text(widget.submitLabel)),
       ],
