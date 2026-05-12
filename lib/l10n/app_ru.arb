@@ -529,5 +529,26 @@
     "moreAllTasksSubtitle": "Все задачи в одном месте.",
     "moreReportsSubtitle": "Прогресс по задачам, привычкам и целям.",
     "moreRecurringTasksTitle": "Повторяющиеся задачи",
-    "moreRecurringTasksSubtitle": "Управление задачами по дням недели и месяцам."
+    "moreRecurringTasksSubtitle": "Управление задачами по дням недели и месяцам.",
+
+    "goalsEmptyDescription": "Целей пока нет. Создайте первую долгосрочную цель.",
+    "goalDialogAddTitle": "Добавить цель",
+    "goalDialogEditTitle": "Изменить цель",
+    "goalTitleFieldLabel": "Название",
+    "goalTitleFieldHint": "например, запустить личный блог",
+    "goalDescriptionFieldLabel": "Описание",
+    "goalDescriptionFieldHint": "Необязательно",
+    "goalCardNoTasksYet": "Задач пока нет",
+    "goalCardTasksCompleted": "{completedCount} / {totalCount} задач выполнено",
+    "@goalCardTasksCompleted": {
+      "description": "Goal card task completion progress text",
+      "placeholders": {
+        "completedCount": {
+          "type": "int"
+        },
+        "totalCount": {
+          "type": "int"
+        }
+      }
+    }
 }

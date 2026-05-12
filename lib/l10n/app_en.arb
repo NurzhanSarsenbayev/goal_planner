@@ -529,5 +529,26 @@
     "moreAllTasksSubtitle": "View all tasks in one place.",
     "moreReportsSubtitle": "Review completed work and goal progress.",
     "moreRecurringTasksTitle": "Recurring tasks",
-    "moreRecurringTasksSubtitle": "Manage repeated weekday and monthly tasks."
+    "moreRecurringTasksSubtitle": "Manage repeated weekday and monthly tasks.",
+
+    "goalsEmptyDescription": "No goals yet. Create your first long-term goal.",
+    "goalDialogAddTitle": "Add goal",
+    "goalDialogEditTitle": "Edit goal",
+    "goalTitleFieldLabel": "Title",
+    "goalTitleFieldHint": "e.g. Build personal blog",
+    "goalDescriptionFieldLabel": "Description",
+    "goalDescriptionFieldHint": "Optional",
+    "goalCardNoTasksYet": "No tasks yet",
+    "goalCardTasksCompleted": "{completedCount} / {totalCount} tasks completed",
+    "@goalCardTasksCompleted": {
+      "description": "Goal card task completion progress text",
+      "placeholders": {
+        "completedCount": {
+          "type": "int"
+        },
+        "totalCount": {
+          "type": "int"
+        }
+      }
+    }
 }

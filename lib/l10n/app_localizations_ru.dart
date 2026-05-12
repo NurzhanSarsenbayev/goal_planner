@@ -622,4 +622,34 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get moreRecurringTasksSubtitle =>
       'Управление задачами по дням недели и месяцам.';
+
+  @override
+  String get goalsEmptyDescription =>
+      'Целей пока нет. Создайте первую долгосрочную цель.';
+
+  @override
+  String get goalDialogAddTitle => 'Добавить цель';
+
+  @override
+  String get goalDialogEditTitle => 'Изменить цель';
+
+  @override
+  String get goalTitleFieldLabel => 'Название';
+
+  @override
+  String get goalTitleFieldHint => 'например, запустить личный блог';
+
+  @override
+  String get goalDescriptionFieldLabel => 'Описание';
+
+  @override
+  String get goalDescriptionFieldHint => 'Необязательно';
+
+  @override
+  String get goalCardNoTasksYet => 'Задач пока нет';
+
+  @override
+  String goalCardTasksCompleted(int completedCount, int totalCount) {
+    return '$completedCount / $totalCount задач выполнено';
+  }
 }

@@ -619,4 +619,34 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get moreRecurringTasksSubtitle =>
       'Manage repeated weekday and monthly tasks.';
+
+  @override
+  String get goalsEmptyDescription =>
+      'No goals yet. Create your first long-term goal.';
+
+  @override
+  String get goalDialogAddTitle => 'Add goal';
+
+  @override
+  String get goalDialogEditTitle => 'Edit goal';
+
+  @override
+  String get goalTitleFieldLabel => 'Title';
+
+  @override
+  String get goalTitleFieldHint => 'e.g. Build personal blog';
+
+  @override
+  String get goalDescriptionFieldLabel => 'Description';
+
+  @override
+  String get goalDescriptionFieldHint => 'Optional';
+
+  @override
+  String get goalCardNoTasksYet => 'No tasks yet';
+
+  @override
+  String goalCardTasksCompleted(int completedCount, int totalCount) {
+    return '$completedCount / $totalCount tasks completed';
+  }
 }

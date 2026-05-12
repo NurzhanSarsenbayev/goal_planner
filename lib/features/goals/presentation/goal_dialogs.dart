@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../models/goal.dart';
 import 'widgets/delete_goal_dialog.dart';
 import 'widgets/goal_dialog.dart';
@@ -8,7 +9,12 @@ Future<GoalDraft?> showAddGoalDialog(BuildContext context) {
   return showDialog<GoalDraft>(
     context: context,
     builder: (context) {
-      return const GoalDialog();
+      final l10n = AppLocalizations.of(context);
+
+      return GoalDialog(
+        title: l10n.goalDialogAddTitle,
+        submitLabel: l10n.commonAdd,
+      );
     },
   );
 }
@@ -20,11 +26,13 @@ Future<GoalDraft?> showEditGoalDialog(
   return showDialog<GoalDraft>(
     context: context,
     builder: (context) {
+      final l10n = AppLocalizations.of(context);
+
       return GoalDialog(
         initialTitle: goal.title,
         initialDescription: goal.description,
-        title: 'Edit goal',
-        submitLabel: 'Save',
+        title: l10n.goalDialogEditTitle,
+        submitLabel: l10n.commonSave,
       );
     },
   );

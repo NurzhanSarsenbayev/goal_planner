@@ -1183,6 +1183,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Manage repeated weekday and monthly tasks.'**
   String get moreRecurringTasksSubtitle;
+
+  /// No description provided for @goalsEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No goals yet. Create your first long-term goal.'**
+  String get goalsEmptyDescription;
+
+  /// No description provided for @goalDialogAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add goal'**
+  String get goalDialogAddTitle;
+
+  /// No description provided for @goalDialogEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit goal'**
+  String get goalDialogEditTitle;
+
+  /// No description provided for @goalTitleFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get goalTitleFieldLabel;
+
+  /// No description provided for @goalTitleFieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Build personal blog'**
+  String get goalTitleFieldHint;
+
+  /// No description provided for @goalDescriptionFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get goalDescriptionFieldLabel;
+
+  /// No description provided for @goalDescriptionFieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get goalDescriptionFieldHint;
+
+  /// No description provided for @goalCardNoTasksYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks yet'**
+  String get goalCardNoTasksYet;
+
+  /// Goal card task completion progress text
+  ///
+  /// In en, this message translates to:
+  /// **'{completedCount} / {totalCount} tasks completed'**
+  String goalCardTasksCompleted(int completedCount, int totalCount);
 }
 
 class _AppLocalizationsDelegate

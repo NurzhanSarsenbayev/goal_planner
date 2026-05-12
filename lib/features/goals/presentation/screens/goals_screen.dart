@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
 import '../../../../shared/presentation/widgets/placeholder_screen.dart';
@@ -25,12 +26,14 @@ class GoalsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     if (goals.isEmpty) {
       return Stack(
         children: [
-          const PlaceholderScreen(
-            title: 'Goals',
-            description: 'No goals yet. Create your first long-term goal.',
+          PlaceholderScreen(
+            title: l10n.goalsTab,
+            description: l10n.goalsEmptyDescription,
             icon: Icons.flag,
           ),
           Positioned(
@@ -39,7 +42,7 @@ class GoalsScreen extends StatelessWidget {
             child: FloatingActionButton.extended(
               onPressed: onAddGoal,
               icon: const Icon(Icons.add),
-              label: const Text('Add goal'),
+              label: Text(l10n.goalDialogAddTitle),
             ),
           ),
         ],
@@ -78,7 +81,7 @@ class GoalsScreen extends StatelessWidget {
           child: FloatingActionButton.extended(
             onPressed: onAddGoal,
             icon: const Icon(Icons.add),
-            label: const Text('Add goal'),
+            label: Text(l10n.goalDialogAddTitle),
           ),
         ),
       ],
