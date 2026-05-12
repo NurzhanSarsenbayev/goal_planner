@@ -985,6 +985,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Complete today'**
   String get taskCompletionCompleteTodayButton;
+
+  /// No description provided for @allTasksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All tasks'**
+  String get allTasksTitle;
+
+  /// No description provided for @allTasksEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks created yet.'**
+  String get allTasksEmptyDescription;
+
+  /// No description provided for @allTasksTasksSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks'**
+  String get allTasksTasksSection;
+
+  /// No description provided for @allTasksRecurringRulesSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring rules'**
+  String get allTasksRecurringRulesSection;
+
+  /// Task card goal label
+  ///
+  /// In en, this message translates to:
+  /// **'Goal: {goalTitle}'**
+  String taskCardGoalLabel(String goalTitle);
+
+  /// No description provided for @taskCardScheduledToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled: Today'**
+  String get taskCardScheduledToday;
+
+  /// Task card scheduled date label
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled: {date}'**
+  String taskCardScheduledDate(String date);
+
+  /// No description provided for @taskCardPlanTodayButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan today'**
+  String get taskCardPlanTodayButton;
+
+  /// No description provided for @taskActionRemoveFromToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from Today'**
+  String get taskActionRemoveFromToday;
+
+  /// No description provided for @taskActionAttachToGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach to goal'**
+  String get taskActionAttachToGoal;
+
+  /// No description provided for @taskActionDetachFromGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Detach from goal'**
+  String get taskActionDetachFromGoal;
+
+  /// No description provided for @taskActionMoveToMilestone.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to milestone'**
+  String get taskActionMoveToMilestone;
+
+  /// No description provided for @taskActionMoveToDirectGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to Direct tasks'**
+  String get taskActionMoveToDirectGoal;
+
+  /// No description provided for @taskActionScheduleDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule date'**
+  String get taskActionScheduleDate;
+
+  /// No description provided for @taskActionRemoveScheduledDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove scheduled date'**
+  String get taskActionRemoveScheduledDate;
 }
 
 class _AppLocalizationsDelegate

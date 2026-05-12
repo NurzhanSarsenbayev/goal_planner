@@ -518,4 +518,53 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get taskCompletionCompleteTodayButton => 'Выполнить сегодня';
+
+  @override
+  String get allTasksTitle => 'Все задачи';
+
+  @override
+  String get allTasksEmptyDescription => 'Задач пока нет.';
+
+  @override
+  String get allTasksTasksSection => 'Задачи';
+
+  @override
+  String get allTasksRecurringRulesSection => 'Повторяющиеся правила';
+
+  @override
+  String taskCardGoalLabel(String goalTitle) {
+    return 'Цель: $goalTitle';
+  }
+
+  @override
+  String get taskCardScheduledToday => 'Запланировано: сегодня';
+
+  @override
+  String taskCardScheduledDate(String date) {
+    return 'Запланировано: $date';
+  }
+
+  @override
+  String get taskCardPlanTodayButton => 'Запланировать на сегодня';
+
+  @override
+  String get taskActionRemoveFromToday => 'Убрать из Сегодня';
+
+  @override
+  String get taskActionAttachToGoal => 'Привязать к цели';
+
+  @override
+  String get taskActionDetachFromGoal => 'Отвязать от цели';
+
+  @override
+  String get taskActionMoveToMilestone => 'Переместить в этап';
+
+  @override
+  String get taskActionMoveToDirectGoal => 'Переместить в задачи цели';
+
+  @override
+  String get taskActionScheduleDate => 'Запланировать дату';
+
+  @override
+  String get taskActionRemoveScheduledDate => 'Убрать дату';
 }

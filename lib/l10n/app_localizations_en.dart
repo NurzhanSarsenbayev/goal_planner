@@ -515,4 +515,53 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get taskCompletionCompleteTodayButton => 'Complete today';
+
+  @override
+  String get allTasksTitle => 'All tasks';
+
+  @override
+  String get allTasksEmptyDescription => 'No tasks created yet.';
+
+  @override
+  String get allTasksTasksSection => 'Tasks';
+
+  @override
+  String get allTasksRecurringRulesSection => 'Recurring rules';
+
+  @override
+  String taskCardGoalLabel(String goalTitle) {
+    return 'Goal: $goalTitle';
+  }
+
+  @override
+  String get taskCardScheduledToday => 'Scheduled: Today';
+
+  @override
+  String taskCardScheduledDate(String date) {
+    return 'Scheduled: $date';
+  }
+
+  @override
+  String get taskCardPlanTodayButton => 'Plan today';
+
+  @override
+  String get taskActionRemoveFromToday => 'Remove from Today';
+
+  @override
+  String get taskActionAttachToGoal => 'Attach to goal';
+
+  @override
+  String get taskActionDetachFromGoal => 'Detach from goal';
+
+  @override
+  String get taskActionMoveToMilestone => 'Move to milestone';
+
+  @override
+  String get taskActionMoveToDirectGoal => 'Move to Direct tasks';
+
+  @override
+  String get taskActionScheduleDate => 'Schedule date';
+
+  @override
+  String get taskActionRemoveScheduledDate => 'Remove scheduled date';
 }

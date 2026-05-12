@@ -475,5 +475,39 @@
         }
       }
     },
-    "taskCompletionCompleteTodayButton": "Complete today"
+    "taskCompletionCompleteTodayButton": "Complete today",
+
+    "allTasksTitle": "All tasks",
+    "allTasksEmptyDescription": "No tasks created yet.",
+    "allTasksTasksSection": "Tasks",
+    "allTasksRecurringRulesSection": "Recurring rules",
+
+    "taskCardGoalLabel": "Goal: {goalTitle}",
+    "@taskCardGoalLabel": {
+      "description": "Task card goal label",
+      "placeholders": {
+        "goalTitle": {
+          "type": "String"
+        }
+      }
+    },
+    "taskCardScheduledToday": "Scheduled: Today",
+    "taskCardScheduledDate": "Scheduled: {date}",
+    "@taskCardScheduledDate": {
+      "description": "Task card scheduled date label",
+      "placeholders": {
+        "date": {
+          "type": "String"
+        }
+      }
+    },
+    "taskCardPlanTodayButton": "Plan today",
+
+    "taskActionRemoveFromToday": "Remove from Today",
+    "taskActionAttachToGoal": "Attach to goal",
+    "taskActionDetachFromGoal": "Detach from goal",
+    "taskActionMoveToMilestone": "Move to milestone",
+    "taskActionMoveToDirectGoal": "Move to Direct tasks",
+    "taskActionScheduleDate": "Schedule date",
+    "taskActionRemoveScheduledDate": "Remove scheduled date"
 }

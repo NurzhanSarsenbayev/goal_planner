@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../task_dialogs.dart' as task_dialogs;
 import '../../../tasks/presentation/task_date_dialogs.dart';
 import '../../../../models/goal.dart';
@@ -113,6 +114,8 @@ class AllTasksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     final view = _viewBuilder.build(
       goals: goals,
       tasks: tasks,
@@ -121,22 +124,25 @@ class AllTasksScreen extends StatelessWidget {
 
     if (view.isEmpty) {
       return Scaffold(
-        appBar: AppBar(title: const Text('All tasks')),
-        body: const PlaceholderScreen(
-          title: 'All tasks',
-          description: 'No tasks created yet.',
+        appBar: AppBar(title: Text(l10n.allTasksTitle)),
+        body: PlaceholderScreen(
+          title: l10n.allTasksTitle,
+          description: l10n.allTasksEmptyDescription,
           icon: Icons.task_alt,
         ),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('All tasks')),
+      appBar: AppBar(title: Text(l10n.allTasksTitle)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           if (view.hasVisibleTasks) ...[
-            Text('Tasks', style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              l10n.allTasksTasksSection,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 8),
             for (final task in view.visibleTasks) ...[
               _buildTaskCard(context, view, task),
@@ -146,7 +152,7 @@ class AllTasksScreen extends StatelessWidget {
           if (view.hasRecurringRules) ...[
             if (view.hasVisibleTasks) const SizedBox(height: 24),
             Text(
-              'Recurring rules',
+              l10n.allTasksRecurringRulesSection,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),

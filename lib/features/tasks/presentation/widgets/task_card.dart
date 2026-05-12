@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
 import '../../../../shared/planner_dates.dart';
@@ -38,6 +39,8 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     final shouldShowScheduleButton =
         onScheduleForToday != null && !task.isScheduledForToday;
     final shouldShowScheduleDate = onScheduleDate != null;
@@ -64,7 +67,7 @@ class TaskCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(
-                  'Goal: ${goal!.title}',
+                  l10n.taskCardGoalLabel(goal!.title),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
@@ -72,7 +75,7 @@ class TaskCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(
-                  _scheduledDateLabel(task.scheduledDate!),
+                  _scheduledDateLabel(l10n, task.scheduledDate!),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
@@ -84,7 +87,7 @@ class TaskCard extends StatelessWidget {
                   child: TextButton.icon(
                     onPressed: onScheduleForToday,
                     icon: const Icon(Icons.today),
-                    label: const Text('Plan today'),
+                    label: Text(l10n.taskCardPlanTodayButton),
                   ),
                 ),
               ),
@@ -115,45 +118,48 @@ class TaskCard extends StatelessWidget {
           },
           itemBuilder: (context) {
             return [
-              const PopupMenuItem(value: _TaskAction.edit, child: Text('Edit')),
+              PopupMenuItem(
+                value: _TaskAction.edit,
+                child: Text(l10n.commonEdit),
+              ),
               if (shouldShowRemoveFromToday)
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: _TaskAction.removeFromToday,
-                  child: Text('Remove from Today'),
+                  child: Text(l10n.taskActionRemoveFromToday),
                 ),
               if (shouldShowAttachToGoal)
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: _TaskAction.attachToGoal,
-                  child: Text('Attach to goal'),
+                  child: Text(l10n.taskActionAttachToGoal),
                 ),
               if (shouldShowDetachFromGoal)
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: _TaskAction.detachFromGoal,
-                  child: Text('Detach from goal'),
+                  child: Text(l10n.taskActionDetachFromGoal),
                 ),
               if (shouldShowMoveToMilestone)
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: _TaskAction.moveToMilestone,
-                  child: Text('Move to milestone'),
+                  child: Text(l10n.taskActionMoveToMilestone),
                 ),
               if (shouldShowMoveToDirectGoal)
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: _TaskAction.moveToDirectGoal,
-                  child: Text('Move to Direct tasks'),
+                  child: Text(l10n.taskActionMoveToDirectGoal),
                 ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: _TaskAction.delete,
-                child: Text('Delete'),
+                child: Text(l10n.commonDelete),
               ),
               if (shouldShowScheduleDate)
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: _TaskAction.scheduleDate,
-                  child: Text('Schedule date'),
+                  child: Text(l10n.taskActionScheduleDate),
                 ),
               if (shouldShowUnschedule)
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: _TaskAction.unschedule,
-                  child: Text('Remove scheduled date'),
+                  child: Text(l10n.taskActionRemoveScheduledDate),
                 ),
             ];
           },
@@ -175,12 +181,12 @@ class TaskCard extends StatelessWidget {
     );
   }
 
-  String _scheduledDateLabel(DateTime date) {
+  String _scheduledDateLabel(AppLocalizations l10n, DateTime date) {
     if (task.isScheduledForToday) {
-      return 'Scheduled: Today';
+      return l10n.taskCardScheduledToday;
     }
 
-    return 'Scheduled: ${formatPlannerDate(date)}';
+    return l10n.taskCardScheduledDate(formatPlannerDate(date));
   }
 }
 

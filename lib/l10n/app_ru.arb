@@ -475,5 +475,39 @@
         }
       }
     },
-    "taskCompletionCompleteTodayButton": "Выполнить сегодня"
+    "taskCompletionCompleteTodayButton": "Выполнить сегодня",
+
+    "allTasksTitle": "Все задачи",
+    "allTasksEmptyDescription": "Задач пока нет.",
+    "allTasksTasksSection": "Задачи",
+    "allTasksRecurringRulesSection": "Повторяющиеся правила",
+
+    "taskCardGoalLabel": "Цель: {goalTitle}",
+    "@taskCardGoalLabel": {
+      "description": "Task card goal label",
+      "placeholders": {
+        "goalTitle": {
+          "type": "String"
+        }
+      }
+    },
+    "taskCardScheduledToday": "Запланировано: сегодня",
+    "taskCardScheduledDate": "Запланировано: {date}",
+    "@taskCardScheduledDate": {
+      "description": "Task card scheduled date label",
+      "placeholders": {
+        "date": {
+          "type": "String"
+        }
+      }
+    },
+    "taskCardPlanTodayButton": "Запланировать на сегодня",
+
+    "taskActionRemoveFromToday": "Убрать из Сегодня",
+    "taskActionAttachToGoal": "Привязать к цели",
+    "taskActionDetachFromGoal": "Отвязать от цели",
+    "taskActionMoveToMilestone": "Переместить в этап",
+    "taskActionMoveToDirectGoal": "Переместить в задачи цели",
+    "taskActionScheduleDate": "Запланировать дату",
+    "taskActionRemoveScheduledDate": "Убрать дату"
 }
