@@ -13,24 +13,3 @@ String formatPlannerDate(DateTime date) {
 
   return '$day.$month.$year';
 }
-
-String relativePlannerDateTitle(DateTime date) {
-  final normalizedDate = dateOnly(date);
-  final today = todayDate();
-  final tomorrow = today.add(const Duration(days: 1));
-  final yesterday = today.subtract(const Duration(days: 1));
-
-  if (normalizedDate == today) {
-    return 'Today';
-  }
-
-  if (normalizedDate == tomorrow) {
-    return 'Tomorrow';
-  }
-
-  if (normalizedDate == yesterday) {
-    return 'Yesterday';
-  }
-
-  return formatPlannerDate(normalizedDate);
-}
