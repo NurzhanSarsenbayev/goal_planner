@@ -603,4 +603,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get taskAttachButton => 'Attach';
+
+  @override
+  String get moreToolsSection => 'Tools';
+
+  @override
+  String get moreAllTasksSubtitle => 'View all tasks in one place.';
+
+  @override
+  String get moreReportsSubtitle => 'Review completed work and goal progress.';
+
+  @override
+  String get moreRecurringTasksTitle => 'Recurring tasks';
+
+  @override
+  String get moreRecurringTasksSubtitle =>
+      'Manage repeated weekday and monthly tasks.';
 }

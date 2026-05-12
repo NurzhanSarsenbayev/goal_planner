@@ -606,4 +606,20 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get taskAttachButton => 'Привязать';
+
+  @override
+  String get moreToolsSection => 'Инструменты';
+
+  @override
+  String get moreAllTasksSubtitle => 'Все задачи в одном месте.';
+
+  @override
+  String get moreReportsSubtitle => 'Прогресс по задачам, привычкам и целям.';
+
+  @override
+  String get moreRecurringTasksTitle => 'Повторяющиеся задачи';
+
+  @override
+  String get moreRecurringTasksSubtitle =>
+      'Управление задачами по дням недели и месяцам.';
 }

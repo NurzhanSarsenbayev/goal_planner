@@ -523,5 +523,11 @@
     "taskMilestoneFieldLabel": "Этап",
     "taskNoMilestoneOption": "Без этапа",
     "taskAttachToGoalTitle": "Привязать задачу к цели",
-    "taskAttachButton": "Привязать"
+    "taskAttachButton": "Привязать",
+
+    "moreToolsSection": "Инструменты",
+    "moreAllTasksSubtitle": "Все задачи в одном месте.",
+    "moreReportsSubtitle": "Прогресс по задачам, привычкам и целям.",
+    "moreRecurringTasksTitle": "Повторяющиеся задачи",
+    "moreRecurringTasksSubtitle": "Управление задачами по дням недели и месяцам."
 }

@@ -523,5 +523,11 @@
     "taskMilestoneFieldLabel": "Milestone",
     "taskNoMilestoneOption": "No milestone",
     "taskAttachToGoalTitle": "Attach task to goal",
-    "taskAttachButton": "Attach"
+    "taskAttachButton": "Attach",
+
+    "moreToolsSection": "Tools",
+    "moreAllTasksSubtitle": "View all tasks in one place.",
+    "moreReportsSubtitle": "Review completed work and goal progress.",
+    "moreRecurringTasksTitle": "Recurring tasks",
+    "moreRecurringTasksSubtitle": "Manage repeated weekday and monthly tasks."
 }

@@ -1153,6 +1153,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Attach'**
   String get taskAttachButton;
+
+  /// No description provided for @moreToolsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Tools'**
+  String get moreToolsSection;
+
+  /// No description provided for @moreAllTasksSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'View all tasks in one place.'**
+  String get moreAllTasksSubtitle;
+
+  /// No description provided for @moreReportsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review completed work and goal progress.'**
+  String get moreReportsSubtitle;
+
+  /// No description provided for @moreRecurringTasksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring tasks'**
+  String get moreRecurringTasksTitle;
+
+  /// No description provided for @moreRecurringTasksSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage repeated weekday and monthly tasks.'**
+  String get moreRecurringTasksSubtitle;
 }
 
 class _AppLocalizationsDelegate
