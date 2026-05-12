@@ -133,6 +133,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'More'**
   String get moreTab;
+
+  /// Today add action sheet title for one-time task
+  ///
+  /// In en, this message translates to:
+  /// **'One-time task'**
+  String get todayOneTimeTaskTitle;
+
+  /// Today add action sheet subtitle for one-time task
+  ///
+  /// In en, this message translates to:
+  /// **'Create a task for today'**
+  String get todayOneTimeTaskSubtitle;
+
+  /// Today add action sheet title for recurring task
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring task'**
+  String get todayRecurringTaskTitle;
+
+  /// Today add action sheet subtitle for recurring task
+  ///
+  /// In en, this message translates to:
+  /// **'Create a task that repeats'**
+  String get todayRecurringTaskSubtitle;
+
+  /// Today floating action button label
+  ///
+  /// In en, this message translates to:
+  /// **'Add task'**
+  String get todayAddTaskButton;
+
+  /// Today overdue task section title
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get todayOverdueSection;
+
+  /// Today pending tasks section title
+  ///
+  /// In en, this message translates to:
+  /// **'To do today'**
+  String get todayTodoSection;
+
+  /// Today completed tasks section title
+  ///
+  /// In en, this message translates to:
+  /// **'Done today'**
+  String get todayDoneSection;
+
+  /// Today empty text for pending tasks section
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks left for today.'**
+  String get todayNoTasksLeft;
+
+  /// Today summary metric label for pending tasks
+  ///
+  /// In en, this message translates to:
+  /// **'To do'**
+  String get todaySummaryTodo;
+
+  /// Today summary metric label for overdue tasks
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get todaySummaryOverdue;
+
+  /// Today summary metric label for completed tasks
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get todaySummaryDone;
+
+  /// Today summary message when no tasks exist
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing planned yet. Add one small task to start the day.'**
+  String get todaySummaryNothingPlanned;
+
+  /// Today summary message when all planned tasks are done
+  ///
+  /// In en, this message translates to:
+  /// **'All planned tasks are done for today.'**
+  String get todaySummaryAllDone;
+
+  /// Today summary message when there are overdue tasks
+  ///
+  /// In en, this message translates to:
+  /// **'Handle overdue tasks first, then continue with today.'**
+  String get todaySummaryHandleOverdue;
+
+  /// Today summary message when there are pending tasks
+  ///
+  /// In en, this message translates to:
+  /// **'Focus on today’s planned tasks.'**
+  String get todaySummaryFocus;
+
+  /// Today habit summary card title
+  ///
+  /// In en, this message translates to:
+  /// **'Habits today'**
+  String get todayHabitsTitle;
+
+  /// Today habit summary when no actionable habits remain
+  ///
+  /// In en, this message translates to:
+  /// **'Done: {doneCount}'**
+  String todayHabitsDoneOnly(int doneCount);
+
+  /// Today habit summary progress text
+  ///
+  /// In en, this message translates to:
+  /// **'{doneCount}/{actionableCount} done'**
+  String todayHabitsDoneProgress(int doneCount, int actionableCount);
+
+  /// Today habit missed count
+  ///
+  /// In en, this message translates to:
+  /// **'Missed: {count}'**
+  String todayHabitsMissedCount(int count);
+
+  /// Today habit skipped count
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped: {count}'**
+  String todayHabitsSkippedCount(int count);
+
+  /// Today habit partial count
+  ///
+  /// In en, this message translates to:
+  /// **'Partial: {count}'**
+  String todayHabitsPartialCount(int count);
+
+  /// Today habit not marked count
+  ///
+  /// In en, this message translates to:
+  /// **'Not marked: {count}'**
+  String todayHabitsNotMarkedCount(int count);
+
+  /// Today habit summary when all habits are marked
+  ///
+  /// In en, this message translates to:
+  /// **'All habits are marked for today.'**
+  String get todayHabitsAllMarked;
+
+  /// Today empty panel title
+  ///
+  /// In en, this message translates to:
+  /// **'Plan today lightly'**
+  String get todayEmptyTitle;
+
+  /// Today empty panel description
+  ///
+  /// In en, this message translates to:
+  /// **'Add one task that would make today feel a little more under control.'**
+  String get todayEmptyDescription;
+
+  /// Today empty panel button label
+  ///
+  /// In en, this message translates to:
+  /// **'Plan today'**
+  String get todayPlanTodayButton;
+
+  /// Fallback empty text for Today sections
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here.'**
+  String get todayEmptySectionFallback;
 }
 
 class _AppLocalizationsDelegate

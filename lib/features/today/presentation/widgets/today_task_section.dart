@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../models/planner_task.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class TodayTaskSection extends StatelessWidget {
   const TodayTaskSection({
@@ -21,6 +22,7 @@ class TodayTaskSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +41,7 @@ class TodayTaskSection extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         if (tasks.isEmpty)
-          _EmptySectionText(text: emptyText ?? 'Nothing here.')
+          _EmptySectionText(text: emptyText ?? l10n.todayEmptySectionFallback)
         else
           for (final task in tasks) ...[
             itemBuilder(task),

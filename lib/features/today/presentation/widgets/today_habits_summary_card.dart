@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../habits/application/habit_today_summary.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class TodayHabitsSummaryCard extends StatelessWidget {
   const TodayHabitsSummaryCard({
@@ -19,6 +20,7 @@ class TodayHabitsSummaryCard extends StatelessWidget {
     }
 
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     return Card(
       child: InkWell(
@@ -38,7 +40,7 @@ class TodayHabitsSummaryCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Habits today',
+                      l10n.todayHabitsTitle,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w800,
                       ),
@@ -52,14 +54,14 @@ class TodayHabitsSummaryCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                _primaryText(),
+                _primaryText(l10n),
                 style: Theme.of(
                   context,
                 ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 4),
               Text(
-                _detailsText(),
+                _detailsText(l10n),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: colorScheme.onSurfaceVariant,
                 ),
@@ -71,24 +73,31 @@ class TodayHabitsSummaryCard extends StatelessWidget {
     );
   }
 
-  String _primaryText() {
+  String _primaryText(AppLocalizations l10n) {
     if (summary.actionableHabitCount == 0) {
-      return '${summary.doneCount} done';
+      return l10n.todayHabitsDoneOnly(summary.doneCount);
     }
 
-    return '${summary.doneCount}/${summary.actionableHabitCount} done';
+    return l10n.todayHabitsDoneProgress(
+      summary.doneCount,
+      summary.actionableHabitCount,
+    );
   }
 
-  String _detailsText() {
+  String _detailsText(AppLocalizations l10n) {
     final parts = <String>[
-      if (summary.failedCount > 0) '${summary.failedCount} missed',
-      if (summary.skippedCount > 0) '${summary.skippedCount} skipped',
-      if (summary.incompleteCount > 0) '${summary.incompleteCount} partial',
-      if (summary.unmarkedCount > 0) '${summary.unmarkedCount} not marked',
+      if (summary.failedCount > 0)
+        l10n.todayHabitsMissedCount(summary.failedCount),
+      if (summary.skippedCount > 0)
+        l10n.todayHabitsSkippedCount(summary.skippedCount),
+      if (summary.incompleteCount > 0)
+        l10n.todayHabitsPartialCount(summary.incompleteCount),
+      if (summary.unmarkedCount > 0)
+        l10n.todayHabitsNotMarkedCount(summary.unmarkedCount),
     ];
 
     if (parts.isEmpty) {
-      return 'All habits are marked for today.';
+      return l10n.todayHabitsAllMarked;
     }
 
     return parts.join(' · ');

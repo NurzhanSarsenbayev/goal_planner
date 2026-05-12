@@ -23,5 +23,150 @@
   "moreTab": "Ещё",
   "@moreTab": {
     "description": "Bottom navigation label and app bar title for More tab"
+  },
+  "todayOneTimeTaskTitle": "Разовая задача",
+  "@todayOneTimeTaskTitle": {
+    "description": "Today add action sheet title for one-time task"
+  },
+  "todayOneTimeTaskSubtitle": "Создать задачу на сегодня",
+  "@todayOneTimeTaskSubtitle": {
+    "description": "Today add action sheet subtitle for one-time task"
+  },
+  "todayRecurringTaskTitle": "Повторяющаяся задача",
+  "@todayRecurringTaskTitle": {
+    "description": "Today add action sheet title for recurring task"
+  },
+  "todayRecurringTaskSubtitle": "Создать задачу, которая повторяется",
+  "@todayRecurringTaskSubtitle": {
+    "description": "Today add action sheet subtitle for recurring task"
+  },
+  "todayAddTaskButton": "Добавить задачу",
+  "@todayAddTaskButton": {
+    "description": "Today floating action button label"
+  },
+  "todayOverdueSection": "Просроченные задачи",
+  "@todayOverdueSection": {
+    "description": "Today overdue task section title"
+  },
+  "todayTodoSection": "На сегодня",
+  "@todayTodoSection": {
+    "description": "Today pending tasks section title"
+  },
+  "todayDoneSection": "Сделано сегодня",
+  "@todayDoneSection": {
+    "description": "Today completed tasks section title"
+  },
+  "todayNoTasksLeft": "На сегодня задач не осталось.",
+  "@todayNoTasksLeft": {
+    "description": "Today empty text for pending tasks section"
+  },
+  "todaySummaryTodo": "Сделать",
+  "@todaySummaryTodo": {
+    "description": "Today summary metric label for pending tasks"
+  },
+  "todaySummaryOverdue": "Просроченно",
+  "@todaySummaryOverdue": {
+    "description": "Today summary metric label for overdue tasks"
+  },
+  "todaySummaryDone": "Сделано",
+  "@todaySummaryDone": {
+    "description": "Today summary metric label for completed tasks"
+  },
+  "todaySummaryNothingPlanned": "Пока ничего не запланировано. Добавьте одну небольшую задачу, чтобы начать день.",
+  "@todaySummaryNothingPlanned": {
+    "description": "Today summary message when no tasks exist"
+  },
+  "todaySummaryAllDone": "Все запланированные задачи на сегодня выполнены.",
+  "@todaySummaryAllDone": {
+    "description": "Today summary message when all planned tasks are done"
+  },
+  "todaySummaryHandleOverdue": "Сначала разберите просроченные задачи, потом продолжайте сегодняшний план.",
+  "@todaySummaryHandleOverdue": {
+    "description": "Today summary message when there are overdue tasks"
+  },
+  "todaySummaryFocus": "Сфокусируйтесь на задачах, запланированных на сегодня.",
+  "@todaySummaryFocus": {
+    "description": "Today summary message when there are pending tasks"
+  },
+  "todayHabitsTitle": "Привычки",
+  "@todayHabitsTitle": {
+    "description": "Today habit summary card title"
+  },
+  "todayHabitsDoneOnly": "Сделано: {doneCount}",
+  "@todayHabitsDoneOnly": {
+    "description": "Today habit summary when no actionable habits remain",
+    "placeholders": {
+      "doneCount": {
+        "type": "int"
+      }
+    }
+  },
+  "todayHabitsDoneProgress": "Сделано: {doneCount}/{actionableCount}",
+  "@todayHabitsDoneProgress": {
+    "description": "Today habit summary progress text",
+    "placeholders": {
+      "doneCount": {
+        "type": "int"
+      },
+      "actionableCount": {
+        "type": "int"
+      }
+    }
+  },
+  "todayHabitsMissedCount": "Пропущено: {count}",
+  "@todayHabitsMissedCount": {
+    "description": "Today habit missed count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayHabitsSkippedCount": "Осознанно пропущено: {count}",
+  "@todayHabitsSkippedCount": {
+    "description": "Today habit skipped count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayHabitsPartialCount": "Частично: {count}",
+  "@todayHabitsPartialCount": {
+    "description": "Today habit partial count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayHabitsNotMarkedCount": "Не отмечено: {count}",
+  "@todayHabitsNotMarkedCount": {
+    "description": "Today habit not marked count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayHabitsAllMarked": "Все привычки на сегодня отмечены.",
+  "@todayHabitsAllMarked": {
+    "description": "Today habit summary when all habits are marked"
+  },
+  "todayEmptyTitle": "Спланируйте день спокойно",
+  "@todayEmptyTitle": {
+    "description": "Today empty panel title"
+  },
+  "todayEmptyDescription": "Добавьте одну задачу, которая поможет почувствовать, что день под контролем.",
+  "@todayEmptyDescription": {
+    "description": "Today empty panel description"
+  },
+  "todayPlanTodayButton": "Запланировать день",
+  "@todayPlanTodayButton": {
+    "description": "Today empty panel button label"
+  },
+  "todayEmptySectionFallback": "Здесь пока ничего нет.",
+  "@todayEmptySectionFallback": {
+    "description": "Fallback empty text for Today sections"
   }
 }

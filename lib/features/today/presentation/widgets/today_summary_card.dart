@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../application/today_task_view_builder.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class TodaySummaryCard extends StatelessWidget {
   const TodaySummaryCard({required this.view, super.key});
@@ -13,6 +14,8 @@ class TodaySummaryCard extends StatelessWidget {
     final todoCount = view.pendingTodayTasks.length;
     final doneCount = view.doneTodayTasks.length;
 
+    final l10n = AppLocalizations.of(context);
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(18),
@@ -20,7 +23,7 @@ class TodaySummaryCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Today',
+              l10n.todayTab,
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
@@ -28,6 +31,7 @@ class TodaySummaryCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               _summaryText(
+                l10n,
                 overdueCount: overdueCount,
                 todoCount: todoCount,
                 doneCount: doneCount,
@@ -41,21 +45,21 @@ class TodaySummaryCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: _SummaryMetric(
-                    label: 'To do',
+                    label: l10n.todaySummaryTodo,
                     value: todoCount.toString(),
                     icon: Icons.radio_button_unchecked,
                   ),
                 ),
                 Expanded(
                   child: _SummaryMetric(
-                    label: 'Overdue',
+                    label: l10n.todaySummaryOverdue,
                     value: overdueCount.toString(),
                     icon: Icons.warning_amber_outlined,
                   ),
                 ),
                 Expanded(
                   child: _SummaryMetric(
-                    label: 'Done',
+                    label: l10n.todaySummaryDone,
                     value: doneCount.toString(),
                     icon: Icons.check_circle_outline,
                   ),
@@ -68,24 +72,25 @@ class TodaySummaryCard extends StatelessWidget {
     );
   }
 
-  String _summaryText({
+  String _summaryText(
+    AppLocalizations l10n, {
     required int overdueCount,
     required int todoCount,
     required int doneCount,
   }) {
     if (overdueCount == 0 && todoCount == 0 && doneCount == 0) {
-      return 'Nothing planned yet. Add one small task to start the day.';
+      return l10n.todaySummaryNothingPlanned;
     }
 
     if (todoCount == 0 && overdueCount == 0) {
-      return 'All planned tasks are done for today.';
+      return l10n.todaySummaryAllDone;
     }
 
     if (overdueCount > 0) {
-      return 'Handle overdue tasks first, then continue with today.';
+      return l10n.todaySummaryHandleOverdue;
     }
 
-    return 'Focus on today’s planned tasks.';
+    return l10n.todaySummaryFocus;
   }
 }
 

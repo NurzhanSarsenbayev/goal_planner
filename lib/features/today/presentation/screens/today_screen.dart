@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
 import '../../../tasks/presentation/task_date_dialogs.dart';
@@ -65,6 +66,7 @@ class TodayScreen extends StatelessWidget {
   }
 
   Future<void> _showAddActionSheet(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
     final selectedAction = await showModalBottomSheet<_TodayAddAction>(
       context: context,
       builder: (context) {
@@ -74,16 +76,16 @@ class TodayScreen extends StatelessWidget {
             children: [
               ListTile(
                 leading: const Icon(Icons.check_circle_outline),
-                title: const Text('One-time task'),
-                subtitle: const Text('Create a task for today'),
+                title: Text(l10n.todayOneTimeTaskTitle),
+                subtitle: Text(l10n.todayOneTimeTaskSubtitle),
                 onTap: () {
                   Navigator.of(context).pop(_TodayAddAction.oneTimeTask);
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.repeat),
-                title: const Text('Recurring task'),
-                subtitle: const Text('Create a task that repeats'),
+                title: Text(l10n.todayRecurringTaskTitle),
+                subtitle: Text(l10n.todayRecurringTaskSubtitle),
                 onTap: () {
                   Navigator.of(context).pop(_TodayAddAction.recurringTask);
                 },
@@ -107,6 +109,7 @@ class TodayScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final view = _viewBuilder.build(goals: goals, tasks: tasks);
+    final l10n = AppLocalizations.of(context);
 
     return Stack(
       children: [
@@ -129,7 +132,7 @@ class TodayScreen extends StatelessWidget {
             else ...[
               if (view.overdueTasks.isNotEmpty) ...[
                 TodayTaskSection(
-                  title: 'Overdue',
+                  title: l10n.todayOverdueSection,
                   icon: Icons.warning_amber_outlined,
                   tasks: view.overdueTasks,
                   itemBuilder: (task) {
@@ -139,10 +142,10 @@ class TodayScreen extends StatelessWidget {
                 const SizedBox(height: 24),
               ],
               TodayTaskSection(
-                title: 'To do today',
+                title: l10n.todayTodoSection,
                 icon: Icons.radio_button_unchecked,
                 tasks: view.pendingTodayTasks,
-                emptyText: 'No tasks left for today.',
+                emptyText: l10n.todayNoTasksLeft,
                 itemBuilder: (task) {
                   return _buildTaskCard(context, view, task);
                 },
@@ -150,7 +153,7 @@ class TodayScreen extends StatelessWidget {
               if (view.doneTodayTasks.isNotEmpty) ...[
                 const SizedBox(height: 24),
                 TodayTaskSection(
-                  title: 'Done today',
+                  title: l10n.todayDoneSection,
                   icon: Icons.check_circle_outline,
                   tasks: view.doneTodayTasks,
                   itemBuilder: (task) {
@@ -169,7 +172,7 @@ class TodayScreen extends StatelessWidget {
               _showAddActionSheet(context);
             },
             icon: const Icon(Icons.add),
-            label: const Text('Add task'),
+            label: Text(l10n.todayAddTaskButton),
           ),
         ),
       ],

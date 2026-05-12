@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class TodayEmptyPanel extends StatelessWidget {
   const TodayEmptyPanel({required this.onPlanToday, super.key});
@@ -8,6 +9,7 @@ class TodayEmptyPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     return Card(
       child: Padding(
@@ -17,7 +19,7 @@ class TodayEmptyPanel extends StatelessWidget {
             Icon(Icons.today_outlined, size: 48, color: colorScheme.primary),
             const SizedBox(height: 12),
             Text(
-              'Plan today lightly',
+              l10n.todayEmptyTitle,
               textAlign: TextAlign.center,
               style: Theme.of(
                 context,
@@ -25,7 +27,7 @@ class TodayEmptyPanel extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              'Add one task that would make today feel a little more under control.',
+              l10n.todayEmptyDescription,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: colorScheme.onSurfaceVariant,
@@ -35,7 +37,7 @@ class TodayEmptyPanel extends StatelessWidget {
             FilledButton.icon(
               onPressed: onPlanToday,
               icon: const Icon(Icons.add),
-              label: const Text('Plan today'),
+              label: Text(l10n.todayPlanTodayButton),
             ),
           ],
         ),

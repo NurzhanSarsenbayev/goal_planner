@@ -23,5 +23,150 @@
   "moreTab": "More",
   "@moreTab": {
     "description": "Bottom navigation label and app bar title for More tab"
+  },
+  "todayOneTimeTaskTitle": "One-time task",
+  "@todayOneTimeTaskTitle": {
+    "description": "Today add action sheet title for one-time task"
+  },
+  "todayOneTimeTaskSubtitle": "Create a task for today",
+  "@todayOneTimeTaskSubtitle": {
+    "description": "Today add action sheet subtitle for one-time task"
+  },
+  "todayRecurringTaskTitle": "Recurring task",
+  "@todayRecurringTaskTitle": {
+    "description": "Today add action sheet title for recurring task"
+  },
+  "todayRecurringTaskSubtitle": "Create a task that repeats",
+  "@todayRecurringTaskSubtitle": {
+    "description": "Today add action sheet subtitle for recurring task"
+  },
+  "todayAddTaskButton": "Add task",
+  "@todayAddTaskButton": {
+    "description": "Today floating action button label"
+  },
+  "todayOverdueSection": "Overdue",
+  "@todayOverdueSection": {
+    "description": "Today overdue task section title"
+  },
+  "todayTodoSection": "To do today",
+  "@todayTodoSection": {
+    "description": "Today pending tasks section title"
+  },
+  "todayDoneSection": "Done today",
+  "@todayDoneSection": {
+    "description": "Today completed tasks section title"
+  },
+  "todayNoTasksLeft": "No tasks left for today.",
+  "@todayNoTasksLeft": {
+    "description": "Today empty text for pending tasks section"
+  },
+  "todaySummaryTodo": "To do",
+  "@todaySummaryTodo": {
+    "description": "Today summary metric label for pending tasks"
+  },
+  "todaySummaryOverdue": "Overdue",
+  "@todaySummaryOverdue": {
+    "description": "Today summary metric label for overdue tasks"
+  },
+  "todaySummaryDone": "Done",
+  "@todaySummaryDone": {
+    "description": "Today summary metric label for completed tasks"
+  },
+  "todaySummaryNothingPlanned": "Nothing planned yet. Add one small task to start the day.",
+  "@todaySummaryNothingPlanned": {
+    "description": "Today summary message when no tasks exist"
+  },
+  "todaySummaryAllDone": "All planned tasks are done for today.",
+  "@todaySummaryAllDone": {
+    "description": "Today summary message when all planned tasks are done"
+  },
+  "todaySummaryHandleOverdue": "Handle overdue tasks first, then continue with today.",
+  "@todaySummaryHandleOverdue": {
+    "description": "Today summary message when there are overdue tasks"
+  },
+  "todaySummaryFocus": "Focus on today’s planned tasks.",
+  "@todaySummaryFocus": {
+    "description": "Today summary message when there are pending tasks"
+  },
+  "todayHabitsTitle": "Habits today",
+  "@todayHabitsTitle": {
+    "description": "Today habit summary card title"
+  },
+  "todayHabitsDoneOnly": "Done: {doneCount}",
+  "@todayHabitsDoneOnly": {
+    "description": "Today habit summary when no actionable habits remain",
+    "placeholders": {
+      "doneCount": {
+        "type": "int"
+      }
+    }
+  },
+  "todayHabitsDoneProgress": "{doneCount}/{actionableCount} done",
+  "@todayHabitsDoneProgress": {
+    "description": "Today habit summary progress text",
+    "placeholders": {
+      "doneCount": {
+        "type": "int"
+      },
+      "actionableCount": {
+        "type": "int"
+      }
+    }
+  },
+  "todayHabitsMissedCount": "Missed: {count}",
+  "@todayHabitsMissedCount": {
+    "description": "Today habit missed count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayHabitsSkippedCount": "Skipped: {count}",
+  "@todayHabitsSkippedCount": {
+    "description": "Today habit skipped count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayHabitsPartialCount": "Partial: {count}",
+  "@todayHabitsPartialCount": {
+    "description": "Today habit partial count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayHabitsNotMarkedCount": "Not marked: {count}",
+  "@todayHabitsNotMarkedCount": {
+    "description": "Today habit not marked count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "todayHabitsAllMarked": "All habits are marked for today.",
+  "@todayHabitsAllMarked": {
+    "description": "Today habit summary when all habits are marked"
+  },
+  "todayEmptyTitle": "Plan today lightly",
+  "@todayEmptyTitle": {
+    "description": "Today empty panel title"
+  },
+  "todayEmptyDescription": "Add one task that would make today feel a little more under control.",
+  "@todayEmptyDescription": {
+    "description": "Today empty panel description"
+  },
+  "todayPlanTodayButton": "Plan today",
+  "@todayPlanTodayButton": {
+    "description": "Today empty panel button label"
+  },
+  "todayEmptySectionFallback": "Nothing here.",
+  "@todayEmptySectionFallback": {
+    "description": "Fallback empty text for Today sections"
   }
 }
