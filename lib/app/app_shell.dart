@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../features/recurring/presentation/recurring_rule_dialog_actions.dart';
 import '../features/goals/presentation/goal_dialog_actions.dart';
 import '../features/tasks/presentation/task_dialog_actions.dart';
@@ -31,14 +32,6 @@ class _AppShellState extends State<AppShell> {
   late final HabitReportLoader _habitReportLoader;
 
   int _selectedIndex = 0;
-
-  static const List<String> _titles = [
-    'Today',
-    'Goals',
-    'Calendar',
-    'Habits',
-    'More',
-  ];
 
   @override
   void initState() {
@@ -104,39 +97,48 @@ class _AppShellState extends State<AppShell> {
     final screens = _mainTabBuilder.buildScreens(context);
     final isAppInitialized = _store.isInitialized && _habitStore.isInitialized;
 
+    final l10n = AppLocalizations.of(context);
+    final titles = [
+      l10n.todayTab,
+      l10n.goalsTab,
+      l10n.calendarTab,
+      l10n.habitsTab,
+      l10n.moreTab,
+    ];
+
     return Scaffold(
-      appBar: AppBar(title: Text(_titles[_selectedIndex])),
+      appBar: AppBar(title: Text(titles[_selectedIndex])),
       body: isAppInitialized
           ? screens[_selectedIndex]
           : const Center(child: CircularProgressIndicator()),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: _onDestinationSelected,
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.today_outlined),
-            selectedIcon: Icon(Icons.today),
-            label: 'Today',
+            icon: const Icon(Icons.today_outlined),
+            selectedIcon: const Icon(Icons.today),
+            label: l10n.todayTab,
           ),
           NavigationDestination(
-            icon: Icon(Icons.flag_outlined),
-            selectedIcon: Icon(Icons.flag),
-            label: 'Goals',
+            icon: const Icon(Icons.flag_outlined),
+            selectedIcon: const Icon(Icons.flag),
+            label: l10n.goalsTab,
           ),
           NavigationDestination(
-            icon: Icon(Icons.calendar_month_outlined),
-            selectedIcon: Icon(Icons.calendar_month),
-            label: 'Calendar',
+            icon: const Icon(Icons.calendar_month_outlined),
+            selectedIcon: const Icon(Icons.calendar_month),
+            label: l10n.calendarTab,
           ),
           NavigationDestination(
-            icon: Icon(Icons.track_changes_outlined),
-            selectedIcon: Icon(Icons.track_changes),
-            label: 'Habits',
+            icon: const Icon(Icons.track_changes_outlined),
+            selectedIcon: const Icon(Icons.track_changes),
+            label: l10n.habitsTab,
           ),
           NavigationDestination(
-            icon: Icon(Icons.more_horiz),
-            selectedIcon: Icon(Icons.more),
-            label: 'More',
+            icon: const Icon(Icons.more_horiz),
+            selectedIcon: const Icon(Icons.more),
+            label: l10n.moreTab,
           ),
         ],
       ),

@@ -103,6 +103,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Goal Planner'**
   String get appTitle;
+
+  /// Bottom navigation label and app bar title for Today tab
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get todayTab;
+
+  /// Bottom navigation label and app bar title for Goals tab
+  ///
+  /// In en, this message translates to:
+  /// **'Goals'**
+  String get goalsTab;
+
+  /// Bottom navigation label and app bar title for Calendar tab
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get calendarTab;
+
+  /// Bottom navigation label and app bar title for Habits tab
+  ///
+  /// In en, this message translates to:
+  /// **'Habits'**
+  String get habitsTab;
+
+  /// Bottom navigation label and app bar title for More tab
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get moreTab;
 }
 
 class _AppLocalizationsDelegate

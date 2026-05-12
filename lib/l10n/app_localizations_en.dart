@@ -10,4 +10,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appTitle => 'Goal Planner';
+
+  @override
+  String get todayTab => 'Today';
+
+  @override
+  String get goalsTab => 'Goals';
+
+  @override
+  String get calendarTab => 'Calendar';
+
+  @override
+  String get habitsTab => 'Habits';
+
+  @override
+  String get moreTab => 'More';
 }

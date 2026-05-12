@@ -3,5 +3,25 @@
   "appTitle": "Goal Planner",
   "@appTitle": {
     "description": "Application title"
+  },
+  "todayTab": "Today",
+  "@todayTab": {
+    "description": "Bottom navigation label and app bar title for Today tab"
+  },
+  "goalsTab": "Goals",
+  "@goalsTab": {
+    "description": "Bottom navigation label and app bar title for Goals tab"
+  },
+  "calendarTab": "Calendar",
+  "@calendarTab": {
+    "description": "Bottom navigation label and app bar title for Calendar tab"
+  },
+  "habitsTab": "Habits",
+  "@habitsTab": {
+    "description": "Bottom navigation label and app bar title for Habits tab"
+  },
+  "moreTab": "More",
+  "@moreTab": {
+    "description": "Bottom navigation label and app bar title for More tab"
   }
 }

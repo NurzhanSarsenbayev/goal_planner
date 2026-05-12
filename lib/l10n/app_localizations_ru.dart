@@ -10,4 +10,19 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get appTitle => 'Планировщик целей';
+
+  @override
+  String get todayTab => 'Сегодня';
+
+  @override
+  String get goalsTab => 'Цели';
+
+  @override
+  String get calendarTab => 'Календарь';
+
+  @override
+  String get habitsTab => 'Привычки';
+
+  @override
+  String get moreTab => 'Ещё';
 }

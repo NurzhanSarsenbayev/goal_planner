@@ -3,5 +3,25 @@
   "appTitle": "Планировщик целей",
   "@appTitle": {
     "description": "Application title"
+  },
+  "todayTab": "Сегодня",
+  "@todayTab": {
+    "description": "Bottom navigation label and app bar title for Today tab"
+  },
+  "goalsTab": "Цели",
+  "@goalsTab": {
+    "description": "Bottom navigation label and app bar title for Goals tab"
+  },
+  "calendarTab": "Календарь",
+  "@calendarTab": {
+    "description": "Bottom navigation label and app bar title for Calendar tab"
+  },
+  "habitsTab": "Привычки",
+  "@habitsTab": {
+    "description": "Bottom navigation label and app bar title for Habits tab"
+  },
+  "moreTab": "Ещё",
+  "@moreTab": {
+    "description": "Bottom navigation label and app bar title for More tab"
   }
 }
