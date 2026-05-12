@@ -1,0 +1,7 @@
+{
+  "@@locale": "en",
+  "appTitle": "Goal Planner",
+  "@appTitle": {
+    "description": "Application title"
+  }
+}

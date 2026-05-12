@@ -1,0 +1,7 @@
+{
+  "@@locale": "ru",
+  "appTitle": "Планировщик целей",
+  "@appTitle": {
+    "description": "Application title"
+  }
+}
