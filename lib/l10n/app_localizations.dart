@@ -1450,6 +1450,141 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No milestones available for this goal.'**
   String get moveTaskToMilestoneDialogEmptyMessage;
+
+  /// No description provided for @recurringTasksScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring tasks'**
+  String get recurringTasksScreenTitle;
+
+  /// No description provided for @recurringTasksEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No recurring task rules yet.'**
+  String get recurringTasksEmptyDescription;
+
+  /// No description provided for @recurringTasksAddRuleButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add rule'**
+  String get recurringTasksAddRuleButton;
+
+  /// No description provided for @recurringRuleActionActivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate'**
+  String get recurringRuleActionActivate;
+
+  /// No description provided for @recurringRuleActionDeactivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Deactivate'**
+  String get recurringRuleActionDeactivate;
+
+  /// Recurring rule subtitle with recurrence and placement
+  ///
+  /// In en, this message translates to:
+  /// **'{recurrence} · {placement}'**
+  String recurringRuleSubtitleWithPlacement(
+    String recurrence,
+    String placement,
+  );
+
+  /// Recurring rule subtitle when the rule is inactive
+  ///
+  /// In en, this message translates to:
+  /// **'Inactive · {subtitle}'**
+  String recurringRuleInactiveSubtitle(String subtitle);
+
+  /// No description provided for @recurringRuleMilestoneTaskLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Milestone task'**
+  String get recurringRuleMilestoneTaskLabel;
+
+  /// No description provided for @recurringRuleGoalTaskLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal task'**
+  String get recurringRuleGoalTaskLabel;
+
+  /// No description provided for @recurringRuleWeeklyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get recurringRuleWeeklyLabel;
+
+  /// Weekly recurring rule label with selected weekdays
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly · {days}'**
+  String recurringRuleWeeklyWithDays(String days);
+
+  /// No description provided for @recurringRuleMonthlyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get recurringRuleMonthlyLabel;
+
+  /// Monthly recurring rule label with selected day of month
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly · day {day}'**
+  String recurringRuleMonthlyDay(int day);
+
+  /// No description provided for @recurringWeekdayMonShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Mon'**
+  String get recurringWeekdayMonShort;
+
+  /// No description provided for @recurringWeekdayTueShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Tue'**
+  String get recurringWeekdayTueShort;
+
+  /// No description provided for @recurringWeekdayWedShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Wed'**
+  String get recurringWeekdayWedShort;
+
+  /// No description provided for @recurringWeekdayThuShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Thu'**
+  String get recurringWeekdayThuShort;
+
+  /// No description provided for @recurringWeekdayFriShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Fri'**
+  String get recurringWeekdayFriShort;
+
+  /// No description provided for @recurringWeekdaySatShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sat'**
+  String get recurringWeekdaySatShort;
+
+  /// No description provided for @recurringWeekdaySunShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun'**
+  String get recurringWeekdaySunShort;
+
+  /// No description provided for @recurringRuleDeleteDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete recurring rule?'**
+  String get recurringRuleDeleteDialogTitle;
+
+  /// Recurring rule delete confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'This will remove all unfinished generated tasks from “{ruleTitle}”. Completed tasks will stay in your history.'**
+  String recurringRuleDeleteDialogMessage(String ruleTitle);
 }
 
 class _AppLocalizationsDelegate

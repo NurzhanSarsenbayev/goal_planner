@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../recurring_rule_delete_dialog.dart';
 import '../../../../models/recurring_task_rule.dart';
 import '../../../../shared/presentation/widgets/placeholder_screen.dart';
@@ -24,12 +25,14 @@ class RecurringTasksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Recurring tasks')),
+      appBar: AppBar(title: Text(l10n.recurringTasksScreenTitle)),
       body: rules.isEmpty
-          ? const PlaceholderScreen(
-              title: 'Recurring tasks',
-              description: 'No recurring task rules yet.',
+          ? PlaceholderScreen(
+              title: l10n.recurringTasksScreenTitle,
+              description: l10n.recurringTasksEmptyDescription,
               icon: Icons.repeat,
             )
           : ListView.separated(
@@ -65,7 +68,7 @@ class RecurringTasksScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: onAddRule,
         icon: const Icon(Icons.add),
-        label: const Text('Add rule'),
+        label: Text(l10n.recurringTasksAddRuleButton),
       ),
     );
   }

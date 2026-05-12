@@ -790,4 +790,83 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get moveTaskToMilestoneDialogEmptyMessage =>
       'У этой цели пока нет этапов.';
+
+  @override
+  String get recurringTasksScreenTitle => 'Повторяющиеся задачи';
+
+  @override
+  String get recurringTasksEmptyDescription => 'Повторяющихся правил пока нет.';
+
+  @override
+  String get recurringTasksAddRuleButton => 'Добавить правило';
+
+  @override
+  String get recurringRuleActionActivate => 'Включить';
+
+  @override
+  String get recurringRuleActionDeactivate => 'Отключить';
+
+  @override
+  String recurringRuleSubtitleWithPlacement(
+    String recurrence,
+    String placement,
+  ) {
+    return '$recurrence · $placement';
+  }
+
+  @override
+  String recurringRuleInactiveSubtitle(String subtitle) {
+    return 'Отключено · $subtitle';
+  }
+
+  @override
+  String get recurringRuleMilestoneTaskLabel => 'Задача этапа';
+
+  @override
+  String get recurringRuleGoalTaskLabel => 'Задача цели';
+
+  @override
+  String get recurringRuleWeeklyLabel => 'Еженедельно';
+
+  @override
+  String recurringRuleWeeklyWithDays(String days) {
+    return 'Еженедельно · $days';
+  }
+
+  @override
+  String get recurringRuleMonthlyLabel => 'Ежемесячно';
+
+  @override
+  String recurringRuleMonthlyDay(int day) {
+    return 'Ежемесячно · день $day';
+  }
+
+  @override
+  String get recurringWeekdayMonShort => 'Пн';
+
+  @override
+  String get recurringWeekdayTueShort => 'Вт';
+
+  @override
+  String get recurringWeekdayWedShort => 'Ср';
+
+  @override
+  String get recurringWeekdayThuShort => 'Чт';
+
+  @override
+  String get recurringWeekdayFriShort => 'Пт';
+
+  @override
+  String get recurringWeekdaySatShort => 'Сб';
+
+  @override
+  String get recurringWeekdaySunShort => 'Вс';
+
+  @override
+  String get recurringRuleDeleteDialogTitle => 'Удалить повторяющееся правило?';
+
+  @override
+  String recurringRuleDeleteDialogMessage(String ruleTitle) {
+    return 'Все незавершённые созданные задачи из «$ruleTitle» будут удалены. Выполненные задачи останутся в истории.';
+  }
 }

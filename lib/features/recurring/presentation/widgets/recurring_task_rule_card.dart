@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/recurring_task_rule.dart';
 
 class RecurringTaskRuleCard extends StatelessWidget {
@@ -18,13 +19,15 @@ class RecurringTaskRuleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Card(
       child: ListTile(
         leading: Icon(
           rule.isActive ? Icons.repeat : Icons.pause_circle_outline,
         ),
         title: Text(rule.title),
-        subtitle: Text(_ruleSubtitle()),
+        subtitle: Text(_ruleSubtitle(l10n)),
         trailing: onActiveChanged == null && onEdit == null && onDelete == null
             ? null
             : PopupMenuButton<_RecurringTaskRuleAction>(
@@ -43,24 +46,24 @@ class RecurringTaskRuleCard extends StatelessWidget {
                 itemBuilder: (context) {
                   return [
                     if (onActiveChanged != null && rule.isActive)
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: _RecurringTaskRuleAction.deactivate,
-                        child: Text('Deactivate'),
+                        child: Text(l10n.recurringRuleActionDeactivate),
                       )
                     else if (onActiveChanged != null)
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: _RecurringTaskRuleAction.activate,
-                        child: Text('Activate'),
+                        child: Text(l10n.recurringRuleActionActivate),
                       ),
                     if (onDelete != null)
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: _RecurringTaskRuleAction.delete,
-                        child: Text('Delete'),
+                        child: Text(l10n.commonDelete),
                       ),
                     if (onEdit != null)
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: _RecurringTaskRuleAction.edit,
-                        child: Text('Edit'),
+                        child: Text(l10n.commonEdit),
                       ),
                   ];
                 },
@@ -69,68 +72,72 @@ class RecurringTaskRuleCard extends StatelessWidget {
     );
   }
 
-  String _ruleSubtitle() {
-    final placement = _placementLabel();
-    final recurrence = _recurrenceLabel();
+  String _ruleSubtitle(AppLocalizations l10n) {
+    final placement = _placementLabel(l10n);
+    final recurrence = _recurrenceLabel(l10n);
     final baseLabel = placement == null
         ? recurrence
-        : '$recurrence · $placement';
+        : l10n.recurringRuleSubtitleWithPlacement(recurrence, placement);
 
     if (rule.isActive) {
       return baseLabel;
     }
 
-    return 'Inactive · $baseLabel';
+    return l10n.recurringRuleInactiveSubtitle(baseLabel);
   }
 
-  String? _placementLabel() {
+  String? _placementLabel(AppLocalizations l10n) {
     if (rule.milestoneId != null) {
-      return 'Milestone task';
+      return l10n.recurringRuleMilestoneTaskLabel;
     }
 
     if (rule.goalId != null) {
-      return 'Goal task';
+      return l10n.recurringRuleGoalTaskLabel;
     }
 
     return null;
   }
 
-  String _recurrenceLabel() {
+  String _recurrenceLabel(AppLocalizations l10n) {
     return switch (rule.recurrenceType) {
-      RecurrenceType.weekly => _weeklyLabel(),
-      RecurrenceType.monthly => _monthlyLabel(),
+      RecurrenceType.weekly => _weeklyLabel(l10n),
+      RecurrenceType.monthly => _monthlyLabel(l10n),
     };
   }
 
-  String _weeklyLabel() {
+  String _weeklyLabel(AppLocalizations l10n) {
     if (rule.weekdays.isEmpty) {
-      return 'Weekly';
+      return l10n.recurringRuleWeeklyLabel;
     }
 
-    final labels = rule.weekdays.map(_weekdayLabel).join(', ');
+    final labels = rule.weekdays
+        .map((weekday) {
+          return _weekdayLabel(l10n, weekday);
+        })
+        .join(', ');
 
-    return 'Weekly · $labels';
+    return l10n.recurringRuleWeeklyWithDays(labels);
   }
 
-  String _monthlyLabel() {
+  String _monthlyLabel(AppLocalizations l10n) {
     final monthDay = rule.monthDay;
 
     if (monthDay == null) {
-      return 'Monthly';
+      return l10n.recurringRuleMonthlyLabel;
     }
 
-    return 'Monthly · day $monthDay';
+    return l10n.recurringRuleMonthlyDay(monthDay);
   }
 
-  String _weekdayLabel(int weekday) {
+  String _weekdayLabel(AppLocalizations l10n, int weekday) {
     return switch (weekday) {
-      DateTime.monday => 'Mon',
-      DateTime.tuesday => 'Tue',
-      DateTime.wednesday => 'Wed',
-      DateTime.thursday => 'Thu',
-      DateTime.friday => 'Fri',
-      DateTime.saturday => 'Sat',
-      DateTime.sunday => 'Sun',
+      DateTime.monday => l10n.recurringWeekdayMonShort,
+      DateTime.tuesday => l10n.recurringWeekdayTueShort,
+      DateTime.wednesday => l10n.recurringWeekdayWedShort,
+      DateTime.thursday => l10n.recurringWeekdayThuShort,
+      DateTime.friday => l10n.recurringWeekdayFriShort,
+      DateTime.saturday => l10n.recurringWeekdaySatShort,
+      DateTime.sunday => l10n.recurringWeekdaySunShort,
       _ => '?',
     };
   }

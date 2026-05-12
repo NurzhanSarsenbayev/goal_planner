@@ -645,5 +645,72 @@
     "milestoneCardAddRecurringButton": "Добавить повтор",
 
     "moveTaskToMilestoneDialogTitle": "Переместить в этап",
-    "moveTaskToMilestoneDialogEmptyMessage": "У этой цели пока нет этапов."
+    "moveTaskToMilestoneDialogEmptyMessage": "У этой цели пока нет этапов.",
+    "recurringTasksScreenTitle": "Повторяющиеся задачи",
+    "recurringTasksEmptyDescription": "Повторяющихся правил пока нет.",
+    "recurringTasksAddRuleButton": "Добавить правило",
+
+    "recurringRuleActionActivate": "Включить",
+    "recurringRuleActionDeactivate": "Отключить",
+    "recurringRuleSubtitleWithPlacement": "{recurrence} · {placement}",
+    "@recurringRuleSubtitleWithPlacement": {
+      "description": "Recurring rule subtitle with recurrence and placement",
+      "placeholders": {
+        "recurrence": {
+          "type": "String"
+        },
+        "placement": {
+          "type": "String"
+        }
+      }
+    },
+    "recurringRuleInactiveSubtitle": "Отключено · {subtitle}",
+    "@recurringRuleInactiveSubtitle": {
+      "description": "Recurring rule subtitle when the rule is inactive",
+      "placeholders": {
+        "subtitle": {
+          "type": "String"
+        }
+      }
+    },
+    "recurringRuleMilestoneTaskLabel": "Задача этапа",
+    "recurringRuleGoalTaskLabel": "Задача цели",
+    "recurringRuleWeeklyLabel": "Еженедельно",
+    "recurringRuleWeeklyWithDays": "Еженедельно · {days}",
+    "@recurringRuleWeeklyWithDays": {
+      "description": "Weekly recurring rule label with selected weekdays",
+      "placeholders": {
+        "days": {
+          "type": "String"
+        }
+      }
+    },
+    "recurringRuleMonthlyLabel": "Ежемесячно",
+    "recurringRuleMonthlyDay": "Ежемесячно · день {day}",
+    "@recurringRuleMonthlyDay": {
+      "description": "Monthly recurring rule label with selected day of month",
+      "placeholders": {
+        "day": {
+          "type": "int"
+        }
+      }
+    },
+    "recurringWeekdayMonShort": "Пн",
+    "recurringWeekdayTueShort": "Вт",
+    "recurringWeekdayWedShort": "Ср",
+    "recurringWeekdayThuShort": "Чт",
+    "recurringWeekdayFriShort": "Пт",
+    "recurringWeekdaySatShort": "Сб",
+    "recurringWeekdaySunShort": "Вс",
+
+    "recurringRuleDeleteDialogTitle": "Удалить повторяющееся правило?",
+    "recurringRuleDeleteDialogMessage": "Все незавершённые созданные задачи из «{ruleTitle}» будут удалены. Выполненные задачи останутся в истории.",
+    "@recurringRuleDeleteDialogMessage": {
+      "description": "Recurring rule delete confirmation message",
+      "placeholders": {
+        "ruleTitle": {
+          "type": "String"
+        }
+      }
+    }
 }

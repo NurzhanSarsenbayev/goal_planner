@@ -782,4 +782,83 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get moveTaskToMilestoneDialogEmptyMessage =>
       'No milestones available for this goal.';
+
+  @override
+  String get recurringTasksScreenTitle => 'Recurring tasks';
+
+  @override
+  String get recurringTasksEmptyDescription => 'No recurring task rules yet.';
+
+  @override
+  String get recurringTasksAddRuleButton => 'Add rule';
+
+  @override
+  String get recurringRuleActionActivate => 'Activate';
+
+  @override
+  String get recurringRuleActionDeactivate => 'Deactivate';
+
+  @override
+  String recurringRuleSubtitleWithPlacement(
+    String recurrence,
+    String placement,
+  ) {
+    return '$recurrence · $placement';
+  }
+
+  @override
+  String recurringRuleInactiveSubtitle(String subtitle) {
+    return 'Inactive · $subtitle';
+  }
+
+  @override
+  String get recurringRuleMilestoneTaskLabel => 'Milestone task';
+
+  @override
+  String get recurringRuleGoalTaskLabel => 'Goal task';
+
+  @override
+  String get recurringRuleWeeklyLabel => 'Weekly';
+
+  @override
+  String recurringRuleWeeklyWithDays(String days) {
+    return 'Weekly · $days';
+  }
+
+  @override
+  String get recurringRuleMonthlyLabel => 'Monthly';
+
+  @override
+  String recurringRuleMonthlyDay(int day) {
+    return 'Monthly · day $day';
+  }
+
+  @override
+  String get recurringWeekdayMonShort => 'Mon';
+
+  @override
+  String get recurringWeekdayTueShort => 'Tue';
+
+  @override
+  String get recurringWeekdayWedShort => 'Wed';
+
+  @override
+  String get recurringWeekdayThuShort => 'Thu';
+
+  @override
+  String get recurringWeekdayFriShort => 'Fri';
+
+  @override
+  String get recurringWeekdaySatShort => 'Sat';
+
+  @override
+  String get recurringWeekdaySunShort => 'Sun';
+
+  @override
+  String get recurringRuleDeleteDialogTitle => 'Delete recurring rule?';
+
+  @override
+  String recurringRuleDeleteDialogMessage(String ruleTitle) {
+    return 'This will remove all unfinished generated tasks from “$ruleTitle”. Completed tasks will stay in your history.';
+  }
 }

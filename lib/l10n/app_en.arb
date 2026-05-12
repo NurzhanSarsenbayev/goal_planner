@@ -645,5 +645,72 @@
     "milestoneCardAddRecurringButton": "Add recurring",
 
     "moveTaskToMilestoneDialogTitle": "Move to milestone",
-    "moveTaskToMilestoneDialogEmptyMessage": "No milestones available for this goal."
+    "moveTaskToMilestoneDialogEmptyMessage": "No milestones available for this goal.",
+    "recurringTasksScreenTitle": "Recurring tasks",
+    "recurringTasksEmptyDescription": "No recurring task rules yet.",
+    "recurringTasksAddRuleButton": "Add rule",
+
+    "recurringRuleActionActivate": "Activate",
+    "recurringRuleActionDeactivate": "Deactivate",
+    "recurringRuleSubtitleWithPlacement": "{recurrence} · {placement}",
+    "@recurringRuleSubtitleWithPlacement": {
+      "description": "Recurring rule subtitle with recurrence and placement",
+      "placeholders": {
+        "recurrence": {
+          "type": "String"
+        },
+        "placement": {
+          "type": "String"
+        }
+      }
+    },
+    "recurringRuleInactiveSubtitle": "Inactive · {subtitle}",
+    "@recurringRuleInactiveSubtitle": {
+      "description": "Recurring rule subtitle when the rule is inactive",
+      "placeholders": {
+        "subtitle": {
+          "type": "String"
+        }
+      }
+    },
+    "recurringRuleMilestoneTaskLabel": "Milestone task",
+    "recurringRuleGoalTaskLabel": "Goal task",
+    "recurringRuleWeeklyLabel": "Weekly",
+    "recurringRuleWeeklyWithDays": "Weekly · {days}",
+    "@recurringRuleWeeklyWithDays": {
+      "description": "Weekly recurring rule label with selected weekdays",
+      "placeholders": {
+        "days": {
+          "type": "String"
+        }
+      }
+    },
+    "recurringRuleMonthlyLabel": "Monthly",
+    "recurringRuleMonthlyDay": "Monthly · day {day}",
+    "@recurringRuleMonthlyDay": {
+      "description": "Monthly recurring rule label with selected day of month",
+      "placeholders": {
+        "day": {
+          "type": "int"
+        }
+      }
+    },
+    "recurringWeekdayMonShort": "Mon",
+    "recurringWeekdayTueShort": "Tue",
+    "recurringWeekdayWedShort": "Wed",
+    "recurringWeekdayThuShort": "Thu",
+    "recurringWeekdayFriShort": "Fri",
+    "recurringWeekdaySatShort": "Sat",
+    "recurringWeekdaySunShort": "Sun",
+
+    "recurringRuleDeleteDialogTitle": "Delete recurring rule?",
+    "recurringRuleDeleteDialogMessage": "This will remove all unfinished generated tasks from “{ruleTitle}”. Completed tasks will stay in your history.",
+    "@recurringRuleDeleteDialogMessage": {
+      "description": "Recurring rule delete confirmation message",
+      "placeholders": {
+        "ruleTitle": {
+          "type": "String"
+        }
+      }
+    }
 }
