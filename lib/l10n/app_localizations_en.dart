@@ -392,4 +392,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String reportsDays(int dayCount) {
     return '$dayCount days';
   }
+
+  @override
+  String get reportsDateYesterday => 'Yesterday';
+
+  @override
+  String reportsCompletedCount(int count) {
+    return '$count completed';
+  }
+
+  @override
+  String get reportsCompletedTasksSubtitle => 'Completed tasks';
+
+  @override
+  String get reportsStandaloneTitle => 'Standalone';
+
+  @override
+  String get reportsStandaloneSubtitle =>
+      'Completed tasks not linked to a goal';
+
+  @override
+  String get reportsNoHabitMarks => 'No habit marks in this period.';
+
+  @override
+  String reportsHabitMissedCount(int count) {
+    return '$count missed';
+  }
+
+  @override
+  String reportsHabitSkippedCount(int count) {
+    return '$count skipped';
+  }
+
+  @override
+  String reportsHabitPartialCount(int count) {
+    return '$count partial';
+  }
 }

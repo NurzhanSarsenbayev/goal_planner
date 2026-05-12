@@ -358,5 +358,47 @@
           "type": "int"
         }
       }
+    },
+
+    "reportsDateYesterday": "Yesterday",
+    "reportsCompletedCount": "{count} completed",
+    "@reportsCompletedCount": {
+      "description": "Reports completed task count in day section",
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "reportsCompletedTasksSubtitle": "Completed tasks",
+    "reportsStandaloneTitle": "Standalone",
+    "reportsStandaloneSubtitle": "Completed tasks not linked to a goal",
+    "reportsNoHabitMarks": "No habit marks in this period.",
+    "reportsHabitMissedCount": "{count} missed",
+    "@reportsHabitMissedCount": {
+      "description": "Reports habit missed count in habit detail row",
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "reportsHabitSkippedCount": "{count} skipped",
+    "@reportsHabitSkippedCount": {
+      "description": "Reports habit skipped count in habit detail row",
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "reportsHabitPartialCount": "{count} partial",
+    "@reportsHabitPartialCount": {
+      "description": "Reports habit partial count in habit detail row",
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
     }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
 
@@ -11,10 +12,12 @@ class GoalReportSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Card(
       child: ListTile(
         title: Text(goal.title),
-        subtitle: const Text('Completed tasks'),
+        subtitle: Text(l10n.reportsCompletedTasksSubtitle),
         trailing: Text(
           tasks.length.toString(),
           style: Theme.of(context).textTheme.titleMedium,

@@ -358,5 +358,47 @@
           "type": "int"
         }
       }
+    },
+
+    "reportsDateYesterday": "Вчера",
+    "reportsCompletedCount": "{count} выполнено",
+    "@reportsCompletedCount": {
+      "description": "Reports completed task count in day section",
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "reportsCompletedTasksSubtitle": "Выполненные задачи",
+    "reportsStandaloneTitle": "Без цели",
+    "reportsStandaloneSubtitle": "Выполненные задачи без привязки к цели",
+    "reportsNoHabitMarks": "За этот период отметок привычек нет.",
+    "reportsHabitMissedCount": "{count} не сделано",
+    "@reportsHabitMissedCount": {
+      "description": "Reports habit missed count in habit detail row",
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "reportsHabitSkippedCount": "{count} пропущено",
+    "@reportsHabitSkippedCount": {
+      "description": "Reports habit skipped count in habit detail row",
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "reportsHabitPartialCount": "{count} частично",
+    "@reportsHabitPartialCount": {
+      "description": "Reports habit partial count in habit detail row",
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
     }
 }

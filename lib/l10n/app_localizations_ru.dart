@@ -344,7 +344,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String reportsOutOfPlanned(int plannedCount) {
-    return 'из $plannedCount запланировано';
+    return 'из $plannedCount запланированных';
   }
 
   @override
@@ -357,7 +357,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get reportsConsistencyMetric => 'регулярность';
 
   @override
-  String get reportsHabitStreakMetric => 'стрик привычек';
+  String get reportsHabitStreakMetric => 'серия привычек';
 
   @override
   String get reportsMissedMetric => 'не сделано';
@@ -385,7 +385,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String reportsActiveHabitsTracked(int activeHabitCount) {
-    return 'Активных привычек отслеживается: $activeHabitCount.';
+    return 'Активных привычек: $activeHabitCount.';
   }
 
   @override
@@ -394,5 +394,41 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String reportsDays(int dayCount) {
     return '$dayCount дней';
+  }
+
+  @override
+  String get reportsDateYesterday => 'Вчера';
+
+  @override
+  String reportsCompletedCount(int count) {
+    return '$count выполнено';
+  }
+
+  @override
+  String get reportsCompletedTasksSubtitle => 'Выполненные задачи';
+
+  @override
+  String get reportsStandaloneTitle => 'Без цели';
+
+  @override
+  String get reportsStandaloneSubtitle =>
+      'Выполненные задачи без привязки к цели';
+
+  @override
+  String get reportsNoHabitMarks => 'За этот период отметок привычек нет.';
+
+  @override
+  String reportsHabitMissedCount(int count) {
+    return '$count не сделано';
+  }
+
+  @override
+  String reportsHabitSkippedCount(int count) {
+    return '$count пропущено';
+  }
+
+  @override
+  String reportsHabitPartialCount(int count) {
+    return '$count частично';
   }
 }

@@ -781,6 +781,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{dayCount} days'**
   String reportsDays(int dayCount);
+
+  /// No description provided for @reportsDateYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get reportsDateYesterday;
+
+  /// Reports completed task count in day section
+  ///
+  /// In en, this message translates to:
+  /// **'{count} completed'**
+  String reportsCompletedCount(int count);
+
+  /// No description provided for @reportsCompletedTasksSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed tasks'**
+  String get reportsCompletedTasksSubtitle;
+
+  /// No description provided for @reportsStandaloneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Standalone'**
+  String get reportsStandaloneTitle;
+
+  /// No description provided for @reportsStandaloneSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed tasks not linked to a goal'**
+  String get reportsStandaloneSubtitle;
+
+  /// No description provided for @reportsNoHabitMarks.
+  ///
+  /// In en, this message translates to:
+  /// **'No habit marks in this period.'**
+  String get reportsNoHabitMarks;
+
+  /// Reports habit missed count in habit detail row
+  ///
+  /// In en, this message translates to:
+  /// **'{count} missed'**
+  String reportsHabitMissedCount(int count);
+
+  /// Reports habit skipped count in habit detail row
+  ///
+  /// In en, this message translates to:
+  /// **'{count} skipped'**
+  String reportsHabitSkippedCount(int count);
+
+  /// Reports habit partial count in habit detail row
+  ///
+  /// In en, this message translates to:
+  /// **'{count} partial'**
+  String reportsHabitPartialCount(int count);
 }
 
 class _AppLocalizationsDelegate

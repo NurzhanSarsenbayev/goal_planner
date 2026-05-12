@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/habit_report_summary.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class HabitReportSection extends StatelessWidget {
   const HabitReportSection({required this.summary, super.key});
@@ -9,6 +10,8 @@ class HabitReportSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     final groups = [
       for (final group in summary.habitGroups)
         if (_shouldShowGroup(group)) group,
@@ -16,7 +19,7 @@ class HabitReportSection extends StatelessWidget {
 
     if (groups.isEmpty) {
       return Text(
-        'No habit marks in this period.',
+        l10n.reportsNoHabitMarks,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
           color: Theme.of(context).colorScheme.onSurfaceVariant,
         ),
@@ -49,6 +52,8 @@ class _HabitReportTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Card(
       child: ListTile(
         title: Text(
@@ -56,7 +61,7 @@ class _HabitReportTile extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        subtitle: Text(_subtitle()),
+        subtitle: Text(_subtitle(l10n)),
         trailing: group.actionableExpectedMarkCount == 0
             ? null
             : Text(
@@ -67,22 +72,28 @@ class _HabitReportTile extends StatelessWidget {
     );
   }
 
-  String _subtitle() {
+  String _subtitle(AppLocalizations l10n) {
     final parts = <String>[
-      _doneText(),
-      if (group.missedCount > 0) '${group.missedCount} missed',
-      if (group.skippedCount > 0) '${group.skippedCount} skipped',
-      if (group.partialCount > 0) '${group.partialCount} partial',
+      _doneText(l10n),
+      if (group.missedCount > 0)
+        l10n.reportsHabitMissedCount(group.missedCount),
+      if (group.skippedCount > 0)
+        l10n.reportsHabitSkippedCount(group.skippedCount),
+      if (group.partialCount > 0)
+        l10n.reportsHabitPartialCount(group.partialCount),
     ];
 
     return parts.join(' · ');
   }
 
-  String _doneText() {
+  String _doneText(AppLocalizations l10n) {
     if (group.actionableExpectedMarkCount == 0) {
-      return '${group.doneCount} done';
+      return l10n.reportsHabitsDoneOnly(group.doneCount);
     }
 
-    return '${group.doneCount}/${group.actionableExpectedMarkCount} done';
+    return l10n.reportsHabitsDoneProgress(
+      group.doneCount,
+      group.actionableExpectedMarkCount,
+    );
   }
 }
