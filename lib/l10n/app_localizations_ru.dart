@@ -431,4 +431,66 @@ class AppLocalizationsRu extends AppLocalizations {
   String reportsHabitPartialCount(int count) {
     return '$count частично';
   }
+
+  @override
+  String get calendarNoTasksForDay => 'На этот день задач нет.';
+
+  @override
+  String get calendarAddButton => 'Добавить';
+
+  @override
+  String calendarSelectedDayTitle(String dateTitle) {
+    return 'Выбранный день: $dateTitle';
+  }
+
+  @override
+  String calendarPastDateWarning(String date) {
+    return 'Вы создаёте задачу на прошедшую дату: $date.';
+  }
+
+  @override
+  String get calendarOneTimeTaskTitle => 'Разовая задача';
+
+  @override
+  String calendarOneTimeTaskSubtitle(String date) {
+    return 'Создать задачу на $date';
+  }
+
+  @override
+  String get calendarRecurringTaskTitle => 'Повторяющаяся задача';
+
+  @override
+  String calendarRecurringTaskSubtitle(String date) {
+    return 'Создать повторяющуюся задачу с $date';
+  }
+
+  @override
+  String get calendarDateToday => 'Сегодня';
+
+  @override
+  String get calendarDateTomorrow => 'Завтра';
+
+  @override
+  String get calendarDateYesterday => 'Вчера';
+
+  @override
+  String get calendarWeekdayMonShort => 'Пн';
+
+  @override
+  String get calendarWeekdayTueShort => 'Вт';
+
+  @override
+  String get calendarWeekdayWedShort => 'Ср';
+
+  @override
+  String get calendarWeekdayThuShort => 'Чт';
+
+  @override
+  String get calendarWeekdayFriShort => 'Пт';
+
+  @override
+  String get calendarWeekdaySatShort => 'Сб';
+
+  @override
+  String get calendarWeekdaySunShort => 'Вс';
 }

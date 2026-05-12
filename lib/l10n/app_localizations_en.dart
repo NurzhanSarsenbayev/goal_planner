@@ -428,4 +428,66 @@ class AppLocalizationsEn extends AppLocalizations {
   String reportsHabitPartialCount(int count) {
     return '$count partial';
   }
+
+  @override
+  String get calendarNoTasksForDay => 'No tasks scheduled for this day.';
+
+  @override
+  String get calendarAddButton => 'Add';
+
+  @override
+  String calendarSelectedDayTitle(String dateTitle) {
+    return 'Selected day: $dateTitle';
+  }
+
+  @override
+  String calendarPastDateWarning(String date) {
+    return 'You are creating a task for a past date: $date.';
+  }
+
+  @override
+  String get calendarOneTimeTaskTitle => 'One-time task';
+
+  @override
+  String calendarOneTimeTaskSubtitle(String date) {
+    return 'Create a task for $date';
+  }
+
+  @override
+  String get calendarRecurringTaskTitle => 'Recurring task';
+
+  @override
+  String calendarRecurringTaskSubtitle(String date) {
+    return 'Create a repeating task starting $date';
+  }
+
+  @override
+  String get calendarDateToday => 'Today';
+
+  @override
+  String get calendarDateTomorrow => 'Tomorrow';
+
+  @override
+  String get calendarDateYesterday => 'Yesterday';
+
+  @override
+  String get calendarWeekdayMonShort => 'Mon';
+
+  @override
+  String get calendarWeekdayTueShort => 'Tue';
+
+  @override
+  String get calendarWeekdayWedShort => 'Wed';
+
+  @override
+  String get calendarWeekdayThuShort => 'Thu';
+
+  @override
+  String get calendarWeekdayFriShort => 'Fri';
+
+  @override
+  String get calendarWeekdaySatShort => 'Sat';
+
+  @override
+  String get calendarWeekdaySunShort => 'Sun';
 }

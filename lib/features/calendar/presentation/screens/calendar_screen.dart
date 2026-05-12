@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../tasks/presentation/task_date_dialogs.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
 import '../../../../shared/planner_dates.dart';
+import '../../../tasks/presentation/task_date_dialogs.dart';
 import '../../../tasks/presentation/widgets/task_card.dart';
 import '../../application/calendar_task_view_builder.dart';
 import '../widgets/calendar_month_grid.dart';
@@ -68,6 +69,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     final selectedDateTasks = _taskViewBuilder.tasksForDate(
       tasks: widget.tasks,
       date: _selectedDate,
@@ -89,13 +92,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
             ),
             const SizedBox(height: 24),
             Text(
-              _selectedDateTitle(_selectedDate),
+              _selectedDateTitle(l10n, _selectedDate),
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
             if (selectedDateTasks.isEmpty)
               Text(
-                'No tasks scheduled for this day.',
+                l10n.calendarNoTasksForDay,
                 style: Theme.of(context).textTheme.bodyMedium,
               )
             else
@@ -139,7 +142,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               _showAddActionSheet(context);
             },
             icon: const Icon(Icons.add),
-            label: const Text('Add'),
+            label: Text(l10n.calendarAddButton),
           ),
         ),
       ],
@@ -173,6 +176,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   Future<void> _showAddActionSheet(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final selectedDateText = formatPlannerDate(_selectedDate);
     final isPastDate = dateOnly(_selectedDate).isBefore(todayDate());
 
     final selectedAction = await showModalBottomSheet<_CalendarAddAction>(
@@ -195,8 +200,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              'You are creating a task for a past date: '
-                              '${formatPlannerDate(_selectedDate)}.',
+                              l10n.calendarPastDateWarning(selectedDateText),
                             ),
                           ),
                         ],
@@ -206,9 +210,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ),
               ListTile(
                 leading: const Icon(Icons.check_circle_outline),
-                title: const Text('One-time task'),
+                title: Text(l10n.calendarOneTimeTaskTitle),
                 subtitle: Text(
-                  'Create a task for ${formatPlannerDate(_selectedDate)}',
+                  l10n.calendarOneTimeTaskSubtitle(selectedDateText),
                 ),
                 onTap: () {
                   Navigator.of(context).pop(_CalendarAddAction.oneTimeTask);
@@ -216,9 +220,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
               ListTile(
                 leading: const Icon(Icons.repeat),
-                title: const Text('Recurring task'),
+                title: Text(l10n.calendarRecurringTaskTitle),
                 subtitle: Text(
-                  'Create a repeating task starting ${formatPlannerDate(_selectedDate)}',
+                  l10n.calendarRecurringTaskSubtitle(selectedDateText),
                 ),
                 onTap: () {
                   Navigator.of(context).pop(_CalendarAddAction.recurringTask);
@@ -256,12 +260,29 @@ class _CalendarScreenState extends State<CalendarScreen> {
     widget.onScheduleTaskForDate(taskId: task.id, scheduledDate: selectedDate);
   }
 
-  String _selectedDateTitle(DateTime date) {
-    return 'Selected day: ${_dateGroupTitle(date)}';
+  String _selectedDateTitle(AppLocalizations l10n, DateTime date) {
+    return l10n.calendarSelectedDayTitle(_dateGroupTitle(l10n, date));
   }
 
-  String _dateGroupTitle(DateTime date) {
-    return relativePlannerDateTitle(date);
+  String _dateGroupTitle(AppLocalizations l10n, DateTime date) {
+    final normalizedDate = dateOnly(date);
+    final today = todayDate();
+    final tomorrow = today.add(const Duration(days: 1));
+    final yesterday = today.subtract(const Duration(days: 1));
+
+    if (normalizedDate == today) {
+      return l10n.calendarDateToday;
+    }
+
+    if (normalizedDate == tomorrow) {
+      return l10n.calendarDateTomorrow;
+    }
+
+    if (normalizedDate == yesterday) {
+      return l10n.calendarDateYesterday;
+    }
+
+    return formatPlannerDate(normalizedDate);
   }
 }
 

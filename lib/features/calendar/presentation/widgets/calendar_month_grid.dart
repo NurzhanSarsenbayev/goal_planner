@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/planner_dates.dart';
 
 class CalendarMonthGrid extends StatelessWidget {
@@ -22,6 +24,8 @@ class CalendarMonthGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     final days = _visibleCalendarDays();
 
     return Card(
@@ -37,7 +41,7 @@ class CalendarMonthGrid extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    plannerMonthTitle(visibleMonth),
+                    DateFormat.yMMMM(l10n.localeName).format(visibleMonth),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
@@ -49,15 +53,15 @@ class CalendarMonthGrid extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            const Row(
+            Row(
               children: [
-                _WeekdayLabel('Mon'),
-                _WeekdayLabel('Tue'),
-                _WeekdayLabel('Wed'),
-                _WeekdayLabel('Thu'),
-                _WeekdayLabel('Fri'),
-                _WeekdayLabel('Sat'),
-                _WeekdayLabel('Sun'),
+                _WeekdayLabel(l10n.calendarWeekdayMonShort),
+                _WeekdayLabel(l10n.calendarWeekdayTueShort),
+                _WeekdayLabel(l10n.calendarWeekdayWedShort),
+                _WeekdayLabel(l10n.calendarWeekdayThuShort),
+                _WeekdayLabel(l10n.calendarWeekdayFriShort),
+                _WeekdayLabel(l10n.calendarWeekdaySatShort),
+                _WeekdayLabel(l10n.calendarWeekdaySunShort),
               ],
             ),
             const SizedBox(height: 8),

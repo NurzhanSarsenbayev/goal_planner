@@ -400,5 +400,56 @@
           "type": "int"
         }
       }
-    }
+    },
+
+    "calendarNoTasksForDay": "На этот день задач нет.",
+    "calendarAddButton": "Добавить",
+    "calendarSelectedDayTitle": "Выбранный день: {dateTitle}",
+    "@calendarSelectedDayTitle": {
+      "description": "Calendar selected date section title",
+      "placeholders": {
+        "dateTitle": {
+          "type": "String"
+        }
+      }
+    },
+    "calendarPastDateWarning": "Вы создаёте задачу на прошедшую дату: {date}.",
+    "@calendarPastDateWarning": {
+      "description": "Calendar warning shown when adding a task for a past date",
+      "placeholders": {
+        "date": {
+          "type": "String"
+        }
+      }
+    },
+    "calendarOneTimeTaskTitle": "Разовая задача",
+    "calendarOneTimeTaskSubtitle": "Создать задачу на {date}",
+    "@calendarOneTimeTaskSubtitle": {
+      "description": "Calendar add action subtitle for one-time task",
+      "placeholders": {
+        "date": {
+          "type": "String"
+        }
+      }
+    },
+    "calendarRecurringTaskTitle": "Повторяющаяся задача",
+    "calendarRecurringTaskSubtitle": "Создать повторяющуюся задачу с {date}",
+    "@calendarRecurringTaskSubtitle": {
+      "description": "Calendar add action subtitle for recurring task",
+      "placeholders": {
+        "date": {
+          "type": "String"
+        }
+      }
+    },
+    "calendarDateToday": "Сегодня",
+    "calendarDateTomorrow": "Завтра",
+    "calendarDateYesterday": "Вчера",
+    "calendarWeekdayMonShort": "Пн",
+    "calendarWeekdayTueShort": "Вт",
+    "calendarWeekdayWedShort": "Ср",
+    "calendarWeekdayThuShort": "Чт",
+    "calendarWeekdayFriShort": "Пт",
+    "calendarWeekdaySatShort": "Сб",
+    "calendarWeekdaySunShort": "Вс"
 }

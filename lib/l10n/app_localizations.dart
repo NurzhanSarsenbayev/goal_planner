@@ -835,6 +835,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} partial'**
   String reportsHabitPartialCount(int count);
+
+  /// No description provided for @calendarNoTasksForDay.
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks scheduled for this day.'**
+  String get calendarNoTasksForDay;
+
+  /// No description provided for @calendarAddButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get calendarAddButton;
+
+  /// Calendar selected date section title
+  ///
+  /// In en, this message translates to:
+  /// **'Selected day: {dateTitle}'**
+  String calendarSelectedDayTitle(String dateTitle);
+
+  /// Calendar warning shown when adding a task for a past date
+  ///
+  /// In en, this message translates to:
+  /// **'You are creating a task for a past date: {date}.'**
+  String calendarPastDateWarning(String date);
+
+  /// No description provided for @calendarOneTimeTaskTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time task'**
+  String get calendarOneTimeTaskTitle;
+
+  /// Calendar add action subtitle for one-time task
+  ///
+  /// In en, this message translates to:
+  /// **'Create a task for {date}'**
+  String calendarOneTimeTaskSubtitle(String date);
+
+  /// No description provided for @calendarRecurringTaskTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring task'**
+  String get calendarRecurringTaskTitle;
+
+  /// Calendar add action subtitle for recurring task
+  ///
+  /// In en, this message translates to:
+  /// **'Create a repeating task starting {date}'**
+  String calendarRecurringTaskSubtitle(String date);
+
+  /// No description provided for @calendarDateToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get calendarDateToday;
+
+  /// No description provided for @calendarDateTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get calendarDateTomorrow;
+
+  /// No description provided for @calendarDateYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get calendarDateYesterday;
+
+  /// No description provided for @calendarWeekdayMonShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Mon'**
+  String get calendarWeekdayMonShort;
+
+  /// No description provided for @calendarWeekdayTueShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Tue'**
+  String get calendarWeekdayTueShort;
+
+  /// No description provided for @calendarWeekdayWedShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Wed'**
+  String get calendarWeekdayWedShort;
+
+  /// No description provided for @calendarWeekdayThuShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Thu'**
+  String get calendarWeekdayThuShort;
+
+  /// No description provided for @calendarWeekdayFriShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Fri'**
+  String get calendarWeekdayFriShort;
+
+  /// No description provided for @calendarWeekdaySatShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sat'**
+  String get calendarWeekdaySatShort;
+
+  /// No description provided for @calendarWeekdaySunShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun'**
+  String get calendarWeekdaySunShort;
 }
 
 class _AppLocalizationsDelegate

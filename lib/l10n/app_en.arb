@@ -400,5 +400,56 @@
           "type": "int"
         }
       }
-    }
+    },
+
+    "calendarNoTasksForDay": "No tasks scheduled for this day.",
+    "calendarAddButton": "Add",
+    "calendarSelectedDayTitle": "Selected day: {dateTitle}",
+    "@calendarSelectedDayTitle": {
+      "description": "Calendar selected date section title",
+      "placeholders": {
+        "dateTitle": {
+          "type": "String"
+        }
+      }
+    },
+    "calendarPastDateWarning": "You are creating a task for a past date: {date}.",
+    "@calendarPastDateWarning": {
+      "description": "Calendar warning shown when adding a task for a past date",
+      "placeholders": {
+        "date": {
+          "type": "String"
+        }
+      }
+    },
+    "calendarOneTimeTaskTitle": "One-time task",
+    "calendarOneTimeTaskSubtitle": "Create a task for {date}",
+    "@calendarOneTimeTaskSubtitle": {
+      "description": "Calendar add action subtitle for one-time task",
+      "placeholders": {
+        "date": {
+          "type": "String"
+        }
+      }
+    },
+    "calendarRecurringTaskTitle": "Recurring task",
+    "calendarRecurringTaskSubtitle": "Create a repeating task starting {date}",
+    "@calendarRecurringTaskSubtitle": {
+      "description": "Calendar add action subtitle for recurring task",
+      "placeholders": {
+        "date": {
+          "type": "String"
+        }
+      }
+    },
+    "calendarDateToday": "Today",
+    "calendarDateTomorrow": "Tomorrow",
+    "calendarDateYesterday": "Yesterday",
+    "calendarWeekdayMonShort": "Mon",
+    "calendarWeekdayTueShort": "Tue",
+    "calendarWeekdayWedShort": "Wed",
+    "calendarWeekdayThuShort": "Thu",
+    "calendarWeekdayFriShort": "Fri",
+    "calendarWeekdaySatShort": "Sat",
+    "calendarWeekdaySunShort": "Sun"
 }
