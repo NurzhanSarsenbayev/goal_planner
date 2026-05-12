@@ -861,4 +861,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String recurringRuleDeleteDialogMessage(String ruleTitle) {
     return 'This will remove all unfinished generated tasks from “$ruleTitle”. Completed tasks will stay in your history.';
   }
+
+  @override
+  String get recurringRuleDialogAddTitle => 'Add recurring task';
+
+  @override
+  String get recurringRuleDialogEditTitle => 'Edit recurring task';
+
+  @override
+  String get recurringRuleTitleFieldLabel => 'Title';
+
+  @override
+  String get recurringRuleDescriptionFieldLabel => 'Description';
+
+  @override
+  String get recurringRuleGoalFieldLabel => 'Goal';
+
+  @override
+  String get recurringRuleNoGoalOption => 'No goal';
+
+  @override
+  String get recurringRuleMilestoneFieldLabel => 'Milestone';
+
+  @override
+  String get recurringRuleDirectGoalTaskOption => 'Direct goal task';
+
+  @override
+  String get recurringRuleMonthDayFieldLabel => 'Day of month';
+
+  @override
+  String recurringRuleMonthDayOption(int day) {
+    return 'Day $day';
+  }
+
+  @override
+  String get recurringRuleShortMonthFallbackNote =>
+      'If a month does not have this day, the task will be created on the last day of that month.';
 }

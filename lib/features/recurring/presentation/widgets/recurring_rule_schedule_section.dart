@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/recurring_task_rule.dart';
 
 class RecurringRuleScheduleSection extends StatelessWidget {
@@ -22,14 +23,19 @@ class RecurringRuleScheduleSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Column(
       children: [
         SegmentedButton<RecurrenceType>(
-          segments: const [
-            ButtonSegment(value: RecurrenceType.weekly, label: Text('Weekly')),
+          segments: [
+            ButtonSegment(
+              value: RecurrenceType.weekly,
+              label: Text(l10n.recurringRuleWeeklyLabel),
+            ),
             ButtonSegment(
               value: RecurrenceType.monthly,
-              label: Text('Monthly'),
+              label: Text(l10n.recurringRuleMonthlyLabel),
             ),
           ],
           selected: {recurrenceType},
@@ -46,10 +52,15 @@ class RecurringRuleScheduleSection extends StatelessWidget {
         else ...[
           DropdownButtonFormField<int>(
             initialValue: selectedMonthDay,
-            decoration: const InputDecoration(labelText: 'Day of month'),
+            decoration: InputDecoration(
+              labelText: l10n.recurringRuleMonthDayFieldLabel,
+            ),
             items: [
               for (var day = 1; day <= 31; day++)
-                DropdownMenuItem(value: day, child: Text('Day $day')),
+                DropdownMenuItem(
+                  value: day,
+                  child: Text(l10n.recurringRuleMonthDayOption(day)),
+                ),
             ],
             onChanged: (day) {
               if (day == null) {
@@ -63,7 +74,7 @@ class RecurringRuleScheduleSection extends StatelessWidget {
           Builder(
             builder: (context) {
               return Text(
-                'If a month does not have this day, the task will be created on the last day of that month.',
+                l10n.recurringRuleShortMonthFallbackNote,
                 style: Theme.of(context).textTheme.bodySmall,
               );
             },
@@ -85,48 +96,50 @@ class _WeekdaySelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Wrap(
       spacing: 8,
       runSpacing: 8,
       children: [
         _WeekdayChip(
-          label: 'Mon',
+          label: l10n.recurringWeekdayMonShort,
           weekday: DateTime.monday,
           selectedWeekdays: selectedWeekdays,
           onChanged: onChanged,
         ),
         _WeekdayChip(
-          label: 'Tue',
+          label: l10n.recurringWeekdayTueShort,
           weekday: DateTime.tuesday,
           selectedWeekdays: selectedWeekdays,
           onChanged: onChanged,
         ),
         _WeekdayChip(
-          label: 'Wed',
+          label: l10n.recurringWeekdayWedShort,
           weekday: DateTime.wednesday,
           selectedWeekdays: selectedWeekdays,
           onChanged: onChanged,
         ),
         _WeekdayChip(
-          label: 'Thu',
+          label: l10n.recurringWeekdayThuShort,
           weekday: DateTime.thursday,
           selectedWeekdays: selectedWeekdays,
           onChanged: onChanged,
         ),
         _WeekdayChip(
-          label: 'Fri',
+          label: l10n.recurringWeekdayFriShort,
           weekday: DateTime.friday,
           selectedWeekdays: selectedWeekdays,
           onChanged: onChanged,
         ),
         _WeekdayChip(
-          label: 'Sat',
+          label: l10n.recurringWeekdaySatShort,
           weekday: DateTime.saturday,
           selectedWeekdays: selectedWeekdays,
           onChanged: onChanged,
         ),
         _WeekdayChip(
-          label: 'Sun',
+          label: l10n.recurringWeekdaySunShort,
           weekday: DateTime.sunday,
           selectedWeekdays: selectedWeekdays,
           onChanged: onChanged,

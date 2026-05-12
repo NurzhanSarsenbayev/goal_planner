@@ -869,4 +869,40 @@ class AppLocalizationsRu extends AppLocalizations {
   String recurringRuleDeleteDialogMessage(String ruleTitle) {
     return 'Все незавершённые созданные задачи из «$ruleTitle» будут удалены. Выполненные задачи останутся в истории.';
   }
+
+  @override
+  String get recurringRuleDialogAddTitle => 'Добавить повторяющуюся задачу';
+
+  @override
+  String get recurringRuleDialogEditTitle => 'Изменить повторяющуюся задачу';
+
+  @override
+  String get recurringRuleTitleFieldLabel => 'Название';
+
+  @override
+  String get recurringRuleDescriptionFieldLabel => 'Описание';
+
+  @override
+  String get recurringRuleGoalFieldLabel => 'Цель';
+
+  @override
+  String get recurringRuleNoGoalOption => 'Без цели';
+
+  @override
+  String get recurringRuleMilestoneFieldLabel => 'Этап';
+
+  @override
+  String get recurringRuleDirectGoalTaskOption => 'Задача цели';
+
+  @override
+  String get recurringRuleMonthDayFieldLabel => 'День месяца';
+
+  @override
+  String recurringRuleMonthDayOption(int day) {
+    return 'День $day';
+  }
+
+  @override
+  String get recurringRuleShortMonthFallbackNote =>
+      'Если в месяце нет выбранного дня, задача будет создана в последний день этого месяца.';
 }

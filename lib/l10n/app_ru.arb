@@ -712,5 +712,24 @@
           "type": "String"
         }
       }
-    }
+    },
+    "recurringRuleDialogAddTitle": "Добавить повторяющуюся задачу",
+    "recurringRuleDialogEditTitle": "Изменить повторяющуюся задачу",
+    "recurringRuleTitleFieldLabel": "Название",
+    "recurringRuleDescriptionFieldLabel": "Описание",
+    "recurringRuleGoalFieldLabel": "Цель",
+    "recurringRuleNoGoalOption": "Без цели",
+    "recurringRuleMilestoneFieldLabel": "Этап",
+    "recurringRuleDirectGoalTaskOption": "Задача цели",
+    "recurringRuleMonthDayFieldLabel": "День месяца",
+    "recurringRuleMonthDayOption": "День {day}",
+    "@recurringRuleMonthDayOption": {
+      "description": "Recurring rule monthly day dropdown option",
+      "placeholders": {
+        "day": {
+          "type": "int"
+        }
+      }
+    },
+    "recurringRuleShortMonthFallbackNote": "Если в месяце нет выбранного дня, задача будет создана в последний день этого месяца."
 }

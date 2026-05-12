@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/milestone.dart';
 
@@ -23,6 +24,8 @@ class RecurringRulePlacementSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     final availableMilestones = milestones
         .where((milestone) => milestone.goalId == selectedGoalId)
         .toList();
@@ -31,11 +34,13 @@ class RecurringRulePlacementSection extends StatelessWidget {
       children: [
         DropdownButtonFormField<String?>(
           initialValue: selectedGoalId,
-          decoration: const InputDecoration(labelText: 'Goal'),
+          decoration: InputDecoration(
+            labelText: l10n.recurringRuleGoalFieldLabel,
+          ),
           items: [
-            const DropdownMenuItem<String?>(
+            DropdownMenuItem<String?>(
               value: null,
-              child: Text('No goal'),
+              child: Text(l10n.recurringRuleNoGoalOption),
             ),
             for (final goal in goals)
               DropdownMenuItem<String?>(
@@ -50,11 +55,13 @@ class RecurringRulePlacementSection extends StatelessWidget {
           DropdownButtonFormField<String?>(
             key: ValueKey(selectedGoalId),
             initialValue: selectedMilestoneId,
-            decoration: const InputDecoration(labelText: 'Milestone'),
+            decoration: InputDecoration(
+              labelText: l10n.recurringRuleMilestoneFieldLabel,
+            ),
             items: [
-              const DropdownMenuItem<String?>(
+              DropdownMenuItem<String?>(
                 value: null,
-                child: Text('Direct goal task'),
+                child: Text(l10n.recurringRuleDirectGoalTaskOption),
               ),
               for (final milestone in availableMilestones)
                 DropdownMenuItem<String?>(

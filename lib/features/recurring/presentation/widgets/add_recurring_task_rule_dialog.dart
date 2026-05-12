@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/milestone.dart';
 import '../../../../models/recurring_task_rule.dart';
@@ -32,8 +33,8 @@ class AddRecurringTaskRuleDialog extends StatefulWidget {
     required this.goals,
     required this.milestones,
     this.initialRule,
-    this.dialogTitle = 'Add recurring task',
-    this.submitLabel = 'Add',
+    this.dialogTitle,
+    this.submitLabel,
     this.initialDate,
     this.initialGoalId,
     this.initialMilestoneId,
@@ -48,8 +49,8 @@ class AddRecurringTaskRuleDialog extends StatefulWidget {
   final DateTime? initialDate;
   final String? initialGoalId;
   final String? initialMilestoneId;
-  final String dialogTitle;
-  final String submitLabel;
+  final String? dialogTitle;
+  final String? submitLabel;
 
   @override
   State<AddRecurringTaskRuleDialog> createState() =>
@@ -129,8 +130,10 @@ class _AddRecurringTaskRuleDialogState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return AlertDialog(
-      title: Text(widget.dialogTitle),
+      title: Text(widget.dialogTitle ?? l10n.recurringRuleDialogAddTitle),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -138,12 +141,16 @@ class _AddRecurringTaskRuleDialogState
             TextField(
               controller: _titleController,
               autofocus: true,
-              decoration: const InputDecoration(labelText: 'Title'),
+              decoration: InputDecoration(
+                labelText: l10n.recurringRuleTitleFieldLabel,
+              ),
             ),
             const SizedBox(height: 8),
             TextField(
               controller: _descriptionController,
-              decoration: const InputDecoration(labelText: 'Description'),
+              decoration: InputDecoration(
+                labelText: l10n.recurringRuleDescriptionFieldLabel,
+              ),
             ),
             const SizedBox(height: 16),
             RecurringRulePlacementSection(
@@ -196,11 +203,11 @@ class _AddRecurringTaskRuleDialogState
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: Text(l10n.commonCancel),
         ),
         FilledButton(
           onPressed: _canSubmit ? _submit : null,
-          child: Text(widget.submitLabel),
+          child: Text(widget.submitLabel ?? l10n.commonAdd),
         ),
       ],
     );

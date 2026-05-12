@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../models/goal.dart';
 import '../../../models/milestone.dart';
 import '../../../models/recurring_task_rule.dart';
@@ -36,12 +37,14 @@ Future<AddRecurringTaskRuleDraft?> showEditRecurringTaskRuleDialog(
   return showDialog<AddRecurringTaskRuleDraft>(
     context: context,
     builder: (context) {
+      final l10n = AppLocalizations.of(context);
+
       return AddRecurringTaskRuleDialog(
         goals: goals,
         milestones: milestones,
         initialRule: rule,
-        dialogTitle: 'Edit recurring task',
-        submitLabel: 'Save',
+        dialogTitle: l10n.recurringRuleDialogEditTitle,
+        submitLabel: l10n.commonSave,
       );
     },
   );

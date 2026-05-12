@@ -1585,6 +1585,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This will remove all unfinished generated tasks from “{ruleTitle}”. Completed tasks will stay in your history.'**
   String recurringRuleDeleteDialogMessage(String ruleTitle);
+
+  /// No description provided for @recurringRuleDialogAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add recurring task'**
+  String get recurringRuleDialogAddTitle;
+
+  /// No description provided for @recurringRuleDialogEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit recurring task'**
+  String get recurringRuleDialogEditTitle;
+
+  /// No description provided for @recurringRuleTitleFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get recurringRuleTitleFieldLabel;
+
+  /// No description provided for @recurringRuleDescriptionFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get recurringRuleDescriptionFieldLabel;
+
+  /// No description provided for @recurringRuleGoalFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal'**
+  String get recurringRuleGoalFieldLabel;
+
+  /// No description provided for @recurringRuleNoGoalOption.
+  ///
+  /// In en, this message translates to:
+  /// **'No goal'**
+  String get recurringRuleNoGoalOption;
+
+  /// No description provided for @recurringRuleMilestoneFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Milestone'**
+  String get recurringRuleMilestoneFieldLabel;
+
+  /// No description provided for @recurringRuleDirectGoalTaskOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Direct goal task'**
+  String get recurringRuleDirectGoalTaskOption;
+
+  /// No description provided for @recurringRuleMonthDayFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Day of month'**
+  String get recurringRuleMonthDayFieldLabel;
+
+  /// Recurring rule monthly day dropdown option
+  ///
+  /// In en, this message translates to:
+  /// **'Day {day}'**
+  String recurringRuleMonthDayOption(int day);
+
+  /// No description provided for @recurringRuleShortMonthFallbackNote.
+  ///
+  /// In en, this message translates to:
+  /// **'If a month does not have this day, the task will be created on the last day of that month.'**
+  String get recurringRuleShortMonthFallbackNote;
 }
 
 class _AppLocalizationsDelegate

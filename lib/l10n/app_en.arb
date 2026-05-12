@@ -712,5 +712,24 @@
           "type": "String"
         }
       }
-    }
+    },
+    "recurringRuleDialogAddTitle": "Add recurring task",
+    "recurringRuleDialogEditTitle": "Edit recurring task",
+    "recurringRuleTitleFieldLabel": "Title",
+    "recurringRuleDescriptionFieldLabel": "Description",
+    "recurringRuleGoalFieldLabel": "Goal",
+    "recurringRuleNoGoalOption": "No goal",
+    "recurringRuleMilestoneFieldLabel": "Milestone",
+    "recurringRuleDirectGoalTaskOption": "Direct goal task",
+    "recurringRuleMonthDayFieldLabel": "Day of month",
+    "recurringRuleMonthDayOption": "Day {day}",
+    "@recurringRuleMonthDayOption": {
+      "description": "Recurring rule monthly day dropdown option",
+      "placeholders": {
+        "day": {
+          "type": "int"
+        }
+      }
+    },
+    "recurringRuleShortMonthFallbackNote": "If a month does not have this day, the task will be created on the last day of that month."
 }
