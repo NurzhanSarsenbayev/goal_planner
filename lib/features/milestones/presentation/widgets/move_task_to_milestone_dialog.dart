@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/milestone.dart';
 
 class MoveTaskToMilestoneDialog extends StatelessWidget {
@@ -9,10 +10,12 @@ class MoveTaskToMilestoneDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return AlertDialog(
-      title: const Text('Move to milestone'),
+      title: Text(l10n.moveTaskToMilestoneDialogTitle),
       content: milestones.isEmpty
-          ? const Text('No milestones available for this goal.')
+          ? Text(l10n.moveTaskToMilestoneDialogEmptyMessage)
           : Column(
               mainAxisSize: MainAxisSize.min,
               children: milestones.map((milestone) {
@@ -32,7 +35,7 @@ class MoveTaskToMilestoneDialog extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: Text(l10n.commonCancel),
         ),
       ],
     );

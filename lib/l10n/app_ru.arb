@@ -613,5 +613,37 @@
       }
     },
     "milestoneDeleteDialogMoveTasksToDirectButton": "Переместить в задачи цели",
-    "milestoneDeleteDialogDeleteWithTasksButton": "Удалить этап и задачи"
+    "milestoneDeleteDialogDeleteWithTasksButton": "Удалить этап и задачи",
+    "milestoneDialogAddTitle": "Добавить этап",
+    "milestoneDialogEditTitle": "Изменить этап",
+    "milestoneTitleFieldLabel": "Название",
+    "milestoneTitleFieldHint": "например, система контента",
+    "milestoneDescriptionFieldLabel": "Описание",
+    "milestoneDescriptionFieldHint": "Необязательно",
+
+    "milestonesSectionTitle": "Этапы",
+    "milestonesAddButton": "Добавить этап",
+    "milestonesEmptyTitle": "Этапов пока нет",
+    "milestonesEmptyDescription": "Добавьте этапы, чтобы группировать задачи внутри цели.",
+
+    "milestoneCardNoTasksYet": "Разовых задач пока нет",
+    "milestoneCardTasksCompleted": "{completedCount} / {totalCount} задач выполнено",
+    "@milestoneCardTasksCompleted": {
+      "description": "Milestone card task completion progress text",
+      "placeholders": {
+        "completedCount": {
+          "type": "int"
+        },
+        "totalCount": {
+          "type": "int"
+        }
+      }
+    },
+    "milestoneCardRecurringTasksSection": "Повторяющиеся задачи",
+    "milestoneCardNoTasksInMilestone": "Задач в этом этапе пока нет.",
+    "milestoneCardAddTaskButton": "Добавить задачу",
+    "milestoneCardAddRecurringButton": "Добавить повтор",
+
+    "moveTaskToMilestoneDialogTitle": "Переместить в этап",
+    "moveTaskToMilestoneDialogEmptyMessage": "У этой цели пока нет этапов."
 }

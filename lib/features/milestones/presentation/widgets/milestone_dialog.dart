@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class MilestoneDialog extends StatefulWidget {
   const MilestoneDialog({
     super.key,
     this.initialTitle = '',
     this.initialDescription = '',
-    this.title = 'Add milestone',
-    this.submitLabel = 'Add',
+    this.title,
+    this.submitLabel,
   });
 
   final String initialTitle;
   final String initialDescription;
-  final String title;
-  final String submitLabel;
+  final String? title;
+  final String? submitLabel;
 
   @override
   State<MilestoneDialog> createState() => _MilestoneDialogState();
@@ -54,17 +56,19 @@ class _MilestoneDialogState extends State<MilestoneDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return AlertDialog(
-      title: Text(widget.title),
+      title: Text(widget.title ?? l10n.milestoneDialogAddTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
             controller: _titleController,
             autofocus: true,
-            decoration: const InputDecoration(
-              labelText: 'Title',
-              hintText: 'e.g. Content system',
+            decoration: InputDecoration(
+              labelText: l10n.milestoneTitleFieldLabel,
+              hintText: l10n.milestoneTitleFieldHint,
             ),
             textInputAction: TextInputAction.next,
             onSubmitted: (_) => _submit(),
@@ -72,9 +76,9 @@ class _MilestoneDialogState extends State<MilestoneDialog> {
           const SizedBox(height: 12),
           TextField(
             controller: _descriptionController,
-            decoration: const InputDecoration(
-              labelText: 'Description',
-              hintText: 'Optional',
+            decoration: InputDecoration(
+              labelText: l10n.milestoneDescriptionFieldLabel,
+              hintText: l10n.milestoneDescriptionFieldHint,
             ),
             minLines: 1,
             maxLines: 3,
@@ -86,9 +90,12 @@ class _MilestoneDialogState extends State<MilestoneDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: Text(l10n.commonCancel),
         ),
-        FilledButton(onPressed: _submit, child: Text(widget.submitLabel)),
+        FilledButton(
+          onPressed: _submit,
+          child: Text(widget.submitLabel ?? l10n.commonAdd),
+        ),
       ],
     );
   }

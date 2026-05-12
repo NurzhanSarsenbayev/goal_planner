@@ -723,4 +723,63 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get milestoneDeleteDialogDeleteWithTasksButton =>
       'Delete milestone and tasks';
+
+  @override
+  String get milestoneDialogAddTitle => 'Add milestone';
+
+  @override
+  String get milestoneDialogEditTitle => 'Edit milestone';
+
+  @override
+  String get milestoneTitleFieldLabel => 'Title';
+
+  @override
+  String get milestoneTitleFieldHint => 'e.g. Content system';
+
+  @override
+  String get milestoneDescriptionFieldLabel => 'Description';
+
+  @override
+  String get milestoneDescriptionFieldHint => 'Optional';
+
+  @override
+  String get milestonesSectionTitle => 'Milestones';
+
+  @override
+  String get milestonesAddButton => 'Add milestone';
+
+  @override
+  String get milestonesEmptyTitle => 'No milestones yet';
+
+  @override
+  String get milestonesEmptyDescription =>
+      'Add milestones to group tasks inside this goal.';
+
+  @override
+  String get milestoneCardNoTasksYet => 'No one-off tasks yet';
+
+  @override
+  String milestoneCardTasksCompleted(int completedCount, int totalCount) {
+    return '$completedCount / $totalCount tasks completed';
+  }
+
+  @override
+  String get milestoneCardRecurringTasksSection => 'Recurring tasks';
+
+  @override
+  String get milestoneCardNoTasksInMilestone =>
+      'No tasks in this milestone yet.';
+
+  @override
+  String get milestoneCardAddTaskButton => 'Add task';
+
+  @override
+  String get milestoneCardAddRecurringButton => 'Add recurring';
+
+  @override
+  String get moveTaskToMilestoneDialogTitle => 'Move to milestone';
+
+  @override
+  String get moveTaskToMilestoneDialogEmptyMessage =>
+      'No milestones available for this goal.';
 }

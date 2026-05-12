@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/milestone.dart';
 import '../../../../models/planner_task.dart';
@@ -50,10 +51,12 @@ class MilestoneCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     final completedTasks = tasks.where((task) => task.isCompleted).length;
     final progressText = tasks.isEmpty
-        ? 'No one-off tasks yet'
-        : '$completedTasks / ${tasks.length} tasks completed';
+        ? l10n.milestoneCardNoTasksYet
+        : l10n.milestoneCardTasksCompleted(completedTasks, tasks.length);
 
     return Card(
       child: ExpansionTile(
@@ -77,11 +80,14 @@ class MilestoneCard extends StatelessWidget {
             }
           },
           itemBuilder: (context) {
-            return const [
-              PopupMenuItem(value: _MilestoneAction.edit, child: Text('Edit')),
+            return [
+              PopupMenuItem(
+                value: _MilestoneAction.edit,
+                child: Text(l10n.commonEdit),
+              ),
               PopupMenuItem(
                 value: _MilestoneAction.delete,
-                child: Text('Delete'),
+                child: Text(l10n.commonDelete),
               ),
             ];
           },
@@ -93,7 +99,7 @@ class MilestoneCard extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Recurring tasks',
+                  l10n.milestoneCardRecurringTasksSection,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
@@ -122,7 +128,7 @@ class MilestoneCard extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'No tasks in this milestone yet.',
+                  l10n.milestoneCardNoTasksInMilestone,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
@@ -156,12 +162,12 @@ class MilestoneCard extends StatelessWidget {
                   TextButton.icon(
                     onPressed: onAddTask,
                     icon: const Icon(Icons.add),
-                    label: const Text('Add task'),
+                    label: Text(l10n.milestoneCardAddTaskButton),
                   ),
                   TextButton.icon(
                     onPressed: onAddRecurringTask,
                     icon: const Icon(Icons.repeat),
-                    label: const Text('Add recurring'),
+                    label: Text(l10n.milestoneCardAddRecurringButton),
                   ),
                 ],
               ),

@@ -613,5 +613,37 @@
       }
     },
     "milestoneDeleteDialogMoveTasksToDirectButton": "Move tasks to Direct tasks",
-    "milestoneDeleteDialogDeleteWithTasksButton": "Delete milestone and tasks"
+    "milestoneDeleteDialogDeleteWithTasksButton": "Delete milestone and tasks",
+    "milestoneDialogAddTitle": "Add milestone",
+    "milestoneDialogEditTitle": "Edit milestone",
+    "milestoneTitleFieldLabel": "Title",
+    "milestoneTitleFieldHint": "e.g. Content system",
+    "milestoneDescriptionFieldLabel": "Description",
+    "milestoneDescriptionFieldHint": "Optional",
+
+    "milestonesSectionTitle": "Milestones",
+    "milestonesAddButton": "Add milestone",
+    "milestonesEmptyTitle": "No milestones yet",
+    "milestonesEmptyDescription": "Add milestones to group tasks inside this goal.",
+
+    "milestoneCardNoTasksYet": "No one-off tasks yet",
+    "milestoneCardTasksCompleted": "{completedCount} / {totalCount} tasks completed",
+    "@milestoneCardTasksCompleted": {
+      "description": "Milestone card task completion progress text",
+      "placeholders": {
+        "completedCount": {
+          "type": "int"
+        },
+        "totalCount": {
+          "type": "int"
+        }
+      }
+    },
+    "milestoneCardRecurringTasksSection": "Recurring tasks",
+    "milestoneCardNoTasksInMilestone": "No tasks in this milestone yet.",
+    "milestoneCardAddTaskButton": "Add task",
+    "milestoneCardAddRecurringButton": "Add recurring",
+
+    "moveTaskToMilestoneDialogTitle": "Move to milestone",
+    "moveTaskToMilestoneDialogEmptyMessage": "No milestones available for this goal."
 }

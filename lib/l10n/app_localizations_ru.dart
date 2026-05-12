@@ -732,4 +732,62 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get milestoneDeleteDialogDeleteWithTasksButton =>
       'Удалить этап и задачи';
+
+  @override
+  String get milestoneDialogAddTitle => 'Добавить этап';
+
+  @override
+  String get milestoneDialogEditTitle => 'Изменить этап';
+
+  @override
+  String get milestoneTitleFieldLabel => 'Название';
+
+  @override
+  String get milestoneTitleFieldHint => 'например, система контента';
+
+  @override
+  String get milestoneDescriptionFieldLabel => 'Описание';
+
+  @override
+  String get milestoneDescriptionFieldHint => 'Необязательно';
+
+  @override
+  String get milestonesSectionTitle => 'Этапы';
+
+  @override
+  String get milestonesAddButton => 'Добавить этап';
+
+  @override
+  String get milestonesEmptyTitle => 'Этапов пока нет';
+
+  @override
+  String get milestonesEmptyDescription =>
+      'Добавьте этапы, чтобы группировать задачи внутри цели.';
+
+  @override
+  String get milestoneCardNoTasksYet => 'Разовых задач пока нет';
+
+  @override
+  String milestoneCardTasksCompleted(int completedCount, int totalCount) {
+    return '$completedCount / $totalCount задач выполнено';
+  }
+
+  @override
+  String get milestoneCardRecurringTasksSection => 'Повторяющиеся задачи';
+
+  @override
+  String get milestoneCardNoTasksInMilestone => 'Задач в этом этапе пока нет.';
+
+  @override
+  String get milestoneCardAddTaskButton => 'Добавить задачу';
+
+  @override
+  String get milestoneCardAddRecurringButton => 'Добавить повтор';
+
+  @override
+  String get moveTaskToMilestoneDialogTitle => 'Переместить в этап';
+
+  @override
+  String get moveTaskToMilestoneDialogEmptyMessage =>
+      'У этой цели пока нет этапов.';
 }

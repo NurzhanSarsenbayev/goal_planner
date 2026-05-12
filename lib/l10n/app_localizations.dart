@@ -1342,6 +1342,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete milestone and tasks'**
   String get milestoneDeleteDialogDeleteWithTasksButton;
+
+  /// No description provided for @milestoneDialogAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add milestone'**
+  String get milestoneDialogAddTitle;
+
+  /// No description provided for @milestoneDialogEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit milestone'**
+  String get milestoneDialogEditTitle;
+
+  /// No description provided for @milestoneTitleFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get milestoneTitleFieldLabel;
+
+  /// No description provided for @milestoneTitleFieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Content system'**
+  String get milestoneTitleFieldHint;
+
+  /// No description provided for @milestoneDescriptionFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get milestoneDescriptionFieldLabel;
+
+  /// No description provided for @milestoneDescriptionFieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get milestoneDescriptionFieldHint;
+
+  /// No description provided for @milestonesSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Milestones'**
+  String get milestonesSectionTitle;
+
+  /// No description provided for @milestonesAddButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add milestone'**
+  String get milestonesAddButton;
+
+  /// No description provided for @milestonesEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No milestones yet'**
+  String get milestonesEmptyTitle;
+
+  /// No description provided for @milestonesEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add milestones to group tasks inside this goal.'**
+  String get milestonesEmptyDescription;
+
+  /// No description provided for @milestoneCardNoTasksYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No one-off tasks yet'**
+  String get milestoneCardNoTasksYet;
+
+  /// Milestone card task completion progress text
+  ///
+  /// In en, this message translates to:
+  /// **'{completedCount} / {totalCount} tasks completed'**
+  String milestoneCardTasksCompleted(int completedCount, int totalCount);
+
+  /// No description provided for @milestoneCardRecurringTasksSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring tasks'**
+  String get milestoneCardRecurringTasksSection;
+
+  /// No description provided for @milestoneCardNoTasksInMilestone.
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks in this milestone yet.'**
+  String get milestoneCardNoTasksInMilestone;
+
+  /// No description provided for @milestoneCardAddTaskButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add task'**
+  String get milestoneCardAddTaskButton;
+
+  /// No description provided for @milestoneCardAddRecurringButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add recurring'**
+  String get milestoneCardAddRecurringButton;
+
+  /// No description provided for @moveTaskToMilestoneDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to milestone'**
+  String get moveTaskToMilestoneDialogTitle;
+
+  /// No description provided for @moveTaskToMilestoneDialogEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No milestones available for this goal.'**
+  String get moveTaskToMilestoneDialogEmptyMessage;
 }
 
 class _AppLocalizationsDelegate

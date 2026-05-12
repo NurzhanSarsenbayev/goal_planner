@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../models/milestone.dart';
 import 'widgets/delete_milestone_dialog.dart';
 import 'widgets/milestone_dialog.dart';
@@ -23,11 +24,13 @@ Future<MilestoneDraft?> showEditMilestoneDialog(
   return showDialog<MilestoneDraft>(
     context: context,
     builder: (context) {
+      final l10n = AppLocalizations.of(context);
+
       return MilestoneDialog(
         initialTitle: milestone.title,
         initialDescription: milestone.description,
-        title: 'Edit milestone',
-        submitLabel: 'Save',
+        title: l10n.milestoneDialogEditTitle,
+        submitLabel: l10n.commonSave,
       );
     },
   );

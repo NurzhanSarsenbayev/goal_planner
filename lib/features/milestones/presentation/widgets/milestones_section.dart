@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/recurring_task_rule.dart';
 import '../../../../models/milestone.dart';
@@ -53,19 +54,21 @@ class MilestonesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          title: 'Milestones',
-          actionLabel: 'Add milestone',
+          title: l10n.milestonesSectionTitle,
+          actionLabel: l10n.milestonesAddButton,
           onActionPressed: onAddMilestone,
         ),
         const SizedBox(height: 8),
         if (milestones.isEmpty)
-          const PlaceholderScreen(
-            title: 'No milestones yet',
-            description: 'Add milestones to group tasks inside this goal.',
+          PlaceholderScreen(
+            title: l10n.milestonesEmptyTitle,
+            description: l10n.milestonesEmptyDescription,
             icon: Icons.account_tree_outlined,
           )
         else
