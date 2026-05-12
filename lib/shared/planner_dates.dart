@@ -34,22 +34,3 @@ String relativePlannerDateTitle(DateTime date) {
 
   return formatPlannerDate(normalizedDate);
 }
-
-String plannerMonthTitle(DateTime date) {
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
-  return '${monthNames[date.month - 1]} ${date.year}';
-}
