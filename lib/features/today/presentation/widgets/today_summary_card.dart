@@ -23,13 +23,6 @@ class TodaySummaryCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              l10n.todayTab,
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
-            ),
-            const SizedBox(height: 4),
-            Text(
               _summaryText(
                 l10n,
                 overdueCount: overdueCount,

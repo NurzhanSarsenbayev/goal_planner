@@ -150,7 +150,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get habitsArchivedTooltip => 'Archived habits';
 
   @override
-  String get habitFabLabel => 'Habit';
+  String get habitFabLabel => 'Add habit';
 
   @override
   String get habitsEmptyTitle => 'Start tracking a small routine';

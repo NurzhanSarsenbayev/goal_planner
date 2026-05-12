@@ -353,7 +353,7 @@ abstract class AppLocalizations {
   /// No description provided for @habitFabLabel.
   ///
   /// In en, this message translates to:
-  /// **'Habit'**
+  /// **'Add habit'**
   String get habitFabLabel;
 
   /// No description provided for @habitsEmptyTitle.

@@ -38,44 +38,55 @@ class _HabitsScreenState extends State<HabitsScreen> {
         );
 
         return Scaffold(
-          appBar: AppBar(
-            title: Text(l10n.habitsTitle),
-            actions: [
+          body: Column(
+            children: [
               if (hasArchivedHabits)
-                IconButton(
-                  tooltip: l10n.habitsArchivedTooltip,
-                  onPressed: () {
-                    _habitDialogActions.showArchivedHabitsSheet(context);
-                  },
-                  icon: const Icon(Icons.archive_outlined),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: IconButton(
+                      tooltip: l10n.habitsArchivedTooltip,
+                      onPressed: () {
+                        _habitDialogActions.showArchivedHabitsSheet(context);
+                      },
+                      icon: const Icon(Icons.archive_outlined),
+                    ),
+                  ),
                 ),
+              Expanded(
+                child: _HabitsBody(
+                  habitStore: habitStore,
+                  onCreateHabit: () {
+                    return _habitDialogActions.showAddDialog(context);
+                  },
+                  onViewArchivedHabits: () {
+                    return _habitDialogActions.showArchivedHabitsSheet(context);
+                  },
+                  onCellTap:
+                      ({required habitId, required date, required status}) {
+                        return _habitDialogActions.showStatusSheet(
+                          context,
+                          habitId: habitId,
+                          date: date,
+                          status: status,
+                        );
+                      },
+                  onEditHabit: (habit) {
+                    return _habitDialogActions.showEditDialog(context, habit);
+                  },
+                  onArchiveHabit: (habit) {
+                    return _habitDialogActions.showArchiveDialog(
+                      context,
+                      habit,
+                    );
+                  },
+                  onDeleteHabit: (habit) {
+                    return _habitDialogActions.showDeleteDialog(context, habit);
+                  },
+                ),
+              ),
             ],
-          ),
-          body: _HabitsBody(
-            habitStore: habitStore,
-            onCreateHabit: () {
-              return _habitDialogActions.showAddDialog(context);
-            },
-            onViewArchivedHabits: () {
-              return _habitDialogActions.showArchivedHabitsSheet(context);
-            },
-            onCellTap: ({required habitId, required date, required status}) {
-              return _habitDialogActions.showStatusSheet(
-                context,
-                habitId: habitId,
-                date: date,
-                status: status,
-              );
-            },
-            onEditHabit: (habit) {
-              return _habitDialogActions.showEditDialog(context, habit);
-            },
-            onArchiveHabit: (habit) {
-              return _habitDialogActions.showArchiveDialog(context, habit);
-            },
-            onDeleteHabit: (habit) {
-              return _habitDialogActions.showDeleteDialog(context, habit);
-            },
           ),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () {

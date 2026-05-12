@@ -153,7 +153,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get habitsArchivedTooltip => 'Архив привычек';
 
   @override
-  String get habitFabLabel => 'Привычка';
+  String get habitFabLabel => 'Добавить привычку';
 
   @override
   String get habitsEmptyTitle => 'Начните с простой привычки';

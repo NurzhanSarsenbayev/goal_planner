@@ -177,7 +177,7 @@
     "commonDelete": "Delete",
     "habitsTitle": "Habits",
     "habitsArchivedTooltip": "Archived habits",
-    "habitFabLabel": "Habit",
+    "habitFabLabel": "Add habit",
     "habitsEmptyTitle": "Start tracking a small routine",
     "habitsEmptyDescription": "Pick something simple that you want to notice every week.",
     "habitsEmptyButton": "Create first habit",

@@ -177,7 +177,7 @@
     "commonDelete": "Удалить",
     "habitsTitle": "Привычки",
     "habitsArchivedTooltip": "Архив привычек",
-    "habitFabLabel": "Привычка",
+    "habitFabLabel": "Добавить привычку",
     "habitsEmptyTitle": "Начните с простой привычки",
     "habitsEmptyDescription": "Выберите что-то небольшое, что хотите отслеживать каждую неделю.",
     "habitsEmptyButton": "Создать первую привычку",
