@@ -80,5 +80,40 @@ void main() {
 
       expect(() => storage.readBackup(file), throwsFormatException);
     });
+
+    test('returns null when latest backup does not exist', () async {
+      final storage = PlannerBackupFileStorage(
+        backupDirectoryProvider: () async => tempDirectory,
+      );
+
+      final latestFile = await storage.findLatestBackupFile();
+      final latestBackup = await storage.readLatestBackup();
+
+      expect(latestFile, isNull);
+      expect(latestBackup, isNull);
+    });
+
+    test('finds latest backup file', () async {
+      final storage = PlannerBackupFileStorage(
+        backupDirectoryProvider: () async => tempDirectory,
+      );
+      final firstBackup = PlannerBackup.create(
+        exportedAt: DateTime.utc(2026, 5, 13, 10),
+        data: const PlannerBackupData.empty(),
+      );
+      final secondBackup = PlannerBackup.create(
+        exportedAt: DateTime.utc(2026, 5, 13, 11),
+        data: const PlannerBackupData.empty(),
+      );
+
+      await storage.saveBackup(firstBackup);
+      final secondFile = await storage.saveBackup(secondBackup);
+
+      final latestFile = await storage.findLatestBackupFile();
+      final latestBackup = await storage.readLatestBackup();
+
+      expect(latestFile?.path, secondFile.path);
+      expect(latestBackup?.exportedAt, secondBackup.exportedAt);
+    });
   });
 }

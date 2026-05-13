@@ -545,6 +545,17 @@
     },
     "backupCreateFailureMessage": "Не удалось создать бэкап. Попробуйте ещё раз.",
 
+    "moreBackupNeverCreated": "Последний бэкап: никогда",
+    "moreBackupLastCreated": "Последний бэкап: {dateTime}",
+    "@moreBackupLastCreated": {
+      "description": "Shown in More backup section as last created backup timestamp",
+      "placeholders": {
+        "dateTime": {
+          "type": "String"
+        }
+      }
+    },
+
     "moreToolsSection": "Инструменты",
     "moreAllTasksSubtitle": "Все задачи в одном месте.",
     "moreReportsSubtitle": "Прогресс по задачам, привычкам и целям.",

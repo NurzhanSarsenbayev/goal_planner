@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../settings/app_language.dart';
 import '../../../l10n/app_localizations.dart';
@@ -9,6 +10,7 @@ class MoreScreen extends StatelessWidget {
     required this.selectedLanguage,
     required this.onLanguageChanged,
     required this.onCreateBackup,
+    required this.lastBackupAt,
     required this.onOpenAllTasks,
     required this.onOpenReports,
     required this.onOpenRecurringTasks,
@@ -17,9 +19,25 @@ class MoreScreen extends StatelessWidget {
   final AppLanguage selectedLanguage;
   final ValueChanged<AppLanguage> onLanguageChanged;
   final Future<void> Function() onCreateBackup;
+  final DateTime? lastBackupAt;
   final VoidCallback onOpenAllTasks;
   final VoidCallback onOpenReports;
   final VoidCallback onOpenRecurringTasks;
+
+  String _backupSubtitle(BuildContext context, AppLocalizations l10n) {
+    final backupAt = lastBackupAt;
+
+    if (backupAt == null) {
+      return l10n.moreBackupNeverCreated;
+    }
+
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    final formattedDate = DateFormat.yMMMd(
+      locale,
+    ).add_Hm().format(backupAt.toLocal());
+
+    return l10n.moreBackupLastCreated(formattedDate);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +97,7 @@ class MoreScreen extends StatelessWidget {
           child: ListTile(
             leading: const Icon(Icons.backup_outlined),
             title: Text(l10n.moreCreateBackupTitle),
-            subtitle: Text(l10n.moreCreateBackupSubtitle),
+            subtitle: Text(_backupSubtitle(context, l10n)),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               onCreateBackup();

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'settings/app_language.dart';
 import '../l10n/app_localizations.dart';
 import '../features/backup/application/planner_backup_file_export_service.dart';
+import '../features/backup/application/planner_backup_file_storage.dart';
 import '../features/recurring/presentation/recurring_rule_dialog_actions.dart';
 import '../features/goals/presentation/goal_dialog_actions.dart';
 import '../features/tasks/presentation/task_dialog_actions.dart';
@@ -37,9 +38,10 @@ class _AppShellState extends State<AppShell> {
   late final TaskDialogActions _taskDialogActions;
   late final RecurringRuleDialogActions _recurringRuleDialogActions;
   late final AppNavigationActions _navigationActions;
-  late final MainTabBuilder _mainTabBuilder;
   late final HabitReportLoader _habitReportLoader;
   late final PlannerBackupFileExportService _backupFileExportService;
+  late final PlannerBackupFileStorage _backupFileStorage;
+  DateTime? _lastBackupAt;
 
   int _selectedIndex = 0;
 
@@ -47,11 +49,17 @@ class _AppShellState extends State<AppShell> {
     try {
       final file = await _backupFileExportService.createBackupFile();
 
+      final latestBackup = await _backupFileStorage.readBackup(file);
+
       if (!mounted) {
         return;
       }
 
       final l10n = AppLocalizations.of(context);
+
+      setState(() {
+        _lastBackupAt = latestBackup.exportedAt;
+      });
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.backupCreateSuccessMessage(file.path))),
@@ -77,6 +85,10 @@ class _AppShellState extends State<AppShell> {
     _store = _dependencies.store;
     _habitStore = _dependencies.habitStore;
     _backupFileExportService = _dependencies.backupFileExportService;
+    _backupFileStorage = _dependencies.backupFileStorage;
+
+    unawaited(_loadBackupStatus());
+
     _habitReportLoader = HabitReportLoader(habitStore: _habitStore);
 
     _goalDialogActions = GoalDialogActions(store: _store);
@@ -90,26 +102,33 @@ class _AppShellState extends State<AppShell> {
       habitReportLoader: _habitReportLoader,
     );
 
-    _mainTabBuilder = MainTabBuilder(
-      store: _store,
-      habitStore: _habitStore,
-      goalDialogActions: _goalDialogActions,
-      taskDialogActions: _taskDialogActions,
-      recurringRuleDialogActions: _recurringRuleDialogActions,
-      navigationActions: _navigationActions,
-      selectedLanguage: widget.selectedLanguage,
-      onLanguageChanged: widget.onLanguageChanged,
-      onCreateBackup: _createBackupFile,
-      onOpenHabits: () {
-        _onDestinationSelected(3);
-      },
-    );
-
     _store.addListener(_onStoreChanged);
     _habitStore.addListener(_onStoreChanged);
 
     unawaited(_store.initialize());
     unawaited(_habitStore.initialize());
+  }
+
+  Future<void> _loadBackupStatus() async {
+    try {
+      final latestBackup = await _backupFileStorage.readLatestBackup();
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _lastBackupAt = latestBackup?.exportedAt;
+      });
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _lastBackupAt = null;
+      });
+    }
   }
 
   @override
@@ -132,9 +151,28 @@ class _AppShellState extends State<AppShell> {
     });
   }
 
+  MainTabBuilder _buildMainTabBuilder() {
+    return MainTabBuilder(
+      store: _store,
+      habitStore: _habitStore,
+      goalDialogActions: _goalDialogActions,
+      taskDialogActions: _taskDialogActions,
+      recurringRuleDialogActions: _recurringRuleDialogActions,
+      navigationActions: _navigationActions,
+      selectedLanguage: widget.selectedLanguage,
+      onLanguageChanged: widget.onLanguageChanged,
+      onCreateBackup: _createBackupFile,
+      lastBackupAt: _lastBackupAt,
+      onOpenHabits: () {
+        _onDestinationSelected(3);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final screens = _mainTabBuilder.buildScreens(context);
+    final mainTabBuilder = _buildMainTabBuilder();
+    final screens = mainTabBuilder.buildScreens(context);
     final isAppInitialized = _store.isInitialized && _habitStore.isInitialized;
 
     final l10n = AppLocalizations.of(context);

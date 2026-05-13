@@ -18,6 +18,7 @@ class MainTabBuilder {
     required PlannerStore store,
     required HabitStore habitStore,
     required Future<void> Function() onCreateBackup,
+    required DateTime? lastBackupAt,
     required GoalDialogActions goalDialogActions,
     required TaskDialogActions taskDialogActions,
     required RecurringRuleDialogActions recurringRuleDialogActions,
@@ -28,6 +29,7 @@ class MainTabBuilder {
   }) : _store = store,
        _habitStore = habitStore,
        _onCreateBackup = onCreateBackup,
+       _lastBackupAt = lastBackupAt,
        _onOpenHabits = onOpenHabits,
        _goalDialogActions = goalDialogActions,
        _taskDialogActions = taskDialogActions,
@@ -39,6 +41,7 @@ class MainTabBuilder {
   final PlannerStore _store;
   final HabitStore _habitStore;
   final Future<void> Function() _onCreateBackup;
+  final DateTime? _lastBackupAt;
   final GoalDialogActions _goalDialogActions;
   final TaskDialogActions _taskDialogActions;
   final RecurringRuleDialogActions _recurringRuleDialogActions;
@@ -114,6 +117,7 @@ class MainTabBuilder {
         selectedLanguage: _selectedLanguage,
         onLanguageChanged: _onLanguageChanged,
         onCreateBackup: _onCreateBackup,
+        lastBackupAt: _lastBackupAt,
         onOpenAllTasks: () {
           _navigationActions.openAllTasks(context);
         },

@@ -25,6 +25,7 @@ class AppDependencies {
     required this.store,
     required this.habitStore,
     required this.backupFileExportService,
+    required this.backupFileStorage,
   }) : _database = database;
 
   factory AppDependencies.create() {
@@ -45,9 +46,11 @@ class AppDependencies {
       habitRepository: habitRepository,
     );
 
+    const backupFileStorage = PlannerBackupFileStorage();
+
     final backupFileExportService = PlannerBackupFileExportService(
       exportService: backupExportService,
-      fileStorage: const PlannerBackupFileStorage(),
+      fileStorage: backupFileStorage,
     );
 
     final goalStoreCoordinator = GoalStoreCoordinator(
@@ -97,6 +100,7 @@ class AppDependencies {
       store: store,
       habitStore: habitStore,
       backupFileExportService: backupFileExportService,
+      backupFileStorage: backupFileStorage,
     );
   }
 
@@ -104,6 +108,7 @@ class AppDependencies {
   final PlannerStore store;
   final HabitStore habitStore;
   final PlannerBackupFileExportService backupFileExportService;
+  final PlannerBackupFileStorage backupFileStorage;
 
   Future<void> dispose() async {
     store.dispose();

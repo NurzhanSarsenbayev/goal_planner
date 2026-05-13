@@ -642,6 +642,14 @@ class AppLocalizationsRu extends AppLocalizations {
       'Не удалось создать бэкап. Попробуйте ещё раз.';
 
   @override
+  String get moreBackupNeverCreated => 'Последний бэкап: никогда';
+
+  @override
+  String moreBackupLastCreated(String dateTime) {
+    return 'Последний бэкап: $dateTime';
+  }
+
+  @override
   String get moreToolsSection => 'Инструменты';
 
   @override

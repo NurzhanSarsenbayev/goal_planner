@@ -639,6 +639,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not create backup. Please try again.';
 
   @override
+  String get moreBackupNeverCreated => 'Last backup: never';
+
+  @override
+  String moreBackupLastCreated(String dateTime) {
+    return 'Last backup: $dateTime';
+  }
+
+  @override
   String get moreToolsSection => 'Tools';
 
   @override

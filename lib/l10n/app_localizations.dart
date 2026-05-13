@@ -1214,6 +1214,18 @@ abstract class AppLocalizations {
   /// **'Could not create backup. Please try again.'**
   String get backupCreateFailureMessage;
 
+  /// No description provided for @moreBackupNeverCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last backup: never'**
+  String get moreBackupNeverCreated;
+
+  /// Shown in More backup section as last created backup timestamp
+  ///
+  /// In en, this message translates to:
+  /// **'Last backup: {dateTime}'**
+  String moreBackupLastCreated(String dateTime);
+
   /// No description provided for @moreToolsSection.
   ///
   /// In en, this message translates to:

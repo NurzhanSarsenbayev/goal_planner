@@ -43,6 +43,54 @@ class PlannerBackupFileStorage {
     throw const FormatException('Backup file must contain a JSON object.');
   }
 
+  Future<PlannerBackup?> readLatestBackup() async {
+    final latestFile = await findLatestBackupFile();
+
+    if (latestFile == null) {
+      return null;
+    }
+
+    return readBackup(latestFile);
+  }
+
+  Future<File?> findLatestBackupFile() async {
+    final directory = await _backupDirectoryProvider();
+
+    if (!await directory.exists()) {
+      return null;
+    }
+
+    final files = <File>[];
+
+    await for (final entity in directory.list()) {
+      if (entity is! File) {
+        continue;
+      }
+
+      final fileName = path.basename(entity.path);
+
+      if (!fileName.startsWith('planner_backup_') ||
+          !fileName.endsWith('.json')) {
+        continue;
+      }
+
+      files.add(entity);
+    }
+
+    if (files.isEmpty) {
+      return null;
+    }
+
+    files.sort((left, right) {
+      final leftName = path.basename(left.path);
+      final rightName = path.basename(right.path);
+
+      return rightName.compareTo(leftName);
+    });
+
+    return files.first;
+  }
+
   static Future<Directory> _defaultBackupDirectory() async {
     final directory = await getApplicationDocumentsDirectory();
 

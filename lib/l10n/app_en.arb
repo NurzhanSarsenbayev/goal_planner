@@ -545,6 +545,17 @@
     },
     "backupCreateFailureMessage": "Could not create backup. Please try again.",
 
+    "moreBackupNeverCreated": "Last backup: never",
+    "moreBackupLastCreated": "Last backup: {dateTime}",
+    "@moreBackupLastCreated": {
+      "description": "Shown in More backup section as last created backup timestamp",
+      "placeholders": {
+        "dateTime": {
+          "type": "String"
+        }
+      }
+    },
+
     "moreToolsSection": "Tools",
     "moreAllTasksSubtitle": "View all tasks in one place.",
     "moreReportsSubtitle": "Review completed work and goal progress.",
