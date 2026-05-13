@@ -9,6 +9,8 @@ abstract interface class HabitRepository {
     required DateTime endDate,
   });
 
+  Future<List<HabitEntry>> loadAllEntries();
+
   Future<void> saveHabit(Habit habit);
 
   Future<void> saveEntry(HabitEntry entry);

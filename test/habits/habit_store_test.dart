@@ -312,6 +312,11 @@ class _FakeHabitRepository implements HabitRepository {
   }
 
   @override
+  Future<List<HabitEntry>> loadAllEntries() async {
+    return _entries;
+  }
+
+  @override
   Future<void> saveHabit(Habit habit) async {
     savedHabits.add(habit);
   }

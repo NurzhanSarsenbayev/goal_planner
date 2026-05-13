@@ -43,6 +43,18 @@ class DriftHabitRepository implements HabitRepository {
   }
 
   @override
+  Future<List<domain.HabitEntry>> loadAllEntries() async {
+    final rows =
+        await (_database.select(_database.habitEntries)..orderBy([
+              (table) => drift.OrderingTerm.asc(table.date),
+              (table) => drift.OrderingTerm.asc(table.createdAt),
+            ]))
+            .get();
+
+    return rows.map(mapHabitEntry).toList();
+  }
+
+  @override
   Future<void> saveHabit(domain.Habit habit) async {
     await _database
         .into(_database.habits)
