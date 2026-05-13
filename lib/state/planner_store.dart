@@ -58,6 +58,10 @@ class PlannerStore extends ChangeNotifier {
   bool get isInitialized => _isInitialized;
 
   Future<void> initialize() async {
+    await reload();
+  }
+
+  Future<void> reload() async {
     final initialState = await _initializationService.initialize();
 
     _goals = initialState.goals;

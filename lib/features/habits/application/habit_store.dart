@@ -76,22 +76,33 @@ class HabitStore extends ChangeNotifier {
       return;
     }
 
+    await reload();
+  }
+
+  Future<void> reload() async {
+    if (_isLoading) {
+      return;
+    }
+
     _isLoading = true;
     notifyListeners();
 
-    _habits = await _habitRepository.loadHabits();
-    _visibleWeekEntries = await _habitRepository.loadEntriesForRange(
-      startDate: _visibleWeekStart,
-      endDate: _visibleWeekEnd,
-    );
-    _todayEntries = await _habitRepository.loadEntriesForRange(
-      startDate: _todayDate,
-      endDate: _todayDate,
-    );
+    try {
+      _habits = await _habitRepository.loadHabits();
+      _visibleWeekEntries = await _habitRepository.loadEntriesForRange(
+        startDate: _visibleWeekStart,
+        endDate: _visibleWeekEnd,
+      );
+      _todayEntries = await _habitRepository.loadEntriesForRange(
+        startDate: _todayDate,
+        endDate: _todayDate,
+      );
 
-    _isInitialized = true;
-    _isLoading = false;
-    notifyListeners();
+      _isInitialized = true;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> goToPreviousWeek() async {
