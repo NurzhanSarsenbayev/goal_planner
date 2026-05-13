@@ -7,6 +7,9 @@ import '../../data/repositories/drift_planner_cleanup_repository.dart';
 import '../../data/repositories/drift_recurring_task_repository.dart';
 import '../../data/repositories/drift_task_repository.dart';
 import '../../data/repositories/drift_habit_repository.dart';
+import '../../data/repositories/drift_planner_backup_restore_repository.dart';
+import '../../features/backup/application/planner_backup_restore_service.dart';
+import '../../features/backup/application/planner_backup_validator.dart';
 import '../../features/planner/application/planner_initialization_service.dart';
 import '../../features/backup/application/planner_backup_export_service.dart';
 import '../../features/backup/application/planner_backup_file_export_service.dart';
@@ -26,6 +29,7 @@ class AppDependencies {
     required this.habitStore,
     required this.backupFileExportService,
     required this.backupFileStorage,
+    required this.backupRestoreService,
   }) : _database = database;
 
   factory AppDependencies.create() {
@@ -37,6 +41,9 @@ class AppDependencies {
     final taskRepository = DriftTaskRepository(database);
     final recurringTaskRepository = DriftRecurringTaskRepository(database);
     final habitRepository = DriftHabitRepository(database);
+    final backupRestoreRepository = DriftPlannerBackupRestoreRepository(
+      database,
+    );
 
     final backupExportService = PlannerBackupExportService(
       goalRepository: goalRepository,
@@ -51,6 +58,12 @@ class AppDependencies {
     final backupFileExportService = PlannerBackupFileExportService(
       exportService: backupExportService,
       fileStorage: backupFileStorage,
+    );
+
+    final backupRestoreService = PlannerBackupRestoreService(
+      fileStorage: backupFileStorage,
+      validator: const PlannerBackupValidator(),
+      restoreRepository: backupRestoreRepository,
     );
 
     final goalStoreCoordinator = GoalStoreCoordinator(
@@ -101,6 +114,7 @@ class AppDependencies {
       habitStore: habitStore,
       backupFileExportService: backupFileExportService,
       backupFileStorage: backupFileStorage,
+      backupRestoreService: backupRestoreService,
     );
   }
 
@@ -109,6 +123,7 @@ class AppDependencies {
   final HabitStore habitStore;
   final PlannerBackupFileExportService backupFileExportService;
   final PlannerBackupFileStorage backupFileStorage;
+  final PlannerBackupRestoreService backupRestoreService;
 
   Future<void> dispose() async {
     store.dispose();
