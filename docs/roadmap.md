@@ -139,7 +139,6 @@ Implemented:
 - Extract GoalDetailsController.
 - Extract AllTasksController.
 - Extract app dialog helpers.
-- Extract planner seed service.
 - Add safer domain model update methods.
 - Separate repository mappers.
 
@@ -981,9 +980,238 @@ Not implemented yet:
 - custom habit report date ranges;
 - backend/sync.
 
+## Phase 7.5: Localization and pre-test readiness
+
+Status: localization done; pre-test safety not started.
+
+Goal:
+
+Prepare the local-first MVP for real user testing by making the app usable in English/Russian and removing development-only sample data.
+
+Reason:
+
+Before giving the app to a real user, the product must not depend on developer setup, system language hacks, or automatic demo data.
+
+The first validation user should be able to:
+
+- choose the app language from inside the app;
+- start from a clean empty state;
+- create their own goals, tasks, recurring rules and habits;
+- trust that the app is not mixing real data with sample data.
+
+Implemented:
+
+### Localization infrastructure
+
+- Add `l10n.yaml`.
+- Add English ARB file.
+- Add Russian ARB file.
+- Generate `AppLocalizations`.
+- Connect localization delegates to `MaterialApp`.
+- Connect supported locales to `MaterialApp`.
+- Use localized app title.
+
+### Language switcher
+
+- Add app language model:
+  - system language;
+  - English;
+  - Russian.
+- Add local language settings storage.
+- Add language switcher to More.
+- Persist selected language locally.
+- Apply selected language to `MaterialApp.locale`.
+- Support switching language without changing Android system settings.
+
+### Localized app areas
+
+- Localize bottom navigation.
+- Localize Today screen.
+- Localize Calendar screen.
+- Localize Goals screen.
+- Localize Goal Details:
+  - goal header;
+  - direct goal tasks;
+  - direct recurring tasks;
+  - milestone sections.
+- Localize goal create/edit dialog.
+- Localize goal delete confirmation.
+- Localize milestone create/edit UI.
+- Localize milestone delete confirmation.
+- Localize task cards.
+- Localize task create/edit dialogs.
+- Localize task placement dialogs.
+- Localize task completion date dialogs.
+- Localize All Tasks screen.
+- Localize Reports screen:
+  - task reports;
+  - habit reports;
+  - period selector;
+  - empty states;
+  - summary cards.
+- Localize Habits core UI:
+  - habits screen;
+  - habit dialog;
+  - habit journal;
+  - habit status actions;
+  - archived habits flow.
+- Localize Recurring Tasks UI:
+  - recurring rules list;
+  - recurring rule card;
+  - recurring rule delete confirmation;
+  - recurring rule create/edit form;
+  - placement section;
+  - schedule section;
+  - weekly/monthly labels;
+  - weekday labels.
+
+### Product wording decisions
+
+- Keep `DELETE` as a universal destructive confirmation token.
+- Localize the instruction around `DELETE`, but do not translate the token itself.
+- Keep habit metrics separate from task metrics.
+- Keep HabitStore separate from PlannerStore.
+- Keep habits outside the recurring task system.
+
+### Development data cleanup
+
+- Disable automatic sample data seeding on app startup.
+- Remove unused sample seed service.
+- Remove unused sample data file.
+- Keep a clean empty state for new installs.
+- Verify that user-facing hardcoded UI strings are localized or intentionally excluded.
+
+Current result:
+
+The app can be used in English or Russian without changing system settings.
+
+A clean install now starts with real empty states instead of development sample goals and tasks.
+
+The main local-first product loops are localized:
+
+> Goals -> Milestones / Tasks -> Today -> Complete -> Reports
+
+> Recurring rule -> Generated scheduled occurrences -> Complete one occurrence -> Keep recurring history
+
+> Create habit -> Mark days -> Review habit consistency and streaks
+
+Known intentional non-localized strings:
+
+- `DELETE` destructive confirmation token.
+- Internal storage values such as `en`, `ru`, `system`.
+- Internal ID prefixes.
+- Developer-facing assert messages.
+
+Not implemented yet:
+
+- Manual backup/export.
+- Restore from backup.
+- Automatic local checkpoints.
+- Last backup status.
+- Backup reminder before real testing.
+- Cloud sync.
+- User accounts.
+- Backend.
+
+## Phase 7.6: Pre-test safety - Backup and restore
+
+Status: not started.
+
+Goal:
+
+Prevent loss of user-created local-first planner data before giving the app to a real user.
+
+Reason:
+
+The app stores valuable user data locally.
+
+During development and testing, local data can be lost because of:
+
+- uninstall/reinstall;
+- emulator wipe;
+- device storage problems;
+- failed migrations;
+- accidental destructive restore;
+- app sandbox deletion.
+
+A planner is trust-sensitive. Losing goals, tasks, habits or reports can destroy trust in the product.
+
+Initial scope:
+
+### Manual backup
+
+- Add Backup section to More.
+- Export all local planner data to a versioned JSON backup.
+- Include metadata:
+  - schema version;
+  - app version if available;
+  - export timestamp.
+- Include planner data:
+  - goals;
+  - milestones;
+  - tasks;
+  - recurring rules;
+  - recurring exceptions;
+  - habits;
+  - habit entries.
+- Allow the user to save/share the backup file outside the app sandbox.
+
+### Manual restore
+
+- Restore from a selected backup file.
+- Use a destructive confirmation flow.
+- Make restore replace current local data.
+- Do not implement merge in MVP.
+- Validate backup schema version before restore.
+- Show clear error states for invalid backup files.
+
+### Automatic local checkpoint
+
+- Create automatic local checkpoints inside the app documents directory.
+- Run checkpoint only when data changed.
+- Avoid checkpointing after every tiny change.
+- Keep checkpointing lightweight and predictable.
+- Keep a limited number of recent checkpoints.
+
+### Backup status
+
+- Show last manual backup status in More.
+- Show last automatic checkpoint status in More.
+- Warn before first real testing if no external backup exists.
+
+Out of scope for this phase:
+
+- Cloud sync.
+- Multi-device merge.
+- User accounts.
+- Backend.
+- Conflict resolution.
+- Google Drive API integration.
+- Automatic remote backups.
+- Full undo history.
+
+Expected result:
+
+Before product validation, the app has a basic safety net:
+
+> Backup data -> Save file externally -> Restore backup if local data is lost
+
+This is enough for first-user testing without prematurely building a backend or sync system.
+
 ## Phase 8: Product validation
 
 Status: not started.
+
+Prerequisite:
+
+Phase 7.6 must be completed before giving the app to a real user.
+
+At minimum:
+
+- manual backup works;
+- restore from backup works;
+- one backup/restore roundtrip is tested on a clean local database;
+- the first tester is told that the app is local-first.
 
 Goal:
 
