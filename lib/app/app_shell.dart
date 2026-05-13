@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'settings/app_language.dart';
 import '../l10n/app_localizations.dart';
 import '../features/recurring/presentation/recurring_rule_dialog_actions.dart';
 import '../features/goals/presentation/goal_dialog_actions.dart';
@@ -14,7 +15,14 @@ import '../features/habits/application/habit_store.dart';
 import '../features/reports/application/habit_report_loader.dart';
 
 class AppShell extends StatefulWidget {
-  const AppShell({super.key});
+  const AppShell({
+    super.key,
+    required this.selectedLanguage,
+    required this.onLanguageChanged,
+  });
+
+  final AppLanguage selectedLanguage;
+  final ValueChanged<AppLanguage> onLanguageChanged;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -60,6 +68,8 @@ class _AppShellState extends State<AppShell> {
       taskDialogActions: _taskDialogActions,
       recurringRuleDialogActions: _recurringRuleDialogActions,
       navigationActions: _navigationActions,
+      selectedLanguage: widget.selectedLanguage,
+      onLanguageChanged: widget.onLanguageChanged,
       onOpenHabits: () {
         _onDestinationSelected(3);
       },

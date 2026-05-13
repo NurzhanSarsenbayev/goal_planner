@@ -525,6 +525,12 @@
     "taskAttachToGoalTitle": "Attach task to goal",
     "taskAttachButton": "Attach",
 
+    "moreSettingsSection": "Settings",
+    "moreLanguageTitle": "Language",
+    "moreLanguageSystemOption": "System language",
+    "moreLanguageEnglishOption": "English",
+    "moreLanguageRussianOption": "Русский",
+
     "moreToolsSection": "Tools",
     "moreAllTasksSubtitle": "View all tasks in one place.",
     "moreReportsSubtitle": "Review completed work and goal progress.",

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../settings/app_language.dart';
 import '../../features/calendar/presentation/screens/calendar_screen.dart';
 import '../../features/today/presentation/screens/today_screen.dart';
 import '../../features/goals/presentation/screens/goals_screen.dart';
@@ -20,6 +21,8 @@ class MainTabBuilder {
     required TaskDialogActions taskDialogActions,
     required RecurringRuleDialogActions recurringRuleDialogActions,
     required AppNavigationActions navigationActions,
+    required AppLanguage selectedLanguage,
+    required ValueChanged<AppLanguage> onLanguageChanged,
     required VoidCallback onOpenHabits,
   }) : _store = store,
        _habitStore = habitStore,
@@ -27,7 +30,9 @@ class MainTabBuilder {
        _goalDialogActions = goalDialogActions,
        _taskDialogActions = taskDialogActions,
        _recurringRuleDialogActions = recurringRuleDialogActions,
-       _navigationActions = navigationActions;
+       _navigationActions = navigationActions,
+       _selectedLanguage = selectedLanguage,
+       _onLanguageChanged = onLanguageChanged;
 
   final PlannerStore _store;
   final HabitStore _habitStore;
@@ -35,6 +40,8 @@ class MainTabBuilder {
   final TaskDialogActions _taskDialogActions;
   final RecurringRuleDialogActions _recurringRuleDialogActions;
   final AppNavigationActions _navigationActions;
+  final AppLanguage _selectedLanguage;
+  final ValueChanged<AppLanguage> _onLanguageChanged;
   final VoidCallback _onOpenHabits;
 
   List<Widget> buildScreens(BuildContext context) {
@@ -101,6 +108,8 @@ class MainTabBuilder {
       ),
       HabitsScreen(habitStore: _habitStore),
       MoreScreen(
+        selectedLanguage: _selectedLanguage,
+        onLanguageChanged: _onLanguageChanged,
         onOpenAllTasks: () {
           _navigationActions.openAllTasks(context);
         },

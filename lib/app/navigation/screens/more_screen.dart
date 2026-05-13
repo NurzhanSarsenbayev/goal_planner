@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 
+import '../../settings/app_language.dart';
 import '../../../l10n/app_localizations.dart';
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({
     super.key,
+    required this.selectedLanguage,
+    required this.onLanguageChanged,
     required this.onOpenAllTasks,
     required this.onOpenReports,
     required this.onOpenRecurringTasks,
   });
 
+  final AppLanguage selectedLanguage;
+  final ValueChanged<AppLanguage> onLanguageChanged;
   final VoidCallback onOpenAllTasks;
   final VoidCallback onOpenReports;
   final VoidCallback onOpenRecurringTasks;
@@ -21,6 +26,47 @@ class MoreScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
+        Text(
+          l10n.moreSettingsSection,
+          style: Theme.of(
+            context,
+          ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+        ),
+        const SizedBox(height: 8),
+        Card(
+          child: ListTile(
+            leading: const Icon(Icons.language),
+            title: Text(l10n.moreLanguageTitle),
+            subtitle: DropdownButtonHideUnderline(
+              child: DropdownButton<AppLanguage>(
+                value: selectedLanguage,
+                isExpanded: true,
+                items: [
+                  DropdownMenuItem(
+                    value: AppLanguage.system,
+                    child: Text(l10n.moreLanguageSystemOption),
+                  ),
+                  DropdownMenuItem(
+                    value: AppLanguage.english,
+                    child: Text(l10n.moreLanguageEnglishOption),
+                  ),
+                  DropdownMenuItem(
+                    value: AppLanguage.russian,
+                    child: Text(l10n.moreLanguageRussianOption),
+                  ),
+                ],
+                onChanged: (language) {
+                  if (language == null) {
+                    return;
+                  }
+
+                  onLanguageChanged(language);
+                },
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
         Text(
           l10n.moreToolsSection,
           style: Theme.of(

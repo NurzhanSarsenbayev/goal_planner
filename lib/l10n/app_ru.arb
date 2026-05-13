@@ -525,6 +525,12 @@
     "taskAttachToGoalTitle": "Привязать задачу к цели",
     "taskAttachButton": "Привязать",
 
+    "moreSettingsSection": "Настройки",
+    "moreLanguageTitle": "Язык",
+    "moreLanguageSystemOption": "Системный язык",
+    "moreLanguageEnglishOption": "English",
+    "moreLanguageRussianOption": "Русский",
+
     "moreToolsSection": "Инструменты",
     "moreAllTasksSubtitle": "Все задачи в одном месте.",
     "moreReportsSubtitle": "Прогресс по задачам, привычкам и целям.",

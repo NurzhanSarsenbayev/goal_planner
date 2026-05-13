@@ -1154,6 +1154,36 @@ abstract class AppLocalizations {
   /// **'Attach'**
   String get taskAttachButton;
 
+  /// No description provided for @moreSettingsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get moreSettingsSection;
+
+  /// No description provided for @moreLanguageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get moreLanguageTitle;
+
+  /// No description provided for @moreLanguageSystemOption.
+  ///
+  /// In en, this message translates to:
+  /// **'System language'**
+  String get moreLanguageSystemOption;
+
+  /// No description provided for @moreLanguageEnglishOption.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get moreLanguageEnglishOption;
+
+  /// No description provided for @moreLanguageRussianOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Русский'**
+  String get moreLanguageRussianOption;
+
   /// No description provided for @moreToolsSection.
   ///
   /// In en, this message translates to:

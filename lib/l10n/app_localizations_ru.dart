@@ -608,6 +608,21 @@ class AppLocalizationsRu extends AppLocalizations {
   String get taskAttachButton => 'Привязать';
 
   @override
+  String get moreSettingsSection => 'Настройки';
+
+  @override
+  String get moreLanguageTitle => 'Язык';
+
+  @override
+  String get moreLanguageSystemOption => 'Системный язык';
+
+  @override
+  String get moreLanguageEnglishOption => 'English';
+
+  @override
+  String get moreLanguageRussianOption => 'Русский';
+
+  @override
   String get moreToolsSection => 'Инструменты';
 
   @override

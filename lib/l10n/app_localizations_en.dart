@@ -605,6 +605,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get taskAttachButton => 'Attach';
 
   @override
+  String get moreSettingsSection => 'Settings';
+
+  @override
+  String get moreLanguageTitle => 'Language';
+
+  @override
+  String get moreLanguageSystemOption => 'System language';
+
+  @override
+  String get moreLanguageEnglishOption => 'English';
+
+  @override
+  String get moreLanguageRussianOption => 'Русский';
+
+  @override
   String get moreToolsSection => 'Tools';
 
   @override
