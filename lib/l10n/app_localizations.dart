@@ -1226,6 +1226,54 @@ abstract class AppLocalizations {
   /// **'Last backup: {dateTime}'**
   String moreBackupLastCreated(String dateTime);
 
+  /// No description provided for @moreRestoreBackupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore latest backup'**
+  String get moreRestoreBackupTitle;
+
+  /// No description provided for @moreRestoreBackupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace local data with the latest local backup.'**
+  String get moreRestoreBackupSubtitle;
+
+  /// No description provided for @backupRestoreNoLocalBackupMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No local backup found.'**
+  String get backupRestoreNoLocalBackupMessage;
+
+  /// No description provided for @backupRestoreConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore backup?'**
+  String get backupRestoreConfirmTitle;
+
+  /// No description provided for @backupRestoreConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will replace all current goals, tasks, recurring tasks, and habits with data from the latest local backup. This cannot be undone.'**
+  String get backupRestoreConfirmMessage;
+
+  /// No description provided for @backupRestoreConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get backupRestoreConfirmAction;
+
+  /// No description provided for @backupRestoreSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup restored. Local data was replaced.'**
+  String get backupRestoreSuccessMessage;
+
+  /// No description provided for @backupRestoreFailureMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not restore backup. Check the file and try again.'**
+  String get backupRestoreFailureMessage;
+
   /// No description provided for @moreToolsSection.
   ///
   /// In en, this message translates to:

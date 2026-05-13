@@ -6,6 +6,7 @@ import 'settings/app_language.dart';
 import '../l10n/app_localizations.dart';
 import '../features/backup/application/planner_backup_file_export_service.dart';
 import '../features/backup/application/planner_backup_file_storage.dart';
+import '../features/backup/application/planner_backup_restore_service.dart';
 import '../features/recurring/presentation/recurring_rule_dialog_actions.dart';
 import '../features/goals/presentation/goal_dialog_actions.dart';
 import '../features/tasks/presentation/task_dialog_actions.dart';
@@ -41,6 +42,7 @@ class _AppShellState extends State<AppShell> {
   late final HabitReportLoader _habitReportLoader;
   late final PlannerBackupFileExportService _backupFileExportService;
   late final PlannerBackupFileStorage _backupFileStorage;
+  late final PlannerBackupRestoreService _backupRestoreService;
   DateTime? _lastBackupAt;
 
   int _selectedIndex = 0;
@@ -77,6 +79,84 @@ class _AppShellState extends State<AppShell> {
     }
   }
 
+  Future<void> _restoreLatestBackupFile() async {
+    try {
+      final latestBackupFile = await _backupFileStorage.findLatestBackupFile();
+
+      if (!mounted) {
+        return;
+      }
+
+      final l10n = AppLocalizations.of(context);
+
+      if (latestBackupFile == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.backupRestoreNoLocalBackupMessage)),
+        );
+        return;
+      }
+
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) {
+          final l10n = AppLocalizations.of(context);
+
+          return AlertDialog(
+            title: Text(l10n.backupRestoreConfirmTitle),
+            content: Text(l10n.backupRestoreConfirmMessage),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text(l10n.commonCancel),
+              ),
+              FilledButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text(l10n.backupRestoreConfirmAction),
+              ),
+            ],
+          );
+        },
+      );
+
+      if (!mounted || confirmed != true) {
+        return;
+      }
+
+      final result = await _backupRestoreService.restoreFromFile(
+        latestBackupFile,
+      );
+
+      await _store.reload();
+      await _habitStore.reload();
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _lastBackupAt = result.exportedAt;
+      });
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.backupRestoreSuccessMessage)));
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+
+      final l10n = AppLocalizations.of(context);
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.backupRestoreFailureMessage)));
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -86,6 +166,7 @@ class _AppShellState extends State<AppShell> {
     _habitStore = _dependencies.habitStore;
     _backupFileExportService = _dependencies.backupFileExportService;
     _backupFileStorage = _dependencies.backupFileStorage;
+    _backupRestoreService = _dependencies.backupRestoreService;
 
     unawaited(_loadBackupStatus());
 
@@ -162,6 +243,7 @@ class _AppShellState extends State<AppShell> {
       selectedLanguage: widget.selectedLanguage,
       onLanguageChanged: widget.onLanguageChanged,
       onCreateBackup: _createBackupFile,
+      onRestoreLatestBackup: _restoreLatestBackupFile,
       lastBackupAt: _lastBackupAt,
       onOpenHabits: () {
         _onDestinationSelected(3);

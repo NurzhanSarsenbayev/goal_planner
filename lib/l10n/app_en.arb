@@ -556,6 +556,15 @@
       }
     },
 
+    "moreRestoreBackupTitle": "Restore latest backup",
+    "moreRestoreBackupSubtitle": "Replace local data with the latest local backup.",
+    "backupRestoreNoLocalBackupMessage": "No local backup found.",
+    "backupRestoreConfirmTitle": "Restore backup?",
+    "backupRestoreConfirmMessage": "This will replace all current goals, tasks, recurring tasks, and habits with data from the latest local backup. This cannot be undone.",
+    "backupRestoreConfirmAction": "Restore",
+    "backupRestoreSuccessMessage": "Backup restored. Local data was replaced.",
+    "backupRestoreFailureMessage": "Could not restore backup. Check the file and try again.",
+
     "moreToolsSection": "Tools",
     "moreAllTasksSubtitle": "View all tasks in one place.",
     "moreReportsSubtitle": "Review completed work and goal progress.",

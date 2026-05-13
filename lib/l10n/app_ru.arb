@@ -556,6 +556,15 @@
       }
     },
 
+    "moreRestoreBackupTitle": "Восстановить последний бэкап",
+    "moreRestoreBackupSubtitle": "Заменить локальные данные последним локальным бэкапом.",
+    "backupRestoreNoLocalBackupMessage": "Локальный бэкап не найден.",
+    "backupRestoreConfirmTitle": "Восстановить бэкап?",
+    "backupRestoreConfirmMessage": "Текущие цели, задачи, повторяющиеся задачи и привычки будут заменены данными из последнего локального бэкапа. Это действие нельзя отменить.",
+    "backupRestoreConfirmAction": "Восстановить",
+    "backupRestoreSuccessMessage": "Бэкап восстановлен. Локальные данные заменены.",
+    "backupRestoreFailureMessage": "Не удалось восстановить бэкап. Проверьте файл и попробуйте ещё раз.",
+
     "moreToolsSection": "Инструменты",
     "moreAllTasksSubtitle": "Все задачи в одном месте.",
     "moreReportsSubtitle": "Прогресс по задачам, привычкам и целям.",

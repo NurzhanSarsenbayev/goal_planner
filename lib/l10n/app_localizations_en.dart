@@ -647,6 +647,34 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get moreRestoreBackupTitle => 'Restore latest backup';
+
+  @override
+  String get moreRestoreBackupSubtitle =>
+      'Replace local data with the latest local backup.';
+
+  @override
+  String get backupRestoreNoLocalBackupMessage => 'No local backup found.';
+
+  @override
+  String get backupRestoreConfirmTitle => 'Restore backup?';
+
+  @override
+  String get backupRestoreConfirmMessage =>
+      'This will replace all current goals, tasks, recurring tasks, and habits with data from the latest local backup. This cannot be undone.';
+
+  @override
+  String get backupRestoreConfirmAction => 'Restore';
+
+  @override
+  String get backupRestoreSuccessMessage =>
+      'Backup restored. Local data was replaced.';
+
+  @override
+  String get backupRestoreFailureMessage =>
+      'Could not restore backup. Check the file and try again.';
+
+  @override
   String get moreToolsSection => 'Tools';
 
   @override

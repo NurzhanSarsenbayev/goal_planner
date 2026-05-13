@@ -650,6 +650,34 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get moreRestoreBackupTitle => 'Восстановить последний бэкап';
+
+  @override
+  String get moreRestoreBackupSubtitle =>
+      'Заменить локальные данные последним локальным бэкапом.';
+
+  @override
+  String get backupRestoreNoLocalBackupMessage => 'Локальный бэкап не найден.';
+
+  @override
+  String get backupRestoreConfirmTitle => 'Восстановить бэкап?';
+
+  @override
+  String get backupRestoreConfirmMessage =>
+      'Текущие цели, задачи, повторяющиеся задачи и привычки будут заменены данными из последнего локального бэкапа. Это действие нельзя отменить.';
+
+  @override
+  String get backupRestoreConfirmAction => 'Восстановить';
+
+  @override
+  String get backupRestoreSuccessMessage =>
+      'Бэкап восстановлен. Локальные данные заменены.';
+
+  @override
+  String get backupRestoreFailureMessage =>
+      'Не удалось восстановить бэкап. Проверьте файл и попробуйте ещё раз.';
+
+  @override
   String get moreToolsSection => 'Инструменты';
 
   @override
