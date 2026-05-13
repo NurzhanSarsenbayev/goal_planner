@@ -1274,6 +1274,48 @@ abstract class AppLocalizations {
   /// **'Could not restore backup. Check the file and try again.'**
   String get backupRestoreFailureMessage;
 
+  /// No description provided for @moreExportBackupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export backup'**
+  String get moreExportBackupTitle;
+
+  /// No description provided for @moreExportBackupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save or send a backup outside the app.'**
+  String get moreExportBackupSubtitle;
+
+  /// No description provided for @backupExportShareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal Planner backup'**
+  String get backupExportShareTitle;
+
+  /// No description provided for @backupExportShareText.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal Planner backup file.'**
+  String get backupExportShareText;
+
+  /// No description provided for @backupExportSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup export opened.'**
+  String get backupExportSuccessMessage;
+
+  /// No description provided for @backupExportDismissedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup export cancelled.'**
+  String get backupExportDismissedMessage;
+
+  /// No description provided for @backupExportFailureMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not export backup. Try again.'**
+  String get backupExportFailureMessage;
+
   /// No description provided for @moreToolsSection.
   ///
   /// In en, this message translates to:

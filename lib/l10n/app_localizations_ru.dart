@@ -678,6 +678,29 @@ class AppLocalizationsRu extends AppLocalizations {
       'Не удалось восстановить бэкап. Проверьте файл и попробуйте ещё раз.';
 
   @override
+  String get moreExportBackupTitle => 'Экспортировать бэкап';
+
+  @override
+  String get moreExportBackupSubtitle =>
+      'Сохранить или отправить бэкап вне приложения.';
+
+  @override
+  String get backupExportShareTitle => 'Бэкап Goal Planner';
+
+  @override
+  String get backupExportShareText => 'Файл бэкапа Goal Planner.';
+
+  @override
+  String get backupExportSuccessMessage => 'Окно экспорта бэкапа открыто.';
+
+  @override
+  String get backupExportDismissedMessage => 'Экспорт бэкапа отменён.';
+
+  @override
+  String get backupExportFailureMessage =>
+      'Не удалось экспортировать бэкап. Попробуйте ещё раз.';
+
+  @override
   String get moreToolsSection => 'Инструменты';
 
   @override

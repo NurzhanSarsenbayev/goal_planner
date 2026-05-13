@@ -675,6 +675,29 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not restore backup. Check the file and try again.';
 
   @override
+  String get moreExportBackupTitle => 'Export backup';
+
+  @override
+  String get moreExportBackupSubtitle =>
+      'Save or send a backup outside the app.';
+
+  @override
+  String get backupExportShareTitle => 'Goal Planner backup';
+
+  @override
+  String get backupExportShareText => 'Goal Planner backup file.';
+
+  @override
+  String get backupExportSuccessMessage => 'Backup export opened.';
+
+  @override
+  String get backupExportDismissedMessage => 'Backup export cancelled.';
+
+  @override
+  String get backupExportFailureMessage =>
+      'Could not export backup. Try again.';
+
+  @override
   String get moreToolsSection => 'Tools';
 
   @override

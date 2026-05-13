@@ -10,6 +10,7 @@ class MoreScreen extends StatelessWidget {
     required this.selectedLanguage,
     required this.onLanguageChanged,
     required this.onCreateBackup,
+    required this.onExportBackup,
     required this.onRestoreLatestBackup,
     required this.lastBackupAt,
     required this.onOpenAllTasks,
@@ -20,6 +21,7 @@ class MoreScreen extends StatelessWidget {
   final AppLanguage selectedLanguage;
   final ValueChanged<AppLanguage> onLanguageChanged;
   final Future<void> Function() onCreateBackup;
+  final Future<void> Function() onExportBackup;
   final Future<void> Function() onRestoreLatestBackup;
   final DateTime? lastBackupAt;
   final VoidCallback onOpenAllTasks;
@@ -109,6 +111,18 @@ class MoreScreen extends StatelessWidget {
         const SizedBox(height: 8),
         Card(
           child: ListTile(
+            leading: const Icon(Icons.ios_share_outlined),
+            title: Text(l10n.moreExportBackupTitle),
+            subtitle: Text(l10n.moreExportBackupSubtitle),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              onExportBackup();
+            },
+          ),
+        ),
+        const SizedBox(height: 8),
+        Card(
+          child: ListTile(
             leading: const Icon(Icons.restore_outlined),
             title: Text(l10n.moreRestoreBackupTitle),
             subtitle: Text(l10n.moreRestoreBackupSubtitle),
@@ -118,7 +132,6 @@ class MoreScreen extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 16),
         const SizedBox(height: 16),
         Text(
           l10n.moreToolsSection,

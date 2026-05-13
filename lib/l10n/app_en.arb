@@ -565,6 +565,14 @@
     "backupRestoreSuccessMessage": "Backup restored. Local data was replaced.",
     "backupRestoreFailureMessage": "Could not restore backup. Check the file and try again.",
 
+    "moreExportBackupTitle": "Export backup",
+    "moreExportBackupSubtitle": "Save or send a backup outside the app.",
+    "backupExportShareTitle": "Goal Planner backup",
+    "backupExportShareText": "Goal Planner backup file.",
+    "backupExportSuccessMessage": "Backup export opened.",
+    "backupExportDismissedMessage": "Backup export cancelled.",
+    "backupExportFailureMessage": "Could not export backup. Try again.",
+
     "moreToolsSection": "Tools",
     "moreAllTasksSubtitle": "View all tasks in one place.",
     "moreReportsSubtitle": "Review completed work and goal progress.",

@@ -565,6 +565,14 @@
     "backupRestoreSuccessMessage": "Бэкап восстановлен. Локальные данные заменены.",
     "backupRestoreFailureMessage": "Не удалось восстановить бэкап. Проверьте файл и попробуйте ещё раз.",
 
+    "moreExportBackupTitle": "Экспортировать бэкап",
+    "moreExportBackupSubtitle": "Сохранить или отправить бэкап вне приложения.",
+    "backupExportShareTitle": "Бэкап Goal Planner",
+    "backupExportShareText": "Файл бэкапа Goal Planner.",
+    "backupExportSuccessMessage": "Окно экспорта бэкапа открыто.",
+    "backupExportDismissedMessage": "Экспорт бэкапа отменён.",
+    "backupExportFailureMessage": "Не удалось экспортировать бэкап. Попробуйте ещё раз.",
+
     "moreToolsSection": "Инструменты",
     "moreAllTasksSubtitle": "Все задачи в одном месте.",
     "moreReportsSubtitle": "Прогресс по задачам, привычкам и целям.",

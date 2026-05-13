@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'settings/app_language.dart';
 import '../l10n/app_localizations.dart';
@@ -46,6 +47,57 @@ class _AppShellState extends State<AppShell> {
   DateTime? _lastBackupAt;
 
   int _selectedIndex = 0;
+
+  Future<void> _exportBackupFile() async {
+    try {
+      final file = await _backupFileExportService.createBackupFile();
+      final latestBackup = await _backupFileStorage.readBackup(file);
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _lastBackupAt = latestBackup.exportedAt;
+      });
+
+      final l10n = AppLocalizations.of(context);
+
+      final result = await SharePlus.instance.share(
+        ShareParams(
+          title: l10n.backupExportShareTitle,
+          subject: l10n.backupExportShareTitle,
+          text: l10n.backupExportShareText,
+          files: [XFile(file.path)],
+        ),
+      );
+
+      if (!mounted) {
+        return;
+      }
+
+      if (result.status == ShareResultStatus.dismissed) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.backupExportDismissedMessage)),
+        );
+        return;
+      }
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.backupExportSuccessMessage)));
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+
+      final l10n = AppLocalizations.of(context);
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.backupExportFailureMessage)));
+    }
+  }
 
   Future<void> _createBackupFile() async {
     try {
@@ -243,6 +295,7 @@ class _AppShellState extends State<AppShell> {
       selectedLanguage: widget.selectedLanguage,
       onLanguageChanged: widget.onLanguageChanged,
       onCreateBackup: _createBackupFile,
+      onExportBackup: _exportBackupFile,
       onRestoreLatestBackup: _restoreLatestBackupFile,
       lastBackupAt: _lastBackupAt,
       onOpenHabits: () {
