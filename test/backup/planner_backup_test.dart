@@ -1,0 +1,189 @@
+import 'dart:convert';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:goal_planner/features/backup/domain/planner_backup.dart';
+import 'package:goal_planner/features/habits/domain/habit.dart';
+import 'package:goal_planner/features/habits/domain/habit_entry.dart';
+import 'package:goal_planner/features/habits/domain/habit_entry_status.dart';
+import 'package:goal_planner/features/habits/domain/habit_tracking_type.dart';
+import 'package:goal_planner/models/goal.dart';
+import 'package:goal_planner/models/milestone.dart';
+import 'package:goal_planner/models/planner_task.dart';
+import 'package:goal_planner/models/recurring_task_exception.dart';
+import 'package:goal_planner/models/recurring_task_rule.dart';
+
+void main() {
+  group('PlannerBackup', () {
+    test('serializes and restores all planner data', () {
+      final now = DateTime(2026, 5, 13, 10, 30);
+      final scheduledDate = DateTime(2026, 5, 14);
+      final completedAt = DateTime(2026, 5, 15);
+      final habitDate = DateTime(2026, 5, 16);
+
+      final backup = PlannerBackup.create(
+        exportedAt: now,
+        data: PlannerBackupData(
+          goals: [
+            Goal(
+              id: 'goal-1',
+              title: 'Goal',
+              description: 'Goal description',
+              status: GoalStatus.active,
+              createdAt: now,
+            ),
+          ],
+          milestones: [
+            Milestone(
+              id: 'milestone-1',
+              goalId: 'goal-1',
+              title: 'Milestone',
+              description: 'Milestone description',
+              createdAt: now,
+            ),
+          ],
+          tasks: [
+            PlannerTask(
+              id: 'task-1',
+              goalId: 'goal-1',
+              milestoneId: 'milestone-1',
+              recurringRuleId: 'rule-1',
+              title: 'Task',
+              description: 'Task description',
+              scheduledDate: scheduledDate,
+              isCompleted: true,
+              completedAt: completedAt,
+              createdAt: now,
+            ),
+          ],
+          recurringRules: [
+            RecurringTaskRule(
+              id: 'rule-1',
+              goalId: 'goal-1',
+              milestoneId: 'milestone-1',
+              title: 'Recurring task',
+              description: 'Recurring description',
+              recurrenceType: RecurrenceType.weekly,
+              weekdays: const [DateTime.monday, DateTime.wednesday],
+              monthDay: null,
+              startDate: scheduledDate,
+              endDate: null,
+              isActive: true,
+              createdAt: now,
+            ),
+          ],
+          recurringExceptions: [
+            RecurringTaskException(
+              id: 'exception-1',
+              ruleId: 'rule-1',
+              date: scheduledDate,
+              createdAt: now,
+            ),
+          ],
+          habits: [
+            Habit(
+              id: 'habit-1',
+              title: 'Habit',
+              description: 'Habit description',
+              trackingType: HabitTrackingType.count,
+              targetCount: 3,
+              sortOrder: 1,
+              isArchived: false,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          ],
+          habitEntries: [
+            HabitEntry(
+              id: 'habit-entry-1',
+              habitId: 'habit-1',
+              date: habitDate,
+              status: HabitEntryStatus.incomplete,
+              completedCount: 2,
+              note: 'Almost done',
+              createdAt: now,
+              updatedAt: now,
+            ),
+          ],
+        ),
+      );
+
+      final encoded = jsonEncode(backup.toJson());
+      final decoded = jsonDecode(encoded) as Map<String, dynamic>;
+      final restored = PlannerBackup.fromJson(decoded);
+
+      expect(restored.schemaVersion, PlannerBackup.currentSchemaVersion);
+      expect(restored.exportedAt, now);
+
+      expect(restored.data.goals.single.title, 'Goal');
+      expect(restored.data.goals.single.status, GoalStatus.active);
+
+      expect(restored.data.milestones.single.goalId, 'goal-1');
+
+      expect(restored.data.tasks.single.id, 'task-1');
+      expect(restored.data.tasks.single.goalId, 'goal-1');
+      expect(restored.data.tasks.single.milestoneId, 'milestone-1');
+      expect(restored.data.tasks.single.recurringRuleId, 'rule-1');
+      expect(restored.data.tasks.single.scheduledDate, scheduledDate);
+      expect(restored.data.tasks.single.isCompleted, isTrue);
+      expect(restored.data.tasks.single.completedAt, completedAt);
+
+      expect(restored.data.recurringRules.single.id, 'rule-1');
+      expect(restored.data.recurringRules.single.goalId, 'goal-1');
+      expect(restored.data.recurringRules.single.milestoneId, 'milestone-1');
+      expect(
+        restored.data.recurringRules.single.recurrenceType,
+        RecurrenceType.weekly,
+      );
+      expect(restored.data.recurringRules.single.weekdays, [
+        DateTime.monday,
+        DateTime.wednesday,
+      ]);
+      expect(restored.data.recurringRules.single.monthDay, isNull);
+      expect(restored.data.recurringRules.single.endDate, isNull);
+
+      expect(restored.data.recurringExceptions.single.ruleId, 'rule-1');
+      expect(restored.data.recurringExceptions.single.date, scheduledDate);
+
+      expect(restored.data.habits.single.trackingType, HabitTrackingType.count);
+      expect(restored.data.habits.single.targetCount, 3);
+      expect(restored.data.habits.single.isArchived, isFalse);
+
+      expect(
+        restored.data.habitEntries.single.status,
+        HabitEntryStatus.incomplete,
+      );
+      expect(restored.data.habitEntries.single.completedCount, 2);
+      expect(restored.data.habitEntries.single.note, 'Almost done');
+    });
+
+    test('rejects unsupported schema version', () {
+      expect(
+        () => PlannerBackup.fromJson({
+          'schemaVersion': 999,
+          'exportedAt': DateTime(2026, 5, 13).toIso8601String(),
+          'data': const {},
+        }),
+        throwsFormatException,
+      );
+    });
+
+    test('supports empty backup data', () {
+      final backup = PlannerBackup.create(
+        exportedAt: DateTime(2026, 5, 13),
+        data: const PlannerBackupData.empty(),
+      );
+
+      final restored = PlannerBackup.fromJson(
+        jsonDecode(jsonEncode(backup.toJson())) as Map<String, dynamic>,
+      );
+
+      expect(restored.data.goals, isEmpty);
+      expect(restored.data.milestones, isEmpty);
+      expect(restored.data.tasks, isEmpty);
+      expect(restored.data.recurringRules, isEmpty);
+      expect(restored.data.recurringExceptions, isEmpty);
+      expect(restored.data.habits, isEmpty);
+      expect(restored.data.habitEntries, isEmpty);
+    });
+  });
+}
