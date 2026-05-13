@@ -9,7 +9,6 @@ import '../../milestones/application/milestone_repository.dart';
 import '../../recurring/application/recurring_task_application_service.dart';
 import '../../recurring/application/recurring_task_repository.dart';
 import '../../tasks/application/task_repository.dart';
-import 'planner_seed_service.dart';
 
 class PlannerInitialState {
   const PlannerInitialState({
@@ -39,27 +38,16 @@ class PlannerInitializationService {
        _taskRepository = taskRepository,
        _recurringTaskRepository = recurringTaskRepository,
        _recurringTaskApplicationService =
-           recurringTaskApplicationService ?? RecurringTaskApplicationService(),
-       _seedService = PlannerSeedService(
-         goalRepository: goalRepository,
-         milestoneRepository: milestoneRepository,
-         taskRepository: taskRepository,
-       );
+           recurringTaskApplicationService ?? RecurringTaskApplicationService();
 
   final GoalRepository _goalRepository;
   final MilestoneRepository _milestoneRepository;
   final TaskRepository _taskRepository;
   final RecurringTaskRepository _recurringTaskRepository;
   final RecurringTaskApplicationService _recurringTaskApplicationService;
-  final PlannerSeedService _seedService;
 
   Future<PlannerInitialState> initialize() async {
-    var initialState = await _loadFromDatabase();
-
-    if (_shouldSeedInitialData(initialState)) {
-      await _seedService.seedInitialData();
-      initialState = await _loadFromDatabase();
-    }
+    final initialState = await _loadFromDatabase();
 
     final generatedTasks = _recurringTaskApplicationService
         .generateUpcomingOccurrences(
@@ -100,11 +88,5 @@ class PlannerInitializationService {
       recurringRules: recurringRules,
       recurringExceptions: recurringExceptions,
     );
-  }
-
-  bool _shouldSeedInitialData(PlannerInitialState initialState) {
-    return initialState.goals.isEmpty &&
-        initialState.milestones.isEmpty &&
-        initialState.tasks.isEmpty;
   }
 }
