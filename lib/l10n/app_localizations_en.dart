@@ -620,6 +620,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get moreLanguageRussianOption => 'Русский';
 
   @override
+  String get moreBackupSection => 'Backup';
+
+  @override
+  String get moreCreateBackupTitle => 'Create backup';
+
+  @override
+  String get moreCreateBackupSubtitle =>
+      'Save a local JSON backup of your planner data.';
+
+  @override
+  String backupCreateSuccessMessage(String filePath) {
+    return 'Backup created: $filePath';
+  }
+
+  @override
+  String get backupCreateFailureMessage =>
+      'Could not create backup. Please try again.';
+
+  @override
   String get moreToolsSection => 'Tools';
 
   @override

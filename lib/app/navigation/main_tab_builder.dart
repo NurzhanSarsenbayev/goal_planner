@@ -17,6 +17,7 @@ class MainTabBuilder {
   const MainTabBuilder({
     required PlannerStore store,
     required HabitStore habitStore,
+    required Future<void> Function() onCreateBackup,
     required GoalDialogActions goalDialogActions,
     required TaskDialogActions taskDialogActions,
     required RecurringRuleDialogActions recurringRuleDialogActions,
@@ -26,6 +27,7 @@ class MainTabBuilder {
     required VoidCallback onOpenHabits,
   }) : _store = store,
        _habitStore = habitStore,
+       _onCreateBackup = onCreateBackup,
        _onOpenHabits = onOpenHabits,
        _goalDialogActions = goalDialogActions,
        _taskDialogActions = taskDialogActions,
@@ -36,6 +38,7 @@ class MainTabBuilder {
 
   final PlannerStore _store;
   final HabitStore _habitStore;
+  final Future<void> Function() _onCreateBackup;
   final GoalDialogActions _goalDialogActions;
   final TaskDialogActions _taskDialogActions;
   final RecurringRuleDialogActions _recurringRuleDialogActions;
@@ -110,6 +113,7 @@ class MainTabBuilder {
       MoreScreen(
         selectedLanguage: _selectedLanguage,
         onLanguageChanged: _onLanguageChanged,
+        onCreateBackup: _onCreateBackup,
         onOpenAllTasks: () {
           _navigationActions.openAllTasks(context);
         },

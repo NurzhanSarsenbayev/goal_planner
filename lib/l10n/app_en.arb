@@ -531,6 +531,20 @@
     "moreLanguageEnglishOption": "English",
     "moreLanguageRussianOption": "Русский",
 
+    "moreBackupSection": "Backup",
+    "moreCreateBackupTitle": "Create backup",
+    "moreCreateBackupSubtitle": "Save a local JSON backup of your planner data.",
+    "backupCreateSuccessMessage": "Backup created: {filePath}",
+    "@backupCreateSuccessMessage": {
+      "description": "Shown after local backup file is created",
+      "placeholders": {
+        "filePath": {
+          "type": "String"
+        }
+      }
+    },
+    "backupCreateFailureMessage": "Could not create backup. Please try again.",
+
     "moreToolsSection": "Tools",
     "moreAllTasksSubtitle": "View all tasks in one place.",
     "moreReportsSubtitle": "Review completed work and goal progress.",

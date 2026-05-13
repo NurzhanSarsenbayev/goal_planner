@@ -1184,6 +1184,36 @@ abstract class AppLocalizations {
   /// **'Русский'**
   String get moreLanguageRussianOption;
 
+  /// No description provided for @moreBackupSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup'**
+  String get moreBackupSection;
+
+  /// No description provided for @moreCreateBackupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create backup'**
+  String get moreCreateBackupTitle;
+
+  /// No description provided for @moreCreateBackupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save a local JSON backup of your planner data.'**
+  String get moreCreateBackupSubtitle;
+
+  /// Shown after local backup file is created
+  ///
+  /// In en, this message translates to:
+  /// **'Backup created: {filePath}'**
+  String backupCreateSuccessMessage(String filePath);
+
+  /// No description provided for @backupCreateFailureMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not create backup. Please try again.'**
+  String get backupCreateFailureMessage;
+
   /// No description provided for @moreToolsSection.
   ///
   /// In en, this message translates to:

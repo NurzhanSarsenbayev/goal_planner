@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'settings/app_language.dart';
 import '../l10n/app_localizations.dart';
+import '../features/backup/application/planner_backup_file_export_service.dart';
 import '../features/recurring/presentation/recurring_rule_dialog_actions.dart';
 import '../features/goals/presentation/goal_dialog_actions.dart';
 import '../features/tasks/presentation/task_dialog_actions.dart';
@@ -38,8 +39,35 @@ class _AppShellState extends State<AppShell> {
   late final AppNavigationActions _navigationActions;
   late final MainTabBuilder _mainTabBuilder;
   late final HabitReportLoader _habitReportLoader;
+  late final PlannerBackupFileExportService _backupFileExportService;
 
   int _selectedIndex = 0;
+
+  Future<void> _createBackupFile() async {
+    try {
+      final file = await _backupFileExportService.createBackupFile();
+
+      if (!mounted) {
+        return;
+      }
+
+      final l10n = AppLocalizations.of(context);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.backupCreateSuccessMessage(file.path))),
+      );
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+
+      final l10n = AppLocalizations.of(context);
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.backupCreateFailureMessage)));
+    }
+  }
 
   @override
   void initState() {
@@ -48,6 +76,7 @@ class _AppShellState extends State<AppShell> {
     _dependencies = AppDependencies.create();
     _store = _dependencies.store;
     _habitStore = _dependencies.habitStore;
+    _backupFileExportService = _dependencies.backupFileExportService;
     _habitReportLoader = HabitReportLoader(habitStore: _habitStore);
 
     _goalDialogActions = GoalDialogActions(store: _store);
@@ -70,6 +99,7 @@ class _AppShellState extends State<AppShell> {
       navigationActions: _navigationActions,
       selectedLanguage: widget.selectedLanguage,
       onLanguageChanged: widget.onLanguageChanged,
+      onCreateBackup: _createBackupFile,
       onOpenHabits: () {
         _onDestinationSelected(3);
       },

@@ -623,6 +623,25 @@ class AppLocalizationsRu extends AppLocalizations {
   String get moreLanguageRussianOption => 'Русский';
 
   @override
+  String get moreBackupSection => 'Бэкап';
+
+  @override
+  String get moreCreateBackupTitle => 'Создать бэкап';
+
+  @override
+  String get moreCreateBackupSubtitle =>
+      'Сохранить локальный JSON-бэкап данных планера.';
+
+  @override
+  String backupCreateSuccessMessage(String filePath) {
+    return 'Бэкап создан: $filePath';
+  }
+
+  @override
+  String get backupCreateFailureMessage =>
+      'Не удалось создать бэкап. Попробуйте ещё раз.';
+
+  @override
   String get moreToolsSection => 'Инструменты';
 
   @override

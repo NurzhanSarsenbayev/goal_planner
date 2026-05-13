@@ -531,6 +531,20 @@
     "moreLanguageEnglishOption": "English",
     "moreLanguageRussianOption": "Русский",
 
+    "moreBackupSection": "Бэкап",
+    "moreCreateBackupTitle": "Создать бэкап",
+    "moreCreateBackupSubtitle": "Сохранить локальный JSON-бэкап данных планера.",
+    "backupCreateSuccessMessage": "Бэкап создан: {filePath}",
+    "@backupCreateSuccessMessage": {
+      "description": "Shown after local backup file is created",
+      "placeholders": {
+        "filePath": {
+          "type": "String"
+        }
+      }
+    },
+    "backupCreateFailureMessage": "Не удалось создать бэкап. Попробуйте ещё раз.",
+
     "moreToolsSection": "Инструменты",
     "moreAllTasksSubtitle": "Все задачи в одном месте.",
     "moreReportsSubtitle": "Прогресс по задачам, привычкам и целям.",
