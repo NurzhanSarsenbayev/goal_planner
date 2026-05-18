@@ -746,9 +746,11 @@ Further decomposition into multiple feature stores is deferred.
 - Extracted `AppDependencies` as the app composition root.
 - Moved store dependency composition out of `PlannerStore`.
 - Kept concrete repository wiring in `AppDependencies`.
-- Cleaned `AppDependencies` public API so external code only needs:
-  - `store`;
-  - `dispose()`.
+- Extracted `AppDependencies` as the composition root for:
+  - `PlannerStore`;
+  - `HabitStore`;
+  - backup/export/restore services;
+  - app-level disposal.
 
 ### Old structure cleanup
 
@@ -982,7 +984,7 @@ Not implemented yet:
 
 ## Phase 7.5: Localization and pre-test readiness
 
-Status: localization done; pre-test safety not started.
+Status: localization done; manual backup/restore safety MVP done; real-device external backup QA pending.
 
 Goal:
 
@@ -1252,7 +1254,7 @@ At minimum:
 - restore latest local backup works;
 - restore from selected external backup file works;
 - one backup/restore roundtrip is tested on a clean local database;
-- the first tester is told that the app is local-first and backups are manual.а
+- the first tester is told that the app is local-first and backups are manual.
 
 Goal:
 
