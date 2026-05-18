@@ -1104,10 +1104,7 @@ Known intentional non-localized strings:
 
 Not implemented yet:
 
-- Manual backup/export.
-- Restore from backup.
 - Automatic local checkpoints.
-- Last backup status.
 - Backup reminder before real testing.
 - Cloud sync.
 - User accounts.
@@ -1115,7 +1112,7 @@ Not implemented yet:
 
 ## Phase 7.6: Pre-test safety - Backup and restore
 
-Status: not started.
+Status: manual backup/restore MVP done; real-device external file QA pending.
 
 Goal:
 
@@ -1179,6 +1176,48 @@ Initial scope:
 - Show last automatic checkpoint status in More.
 - Warn before first real testing if no external backup exists.
 
+Implemented:
+
+### Manual backup
+
+- Add Backup section to More.
+- Export local planner data to a versioned JSON backup.
+- Include schema version.
+- Include export timestamp.
+- Include planner data:
+  - goals;
+  - milestones;
+  - tasks;
+  - recurring rules;
+  - recurring exceptions;
+  - habits;
+  - habit entries.
+- Create manual local backup inside the app documents directory.
+- Show latest local backup status in More.
+- Export/share backup file outside the app sandbox through the system share sheet.
+
+### Manual restore
+
+- Restore latest local backup from the app documents directory.
+- Restore from a selected external backup JSON file.
+- Use destructive confirmation before replacing data.
+- Replace current local data instead of merging.
+- Validate backup before replacing the local database.
+- Roll back restore transaction if invalid data violates database constraints.
+- Reload PlannerStore after restore.
+- Reload HabitStore after restore.
+- Show user-facing success and failure messages.
+
+Current result:
+
+The app now has a basic local-first safety loop:
+
+> Create backup -> Export backup outside the app -> Restore latest local backup or selected external backup file -> Continue without restart
+
+Known limitation:
+
+External backup export/import was smoke-tested on emulator, but still needs a full real-device Android QA pass before first-user testing.
+
 Out of scope for this phase:
 
 - Cloud sync.
@@ -1196,7 +1235,7 @@ Before product validation, the app has a basic safety net:
 
 > Backup data -> Save file externally -> Restore backup if local data is lost
 
-This is enough for first-user testing without prematurely building a backend or sync system.
+This is enough for first-user testing without prematurely building a backend or sync system, after one successful real-device external backup roundtrip.
 
 ## Phase 8: Product validation
 
@@ -1209,9 +1248,11 @@ Phase 7.6 must be completed before giving the app to a real user.
 At minimum:
 
 - manual backup works;
-- restore from backup works;
+- external backup export works on a real Android device;
+- restore latest local backup works;
+- restore from selected external backup file works;
 - one backup/restore roundtrip is tested on a clean local database;
-- the first tester is told that the app is local-first.
+- the first tester is told that the app is local-first and backups are manual.а
 
 Goal:
 
@@ -1319,7 +1360,8 @@ Main differentiator:
 - No cloud sync/backend.
 - No auth.
 - No serious design polish yet.
-- Sample seed data still exists for development.
+- Backup/restore MVP exists, but external file roundtrip still needs real-device Android QA before first-user testing.
+- No automatic local checkpoints yet.
 - State management is still custom ChangeNotifier-based; Riverpod is not introduced yet.
 
 ## Not doing now
