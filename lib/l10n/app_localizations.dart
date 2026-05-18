@@ -1316,6 +1316,30 @@ abstract class AppLocalizations {
   /// **'Could not export backup. Try again.'**
   String get backupExportFailureMessage;
 
+  /// No description provided for @moreRestoreExternalBackupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from file'**
+  String get moreRestoreExternalBackupTitle;
+
+  /// No description provided for @moreRestoreExternalBackupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an exported backup file and replace local data.'**
+  String get moreRestoreExternalBackupSubtitle;
+
+  /// No description provided for @backupRestorePickCancelledMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup file selection cancelled.'**
+  String get backupRestorePickCancelledMessage;
+
+  /// No description provided for @backupRestoreExternalConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will replace all current goals, tasks, recurring tasks, and habits with data from the selected backup file. This cannot be undone.'**
+  String get backupRestoreExternalConfirmMessage;
+
   /// No description provided for @moreToolsSection.
   ///
   /// In en, this message translates to:

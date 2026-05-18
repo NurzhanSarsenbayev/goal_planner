@@ -12,6 +12,7 @@ class MoreScreen extends StatelessWidget {
     required this.onCreateBackup,
     required this.onExportBackup,
     required this.onRestoreLatestBackup,
+    required this.onRestoreExternalBackup,
     required this.lastBackupAt,
     required this.onOpenAllTasks,
     required this.onOpenReports,
@@ -23,6 +24,7 @@ class MoreScreen extends StatelessWidget {
   final Future<void> Function() onCreateBackup;
   final Future<void> Function() onExportBackup;
   final Future<void> Function() onRestoreLatestBackup;
+  final Future<void> Function() onRestoreExternalBackup;
   final DateTime? lastBackupAt;
   final VoidCallback onOpenAllTasks;
   final VoidCallback onOpenReports;
@@ -129,6 +131,18 @@ class MoreScreen extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               onRestoreLatestBackup();
+            },
+          ),
+        ),
+        const SizedBox(height: 8),
+        Card(
+          child: ListTile(
+            leading: const Icon(Icons.upload_file_outlined),
+            title: Text(l10n.moreRestoreExternalBackupTitle),
+            subtitle: Text(l10n.moreRestoreExternalBackupSubtitle),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              onRestoreExternalBackup();
             },
           ),
         ),

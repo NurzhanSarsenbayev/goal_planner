@@ -573,6 +573,11 @@
     "backupExportDismissedMessage": "Экспорт бэкапа отменён.",
     "backupExportFailureMessage": "Не удалось экспортировать бэкап. Попробуйте ещё раз.",
 
+    "moreRestoreExternalBackupTitle": "Восстановить из файла",
+    "moreRestoreExternalBackupSubtitle": "Выбрать экспортированный бэкап и заменить локальные данные.",
+    "backupRestorePickCancelledMessage": "Выбор файла бэкапа отменён.",
+    "backupRestoreExternalConfirmMessage": "Текущие цели, задачи, повторяющиеся задачи и привычки будут заменены данными из выбранного файла бэкапа. Это действие нельзя отменить.",
+
     "moreToolsSection": "Инструменты",
     "moreAllTasksSubtitle": "Все задачи в одном месте.",
     "moreReportsSubtitle": "Прогресс по задачам, привычкам и целям.",

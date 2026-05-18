@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -209,6 +211,90 @@ class _AppShellState extends State<AppShell> {
     }
   }
 
+  Future<void> _restoreExternalBackupFile() async {
+    try {
+      const backupFileType = XTypeGroup(
+        label: 'Goal Planner backup',
+        extensions: ['json'],
+        mimeTypes: ['application/json'],
+      );
+
+      final pickedFile = await openFile(acceptedTypeGroups: [backupFileType]);
+
+      if (!mounted) {
+        return;
+      }
+
+      final l10n = AppLocalizations.of(context);
+
+      if (pickedFile == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.backupRestorePickCancelledMessage)),
+        );
+        return;
+      }
+
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) {
+          final l10n = AppLocalizations.of(context);
+
+          return AlertDialog(
+            title: Text(l10n.backupRestoreConfirmTitle),
+            content: Text(l10n.backupRestoreExternalConfirmMessage),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text(l10n.commonCancel),
+              ),
+              FilledButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text(l10n.backupRestoreConfirmAction),
+              ),
+            ],
+          );
+        },
+      );
+
+      if (!mounted || confirmed != true) {
+        return;
+      }
+
+      final result = await _backupRestoreService.restoreFromFile(
+        File(pickedFile.path),
+      );
+
+      await _store.reload();
+      await _habitStore.reload();
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _lastBackupAt = result.exportedAt;
+      });
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.backupRestoreSuccessMessage)));
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+
+      final l10n = AppLocalizations.of(context);
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.backupRestoreFailureMessage)));
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -297,6 +383,7 @@ class _AppShellState extends State<AppShell> {
       onCreateBackup: _createBackupFile,
       onExportBackup: _exportBackupFile,
       onRestoreLatestBackup: _restoreLatestBackupFile,
+      onRestoreExternalBackup: _restoreExternalBackupFile,
       lastBackupAt: _lastBackupAt,
       onOpenHabits: () {
         _onDestinationSelected(3);

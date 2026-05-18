@@ -20,6 +20,7 @@ class MainTabBuilder {
     required Future<void> Function() onCreateBackup,
     required Future<void> Function() onExportBackup,
     required Future<void> Function() onRestoreLatestBackup,
+    required Future<void> Function() onRestoreExternalBackup,
     required DateTime? lastBackupAt,
     required GoalDialogActions goalDialogActions,
     required TaskDialogActions taskDialogActions,
@@ -33,6 +34,7 @@ class MainTabBuilder {
        _onCreateBackup = onCreateBackup,
        _onExportBackup = onExportBackup,
        _onRestoreLatestBackup = onRestoreLatestBackup,
+       _onRestoreExternalBackup = onRestoreExternalBackup,
        _lastBackupAt = lastBackupAt,
        _onOpenHabits = onOpenHabits,
        _goalDialogActions = goalDialogActions,
@@ -47,6 +49,7 @@ class MainTabBuilder {
   final Future<void> Function() _onCreateBackup;
   final Future<void> Function() _onExportBackup;
   final Future<void> Function() _onRestoreLatestBackup;
+  final Future<void> Function() _onRestoreExternalBackup;
   final DateTime? _lastBackupAt;
   final GoalDialogActions _goalDialogActions;
   final TaskDialogActions _taskDialogActions;
@@ -125,6 +128,7 @@ class MainTabBuilder {
         onCreateBackup: _onCreateBackup,
         onExportBackup: _onExportBackup,
         onRestoreLatestBackup: _onRestoreLatestBackup,
+        onRestoreExternalBackup: _onRestoreExternalBackup,
         lastBackupAt: _lastBackupAt,
         onOpenAllTasks: () {
           _navigationActions.openAllTasks(context);

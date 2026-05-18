@@ -698,6 +698,21 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not export backup. Try again.';
 
   @override
+  String get moreRestoreExternalBackupTitle => 'Restore from file';
+
+  @override
+  String get moreRestoreExternalBackupSubtitle =>
+      'Choose an exported backup file and replace local data.';
+
+  @override
+  String get backupRestorePickCancelledMessage =>
+      'Backup file selection cancelled.';
+
+  @override
+  String get backupRestoreExternalConfirmMessage =>
+      'This will replace all current goals, tasks, recurring tasks, and habits with data from the selected backup file. This cannot be undone.';
+
+  @override
   String get moreToolsSection => 'Tools';
 
   @override

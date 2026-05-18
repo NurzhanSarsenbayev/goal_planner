@@ -573,6 +573,11 @@
     "backupExportDismissedMessage": "Backup export cancelled.",
     "backupExportFailureMessage": "Could not export backup. Try again.",
 
+    "moreRestoreExternalBackupTitle": "Restore from file",
+    "moreRestoreExternalBackupSubtitle": "Choose an exported backup file and replace local data.",
+    "backupRestorePickCancelledMessage": "Backup file selection cancelled.",
+    "backupRestoreExternalConfirmMessage": "This will replace all current goals, tasks, recurring tasks, and habits with data from the selected backup file. This cannot be undone.",
+
     "moreToolsSection": "Tools",
     "moreAllTasksSubtitle": "View all tasks in one place.",
     "moreReportsSubtitle": "Review completed work and goal progress.",

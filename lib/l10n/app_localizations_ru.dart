@@ -701,6 +701,20 @@ class AppLocalizationsRu extends AppLocalizations {
       'Не удалось экспортировать бэкап. Попробуйте ещё раз.';
 
   @override
+  String get moreRestoreExternalBackupTitle => 'Восстановить из файла';
+
+  @override
+  String get moreRestoreExternalBackupSubtitle =>
+      'Выбрать экспортированный бэкап и заменить локальные данные.';
+
+  @override
+  String get backupRestorePickCancelledMessage => 'Выбор файла бэкапа отменён.';
+
+  @override
+  String get backupRestoreExternalConfirmMessage =>
+      'Текущие цели, задачи, повторяющиеся задачи и привычки будут заменены данными из выбранного файла бэкапа. Это действие нельзя отменить.';
+
+  @override
   String get moreToolsSection => 'Инструменты';
 
   @override
