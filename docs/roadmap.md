@@ -1114,7 +1114,7 @@ Not implemented yet:
 
 ## Phase 7.6: Pre-test safety - Backup and restore
 
-Status: manual backup/restore MVP done; real-device external file QA pending.
+Status: done.
 
 Goal:
 
@@ -1216,9 +1216,17 @@ The app now has a basic local-first safety loop:
 
 > Create backup -> Export backup outside the app -> Restore latest local backup or selected external backup file -> Continue without restart
 
+Real-device QA result:
+
+External backup export/import roundtrip was tested on a real Android device.
+
+Verified flow:
+
+> Export backup -> Save backup outside the app -> Restore from selected external backup file -> Continue without restart
+
 Known limitation:
 
-External backup export/import was smoke-tested on emulator, but still needs a full real-device Android QA pass before first-user testing.
+The Android file picker / Downloads flow can be clumsy depending on device/provider caching, but the backup/restore flow itself works.
 
 Out of scope for this phase:
 
@@ -1253,7 +1261,7 @@ At minimum:
 - external backup export works on a real Android device;
 - restore latest local backup works;
 - restore from selected external backup file works;
-- one backup/restore roundtrip is tested on a clean local database;
+- one external backup/restore roundtrip was tested on a real Android device;
 - the first tester is told that the app is local-first and backups are manual.
 
 Goal:
@@ -1362,7 +1370,6 @@ Main differentiator:
 - No cloud sync/backend.
 - No auth.
 - No serious design polish yet.
-- Backup/restore MVP exists, but external file roundtrip still needs real-device Android QA before first-user testing.
 - No automatic local checkpoints yet.
 - State management is still custom ChangeNotifier-based; Riverpod is not introduced yet.
 
