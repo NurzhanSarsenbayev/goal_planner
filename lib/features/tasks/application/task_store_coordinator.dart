@@ -1,6 +1,7 @@
 import '../../../models/planner_task.dart';
 import '../../../models/recurring_task_exception.dart';
 import '../../recurring/application/recurring_occurrence_store_coordinator.dart';
+import '../../reminders/application/task_reminder_scheduler.dart';
 import 'task_application_service.dart';
 import 'task_repository.dart';
 
@@ -22,16 +23,19 @@ class TaskStoreCoordinator {
     required RecurringOccurrenceStoreCoordinator
     recurringOccurrenceStoreCoordinator,
     TaskApplicationService? taskApplicationService,
+    TaskReminderScheduler? taskReminderScheduler,
   }) : _taskRepository = taskRepository,
        _recurringOccurrenceStoreCoordinator =
            recurringOccurrenceStoreCoordinator,
        _taskApplicationService =
-           taskApplicationService ?? const TaskApplicationService();
+           taskApplicationService ?? const TaskApplicationService(),
+       _taskReminderScheduler = taskReminderScheduler;
 
   final TaskRepository _taskRepository;
   final RecurringOccurrenceStoreCoordinator
   _recurringOccurrenceStoreCoordinator;
   final TaskApplicationService _taskApplicationService;
+  final TaskReminderScheduler? _taskReminderScheduler;
 
   TaskStoreMutation? addTask({
     required List<PlannerTask> tasks,
@@ -347,10 +351,12 @@ class TaskStoreCoordinator {
       persistOperation: () async {
         if (taskToPersist != null) {
           await _taskRepository.saveTask(taskToPersist);
+          await _taskReminderScheduler?.syncTaskReminder(taskToPersist);
         }
 
         if (taskIdToDelete != null) {
           await _taskRepository.deleteTask(taskIdToDelete);
+          await _taskReminderScheduler?.cancelTaskReminder(taskIdToDelete);
         }
       },
     );

@@ -96,9 +96,16 @@ class AppDependencies {
           recurringTaskRepository: recurringTaskRepository,
         );
 
+    final localNotificationService = LocalNotificationService();
+
+    final taskReminderScheduler = TaskReminderScheduler(
+      notifications: localNotificationService,
+    );
+
     final taskStoreCoordinator = TaskStoreCoordinator(
       taskRepository: taskRepository,
       recurringOccurrenceStoreCoordinator: recurringOccurrenceStoreCoordinator,
+      taskReminderScheduler: taskReminderScheduler,
     );
 
     final store = PlannerStore(
@@ -111,12 +118,6 @@ class AppDependencies {
     );
 
     final habitStore = HabitStore(habitRepository: habitRepository);
-
-    final localNotificationService = LocalNotificationService();
-
-    final taskReminderScheduler = TaskReminderScheduler(
-      notifications: localNotificationService,
-    );
 
     return AppDependencies._(
       database: database,
