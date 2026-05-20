@@ -21,6 +21,7 @@ import '../../features/milestones/application/milestone_store_coordinator.dart';
 import '../../features/tasks/application/task_store_coordinator.dart';
 import '../../features/habits/application/habit_store.dart';
 import '../../features/reminders/application/local_notification_service.dart';
+import '../../features/reminders/application/task_reminder_scheduler.dart';
 import '../../state/planner_store.dart';
 
 class AppDependencies {
@@ -32,6 +33,7 @@ class AppDependencies {
     required this.backupFileStorage,
     required this.backupRestoreService,
     required this.localNotificationService,
+    required this.taskReminderScheduler,
   }) : _database = database;
 
   factory AppDependencies.create() {
@@ -112,6 +114,10 @@ class AppDependencies {
 
     final localNotificationService = LocalNotificationService();
 
+    final taskReminderScheduler = TaskReminderScheduler(
+      notifications: localNotificationService,
+    );
+
     return AppDependencies._(
       database: database,
       store: store,
@@ -120,6 +126,7 @@ class AppDependencies {
       backupFileStorage: backupFileStorage,
       backupRestoreService: backupRestoreService,
       localNotificationService: localNotificationService,
+      taskReminderScheduler: taskReminderScheduler,
     );
   }
 
@@ -130,6 +137,7 @@ class AppDependencies {
   final PlannerBackupFileStorage backupFileStorage;
   final PlannerBackupRestoreService backupRestoreService;
   final LocalNotificationService localNotificationService;
+  final TaskReminderScheduler taskReminderScheduler;
 
   Future<void> dispose() async {
     store.dispose();
