@@ -12,9 +12,14 @@ class PlannerTask {
     this.milestoneId,
     this.recurringRuleId,
     this.scheduledDate,
+    this.scheduledTimeMinutes,
     this.isCompleted = false,
     this.completedAt,
-  });
+  }) : assert(
+         scheduledTimeMinutes == null ||
+             (scheduledTimeMinutes >= 0 && scheduledTimeMinutes <= 1439),
+         'scheduledTimeMinutes must be between 0 and 1439.',
+       );
 
   final String id;
   final String title;
@@ -24,6 +29,7 @@ class PlannerTask {
   final String? milestoneId;
   final String? recurringRuleId;
   final DateTime? scheduledDate;
+  final int? scheduledTimeMinutes;
   final bool isCompleted;
   final DateTime? completedAt;
 
@@ -62,8 +68,18 @@ class PlannerTask {
     return copyWith(scheduledDate: dateOnly(date));
   }
 
+  PlannerTask scheduleForDateAndTime({
+    required DateTime date,
+    required int? timeMinutes,
+  }) {
+    return copyWith(
+      scheduledDate: dateOnly(date),
+      scheduledTimeMinutes: timeMinutes,
+    );
+  }
+
   PlannerTask unschedule() {
-    return copyWith(scheduledDate: null);
+    return copyWith(scheduledDate: null, scheduledTimeMinutes: null);
   }
 
   PlannerTask assignToGoal(String goalId) {
@@ -100,6 +116,7 @@ class PlannerTask {
     Object? scheduledDate = _unset,
     bool? isCompleted,
     Object? completedAt = _unset,
+    Object? scheduledTimeMinutes = _unset,
   }) {
     return PlannerTask(
       id: id ?? this.id,
@@ -116,6 +133,9 @@ class PlannerTask {
       scheduledDate: identical(scheduledDate, _unset)
           ? this.scheduledDate
           : scheduledDate as DateTime?,
+      scheduledTimeMinutes: identical(scheduledTimeMinutes, _unset)
+          ? this.scheduledTimeMinutes
+          : scheduledTimeMinutes as int?,
       isCompleted: isCompleted ?? this.isCompleted,
       completedAt: identical(completedAt, _unset)
           ? this.completedAt
