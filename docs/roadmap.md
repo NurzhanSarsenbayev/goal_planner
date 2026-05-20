@@ -1305,6 +1305,145 @@ Failure signals:
 - Habit reports feel confusing or demotivating.
 - User returns to previous planner.
 
+## Phase 8.1: Time-aware daily planning MVP
+
+Status: not started.
+
+Reason:
+
+The first real-device beta feedback showed that the app is easy to forget without reminders. Before adding useful reminders, tasks need optional time-of-day planning.
+
+Goal:
+
+Allow users to plan the day by date and optional time without making every task time-bound.
+
+Initial scope:
+
+- Add optional time-of-day to scheduled tasks.
+- Keep date-only tasks supported.
+- Update Drift schema and migration.
+- Update task model, repository, and mappers.
+- Update task creation/edit dialogs with time picker.
+- Allow setting, changing, and clearing task time.
+- Show task time in Today.
+- Sort Today tasks by time first, then untimed tasks.
+- Show task time in Calendar selected-day task list.
+- Keep reports date-based.
+
+Out of scope for this phase:
+
+- Local notifications.
+- Per-task reminders.
+- Per-habit reminders.
+- Recurring rule default time.
+- Timeline calendar UI.
+- Drag-and-drop scheduling.
+- Reports by hour.
+
+
+## Phase 8.2: Retention - Local reminders foundation
+
+Status: not started.
+
+Reason:
+
+A daily planner and habit tracker needs a return loop. Without reminders, the user can forget to open the app even if the core planning flow works.
+
+Goal:
+
+Add a small local notification foundation without backend push notifications.
+
+Initial scope:
+
+- Add local notifications dependency.
+- Add notification permission request flow.
+- Add reminder settings in More.
+- Support one daily app reminder.
+- Allow enabling/disabling the daily reminder.
+- Allow choosing daily reminder time.
+- Save reminder settings locally.
+- Schedule/cancel daily local notification.
+- Test on real Android release build.
+
+Out of scope for this phase:
+
+- Backend push notifications.
+- Syncing reminder settings across devices.
+- Per-task reminders.
+- Per-habit reminders.
+- Snooze.
+- Notification actions.
+
+
+## Phase 8.3: Task reminders
+
+Status: not started.
+
+Goal:
+
+Use task scheduled date and time to remind the user about concrete planned tasks.
+
+Initial scope:
+
+- Add optional reminder setting for timed tasks.
+- Schedule notification for task date/time.
+- Cancel notification when task is completed.
+- Cancel notification when task is deleted.
+- Cancel notification when task is unscheduled.
+- Reschedule notification when task date/time changes.
+
+Out of scope for this phase:
+
+- Snooze.
+- Notification actions.
+- Smart reminders.
+- Backend push notifications.
+
+
+## Phase 8.4: Habit reminders
+
+Status: not started.
+
+Goal:
+
+Let users configure reminders for habits they want to perform at a specific time.
+
+Initial scope:
+
+- Add optional reminder time per habit.
+- Allow enabling/disabling reminder per habit.
+- Schedule habit reminder notification.
+- Cancel/reschedule habit reminder when habit settings change.
+- Keep habit reminders separate from PlannerStore.
+
+Out of scope for this phase:
+
+- Multiple reminder times per habit.
+- Snooze.
+- Notification actions.
+- Backend push notifications.
+
+
+## Phase 8.5: Snooze and notification actions
+
+Status: not started.
+
+Goal:
+
+Make reminders actionable after the basic reminder system is stable.
+
+Initial scope:
+
+- Add snooze action.
+- Open relevant task/habit from notification.
+- Consider quick complete action for tasks.
+- Consider quick done/skip action for habits.
+
+Out of scope for this phase:
+
+- Backend push notifications.
+- Cross-device reminder sync.
+
 ## Phase 9: Backend and sync
 
 Status: later.
