@@ -587,6 +587,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get taskDescriptionFieldHint => 'Optional';
 
   @override
+  String get taskTimeNotSetButton => 'Add time';
+
+  @override
+  String taskTimeSelectedButton(String time) {
+    return 'Time: $time';
+  }
+
+  @override
+  String get taskTimeClearButton => 'Clear time';
+
+  @override
   String get taskGoalFieldLabel => 'Goal';
 
   @override

@@ -1118,6 +1118,24 @@ abstract class AppLocalizations {
   /// **'Optional'**
   String get taskDescriptionFieldHint;
 
+  /// No description provided for @taskTimeNotSetButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add time'**
+  String get taskTimeNotSetButton;
+
+  /// Button label for selected task time
+  ///
+  /// In en, this message translates to:
+  /// **'Time: {time}'**
+  String taskTimeSelectedButton(String time);
+
+  /// No description provided for @taskTimeClearButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear time'**
+  String get taskTimeClearButton;
+
   /// No description provided for @taskGoalFieldLabel.
   ///
   /// In en, this message translates to:

@@ -518,6 +518,17 @@
     "taskTitleFieldHint": "e.g. Write post outline",
     "taskDescriptionFieldLabel": "Description",
     "taskDescriptionFieldHint": "Optional",
+    "taskTimeNotSetButton": "Add time",
+    "taskTimeSelectedButton": "Time: {time}",
+    "@taskTimeSelectedButton": {
+      "description": "Button label for selected task time",
+      "placeholders": {
+        "time": {
+          "type": "String"
+        }
+      }
+    },
+    "taskTimeClearButton": "Clear time",
     "taskGoalFieldLabel": "Goal",
     "taskNoGoalOption": "No goal",
     "taskMilestoneFieldLabel": "Milestone",

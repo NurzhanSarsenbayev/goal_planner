@@ -518,6 +518,17 @@
     "taskTitleFieldHint": "например, набросать план статьи",
     "taskDescriptionFieldLabel": "Описание",
     "taskDescriptionFieldHint": "Необязательно",
+    "taskTimeNotSetButton": "Добавить время",
+    "taskTimeSelectedButton": "Время: {time}",
+    "@taskTimeSelectedButton": {
+      "description": "Button label for selected task time",
+      "placeholders": {
+        "time": {
+          "type": "String"
+        }
+      }
+    },
+    "taskTimeClearButton": "Убрать время",
     "taskGoalFieldLabel": "Цель",
     "taskNoGoalOption": "Без цели",
     "taskMilestoneFieldLabel": "Этап",

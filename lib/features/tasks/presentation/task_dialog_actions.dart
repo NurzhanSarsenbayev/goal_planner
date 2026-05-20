@@ -23,6 +23,7 @@ class TaskDialogActions {
     _store.addTaskForToday(
       title: result.title,
       description: result.description,
+      scheduledTimeMinutes: result.scheduledTimeMinutes,
       goalId: result.goalId,
       milestoneId: result.milestoneId,
     );
@@ -46,6 +47,7 @@ class TaskDialogActions {
       title: result.title,
       description: result.description,
       scheduledDate: scheduledDate,
+      scheduledTimeMinutes: result.scheduledTimeMinutes,
       goalId: result.goalId,
       milestoneId: result.milestoneId,
     );

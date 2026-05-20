@@ -590,6 +590,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get taskDescriptionFieldHint => 'Необязательно';
 
   @override
+  String get taskTimeNotSetButton => 'Добавить время';
+
+  @override
+  String taskTimeSelectedButton(String time) {
+    return 'Время: $time';
+  }
+
+  @override
+  String get taskTimeClearButton => 'Убрать время';
+
+  @override
   String get taskGoalFieldLabel => 'Цель';
 
   @override

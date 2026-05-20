@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/milestone.dart';
+import '../../../../shared/planner_time.dart';
 
 class AddTaskWithPlacementDialog extends StatefulWidget {
   const AddTaskWithPlacementDialog({
@@ -26,6 +27,7 @@ class _AddTaskWithPlacementDialogState
 
   String? _selectedGoalId;
   String? _selectedMilestoneId;
+  int? _scheduledTimeMinutes;
 
   List<Milestone> get _availableMilestones {
     if (_selectedGoalId == null) {
@@ -37,11 +39,48 @@ class _AddTaskWithPlacementDialogState
         .toList();
   }
 
+  TimeOfDay get _initialTime {
+    final scheduledTimeMinutes = _scheduledTimeMinutes;
+
+    if (scheduledTimeMinutes == null) {
+      return TimeOfDay.now();
+    }
+
+    return TimeOfDay(
+      hour: scheduledTimeMinutes ~/ 60,
+      minute: scheduledTimeMinutes % 60,
+    );
+  }
+
   @override
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickTime() async {
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: _initialTime,
+    );
+
+    if (!mounted || pickedTime == null) {
+      return;
+    }
+
+    setState(() {
+      _scheduledTimeMinutes = plannerTimeMinutes(
+        hour: pickedTime.hour,
+        minute: pickedTime.minute,
+      );
+    });
+  }
+
+  void _clearTime() {
+    setState(() {
+      _scheduledTimeMinutes = null;
+    });
   }
 
   void _submit() {
@@ -56,6 +95,7 @@ class _AddTaskWithPlacementDialogState
       AddTaskWithPlacementDraft(
         title: title,
         description: description,
+        scheduledTimeMinutes: _scheduledTimeMinutes,
         goalId: _selectedGoalId,
         milestoneId: _selectedMilestoneId,
       ),
@@ -92,6 +132,31 @@ class _AddTaskWithPlacementDialogState
               ),
               minLines: 1,
               maxLines: 3,
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: _pickTime,
+                    icon: const Icon(Icons.schedule),
+                    label: Text(
+                      _scheduledTimeMinutes == null
+                          ? l10n.taskTimeNotSetButton
+                          : l10n.taskTimeSelectedButton(
+                              formatPlannerTime(_scheduledTimeMinutes!),
+                            ),
+                    ),
+                  ),
+                ),
+                if (_scheduledTimeMinutes != null) ...[
+                  const SizedBox(width: 8),
+                  TextButton(
+                    onPressed: _clearTime,
+                    child: Text(l10n.taskTimeClearButton),
+                  ),
+                ],
+              ],
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<String?>(
@@ -162,12 +227,14 @@ class AddTaskWithPlacementDraft {
   const AddTaskWithPlacementDraft({
     required this.title,
     required this.description,
+    required this.scheduledTimeMinutes,
     required this.goalId,
     required this.milestoneId,
   });
 
   final String title;
   final String description;
+  final int? scheduledTimeMinutes;
   final String? goalId;
   final String? milestoneId;
 }
