@@ -10,6 +10,7 @@ class TaskApplicationService {
     String? goalId,
     String? milestoneId,
     DateTime? scheduledDate,
+    int? scheduledTimeMinutes,
     DateTime? now,
   }) {
     final createdAt = now ?? DateTime.now();
@@ -21,6 +22,7 @@ class TaskApplicationService {
       goalId: goalId,
       milestoneId: milestoneId,
       scheduledDate: scheduledDate == null ? null : dateOnly(scheduledDate),
+      scheduledTimeMinutes: scheduledTimeMinutes,
       createdAt: createdAt,
     );
   }
@@ -122,6 +124,22 @@ class TaskApplicationService {
       tasks: tasks,
       taskId: taskId,
       update: (task) => task.scheduleForDate(scheduledDate),
+    );
+  }
+
+  TaskMutationResult scheduleTaskForDateAndTime({
+    required List<PlannerTask> tasks,
+    required String taskId,
+    required DateTime scheduledDate,
+    required int? scheduledTimeMinutes,
+  }) {
+    return _updateTaskById(
+      tasks: tasks,
+      taskId: taskId,
+      update: (task) => task.scheduleForDateAndTime(
+        date: scheduledDate,
+        timeMinutes: scheduledTimeMinutes,
+      ),
     );
   }
 

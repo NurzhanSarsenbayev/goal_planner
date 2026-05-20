@@ -189,6 +189,7 @@ class PlannerStore extends ChangeNotifier {
     required String title,
     required String description,
     required DateTime scheduledDate,
+    int? scheduledTimeMinutes,
     String? goalId,
     String? milestoneId,
   }) {
@@ -198,6 +199,7 @@ class PlannerStore extends ChangeNotifier {
       title: title,
       description: description,
       scheduledDate: scheduledDate,
+      scheduledTimeMinutes: scheduledTimeMinutes,
       goalId: goalId,
       milestoneId: milestoneId,
     );
@@ -208,6 +210,7 @@ class PlannerStore extends ChangeNotifier {
   void addTaskForToday({
     required String title,
     required String description,
+    int? scheduledTimeMinutes,
     String? goalId,
     String? milestoneId,
   }) {
@@ -215,6 +218,7 @@ class PlannerStore extends ChangeNotifier {
       title: title,
       description: description,
       scheduledDate: todayDate(),
+      scheduledTimeMinutes: scheduledTimeMinutes,
       goalId: goalId,
       milestoneId: milestoneId,
     );
@@ -366,6 +370,22 @@ class PlannerStore extends ChangeNotifier {
       recurringExceptions: _recurringExceptions,
       taskId: taskId,
       scheduledDate: scheduledDate,
+    );
+
+    _applyTaskStoreMutation(mutation);
+  }
+
+  void scheduleTaskForDateAndTime({
+    required String taskId,
+    required DateTime scheduledDate,
+    required int? scheduledTimeMinutes,
+  }) {
+    final mutation = _taskStoreCoordinator.scheduleTaskForDateAndTime(
+      tasks: _tasks,
+      recurringExceptions: _recurringExceptions,
+      taskId: taskId,
+      scheduledDate: scheduledDate,
+      scheduledTimeMinutes: scheduledTimeMinutes,
     );
 
     _applyTaskStoreMutation(mutation);

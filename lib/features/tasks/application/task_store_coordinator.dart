@@ -52,6 +52,7 @@ class TaskStoreCoordinator {
     required String title,
     required String description,
     required DateTime scheduledDate,
+    int? scheduledTimeMinutes,
     String? goalId,
     String? milestoneId,
   }) {
@@ -61,6 +62,7 @@ class TaskStoreCoordinator {
       goalId: goalId,
       milestoneId: milestoneId,
       scheduledDate: scheduledDate,
+      scheduledTimeMinutes: scheduledTimeMinutes,
     );
 
     return addTask(
@@ -218,11 +220,40 @@ class TaskStoreCoordinator {
         ),
       );
     }
-
     final result = _taskApplicationService.scheduleTaskForDate(
       tasks: tasks,
       taskId: taskId,
       scheduledDate: scheduledDate,
+    );
+
+    return _regularTaskMutation(
+      result,
+      recurringExceptions: recurringExceptions,
+    );
+  }
+
+  TaskStoreMutation? scheduleTaskForDateAndTime({
+    required List<PlannerTask> tasks,
+    required List<RecurringTaskException> recurringExceptions,
+    required String taskId,
+    required DateTime scheduledDate,
+    required int? scheduledTimeMinutes,
+  }) {
+    final taskToUpdate = _findTaskById(tasks: tasks, taskId: taskId);
+
+    if (taskToUpdate == null) {
+      return null;
+    }
+
+    if (_isRecurringOccurrence(taskToUpdate)) {
+      return null;
+    }
+
+    final result = _taskApplicationService.scheduleTaskForDateAndTime(
+      tasks: tasks,
+      taskId: taskId,
+      scheduledDate: scheduledDate,
+      scheduledTimeMinutes: scheduledTimeMinutes,
     );
 
     return _regularTaskMutation(
