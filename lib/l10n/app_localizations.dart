@@ -1873,6 +1873,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'If a month does not have this day, the task will be created on the last day of that month.'**
   String get recurringRuleShortMonthFallbackNote;
+
+  /// No description provided for @moreNotificationsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get moreNotificationsSection;
+
+  /// No description provided for @moreTestNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send test notification'**
+  String get moreTestNotificationTitle;
+
+  /// No description provided for @moreTestNotificationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Checks that local notifications work on this device.'**
+  String get moreTestNotificationSubtitle;
+
+  /// No description provided for @notificationPermissionDeniedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification permission is not granted.'**
+  String get notificationPermissionDeniedMessage;
+
+  /// No description provided for @notificationTestSentMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Test notification sent.'**
+  String get notificationTestSentMessage;
+
+  /// No description provided for @notificationTestFailureMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not send test notification.'**
+  String get notificationTestFailureMessage;
 }
 
 class _AppLocalizationsDelegate

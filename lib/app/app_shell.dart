@@ -13,6 +13,7 @@ import '../features/backup/application/planner_backup_restore_service.dart';
 import '../features/recurring/presentation/recurring_rule_dialog_actions.dart';
 import '../features/goals/presentation/goal_dialog_actions.dart';
 import '../features/tasks/presentation/task_dialog_actions.dart';
+import '../features/reminders/application/local_notification_service.dart';
 import 'composition/app_dependencies.dart';
 import 'navigation/app_navigation_actions.dart';
 import 'navigation/main_tab_builder.dart';
@@ -47,6 +48,7 @@ class _AppShellState extends State<AppShell> {
   late final PlannerBackupFileStorage _backupFileStorage;
   late final PlannerBackupRestoreService _backupRestoreService;
   DateTime? _lastBackupAt;
+  late final LocalNotificationService _localNotificationService;
 
   int _selectedIndex = 0;
 
@@ -295,6 +297,58 @@ class _AppShellState extends State<AppShell> {
     }
   }
 
+  Future<void> _initializeNotifications() async {
+    try {
+      await _localNotificationService.initialize();
+    } catch (_) {
+      // Notification setup must not block app startup.
+    }
+  }
+
+  Future<void> _showTestNotification() async {
+    try {
+      await _localNotificationService.initialize();
+
+      final granted = await _localNotificationService
+          .requestNotificationPermission();
+
+      if (!mounted) {
+        return;
+      }
+
+      final l10n = AppLocalizations.of(context);
+
+      if (!granted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.notificationPermissionDeniedMessage)),
+        );
+        return;
+      }
+
+      await _localNotificationService.showTestNotification();
+
+      if (!mounted) {
+        return;
+      }
+
+      final updatedL10n = AppLocalizations.of(context);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(updatedL10n.notificationTestSentMessage)),
+      );
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+
+      final l10n = AppLocalizations.of(context);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.notificationTestFailureMessage)),
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -305,6 +359,7 @@ class _AppShellState extends State<AppShell> {
     _backupFileExportService = _dependencies.backupFileExportService;
     _backupFileStorage = _dependencies.backupFileStorage;
     _backupRestoreService = _dependencies.backupRestoreService;
+    _localNotificationService = _dependencies.localNotificationService;
 
     unawaited(_loadBackupStatus());
 
@@ -325,6 +380,7 @@ class _AppShellState extends State<AppShell> {
     _habitStore.addListener(_onStoreChanged);
 
     unawaited(_store.initialize());
+    unawaited(_initializeNotifications());
     unawaited(_habitStore.initialize());
   }
 
@@ -388,6 +444,7 @@ class _AppShellState extends State<AppShell> {
       onOpenHabits: () {
         _onDestinationSelected(3);
       },
+      onShowTestNotification: _showTestNotification,
     );
   }
 

@@ -29,6 +29,7 @@ class MainTabBuilder {
     required AppLanguage selectedLanguage,
     required ValueChanged<AppLanguage> onLanguageChanged,
     required VoidCallback onOpenHabits,
+    required Future<void> Function() onShowTestNotification,
   }) : _store = store,
        _habitStore = habitStore,
        _onCreateBackup = onCreateBackup,
@@ -42,6 +43,7 @@ class MainTabBuilder {
        _recurringRuleDialogActions = recurringRuleDialogActions,
        _navigationActions = navigationActions,
        _selectedLanguage = selectedLanguage,
+       _onShowTestNotification = onShowTestNotification,
        _onLanguageChanged = onLanguageChanged;
 
   final PlannerStore _store;
@@ -56,6 +58,7 @@ class MainTabBuilder {
   final RecurringRuleDialogActions _recurringRuleDialogActions;
   final AppNavigationActions _navigationActions;
   final AppLanguage _selectedLanguage;
+  final Future<void> Function() _onShowTestNotification;
   final ValueChanged<AppLanguage> _onLanguageChanged;
   final VoidCallback _onOpenHabits;
 
@@ -141,6 +144,7 @@ class MainTabBuilder {
         onOpenRecurringTasks: () {
           _navigationActions.openRecurringTasks(context);
         },
+        onShowTestNotification: _onShowTestNotification,
       ),
     ];
   }

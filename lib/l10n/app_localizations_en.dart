@@ -1025,4 +1025,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get recurringRuleShortMonthFallbackNote =>
       'If a month does not have this day, the task will be created on the last day of that month.';
+
+  @override
+  String get moreNotificationsSection => 'Notifications';
+
+  @override
+  String get moreTestNotificationTitle => 'Send test notification';
+
+  @override
+  String get moreTestNotificationSubtitle =>
+      'Checks that local notifications work on this device.';
+
+  @override
+  String get notificationPermissionDeniedMessage =>
+      'Notification permission is not granted.';
+
+  @override
+  String get notificationTestSentMessage => 'Test notification sent.';
+
+  @override
+  String get notificationTestFailureMessage =>
+      'Could not send test notification.';
 }

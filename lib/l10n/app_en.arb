@@ -798,5 +798,12 @@
         }
       }
     },
-    "recurringRuleShortMonthFallbackNote": "If a month does not have this day, the task will be created on the last day of that month."
+    "recurringRuleShortMonthFallbackNote": "If a month does not have this day, the task will be created on the last day of that month.",
+
+    "moreNotificationsSection": "Notifications",
+    "moreTestNotificationTitle": "Send test notification",
+    "moreTestNotificationSubtitle": "Checks that local notifications work on this device.",
+    "notificationPermissionDeniedMessage": "Notification permission is not granted.",
+    "notificationTestSentMessage": "Test notification sent.",
+    "notificationTestFailureMessage": "Could not send test notification."
 }

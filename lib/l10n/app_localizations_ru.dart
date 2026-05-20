@@ -1032,4 +1032,25 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get recurringRuleShortMonthFallbackNote =>
       'Если в месяце нет выбранного дня, задача будет создана в последний день этого месяца.';
+
+  @override
+  String get moreNotificationsSection => 'Уведомления';
+
+  @override
+  String get moreTestNotificationTitle => 'Отправить тестовое уведомление';
+
+  @override
+  String get moreTestNotificationSubtitle =>
+      'Проверяет, что локальные уведомления работают на этом устройстве.';
+
+  @override
+  String get notificationPermissionDeniedMessage =>
+      'Разрешение на уведомления не выдано.';
+
+  @override
+  String get notificationTestSentMessage => 'Тестовое уведомление отправлено.';
+
+  @override
+  String get notificationTestFailureMessage =>
+      'Не удалось отправить тестовое уведомление.';
 }

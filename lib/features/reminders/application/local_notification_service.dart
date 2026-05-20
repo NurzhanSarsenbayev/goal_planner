@@ -9,7 +9,13 @@ class LocalNotificationService {
 
   final FlutterLocalNotificationsPlugin _plugin;
 
-  Future<void> initialize() async {
+  Future<void>? _initializeFuture;
+
+  Future<void> initialize() {
+    return _initializeFuture ??= _initialize();
+  }
+
+  Future<void> _initialize() async {
     timezone_data.initializeTimeZones();
     await _configureLocalTimeZone();
 

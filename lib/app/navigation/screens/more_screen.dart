@@ -17,6 +17,7 @@ class MoreScreen extends StatelessWidget {
     required this.onOpenAllTasks,
     required this.onOpenReports,
     required this.onOpenRecurringTasks,
+    required this.onShowTestNotification,
   });
 
   final AppLanguage selectedLanguage;
@@ -29,6 +30,7 @@ class MoreScreen extends StatelessWidget {
   final VoidCallback onOpenAllTasks;
   final VoidCallback onOpenReports;
   final VoidCallback onOpenRecurringTasks;
+  final Future<void> Function() onShowTestNotification;
 
   String _backupSubtitle(BuildContext context, AppLocalizations l10n) {
     final backupAt = lastBackupAt;
@@ -143,6 +145,25 @@ class MoreScreen extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               onRestoreExternalBackup();
+            },
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          l10n.moreNotificationsSection,
+          style: Theme.of(
+            context,
+          ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+        ),
+        const SizedBox(height: 8),
+        Card(
+          child: ListTile(
+            leading: const Icon(Icons.notifications_active_outlined),
+            title: Text(l10n.moreTestNotificationTitle),
+            subtitle: Text(l10n.moreTestNotificationSubtitle),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              onShowTestNotification();
             },
           ),
         ),

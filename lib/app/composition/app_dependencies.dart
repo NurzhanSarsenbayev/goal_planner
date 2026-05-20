@@ -20,6 +20,7 @@ import '../../features/goals/application/goal_store_coordinator.dart';
 import '../../features/milestones/application/milestone_store_coordinator.dart';
 import '../../features/tasks/application/task_store_coordinator.dart';
 import '../../features/habits/application/habit_store.dart';
+import '../../features/reminders/application/local_notification_service.dart';
 import '../../state/planner_store.dart';
 
 class AppDependencies {
@@ -30,6 +31,7 @@ class AppDependencies {
     required this.backupFileExportService,
     required this.backupFileStorage,
     required this.backupRestoreService,
+    required this.localNotificationService,
   }) : _database = database;
 
   factory AppDependencies.create() {
@@ -108,6 +110,8 @@ class AppDependencies {
 
     final habitStore = HabitStore(habitRepository: habitRepository);
 
+    final localNotificationService = LocalNotificationService();
+
     return AppDependencies._(
       database: database,
       store: store,
@@ -115,6 +119,7 @@ class AppDependencies {
       backupFileExportService: backupFileExportService,
       backupFileStorage: backupFileStorage,
       backupRestoreService: backupRestoreService,
+      localNotificationService: localNotificationService,
     );
   }
 
@@ -124,6 +129,7 @@ class AppDependencies {
   final PlannerBackupFileExportService backupFileExportService;
   final PlannerBackupFileStorage backupFileStorage;
   final PlannerBackupRestoreService backupRestoreService;
+  final LocalNotificationService localNotificationService;
 
   Future<void> dispose() async {
     store.dispose();

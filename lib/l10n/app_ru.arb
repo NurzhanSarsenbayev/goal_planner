@@ -798,5 +798,12 @@
         }
       }
     },
-    "recurringRuleShortMonthFallbackNote": "Если в месяце нет выбранного дня, задача будет создана в последний день этого месяца."
+    "recurringRuleShortMonthFallbackNote": "Если в месяце нет выбранного дня, задача будет создана в последний день этого месяца.",
+
+    "moreNotificationsSection": "Уведомления",
+    "moreTestNotificationTitle": "Отправить тестовое уведомление",
+    "moreTestNotificationSubtitle": "Проверяет, что локальные уведомления работают на этом устройстве.",
+    "notificationPermissionDeniedMessage": "Разрешение на уведомления не выдано.",
+    "notificationTestSentMessage": "Тестовое уведомление отправлено.",
+    "notificationTestFailureMessage": "Не удалось отправить тестовое уведомление."
 }
