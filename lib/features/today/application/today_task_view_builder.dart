@@ -1,6 +1,7 @@
 import '../../../models/goal.dart';
 import '../../../models/planner_task.dart';
 import '../../../shared/planner_dates.dart';
+import '../../tasks/application/task_schedule_sorting.dart';
 
 class TodayTaskViewBuilder {
   const TodayTaskViewBuilder();
@@ -10,13 +11,13 @@ class TodayTaskViewBuilder {
     required List<PlannerTask> tasks,
   }) {
     final overdueTasks = tasks.where(_isOverdue).toList()
-      ..sort((first, second) {
-        return first.scheduledDate!.compareTo(second.scheduledDate!);
-      });
+      ..sort(compareTasksByScheduledDateTimeThenTitle);
 
-    final pendingTodayTasks = tasks
-        .where((task) => task.isScheduledForToday && !task.isCompleted)
-        .toList();
+    final pendingTodayTasks =
+        tasks
+            .where((task) => task.isScheduledForToday && !task.isCompleted)
+            .toList()
+          ..sort(compareTasksByScheduledTimeThenTitle);
 
     final doneTodayTasks = tasks.where(_wasCompletedToday).toList();
 

@@ -1,6 +1,7 @@
 import '../../../models/goal.dart';
 import '../../../models/planner_task.dart';
 import '../../../shared/planner_dates.dart';
+import '../../tasks/application/task_schedule_sorting.dart';
 
 class CalendarTaskViewBuilder {
   const CalendarTaskViewBuilder();
@@ -19,7 +20,7 @@ class CalendarTaskViewBuilder {
       }
 
       return dateOnly(scheduledDate) == selectedDate;
-    }).toList()..sort((first, second) => first.title.compareTo(second.title));
+    }).toList()..sort(compareTasksByScheduledTimeThenTitle);
 
     return selectedTasks;
   }
