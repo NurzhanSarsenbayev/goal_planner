@@ -22,6 +22,7 @@ import '../../features/tasks/application/task_store_coordinator.dart';
 import '../../features/habits/application/habit_store.dart';
 import '../../features/reminders/application/local_notification_service.dart';
 import '../../features/reminders/application/task_reminder_scheduler.dart';
+import '../../features/reminders/application/task_reminder_resync_service.dart';
 import '../../state/planner_store.dart';
 
 class AppDependencies {
@@ -34,6 +35,7 @@ class AppDependencies {
     required this.backupRestoreService,
     required this.localNotificationService,
     required this.taskReminderScheduler,
+    required this.taskReminderResyncService,
   }) : _database = database;
 
   factory AppDependencies.create() {
@@ -102,6 +104,10 @@ class AppDependencies {
       notifications: localNotificationService,
     );
 
+    final taskReminderResyncService = TaskReminderResyncService(
+      taskReminderScheduler: taskReminderScheduler,
+    );
+
     final taskStoreCoordinator = TaskStoreCoordinator(
       taskRepository: taskRepository,
       recurringOccurrenceStoreCoordinator: recurringOccurrenceStoreCoordinator,
@@ -128,6 +134,7 @@ class AppDependencies {
       backupRestoreService: backupRestoreService,
       localNotificationService: localNotificationService,
       taskReminderScheduler: taskReminderScheduler,
+      taskReminderResyncService: taskReminderResyncService,
     );
   }
 
@@ -139,6 +146,7 @@ class AppDependencies {
   final PlannerBackupRestoreService backupRestoreService;
   final LocalNotificationService localNotificationService;
   final TaskReminderScheduler taskReminderScheduler;
+  final TaskReminderResyncService taskReminderResyncService;
 
   Future<void> dispose() async {
     store.dispose();

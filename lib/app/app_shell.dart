@@ -14,6 +14,7 @@ import '../features/recurring/presentation/recurring_rule_dialog_actions.dart';
 import '../features/goals/presentation/goal_dialog_actions.dart';
 import '../features/tasks/presentation/task_dialog_actions.dart';
 import '../features/reminders/application/local_notification_service.dart';
+import '../features/reminders/application/task_reminder_resync_service.dart';
 import 'composition/app_dependencies.dart';
 import 'navigation/app_navigation_actions.dart';
 import 'navigation/main_tab_builder.dart';
@@ -49,6 +50,7 @@ class _AppShellState extends State<AppShell> {
   late final PlannerBackupRestoreService _backupRestoreService;
   DateTime? _lastBackupAt;
   late final LocalNotificationService _localNotificationService;
+  late final TaskReminderResyncService _taskReminderResyncService;
 
   int _selectedIndex = 0;
 
@@ -306,6 +308,17 @@ class _AppShellState extends State<AppShell> {
     }
   }
 
+  Future<void> _initializeStoreAndReminders() async {
+    await _store.initialize();
+
+    try {
+      await _initializeNotifications();
+      await _taskReminderResyncService.syncTaskReminders(_store.tasks);
+    } catch (_) {
+      // Reminder sync must not block app startup.
+    }
+  }
+
   Future<void> _showTestNotification() async {
     try {
       await _localNotificationService.initialize();
@@ -361,6 +374,7 @@ class _AppShellState extends State<AppShell> {
     _backupFileStorage = _dependencies.backupFileStorage;
     _backupRestoreService = _dependencies.backupRestoreService;
     _localNotificationService = _dependencies.localNotificationService;
+    _taskReminderResyncService = _dependencies.taskReminderResyncService;
 
     unawaited(_loadBackupStatus());
 
@@ -380,8 +394,7 @@ class _AppShellState extends State<AppShell> {
     _store.addListener(_onStoreChanged);
     _habitStore.addListener(_onStoreChanged);
 
-    unawaited(_store.initialize());
-    unawaited(_initializeNotifications());
+    unawaited(_initializeStoreAndReminders());
     unawaited(_habitStore.initialize());
   }
 
