@@ -213,13 +213,34 @@ class TaskCard extends StatelessWidget {
         ? l10n.taskCardScheduledToday
         : l10n.taskCardScheduledDate(formatPlannerDate(date));
 
-    final scheduledTimeMinutes = task.scheduledTimeMinutes;
+    final parts = <String>[dateLabel];
 
-    if (scheduledTimeMinutes == null) {
-      return dateLabel;
+    final scheduledTimeMinutes = task.scheduledTimeMinutes;
+    if (scheduledTimeMinutes != null) {
+      parts.add(formatPlannerTime(scheduledTimeMinutes));
     }
 
-    return '$dateLabel · ${formatPlannerTime(scheduledTimeMinutes)}';
+    final reminderMinutesBefore = task.reminderMinutesBefore;
+    if (reminderMinutesBefore != null) {
+      parts.add(
+        '${l10n.taskReminderFieldLabel}: '
+        '${_reminderLabel(l10n, reminderMinutesBefore)}',
+      );
+    }
+
+    return parts.join(' · ');
+  }
+
+  String _reminderLabel(AppLocalizations l10n, int minutesBefore) {
+    if (minutesBefore == 0) {
+      return l10n.taskReminderAtTimeOption;
+    }
+
+    if (minutesBefore % 60 == 0) {
+      return l10n.taskReminderHoursBeforeOption(minutesBefore ~/ 60);
+    }
+
+    return l10n.taskReminderMinutesBeforeOption(minutesBefore);
   }
 }
 

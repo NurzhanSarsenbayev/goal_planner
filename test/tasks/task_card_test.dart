@@ -26,6 +26,27 @@ void main() {
       expect(find.text('Scheduled: Today · 09:30'), findsOneWidget);
     });
 
+    testWidgets('shows reminder status when task has reminder', (tester) async {
+      await tester.pumpWidget(
+        _app(
+          task: PlannerTask(
+            id: 'task_1',
+            title: 'Plan day',
+            description: '',
+            scheduledDate: todayDate(),
+            scheduledTimeMinutes: 9 * 60 + 30,
+            reminderMinutesBefore: 15,
+            createdAt: DateTime(2026, 5, 20),
+          ),
+        ),
+      );
+
+      expect(
+        find.text('Scheduled: Today · 09:30 · Reminder: 15 min before'),
+        findsOneWidget,
+      );
+    });
+
     testWidgets('shows scheduled time actions for scheduled tasks', (
       tester,
     ) async {
