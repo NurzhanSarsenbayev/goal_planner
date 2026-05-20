@@ -21,6 +21,7 @@ import 'navigation/main_tab_builder.dart';
 import '../state/planner_store.dart';
 import '../features/habits/application/habit_store.dart';
 import '../features/reports/application/habit_report_loader.dart';
+import '../models/planner_task.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({
@@ -184,12 +185,15 @@ class _AppShellState extends State<AppShell> {
         return;
       }
 
+      final previousTasks = List<PlannerTask>.of(_store.tasks);
+
       final result = await _backupRestoreService.restoreFromFile(
         latestBackupFile,
       );
 
       await _store.reload();
       await _habitStore.reload();
+      await _resyncTaskRemindersAfterRestore(previousTasks);
 
       if (!mounted) {
         return;
@@ -268,12 +272,15 @@ class _AppShellState extends State<AppShell> {
         return;
       }
 
+      final previousTasks = List<PlannerTask>.of(_store.tasks);
+
       final result = await _backupRestoreService.restoreFromFile(
         File(pickedFile.path),
       );
 
       await _store.reload();
       await _habitStore.reload();
+      await _resyncTaskRemindersAfterRestore(previousTasks);
 
       if (!mounted) {
         return;
@@ -417,6 +424,21 @@ class _AppShellState extends State<AppShell> {
       setState(() {
         _lastBackupAt = null;
       });
+    }
+  }
+
+  Future<void> _resyncTaskRemindersAfterRestore(
+    List<PlannerTask> previousTasks,
+  ) async {
+    try {
+      await _initializeNotifications();
+
+      await _taskReminderResyncService.syncAfterTaskSetReplacement(
+        previousTasks: previousTasks,
+        currentTasks: _store.tasks,
+      );
+    } catch (_) {
+      // Reminder restore sync must not block backup restore.
     }
   }
 

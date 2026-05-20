@@ -13,4 +13,19 @@ class TaskReminderResyncService {
       await _taskReminderScheduler.syncTaskReminder(task);
     }
   }
+
+  Future<void> syncAfterTaskSetReplacement({
+    required Iterable<PlannerTask> previousTasks,
+    required Iterable<PlannerTask> currentTasks,
+  }) async {
+    final currentTaskIds = currentTasks.map((task) => task.id).toSet();
+
+    for (final previousTask in previousTasks) {
+      if (!currentTaskIds.contains(previousTask.id)) {
+        await _taskReminderScheduler.cancelTaskReminder(previousTask.id);
+      }
+    }
+
+    await syncTaskReminders(currentTasks);
+  }
 }

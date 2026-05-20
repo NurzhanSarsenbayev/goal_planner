@@ -51,6 +51,67 @@ void main() {
         DateTime(2026, 5, 20, 9, 15),
       );
     });
+
+    test(
+      'cancels removed tasks and syncs current tasks after replacement',
+      () async {
+        final notifications = FakeTaskReminderNotificationClient();
+        final scheduler = TaskReminderScheduler(
+          notifications: notifications,
+          now: () => DateTime(2026, 5, 20, 8),
+        );
+        final service = TaskReminderResyncService(
+          taskReminderScheduler: scheduler,
+        );
+
+        final removedTask = PlannerTask(
+          id: 'old_task',
+          title: 'Old task',
+          description: '',
+          scheduledDate: DateTime(2026, 5, 20),
+          scheduledTimeMinutes: 540,
+          reminderMinutesBefore: 15,
+          createdAt: DateTime(2026, 5, 19),
+        );
+
+        final keptTask = PlannerTask(
+          id: 'kept_task',
+          title: 'Kept task',
+          description: '',
+          scheduledDate: DateTime(2026, 5, 20),
+          scheduledTimeMinutes: 570,
+          reminderMinutesBefore: 15,
+          createdAt: DateTime(2026, 5, 19),
+        );
+
+        final restoredTask = PlannerTask(
+          id: 'restored_task',
+          title: 'Restored task',
+          description: '',
+          scheduledDate: DateTime(2026, 5, 20),
+          scheduledTimeMinutes: 600,
+          reminderMinutesBefore: 15,
+          createdAt: DateTime(2026, 5, 20),
+        );
+
+        await service.syncAfterTaskSetReplacement(
+          previousTasks: [removedTask, keptTask],
+          currentTasks: [keptTask, restoredTask],
+        );
+
+        expect(notifications.canceledIds, [
+          taskReminderNotificationId('old_task'),
+          taskReminderNotificationId('kept_task'),
+          taskReminderNotificationId('restored_task'),
+        ]);
+
+        expect(notifications.scheduledReminders, hasLength(2));
+        expect(notifications.scheduledReminders.map((call) => call.id), [
+          taskReminderNotificationId('kept_task'),
+          taskReminderNotificationId('restored_task'),
+        ]);
+      },
+    );
   });
 }
 
