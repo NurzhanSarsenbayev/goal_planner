@@ -68,6 +68,7 @@ void main() {
       expect(tasks.single.goalId, 'new-goal');
       expect(tasks.single.milestoneId, 'new-milestone');
       expect(tasks.single.recurringRuleId, 'new-rule');
+      expect(tasks.single.scheduledTimeMinutes, 570);
       expect(habitEntries.single.habitId, 'new-habit');
     });
 
@@ -171,6 +172,7 @@ PlannerBackupData _backupData({required String idPrefix}) {
         title: '$idPrefix task',
         description: '',
         scheduledDate: scheduledDate,
+        scheduledTimeMinutes: 9 * 60 + 30,
         isCompleted: true,
         completedAt: scheduledDate,
         createdAt: now,

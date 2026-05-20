@@ -34,6 +34,7 @@ domain.PlannerTask mapTask(local.Task row) {
     title: row.title,
     description: row.description,
     scheduledDate: row.scheduledDate,
+    scheduledTimeMinutes: row.scheduledTimeMinutes,
     isCompleted: row.isCompleted,
     completedAt: row.completedAt,
     createdAt: row.createdAt,

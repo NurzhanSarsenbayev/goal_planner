@@ -1853,6 +1853,16 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
         type: DriftSqlType.dateTime,
         requiredDuringInsert: false,
       );
+  static const VerificationMeta _scheduledTimeMinutesMeta =
+      const VerificationMeta('scheduledTimeMinutes');
+  @override
+  late final GeneratedColumn<int> scheduledTimeMinutes = GeneratedColumn<int>(
+    'scheduled_time_minutes',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _isCompletedMeta = const VerificationMeta(
     'isCompleted',
   );
@@ -1899,6 +1909,7 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
     title,
     description,
     scheduledDate,
+    scheduledTimeMinutes,
     isCompleted,
     completedAt,
     createdAt,
@@ -1970,6 +1981,15 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
         ),
       );
     }
+    if (data.containsKey('scheduled_time_minutes')) {
+      context.handle(
+        _scheduledTimeMinutesMeta,
+        scheduledTimeMinutes.isAcceptableOrUnknown(
+          data['scheduled_time_minutes']!,
+          _scheduledTimeMinutesMeta,
+        ),
+      );
+    }
     if (data.containsKey('is_completed')) {
       context.handle(
         _isCompletedMeta,
@@ -2033,6 +2053,10 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
         DriftSqlType.dateTime,
         data['${effectivePrefix}scheduled_date'],
       ),
+      scheduledTimeMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}scheduled_time_minutes'],
+      ),
       isCompleted: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}is_completed'],
@@ -2062,6 +2086,7 @@ class Task extends DataClass implements Insertable<Task> {
   final String title;
   final String description;
   final DateTime? scheduledDate;
+  final int? scheduledTimeMinutes;
   final bool isCompleted;
   final DateTime? completedAt;
   final DateTime createdAt;
@@ -2073,6 +2098,7 @@ class Task extends DataClass implements Insertable<Task> {
     required this.title,
     required this.description,
     this.scheduledDate,
+    this.scheduledTimeMinutes,
     required this.isCompleted,
     this.completedAt,
     required this.createdAt,
@@ -2094,6 +2120,9 @@ class Task extends DataClass implements Insertable<Task> {
     map['description'] = Variable<String>(description);
     if (!nullToAbsent || scheduledDate != null) {
       map['scheduled_date'] = Variable<DateTime>(scheduledDate);
+    }
+    if (!nullToAbsent || scheduledTimeMinutes != null) {
+      map['scheduled_time_minutes'] = Variable<int>(scheduledTimeMinutes);
     }
     map['is_completed'] = Variable<bool>(isCompleted);
     if (!nullToAbsent || completedAt != null) {
@@ -2120,6 +2149,9 @@ class Task extends DataClass implements Insertable<Task> {
       scheduledDate: scheduledDate == null && nullToAbsent
           ? const Value.absent()
           : Value(scheduledDate),
+      scheduledTimeMinutes: scheduledTimeMinutes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(scheduledTimeMinutes),
       isCompleted: Value(isCompleted),
       completedAt: completedAt == null && nullToAbsent
           ? const Value.absent()
@@ -2141,6 +2173,9 @@ class Task extends DataClass implements Insertable<Task> {
       title: serializer.fromJson<String>(json['title']),
       description: serializer.fromJson<String>(json['description']),
       scheduledDate: serializer.fromJson<DateTime?>(json['scheduledDate']),
+      scheduledTimeMinutes: serializer.fromJson<int?>(
+        json['scheduledTimeMinutes'],
+      ),
       isCompleted: serializer.fromJson<bool>(json['isCompleted']),
       completedAt: serializer.fromJson<DateTime?>(json['completedAt']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
@@ -2157,6 +2192,7 @@ class Task extends DataClass implements Insertable<Task> {
       'title': serializer.toJson<String>(title),
       'description': serializer.toJson<String>(description),
       'scheduledDate': serializer.toJson<DateTime?>(scheduledDate),
+      'scheduledTimeMinutes': serializer.toJson<int?>(scheduledTimeMinutes),
       'isCompleted': serializer.toJson<bool>(isCompleted),
       'completedAt': serializer.toJson<DateTime?>(completedAt),
       'createdAt': serializer.toJson<DateTime>(createdAt),
@@ -2171,6 +2207,7 @@ class Task extends DataClass implements Insertable<Task> {
     String? title,
     String? description,
     Value<DateTime?> scheduledDate = const Value.absent(),
+    Value<int?> scheduledTimeMinutes = const Value.absent(),
     bool? isCompleted,
     Value<DateTime?> completedAt = const Value.absent(),
     DateTime? createdAt,
@@ -2186,6 +2223,9 @@ class Task extends DataClass implements Insertable<Task> {
     scheduledDate: scheduledDate.present
         ? scheduledDate.value
         : this.scheduledDate,
+    scheduledTimeMinutes: scheduledTimeMinutes.present
+        ? scheduledTimeMinutes.value
+        : this.scheduledTimeMinutes,
     isCompleted: isCompleted ?? this.isCompleted,
     completedAt: completedAt.present ? completedAt.value : this.completedAt,
     createdAt: createdAt ?? this.createdAt,
@@ -2207,6 +2247,9 @@ class Task extends DataClass implements Insertable<Task> {
       scheduledDate: data.scheduledDate.present
           ? data.scheduledDate.value
           : this.scheduledDate,
+      scheduledTimeMinutes: data.scheduledTimeMinutes.present
+          ? data.scheduledTimeMinutes.value
+          : this.scheduledTimeMinutes,
       isCompleted: data.isCompleted.present
           ? data.isCompleted.value
           : this.isCompleted,
@@ -2227,6 +2270,7 @@ class Task extends DataClass implements Insertable<Task> {
           ..write('title: $title, ')
           ..write('description: $description, ')
           ..write('scheduledDate: $scheduledDate, ')
+          ..write('scheduledTimeMinutes: $scheduledTimeMinutes, ')
           ..write('isCompleted: $isCompleted, ')
           ..write('completedAt: $completedAt, ')
           ..write('createdAt: $createdAt')
@@ -2243,6 +2287,7 @@ class Task extends DataClass implements Insertable<Task> {
     title,
     description,
     scheduledDate,
+    scheduledTimeMinutes,
     isCompleted,
     completedAt,
     createdAt,
@@ -2258,6 +2303,7 @@ class Task extends DataClass implements Insertable<Task> {
           other.title == this.title &&
           other.description == this.description &&
           other.scheduledDate == this.scheduledDate &&
+          other.scheduledTimeMinutes == this.scheduledTimeMinutes &&
           other.isCompleted == this.isCompleted &&
           other.completedAt == this.completedAt &&
           other.createdAt == this.createdAt);
@@ -2271,6 +2317,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
   final Value<String> title;
   final Value<String> description;
   final Value<DateTime?> scheduledDate;
+  final Value<int?> scheduledTimeMinutes;
   final Value<bool> isCompleted;
   final Value<DateTime?> completedAt;
   final Value<DateTime> createdAt;
@@ -2283,6 +2330,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     this.title = const Value.absent(),
     this.description = const Value.absent(),
     this.scheduledDate = const Value.absent(),
+    this.scheduledTimeMinutes = const Value.absent(),
     this.isCompleted = const Value.absent(),
     this.completedAt = const Value.absent(),
     this.createdAt = const Value.absent(),
@@ -2296,6 +2344,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     required String title,
     this.description = const Value.absent(),
     this.scheduledDate = const Value.absent(),
+    this.scheduledTimeMinutes = const Value.absent(),
     this.isCompleted = const Value.absent(),
     this.completedAt = const Value.absent(),
     required DateTime createdAt,
@@ -2311,6 +2360,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     Expression<String>? title,
     Expression<String>? description,
     Expression<DateTime>? scheduledDate,
+    Expression<int>? scheduledTimeMinutes,
     Expression<bool>? isCompleted,
     Expression<DateTime>? completedAt,
     Expression<DateTime>? createdAt,
@@ -2324,6 +2374,8 @@ class TasksCompanion extends UpdateCompanion<Task> {
       if (title != null) 'title': title,
       if (description != null) 'description': description,
       if (scheduledDate != null) 'scheduled_date': scheduledDate,
+      if (scheduledTimeMinutes != null)
+        'scheduled_time_minutes': scheduledTimeMinutes,
       if (isCompleted != null) 'is_completed': isCompleted,
       if (completedAt != null) 'completed_at': completedAt,
       if (createdAt != null) 'created_at': createdAt,
@@ -2339,6 +2391,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     Value<String>? title,
     Value<String>? description,
     Value<DateTime?>? scheduledDate,
+    Value<int?>? scheduledTimeMinutes,
     Value<bool>? isCompleted,
     Value<DateTime?>? completedAt,
     Value<DateTime>? createdAt,
@@ -2352,6 +2405,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
       title: title ?? this.title,
       description: description ?? this.description,
       scheduledDate: scheduledDate ?? this.scheduledDate,
+      scheduledTimeMinutes: scheduledTimeMinutes ?? this.scheduledTimeMinutes,
       isCompleted: isCompleted ?? this.isCompleted,
       completedAt: completedAt ?? this.completedAt,
       createdAt: createdAt ?? this.createdAt,
@@ -2383,6 +2437,9 @@ class TasksCompanion extends UpdateCompanion<Task> {
     if (scheduledDate.present) {
       map['scheduled_date'] = Variable<DateTime>(scheduledDate.value);
     }
+    if (scheduledTimeMinutes.present) {
+      map['scheduled_time_minutes'] = Variable<int>(scheduledTimeMinutes.value);
+    }
     if (isCompleted.present) {
       map['is_completed'] = Variable<bool>(isCompleted.value);
     }
@@ -2408,6 +2465,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
           ..write('title: $title, ')
           ..write('description: $description, ')
           ..write('scheduledDate: $scheduledDate, ')
+          ..write('scheduledTimeMinutes: $scheduledTimeMinutes, ')
           ..write('isCompleted: $isCompleted, ')
           ..write('completedAt: $completedAt, ')
           ..write('createdAt: $createdAt, ')
@@ -5669,6 +5727,7 @@ typedef $$TasksTableCreateCompanionBuilder =
       required String title,
       Value<String> description,
       Value<DateTime?> scheduledDate,
+      Value<int?> scheduledTimeMinutes,
       Value<bool> isCompleted,
       Value<DateTime?> completedAt,
       required DateTime createdAt,
@@ -5683,6 +5742,7 @@ typedef $$TasksTableUpdateCompanionBuilder =
       Value<String> title,
       Value<String> description,
       Value<DateTime?> scheduledDate,
+      Value<int?> scheduledTimeMinutes,
       Value<bool> isCompleted,
       Value<DateTime?> completedAt,
       Value<DateTime> createdAt,
@@ -5777,6 +5837,11 @@ class $$TasksTableFilterComposer extends Composer<_$AppDatabase, $TasksTable> {
 
   ColumnFilters<DateTime> get scheduledDate => $composableBuilder(
     column: $table.scheduledDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get scheduledTimeMinutes => $composableBuilder(
+    column: $table.scheduledTimeMinutes,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -5894,6 +5959,11 @@ class $$TasksTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get scheduledTimeMinutes => $composableBuilder(
+    column: $table.scheduledTimeMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<bool> get isCompleted => $composableBuilder(
     column: $table.isCompleted,
     builder: (column) => ColumnOrderings(column),
@@ -6001,6 +6071,11 @@ class $$TasksTableAnnotationComposer
 
   GeneratedColumn<DateTime> get scheduledDate => $composableBuilder(
     column: $table.scheduledDate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get scheduledTimeMinutes => $composableBuilder(
+    column: $table.scheduledTimeMinutes,
     builder: (column) => column,
   );
 
@@ -6127,6 +6202,7 @@ class $$TasksTableTableManager
                 Value<String> title = const Value.absent(),
                 Value<String> description = const Value.absent(),
                 Value<DateTime?> scheduledDate = const Value.absent(),
+                Value<int?> scheduledTimeMinutes = const Value.absent(),
                 Value<bool> isCompleted = const Value.absent(),
                 Value<DateTime?> completedAt = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
@@ -6139,6 +6215,7 @@ class $$TasksTableTableManager
                 title: title,
                 description: description,
                 scheduledDate: scheduledDate,
+                scheduledTimeMinutes: scheduledTimeMinutes,
                 isCompleted: isCompleted,
                 completedAt: completedAt,
                 createdAt: createdAt,
@@ -6153,6 +6230,7 @@ class $$TasksTableTableManager
                 required String title,
                 Value<String> description = const Value.absent(),
                 Value<DateTime?> scheduledDate = const Value.absent(),
+                Value<int?> scheduledTimeMinutes = const Value.absent(),
                 Value<bool> isCompleted = const Value.absent(),
                 Value<DateTime?> completedAt = const Value.absent(),
                 required DateTime createdAt,
@@ -6165,6 +6243,7 @@ class $$TasksTableTableManager
                 title: title,
                 description: description,
                 scheduledDate: scheduledDate,
+                scheduledTimeMinutes: scheduledTimeMinutes,
                 isCompleted: isCompleted,
                 completedAt: completedAt,
                 createdAt: createdAt,

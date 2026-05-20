@@ -95,6 +95,8 @@ class Tasks extends Table {
 
   DateTimeColumn get scheduledDate => dateTime().nullable()();
 
+  IntColumn get scheduledTimeMinutes => integer().nullable()();
+
   BoolColumn get isCompleted => boolean().withDefault(const Constant(false))();
 
   DateTimeColumn get completedAt => dateTime().nullable()();
@@ -167,7 +169,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration {
@@ -182,6 +184,10 @@ class AppDatabase extends _$AppDatabase {
         if (from < 3) {
           await migrator.createTable(habits);
           await migrator.createTable(habitEntries);
+        }
+
+        if (from < 4) {
+          await migrator.addColumn(tasks, tasks.scheduledTimeMinutes);
         }
       },
     );
