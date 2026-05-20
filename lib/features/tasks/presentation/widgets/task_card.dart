@@ -4,6 +4,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
 import '../../../../shared/planner_dates.dart';
+import '../../../../shared/planner_time.dart';
 
 class TaskCard extends StatelessWidget {
   const TaskCard({
@@ -182,11 +183,17 @@ class TaskCard extends StatelessWidget {
   }
 
   String _scheduledDateLabel(AppLocalizations l10n, DateTime date) {
-    if (task.isScheduledForToday) {
-      return l10n.taskCardScheduledToday;
+    final dateLabel = task.isScheduledForToday
+        ? l10n.taskCardScheduledToday
+        : l10n.taskCardScheduledDate(formatPlannerDate(date));
+
+    final scheduledTimeMinutes = task.scheduledTimeMinutes;
+
+    if (scheduledTimeMinutes == null) {
+      return dateLabel;
     }
 
-    return l10n.taskCardScheduledDate(formatPlannerDate(date));
+    return '$dateLabel · ${formatPlannerTime(scheduledTimeMinutes)}';
   }
 }
 
