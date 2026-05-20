@@ -1307,7 +1307,7 @@ Failure signals:
 
 ## Phase 8.1: Time-aware daily planning MVP
 
-Status: not started.
+Status: done.
 
 Reason:
 
@@ -1317,29 +1317,29 @@ Goal:
 
 Allow users to plan the day by date and optional time without making every task time-bound.
 
-Initial scope:
+Completed scope:
 
-- Add optional time-of-day to scheduled tasks.
-- Keep date-only tasks supported.
-- Update Drift schema and migration.
-- Update task model, repository, and mappers.
-- Update task creation/edit dialogs with time picker.
-- Allow setting, changing, and clearing task time.
-- Show task time in Today.
+- Added optional time-of-day to scheduled tasks.
+- Kept date-only tasks supported.
+- Updated Drift schema and migration.
+- Updated task model, repository, mappers, and backup JSON.
+- Added optional time picker when creating scheduled tasks.
+- Added setting, changing, and clearing task time for scheduled non-recurring tasks.
+- Show task time in task cards.
 - Sort Today tasks by time first, then untimed tasks.
-- Show task time in Calendar selected-day task list.
-- Keep reports date-based.
+- Sort Calendar selected-day tasks by time first, then untimed tasks.
+- Kept reports date-based.
 
-Out of scope for this phase:
+Deliberately left for later:
 
 - Local notifications.
 - Per-task reminders.
 - Per-habit reminders.
 - Recurring rule default time.
+- Editing time for recurring occurrences.
 - Timeline calendar UI.
 - Drag-and-drop scheduling.
 - Reports by hour.
-
 
 ## Phase 8.2: Retention - Local reminders foundation
 
@@ -1492,8 +1492,10 @@ Main differentiator:
 
 ## Current limitations
 
-- No time-of-day scheduling yet.
 - Recurring task planning MVP exists, but advanced recurrence rules are not supported yet.
+- Time-of-day scheduling exists for regular scheduled tasks, but there is no timeline/day agenda UI yet.
+- Recurring tasks do not have default time-of-day support yet.
+- No reminders / notifications. 
 - Habits MVP exists with Today summary and Reports integration, but there are no reminders, notes, timed habits, optional weekdays, count-based habit UI or advanced graphs yet.
 - Architecture stabilization before Habits is completed, but further feature-store decomposition remains a later improvement.
 - Reports support only Today / Last 7 days / Last 14 days.
