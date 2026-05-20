@@ -57,6 +57,7 @@ class TaskStoreCoordinator {
     required String description,
     required DateTime scheduledDate,
     int? scheduledTimeMinutes,
+    int? reminderMinutesBefore,
     String? goalId,
     String? milestoneId,
   }) {
@@ -67,6 +68,7 @@ class TaskStoreCoordinator {
       milestoneId: milestoneId,
       scheduledDate: scheduledDate,
       scheduledTimeMinutes: scheduledTimeMinutes,
+      reminderMinutesBefore: reminderMinutesBefore,
     );
 
     return addTask(

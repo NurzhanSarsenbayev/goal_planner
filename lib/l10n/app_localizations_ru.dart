@@ -1053,4 +1053,23 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get notificationTestFailureMessage =>
       'Не удалось отправить тестовое уведомление.';
+
+  @override
+  String get taskReminderFieldLabel => 'Напоминание';
+
+  @override
+  String get taskReminderNoneOption => 'Без напоминания';
+
+  @override
+  String get taskReminderAtTimeOption => 'В момент задачи';
+
+  @override
+  String taskReminderMinutesBeforeOption(int minutes) {
+    return 'За $minutes мин';
+  }
+
+  @override
+  String taskReminderHoursBeforeOption(int hours) {
+    return 'За $hours ч';
+  }
 }

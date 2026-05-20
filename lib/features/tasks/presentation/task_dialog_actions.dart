@@ -24,6 +24,7 @@ class TaskDialogActions {
       title: result.title,
       description: result.description,
       scheduledTimeMinutes: result.scheduledTimeMinutes,
+      reminderMinutesBefore: result.reminderMinutesBefore,
       goalId: result.goalId,
       milestoneId: result.milestoneId,
     );
@@ -48,6 +49,7 @@ class TaskDialogActions {
       description: result.description,
       scheduledDate: scheduledDate,
       scheduledTimeMinutes: result.scheduledTimeMinutes,
+      reminderMinutesBefore: result.reminderMinutesBefore,
       goalId: result.goalId,
       milestoneId: result.milestoneId,
     );

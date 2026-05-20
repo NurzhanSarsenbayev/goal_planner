@@ -190,6 +190,7 @@ class PlannerStore extends ChangeNotifier {
     required String description,
     required DateTime scheduledDate,
     int? scheduledTimeMinutes,
+    int? reminderMinutesBefore,
     String? goalId,
     String? milestoneId,
   }) {
@@ -200,6 +201,7 @@ class PlannerStore extends ChangeNotifier {
       description: description,
       scheduledDate: scheduledDate,
       scheduledTimeMinutes: scheduledTimeMinutes,
+      reminderMinutesBefore: reminderMinutesBefore,
       goalId: goalId,
       milestoneId: milestoneId,
     );
@@ -211,6 +213,7 @@ class PlannerStore extends ChangeNotifier {
     required String title,
     required String description,
     int? scheduledTimeMinutes,
+    int? reminderMinutesBefore,
     String? goalId,
     String? milestoneId,
   }) {
@@ -219,6 +222,7 @@ class PlannerStore extends ChangeNotifier {
       description: description,
       scheduledDate: todayDate(),
       scheduledTimeMinutes: scheduledTimeMinutes,
+      reminderMinutesBefore: reminderMinutesBefore,
       goalId: goalId,
       milestoneId: milestoneId,
     );

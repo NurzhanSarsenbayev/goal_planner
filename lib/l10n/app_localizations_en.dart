@@ -1046,4 +1046,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get notificationTestFailureMessage =>
       'Could not send test notification.';
+
+  @override
+  String get taskReminderFieldLabel => 'Reminder';
+
+  @override
+  String get taskReminderNoneOption => 'No reminder';
+
+  @override
+  String get taskReminderAtTimeOption => 'At task time';
+
+  @override
+  String taskReminderMinutesBeforeOption(int minutes) {
+    return '$minutes min before';
+  }
+
+  @override
+  String taskReminderHoursBeforeOption(int hours) {
+    return '$hours h before';
+  }
 }

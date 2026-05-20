@@ -1909,6 +1909,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not send test notification.'**
   String get notificationTestFailureMessage;
+
+  /// No description provided for @taskReminderFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder'**
+  String get taskReminderFieldLabel;
+
+  /// No description provided for @taskReminderNoneOption.
+  ///
+  /// In en, this message translates to:
+  /// **'No reminder'**
+  String get taskReminderNoneOption;
+
+  /// No description provided for @taskReminderAtTimeOption.
+  ///
+  /// In en, this message translates to:
+  /// **'At task time'**
+  String get taskReminderAtTimeOption;
+
+  /// No description provided for @taskReminderMinutesBeforeOption.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min before'**
+  String taskReminderMinutesBeforeOption(int minutes);
+
+  /// No description provided for @taskReminderHoursBeforeOption.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours} h before'**
+  String taskReminderHoursBeforeOption(int hours);
 }
 
 class _AppLocalizationsDelegate

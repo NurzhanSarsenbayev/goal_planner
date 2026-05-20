@@ -28,6 +28,7 @@ class _AddTaskWithPlacementDialogState
   String? _selectedGoalId;
   String? _selectedMilestoneId;
   int? _scheduledTimeMinutes;
+  int? _reminderMinutesBefore;
 
   List<Milestone> get _availableMilestones {
     if (_selectedGoalId == null) {
@@ -80,6 +81,7 @@ class _AddTaskWithPlacementDialogState
   void _clearTime() {
     setState(() {
       _scheduledTimeMinutes = null;
+      _reminderMinutesBefore = null;
     });
   }
 
@@ -96,6 +98,7 @@ class _AddTaskWithPlacementDialogState
         title: title,
         description: description,
         scheduledTimeMinutes: _scheduledTimeMinutes,
+        reminderMinutesBefore: _reminderMinutesBefore,
         goalId: _selectedGoalId,
         milestoneId: _selectedMilestoneId,
       ),
@@ -158,6 +161,46 @@ class _AddTaskWithPlacementDialogState
                 ],
               ],
             ),
+            if (_scheduledTimeMinutes != null) ...[
+              const SizedBox(height: 12),
+              DropdownButtonFormField<int?>(
+                initialValue: _reminderMinutesBefore,
+                decoration: InputDecoration(
+                  labelText: l10n.taskReminderFieldLabel,
+                ),
+                items: [
+                  DropdownMenuItem<int?>(
+                    value: null,
+                    child: Text(l10n.taskReminderNoneOption),
+                  ),
+                  DropdownMenuItem<int?>(
+                    value: 0,
+                    child: Text(l10n.taskReminderAtTimeOption),
+                  ),
+                  DropdownMenuItem<int?>(
+                    value: 5,
+                    child: Text(l10n.taskReminderMinutesBeforeOption(5)),
+                  ),
+                  DropdownMenuItem<int?>(
+                    value: 15,
+                    child: Text(l10n.taskReminderMinutesBeforeOption(15)),
+                  ),
+                  DropdownMenuItem<int?>(
+                    value: 30,
+                    child: Text(l10n.taskReminderMinutesBeforeOption(30)),
+                  ),
+                  DropdownMenuItem<int?>(
+                    value: 60,
+                    child: Text(l10n.taskReminderHoursBeforeOption(1)),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    _reminderMinutesBefore = value;
+                  });
+                },
+              ),
+            ],
             const SizedBox(height: 12),
             DropdownButtonFormField<String?>(
               initialValue: _selectedGoalId,
@@ -228,6 +271,7 @@ class AddTaskWithPlacementDraft {
     required this.title,
     required this.description,
     required this.scheduledTimeMinutes,
+    required this.reminderMinutesBefore,
     required this.goalId,
     required this.milestoneId,
   });
@@ -235,6 +279,7 @@ class AddTaskWithPlacementDraft {
   final String title;
   final String description;
   final int? scheduledTimeMinutes;
+  final int? reminderMinutesBefore;
   final String? goalId;
   final String? milestoneId;
 }

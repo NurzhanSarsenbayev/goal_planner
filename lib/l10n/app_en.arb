@@ -805,5 +805,25 @@
     "moreTestNotificationSubtitle": "Checks that local notifications work on this device.",
     "notificationPermissionDeniedMessage": "Notification permission is not granted.",
     "notificationTestSentMessage": "Test notification sent.",
-    "notificationTestFailureMessage": "Could not send test notification."
+    "notificationTestFailureMessage": "Could not send test notification.",
+
+    "taskReminderFieldLabel": "Reminder",
+    "taskReminderNoneOption": "No reminder",
+    "taskReminderAtTimeOption": "At task time",
+    "taskReminderMinutesBeforeOption": "{minutes} min before",
+    "@taskReminderMinutesBeforeOption": {
+      "placeholders": {
+        "minutes": {
+          "type": "int"
+        }
+      }
+    },
+    "taskReminderHoursBeforeOption": "{hours} h before",
+    "@taskReminderHoursBeforeOption": {
+      "placeholders": {
+        "hours": {
+          "type": "int"
+        }
+      }
+    }
 }

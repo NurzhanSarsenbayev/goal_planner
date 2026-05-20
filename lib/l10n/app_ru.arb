@@ -805,5 +805,25 @@
     "moreTestNotificationSubtitle": "Проверяет, что локальные уведомления работают на этом устройстве.",
     "notificationPermissionDeniedMessage": "Разрешение на уведомления не выдано.",
     "notificationTestSentMessage": "Тестовое уведомление отправлено.",
-    "notificationTestFailureMessage": "Не удалось отправить тестовое уведомление."
+    "notificationTestFailureMessage": "Не удалось отправить тестовое уведомление.",
+
+    "taskReminderFieldLabel": "Напоминание",
+    "taskReminderNoneOption": "Без напоминания",
+    "taskReminderAtTimeOption": "В момент задачи",
+    "taskReminderMinutesBeforeOption": "За {minutes} мин",
+    "@taskReminderMinutesBeforeOption": {
+      "placeholders": {
+        "minutes": {
+          "type": "int"
+        }
+      }
+    },
+    "taskReminderHoursBeforeOption": "За {hours} ч",
+    "@taskReminderHoursBeforeOption": {
+      "placeholders": {
+        "hours": {
+          "type": "int"
+        }
+      }
+    }
 }

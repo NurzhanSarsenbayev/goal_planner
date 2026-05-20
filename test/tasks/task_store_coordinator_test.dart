@@ -55,6 +55,33 @@ void main() {
       );
     });
 
+    test('passes reminder minutes when creating task for date', () async {
+      final taskRepository = FakeTaskRepository();
+      final notifications = FakeTaskReminderNotificationClient();
+      final coordinator = _createCoordinator(
+        taskRepository: taskRepository,
+        notifications: notifications,
+      );
+
+      final mutation = coordinator.addTaskForDate(
+        tasks: const [],
+        recurringExceptions: const [],
+        title: 'Plan day',
+        description: '',
+        scheduledDate: DateTime(2026, 5, 20),
+        scheduledTimeMinutes: 570,
+        reminderMinutesBefore: 15,
+      );
+
+      expect(mutation, isNotNull);
+
+      await mutation!.persistOperation();
+
+      expect(taskRepository.savedTasks, hasLength(1));
+      expect(taskRepository.savedTasks.single.reminderMinutesBefore, 15);
+      expect(notifications.scheduledReminders, hasLength(1));
+    });
+
     test('cancels reminder after deleting regular task', () async {
       final taskRepository = FakeTaskRepository();
       final notifications = FakeTaskReminderNotificationClient();
