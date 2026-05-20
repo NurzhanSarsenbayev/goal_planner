@@ -12,11 +12,13 @@ void main() {
         description: '',
         scheduledDate: DateTime(2026, 5, 20, 23, 59),
         scheduledTimeMinutes: 9 * 60 + 30,
+        reminderMinutesBefore: 15,
         now: DateTime(2026, 5, 20),
       );
 
       expect(task.scheduledDate, DateTime(2026, 5, 20));
       expect(task.scheduledTimeMinutes, 570);
+      expect(task.reminderMinutesBefore, 15);
     });
 
     test('schedules existing task for date and time', () {

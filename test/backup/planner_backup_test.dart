@@ -51,6 +51,7 @@ void main() {
               description: 'Task description',
               scheduledDate: scheduledDate,
               scheduledTimeMinutes: 9 * 60 + 30,
+              reminderMinutesBefore: 15,
               isCompleted: true,
               completedAt: completedAt,
               createdAt: now,
@@ -126,6 +127,7 @@ void main() {
       expect(restored.data.tasks.single.recurringRuleId, 'rule-1');
       expect(restored.data.tasks.single.scheduledDate, scheduledDate);
       expect(restored.data.tasks.single.scheduledTimeMinutes, 570);
+      expect(restored.data.tasks.single.reminderMinutesBefore, 15);
       expect(restored.data.tasks.single.isCompleted, isTrue);
       expect(restored.data.tasks.single.completedAt, completedAt);
 
@@ -196,6 +198,7 @@ void main() {
 
       expect(restored.data.tasks.single.scheduledDate, scheduledDate);
       expect(restored.data.tasks.single.scheduledTimeMinutes, isNull);
+      expect(restored.data.tasks.single.reminderMinutesBefore, isNull);
     });
 
     test('supports empty backup data', () {

@@ -95,6 +95,7 @@ class DriftPlannerBackupRestoreRepository
               description: drift.Value(task.description),
               scheduledDate: drift.Value(task.scheduledDate),
               scheduledTimeMinutes: drift.Value(task.scheduledTimeMinutes),
+              reminderMinutesBefore: drift.Value(task.reminderMinutesBefore),
               isCompleted: drift.Value(task.isCompleted),
               completedAt: drift.Value(task.completedAt),
               createdAt: task.createdAt,

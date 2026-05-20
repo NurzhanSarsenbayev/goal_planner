@@ -25,6 +25,7 @@ void main() {
         description: '',
         scheduledDate: DateTime(2026, 5, 20),
         scheduledTimeMinutes: 9 * 60 + 30,
+        reminderMinutesBefore: 15,
         createdAt: DateTime(2026, 5, 20),
       );
 
@@ -34,25 +35,33 @@ void main() {
 
       expect(tasks.single.scheduledDate, DateTime(2026, 5, 20));
       expect(tasks.single.scheduledTimeMinutes, 570);
+      expect(tasks.single.reminderMinutesBefore, 15);
     });
 
-    test('can clear scheduled time without clearing scheduled date', () async {
+    test('clearing scheduled time also clears reminder', () async {
       final task = PlannerTask(
         id: 'task_1',
         title: 'Plan day',
         description: '',
         scheduledDate: DateTime(2026, 5, 20),
         scheduledTimeMinutes: 570,
+        reminderMinutesBefore: 15,
         createdAt: DateTime(2026, 5, 20),
       );
 
       await repository.saveTask(task);
-      await repository.updateTask(task.copyWith(scheduledTimeMinutes: null));
+      await repository.updateTask(
+        task.scheduleForDateAndTime(
+          date: DateTime(2026, 5, 20),
+          timeMinutes: null,
+        ),
+      );
 
       final tasks = await repository.loadTasks();
 
       expect(tasks.single.scheduledDate, DateTime(2026, 5, 20));
       expect(tasks.single.scheduledTimeMinutes, isNull);
+      expect(tasks.single.reminderMinutesBefore, isNull);
     });
   });
 }

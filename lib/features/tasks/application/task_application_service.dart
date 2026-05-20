@@ -11,6 +11,7 @@ class TaskApplicationService {
     String? milestoneId,
     DateTime? scheduledDate,
     int? scheduledTimeMinutes,
+    int? reminderMinutesBefore,
     DateTime? now,
   }) {
     final createdAt = now ?? DateTime.now();
@@ -23,6 +24,7 @@ class TaskApplicationService {
       milestoneId: milestoneId,
       scheduledDate: scheduledDate == null ? null : dateOnly(scheduledDate),
       scheduledTimeMinutes: scheduledTimeMinutes,
+      reminderMinutesBefore: reminderMinutesBefore,
       createdAt: createdAt,
     );
   }

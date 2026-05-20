@@ -10,10 +10,12 @@ void main() {
         description: '',
         scheduledDate: DateTime(2026, 5, 20),
         scheduledTimeMinutes: 9 * 60 + 30,
+        reminderMinutesBefore: 15,
         createdAt: DateTime(2026, 5, 20),
       );
 
       expect(task.scheduledTimeMinutes, 570);
+      expect(task.reminderMinutesBefore, 15);
     });
 
     test('scheduleForDate keeps existing scheduled time', () {
@@ -56,6 +58,7 @@ void main() {
         description: '',
         scheduledDate: DateTime(2026, 5, 20),
         scheduledTimeMinutes: 570,
+        reminderMinutesBefore: 15,
         createdAt: DateTime(2026, 5, 20),
       );
 
@@ -63,7 +66,32 @@ void main() {
 
       expect(updatedTask.scheduledDate, isNull);
       expect(updatedTask.scheduledTimeMinutes, isNull);
+      expect(updatedTask.reminderMinutesBefore, isNull);
     });
+
+    test(
+      'scheduleForDateAndTime clears reminder when scheduled time is cleared',
+      () {
+        final task = PlannerTask(
+          id: 'task_1',
+          title: 'Plan day',
+          description: '',
+          scheduledDate: DateTime(2026, 5, 20),
+          scheduledTimeMinutes: 570,
+          reminderMinutesBefore: 15,
+          createdAt: DateTime(2026, 5, 20),
+        );
+
+        final updatedTask = task.scheduleForDateAndTime(
+          date: DateTime(2026, 5, 21),
+          timeMinutes: null,
+        );
+
+        expect(updatedTask.scheduledDate, DateTime(2026, 5, 21));
+        expect(updatedTask.scheduledTimeMinutes, isNull);
+        expect(updatedTask.reminderMinutesBefore, isNull);
+      },
+    );
 
     test('copyWith can clear scheduled time', () {
       final task = PlannerTask(

@@ -13,12 +13,22 @@ class PlannerTask {
     this.recurringRuleId,
     this.scheduledDate,
     this.scheduledTimeMinutes,
+    this.reminderMinutesBefore,
     this.isCompleted = false,
     this.completedAt,
   }) : assert(
          scheduledTimeMinutes == null ||
              (scheduledTimeMinutes >= 0 && scheduledTimeMinutes <= 1439),
          'scheduledTimeMinutes must be between 0 and 1439.',
+       ),
+       assert(
+         reminderMinutesBefore == null ||
+             (reminderMinutesBefore >= 0 && reminderMinutesBefore <= 10080),
+         'reminderMinutesBefore must be between 0 and 10080.',
+       ),
+       assert(
+         reminderMinutesBefore == null || scheduledTimeMinutes != null,
+         'reminderMinutesBefore requires scheduledTimeMinutes.',
        );
 
   final String id;
@@ -30,6 +40,7 @@ class PlannerTask {
   final String? recurringRuleId;
   final DateTime? scheduledDate;
   final int? scheduledTimeMinutes;
+  final int? reminderMinutesBefore;
   final bool isCompleted;
   final DateTime? completedAt;
 
@@ -75,11 +86,16 @@ class PlannerTask {
     return copyWith(
       scheduledDate: dateOnly(date),
       scheduledTimeMinutes: timeMinutes,
+      reminderMinutesBefore: timeMinutes == null ? null : _unset,
     );
   }
 
   PlannerTask unschedule() {
-    return copyWith(scheduledDate: null, scheduledTimeMinutes: null);
+    return copyWith(
+      scheduledDate: null,
+      scheduledTimeMinutes: null,
+      reminderMinutesBefore: null,
+    );
   }
 
   PlannerTask assignToGoal(String goalId) {
@@ -117,6 +133,7 @@ class PlannerTask {
     bool? isCompleted,
     Object? completedAt = _unset,
     Object? scheduledTimeMinutes = _unset,
+    Object? reminderMinutesBefore = _unset,
   }) {
     return PlannerTask(
       id: id ?? this.id,
@@ -136,6 +153,9 @@ class PlannerTask {
       scheduledTimeMinutes: identical(scheduledTimeMinutes, _unset)
           ? this.scheduledTimeMinutes
           : scheduledTimeMinutes as int?,
+      reminderMinutesBefore: identical(reminderMinutesBefore, _unset)
+          ? this.reminderMinutesBefore
+          : reminderMinutesBefore as int?,
       isCompleted: isCompleted ?? this.isCompleted,
       completedAt: identical(completedAt, _unset)
           ? this.completedAt

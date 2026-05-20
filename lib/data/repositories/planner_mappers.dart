@@ -35,6 +35,7 @@ domain.PlannerTask mapTask(local.Task row) {
     description: row.description,
     scheduledDate: row.scheduledDate,
     scheduledTimeMinutes: row.scheduledTimeMinutes,
+    reminderMinutesBefore: row.reminderMinutesBefore,
     isCompleted: row.isCompleted,
     completedAt: row.completedAt,
     createdAt: row.createdAt,

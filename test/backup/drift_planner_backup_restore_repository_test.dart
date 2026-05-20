@@ -62,6 +62,7 @@ void main() {
       expect(recurringExceptions.map((exception) => exception.id), [
         'new-exception',
       ]);
+      expect(tasks.single.reminderMinutesBefore, 15);
       expect(habits.map((habit) => habit.id), ['new-habit']);
       expect(habitEntries.map((entry) => entry.id), ['new-habit-entry']);
 
@@ -173,6 +174,7 @@ PlannerBackupData _backupData({required String idPrefix}) {
         description: '',
         scheduledDate: scheduledDate,
         scheduledTimeMinutes: 9 * 60 + 30,
+        reminderMinutesBefore: 15,
         isCompleted: true,
         completedAt: scheduledDate,
         createdAt: now,
