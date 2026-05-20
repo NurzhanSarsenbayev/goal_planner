@@ -300,6 +300,7 @@ class _AppShellState extends State<AppShell> {
   Future<void> _initializeNotifications() async {
     try {
       await _localNotificationService.initialize();
+      await _localNotificationService.requestTaskReminderPermissions();
     } catch (_) {
       // Notification setup must not block app startup.
     }

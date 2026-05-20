@@ -50,6 +50,20 @@ class LocalNotificationService implements TaskReminderNotificationClient {
     return granted ?? true;
   }
 
+  Future<bool> requestTaskReminderPermissions() async {
+    await initialize();
+
+    final notificationPermissionGranted = await requestNotificationPermission();
+
+    if (!notificationPermissionGranted) {
+      return false;
+    }
+
+    final exactAlarmPermissionGranted = await requestExactAlarmPermission();
+
+    return exactAlarmPermissionGranted;
+  }
+
   Future<void> showTestNotification() async {
     const androidDetails = AndroidNotificationDetails(
       'goal_planner_test',
