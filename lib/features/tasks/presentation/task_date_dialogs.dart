@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/planner_task.dart';
 import '../../../shared/planner_dates.dart';
+import '../../../shared/planner_time.dart';
 
 Future<DateTime?> showScheduleTaskDatePicker(
   BuildContext context, {
@@ -16,6 +17,29 @@ Future<DateTime?> showScheduleTaskDatePicker(
     firstDate: DateTime(today.year - 1),
     lastDate: DateTime(today.year + 5),
   );
+}
+
+Future<int?> showScheduleTaskTimePicker(
+  BuildContext context, {
+  required int? initialTimeMinutes,
+}) async {
+  final initialTime = initialTimeMinutes == null
+      ? TimeOfDay.now()
+      : TimeOfDay(
+          hour: initialTimeMinutes ~/ 60,
+          minute: initialTimeMinutes % 60,
+        );
+
+  final pickedTime = await showTimePicker(
+    context: context,
+    initialTime: initialTime,
+  );
+
+  if (pickedTime == null) {
+    return null;
+  }
+
+  return plannerTimeMinutes(hour: pickedTime.hour, minute: pickedTime.minute);
 }
 
 Future<void> handleTaskCompletionWithDateFlow(

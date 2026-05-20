@@ -1076,6 +1076,24 @@ abstract class AppLocalizations {
   /// **'Remove scheduled date'**
   String get taskActionRemoveScheduledDate;
 
+  /// No description provided for @taskActionSetTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Set time'**
+  String get taskActionSetTime;
+
+  /// No description provided for @taskActionChangeTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Change time'**
+  String get taskActionChangeTime;
+
+  /// No description provided for @taskActionClearTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear time'**
+  String get taskActionClearTime;
+
   /// No description provided for @taskDialogAddTitle.
   ///
   /// In en, this message translates to:

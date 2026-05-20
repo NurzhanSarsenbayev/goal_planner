@@ -28,6 +28,7 @@ class TodayScreen extends StatelessWidget {
     required this.onAddTask,
     required this.onRemoveTaskFromToday,
     required this.onScheduleTaskForDate,
+    required this.onScheduleTaskForDateAndTime,
     required this.onAddRecurringTask,
   });
 
@@ -42,6 +43,12 @@ class TodayScreen extends StatelessWidget {
   final void Function(String taskId) onRemoveTaskFromToday;
   final void Function({required String taskId, required DateTime scheduledDate})
   onScheduleTaskForDate;
+  final void Function({
+    required String taskId,
+    required DateTime scheduledDate,
+    required int? scheduledTimeMinutes,
+  })
+  onScheduleTaskForDateAndTime;
   final void Function(PlannerTask task) onAttachTaskToGoal;
   final void Function(String taskId) onDetachTaskFromGoal;
   final void Function(String taskId) onDeleteTask;
@@ -63,6 +70,46 @@ class TodayScreen extends StatelessWidget {
     }
 
     onScheduleTaskForDate(taskId: task.id, scheduledDate: selectedDate);
+  }
+
+  Future<void> _showScheduleTaskTimePicker(
+    BuildContext context,
+    PlannerTask task,
+  ) async {
+    final scheduledDate = task.scheduledDate;
+
+    if (scheduledDate == null) {
+      return;
+    }
+
+    final selectedTime = await showScheduleTaskTimePicker(
+      context,
+      initialTimeMinutes: task.scheduledTimeMinutes,
+    );
+
+    if (selectedTime == null) {
+      return;
+    }
+
+    onScheduleTaskForDateAndTime(
+      taskId: task.id,
+      scheduledDate: scheduledDate,
+      scheduledTimeMinutes: selectedTime,
+    );
+  }
+
+  void _clearScheduledTaskTime(PlannerTask task) {
+    final scheduledDate = task.scheduledDate;
+
+    if (scheduledDate == null) {
+      return;
+    }
+
+    onScheduleTaskForDateAndTime(
+      taskId: task.id,
+      scheduledDate: scheduledDate,
+      scheduledTimeMinutes: null,
+    );
   }
 
   Future<void> _showAddActionSheet(BuildContext context) async {
@@ -187,6 +234,8 @@ class TodayScreen extends StatelessWidget {
     final goal = view.findGoalById(task.goalId);
     final isStandaloneTask = task.goalId == null;
     final isGoalLinkedTask = task.goalId != null;
+    final canEditScheduleTime =
+        task.scheduledDate != null && task.recurringRuleId == null;
 
     return TaskCard(
       key: ValueKey(task.id),
@@ -214,6 +263,17 @@ class TodayScreen extends StatelessWidget {
       onScheduleDate: () {
         _showScheduleTaskDatePicker(context, task);
       },
+      onScheduleTime: canEditScheduleTime
+          ? () {
+              _showScheduleTaskTimePicker(context, task);
+            }
+          : null,
+      onClearScheduledTime:
+          canEditScheduleTime && task.scheduledTimeMinutes != null
+          ? () {
+              _clearScheduledTaskTime(task);
+            }
+          : null,
       onDelete: () => onDeleteTask(task.id),
     );
   }

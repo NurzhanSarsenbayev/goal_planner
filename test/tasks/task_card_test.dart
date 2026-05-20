@@ -26,6 +26,53 @@ void main() {
       expect(find.text('Scheduled: Today · 09:30'), findsOneWidget);
     });
 
+    testWidgets('shows scheduled time actions for scheduled tasks', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _app(
+          task: PlannerTask(
+            id: 'task_1',
+            title: 'Plan day',
+            description: '',
+            scheduledDate: todayDate(),
+            createdAt: DateTime(2026, 5, 20),
+          ),
+          onScheduleTime: () {},
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Set time'), findsOneWidget);
+    });
+
+    testWidgets('shows clear time action when scheduled time exists', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _app(
+          task: PlannerTask(
+            id: 'task_1',
+            title: 'Plan day',
+            description: '',
+            scheduledDate: todayDate(),
+            scheduledTimeMinutes: 9 * 60 + 30,
+            createdAt: DateTime(2026, 5, 20),
+          ),
+          onScheduleTime: () {},
+          onClearScheduledTime: () {},
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Change time'), findsOneWidget);
+      expect(find.text('Clear time'), findsOneWidget);
+    });
+
     testWidgets('keeps scheduled date label without time for untimed tasks', (
       tester,
     ) async {
@@ -46,7 +93,11 @@ void main() {
   });
 }
 
-Widget _app({required PlannerTask task}) {
+Widget _app({
+  required PlannerTask task,
+  VoidCallback? onScheduleTime,
+  VoidCallback? onClearScheduledTime,
+}) {
   return MaterialApp(
     locale: const Locale('en'),
     localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -58,6 +109,8 @@ Widget _app({required PlannerTask task}) {
         onToggleCompleted: () {},
         onEdit: () {},
         onDelete: () {},
+        onScheduleTime: onScheduleTime,
+        onClearScheduledTime: onClearScheduledTime,
       ),
     ),
   );

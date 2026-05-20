@@ -18,6 +18,7 @@ class CalendarScreen extends StatefulWidget {
     required this.onCompleteTaskOnDate,
     required this.onEditTask,
     required this.onScheduleTaskForDate,
+    required this.onScheduleTaskForDateAndTime,
     required this.onRemoveTaskFromSchedule,
     required this.onDeleteTask,
     required this.onAddTaskForDate,
@@ -33,6 +34,12 @@ class CalendarScreen extends StatefulWidget {
   final void Function(PlannerTask task) onEditTask;
   final void Function({required String taskId, required DateTime scheduledDate})
   onScheduleTaskForDate;
+  final void Function({
+    required String taskId,
+    required DateTime scheduledDate,
+    required int? scheduledTimeMinutes,
+  })
+  onScheduleTaskForDateAndTime;
   final void Function(String taskId) onRemoveTaskFromSchedule;
   final void Function(String taskId) onDeleteTask;
   final void Function(DateTime date) onAddTaskForDate;
@@ -126,6 +133,18 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   onUnschedule: () {
                     widget.onRemoveTaskFromSchedule(task.id);
                   },
+                  onScheduleTime: _canEditScheduleTime(task)
+                      ? () {
+                          _showScheduleTaskTimePicker(context, task);
+                        }
+                      : null,
+                  onClearScheduledTime:
+                      _canEditScheduleTime(task) &&
+                          task.scheduledTimeMinutes != null
+                      ? () {
+                          _clearScheduledTaskTime(task);
+                        }
+                      : null,
                   onDelete: () {
                     widget.onDeleteTask(task.id);
                   },
@@ -258,6 +277,50 @@ class _CalendarScreenState extends State<CalendarScreen> {
     }
 
     widget.onScheduleTaskForDate(taskId: task.id, scheduledDate: selectedDate);
+  }
+
+  bool _canEditScheduleTime(PlannerTask task) {
+    return task.scheduledDate != null && task.recurringRuleId == null;
+  }
+
+  Future<void> _showScheduleTaskTimePicker(
+    BuildContext context,
+    PlannerTask task,
+  ) async {
+    final scheduledDate = task.scheduledDate;
+
+    if (scheduledDate == null) {
+      return;
+    }
+
+    final selectedTime = await showScheduleTaskTimePicker(
+      context,
+      initialTimeMinutes: task.scheduledTimeMinutes,
+    );
+
+    if (selectedTime == null) {
+      return;
+    }
+
+    widget.onScheduleTaskForDateAndTime(
+      taskId: task.id,
+      scheduledDate: scheduledDate,
+      scheduledTimeMinutes: selectedTime,
+    );
+  }
+
+  void _clearScheduledTaskTime(PlannerTask task) {
+    final scheduledDate = task.scheduledDate;
+
+    if (scheduledDate == null) {
+      return;
+    }
+
+    widget.onScheduleTaskForDateAndTime(
+      taskId: task.id,
+      scheduledDate: scheduledDate,
+      scheduledTimeMinutes: null,
+    );
   }
 
   String _selectedDateTitle(AppLocalizations l10n, DateTime date) {

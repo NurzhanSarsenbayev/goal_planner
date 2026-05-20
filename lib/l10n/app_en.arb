@@ -510,6 +510,9 @@
     "taskActionMoveToDirectGoal": "Move to Direct tasks",
     "taskActionScheduleDate": "Schedule date",
     "taskActionRemoveScheduledDate": "Remove scheduled date",
+    "taskActionSetTime": "Set time",
+    "taskActionChangeTime": "Change time",
+    "taskActionClearTime": "Clear time",
 
     "taskDialogAddTitle": "Add task",
     "taskDialogEditTitle": "Edit task",

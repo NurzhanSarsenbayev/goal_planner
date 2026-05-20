@@ -510,6 +510,9 @@
     "taskActionMoveToDirectGoal": "Переместить в задачи цели",
     "taskActionScheduleDate": "Запланировать дату",
     "taskActionRemoveScheduledDate": "Убрать дату",
+    "taskActionSetTime": "Задать время",
+    "taskActionChangeTime": "Изменить время",
+    "taskActionClearTime": "Убрать время",
 
     "taskDialogAddTitle": "Добавить задачу",
     "taskDialogEditTitle": "Изменить задачу",

@@ -20,6 +20,8 @@ class TaskCard extends StatelessWidget {
     this.onMoveToDirectGoal,
     this.onScheduleForToday,
     this.onScheduleDate,
+    this.onScheduleTime,
+    this.onClearScheduledTime,
     this.onRemoveFromToday,
     this.onUnschedule,
   });
@@ -35,6 +37,8 @@ class TaskCard extends StatelessWidget {
   final VoidCallback? onMoveToDirectGoal;
   final VoidCallback? onScheduleForToday;
   final VoidCallback? onScheduleDate;
+  final VoidCallback? onScheduleTime;
+  final VoidCallback? onClearScheduledTime;
   final VoidCallback? onRemoveFromToday;
   final VoidCallback? onUnschedule;
 
@@ -47,6 +51,10 @@ class TaskCard extends StatelessWidget {
     final shouldShowScheduleDate = onScheduleDate != null;
     final shouldShowRemoveFromToday = onRemoveFromToday != null;
     final shouldShowUnschedule = onUnschedule != null;
+    final shouldShowScheduleTime =
+        onScheduleTime != null && task.scheduledDate != null;
+    final shouldShowClearScheduledTime =
+        onClearScheduledTime != null && task.scheduledTimeMinutes != null;
 
     final shouldShowAttachToGoal = onAttachToGoal != null;
     final shouldShowDetachFromGoal = onDetachFromGoal != null;
@@ -113,6 +121,10 @@ class TaskCard extends StatelessWidget {
                 onUnschedule?.call();
               case _TaskAction.scheduleDate:
                 onScheduleDate?.call();
+              case _TaskAction.scheduleTime:
+                onScheduleTime?.call();
+              case _TaskAction.clearScheduledTime:
+                onClearScheduledTime?.call();
               case _TaskAction.delete:
                 onDelete();
             }
@@ -157,6 +169,20 @@ class TaskCard extends StatelessWidget {
                   value: _TaskAction.scheduleDate,
                   child: Text(l10n.taskActionScheduleDate),
                 ),
+              if (shouldShowScheduleTime)
+                PopupMenuItem(
+                  value: _TaskAction.scheduleTime,
+                  child: Text(
+                    task.scheduledTimeMinutes == null
+                        ? l10n.taskActionSetTime
+                        : l10n.taskActionChangeTime,
+                  ),
+                ),
+              if (shouldShowClearScheduledTime)
+                PopupMenuItem(
+                  value: _TaskAction.clearScheduledTime,
+                  child: Text(l10n.taskActionClearTime),
+                ),
               if (shouldShowUnschedule)
                 PopupMenuItem(
                   value: _TaskAction.unschedule,
@@ -200,6 +226,8 @@ class TaskCard extends StatelessWidget {
 enum _TaskAction {
   edit,
   scheduleDate,
+  scheduleTime,
+  clearScheduledTime,
   removeFromToday,
   unschedule,
   attachToGoal,

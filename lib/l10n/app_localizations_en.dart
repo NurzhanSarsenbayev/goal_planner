@@ -566,6 +566,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get taskActionRemoveScheduledDate => 'Remove scheduled date';
 
   @override
+  String get taskActionSetTime => 'Set time';
+
+  @override
+  String get taskActionChangeTime => 'Change time';
+
+  @override
+  String get taskActionClearTime => 'Clear time';
+
+  @override
   String get taskDialogAddTitle => 'Add task';
 
   @override

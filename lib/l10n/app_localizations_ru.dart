@@ -569,6 +569,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get taskActionRemoveScheduledDate => 'Убрать дату';
 
   @override
+  String get taskActionSetTime => 'Задать время';
+
+  @override
+  String get taskActionChangeTime => 'Изменить время';
+
+  @override
+  String get taskActionClearTime => 'Убрать время';
+
+  @override
   String get taskDialogAddTitle => 'Добавить задачу';
 
   @override
