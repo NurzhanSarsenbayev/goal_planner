@@ -3,7 +3,9 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as timezone_data;
 import 'package:timezone/timezone.dart' as timezone;
 
-class LocalNotificationService {
+import 'task_reminder_scheduler.dart';
+
+class LocalNotificationService implements TaskReminderNotificationClient {
   LocalNotificationService({FlutterLocalNotificationsPlugin? plugin})
     : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
 
@@ -54,6 +56,44 @@ class LocalNotificationService {
       body: 'Notifications are working.',
       notificationDetails: notificationDetails,
     );
+  }
+
+  @override
+  Future<void> scheduleTaskReminder({
+    required int id,
+    required String title,
+    required String body,
+    required DateTime scheduledAt,
+    String? payload,
+  }) async {
+    await initialize();
+
+    const androidDetails = AndroidNotificationDetails(
+      'goal_planner_task_reminders',
+      'Task reminders',
+      channelDescription: 'Notifications for scheduled Goal Planner tasks.',
+      importance: Importance.high,
+      priority: Priority.high,
+    );
+
+    const notificationDetails = NotificationDetails(android: androidDetails);
+
+    await _plugin.zonedSchedule(
+      id: id,
+      title: title,
+      body: body,
+      scheduledDate: timezone.TZDateTime.from(scheduledAt, timezone.local),
+      notificationDetails: notificationDetails,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      payload: payload,
+    );
+  }
+
+  @override
+  Future<void> cancelTaskReminder(int id) async {
+    await initialize();
+
+    await _plugin.cancel(id: id);
   }
 
   Future<void> _configureLocalTimeZone() async {
