@@ -39,6 +39,8 @@ void main() {
         milestoneId: milestone.id,
         title: 'Task',
         description: '',
+        scheduledDate: now,
+        scheduledTimeMinutes: 9 * 60 + 30,
         createdAt: now,
       );
       final recurringRule = RecurringTaskRule(
@@ -102,6 +104,7 @@ void main() {
       expect(backup.data.goals.single.id, goal.id);
       expect(backup.data.milestones.single.id, milestone.id);
       expect(backup.data.tasks.single.id, task.id);
+      expect(backup.data.tasks.single.scheduledTimeMinutes, 570);
       expect(backup.data.recurringRules.single.id, recurringRule.id);
       expect(backup.data.recurringExceptions.single.id, recurringException.id);
       expect(backup.data.habits.single.id, habit.id);

@@ -50,6 +50,7 @@ void main() {
               title: 'Task',
               description: 'Task description',
               scheduledDate: scheduledDate,
+              scheduledTimeMinutes: 9 * 60 + 30,
               isCompleted: true,
               completedAt: completedAt,
               createdAt: now,
@@ -124,6 +125,7 @@ void main() {
       expect(restored.data.tasks.single.milestoneId, 'milestone-1');
       expect(restored.data.tasks.single.recurringRuleId, 'rule-1');
       expect(restored.data.tasks.single.scheduledDate, scheduledDate);
+      expect(restored.data.tasks.single.scheduledTimeMinutes, 570);
       expect(restored.data.tasks.single.isCompleted, isTrue);
       expect(restored.data.tasks.single.completedAt, completedAt);
 
@@ -165,6 +167,35 @@ void main() {
         }),
         throwsFormatException,
       );
+    });
+
+    test('restores old task backup without scheduled time as untimed task', () {
+      final now = DateTime(2026, 5, 13);
+      final scheduledDate = DateTime(2026, 5, 14);
+
+      final restored = PlannerBackup.fromJson({
+        'schemaVersion': PlannerBackup.currentSchemaVersion,
+        'exportedAt': now.toIso8601String(),
+        'data': {
+          'tasks': [
+            {
+              'id': 'task-1',
+              'goalId': null,
+              'milestoneId': null,
+              'recurringRuleId': null,
+              'title': 'Task',
+              'description': '',
+              'scheduledDate': scheduledDate.toIso8601String(),
+              'isCompleted': false,
+              'completedAt': null,
+              'createdAt': now.toIso8601String(),
+            },
+          ],
+        },
+      });
+
+      expect(restored.data.tasks.single.scheduledDate, scheduledDate);
+      expect(restored.data.tasks.single.scheduledTimeMinutes, isNull);
     });
 
     test('supports empty backup data', () {
