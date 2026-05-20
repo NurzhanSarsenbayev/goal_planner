@@ -39,6 +39,17 @@ class LocalNotificationService implements TaskReminderNotificationClient {
     return granted ?? true;
   }
 
+  Future<bool> requestExactAlarmPermission() async {
+    final android = _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+
+    final granted = await android?.requestExactAlarmsPermission();
+
+    return granted ?? true;
+  }
+
   Future<void> showTestNotification() async {
     const androidDetails = AndroidNotificationDetails(
       'goal_planner_test',
@@ -67,6 +78,18 @@ class LocalNotificationService implements TaskReminderNotificationClient {
     String? payload,
   }) async {
     await initialize();
+
+    final notificationPermissionGranted = await requestNotificationPermission();
+
+    if (!notificationPermissionGranted) {
+      return;
+    }
+
+    final exactAlarmPermissionGranted = await requestExactAlarmPermission();
+
+    if (!exactAlarmPermissionGranted) {
+      return;
+    }
 
     const androidDetails = AndroidNotificationDetails(
       'goal_planner_task_reminders',
