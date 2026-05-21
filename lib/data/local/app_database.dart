@@ -154,6 +154,23 @@ class HabitEntries extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+class StandaloneReminders extends Table {
+  TextColumn get id => text()();
+
+  TextColumn get title => text()();
+
+  IntColumn get timeMinutes => integer()();
+
+  BoolColumn get isEnabled => boolean().withDefault(const Constant(true))();
+
+  DateTimeColumn get createdAt => dateTime()();
+
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 @DriftDatabase(
   tables: [
     Goals,
@@ -163,6 +180,7 @@ class HabitEntries extends Table {
     Tasks,
     Habits,
     HabitEntries,
+    StandaloneReminders,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -171,7 +189,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration {
@@ -194,6 +212,10 @@ class AppDatabase extends _$AppDatabase {
 
         if (from < 5) {
           await migrator.addColumn(tasks, tasks.reminderMinutesBefore);
+        }
+
+        if (from < 6) {
+          await migrator.createTable(standaloneReminders);
         }
       },
     );
