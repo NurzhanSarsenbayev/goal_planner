@@ -21,6 +21,7 @@ import '../../features/milestones/application/milestone_store_coordinator.dart';
 import '../../features/tasks/application/task_store_coordinator.dart';
 import '../../features/habits/application/habit_store.dart';
 import '../../features/reminders/application/local_notification_service.dart';
+import '../../features/reminders/application/task_reminder_application_service.dart';
 import '../../features/reminders/application/task_reminder_scheduler.dart';
 import '../../features/reminders/application/task_reminder_resync_service.dart';
 import '../../state/planner_store.dart';
@@ -104,6 +105,10 @@ class AppDependencies {
       notifications: localNotificationService,
     );
 
+    final taskReminderApplicationService = TaskReminderApplicationService(
+      taskReminderScheduler: taskReminderScheduler,
+    );
+
     final taskReminderResyncService = TaskReminderResyncService(
       taskReminderScheduler: taskReminderScheduler,
     );
@@ -111,7 +116,7 @@ class AppDependencies {
     final taskStoreCoordinator = TaskStoreCoordinator(
       taskRepository: taskRepository,
       recurringOccurrenceStoreCoordinator: recurringOccurrenceStoreCoordinator,
-      taskReminderScheduler: taskReminderScheduler,
+      taskReminderApplicationService: taskReminderApplicationService,
     );
 
     final store = PlannerStore(
