@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -148,25 +149,27 @@ class MoreScreen extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 16),
-        Text(
-          l10n.moreNotificationsSection,
-          style: Theme.of(
-            context,
-          ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-        ),
-        const SizedBox(height: 8),
-        Card(
-          child: ListTile(
-            leading: const Icon(Icons.notifications_active_outlined),
-            title: Text(l10n.moreTestNotificationTitle),
-            subtitle: Text(l10n.moreTestNotificationSubtitle),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              onShowTestNotification();
-            },
+        if (kDebugMode) ...[
+          const SizedBox(height: 16),
+          Text(
+            l10n.moreNotificationsSection,
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
           ),
-        ),
+          const SizedBox(height: 8),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.notifications_active_outlined),
+              title: Text(l10n.moreTestNotificationTitle),
+              subtitle: Text(l10n.moreTestNotificationSubtitle),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                onShowTestNotification();
+              },
+            ),
+          ),
+        ],
         const SizedBox(height: 16),
         Text(
           l10n.moreToolsSection,
