@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
-import '../../../../shared/planner_dates.dart';
-import '../../../../shared/planner_time.dart';
+import 'task_card_action_menu.dart';
+import 'task_card_subtitle.dart';
 
 class TaskCard extends StatelessWidget {
   const TaskCard({
@@ -46,25 +45,6 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-
-    final shouldShowScheduleButton =
-        onScheduleForToday != null && !task.isScheduledForToday;
-    final shouldShowScheduleDate = onScheduleDate != null;
-    final shouldShowRemoveFromToday = onRemoveFromToday != null;
-    final shouldShowUnschedule = onUnschedule != null;
-    final shouldShowScheduleTime =
-        onScheduleTime != null && task.scheduledDate != null;
-    final shouldShowClearScheduledTime =
-        onClearScheduledTime != null && task.scheduledTimeMinutes != null;
-
-    final shouldShowAttachToGoal = onAttachToGoal != null;
-    final shouldShowDetachFromGoal = onDetachFromGoal != null;
-    final shouldShowMoveToMilestone = onMoveToMilestone != null;
-    final shouldShowMoveToDirectGoal = onMoveToDirectGoal != null;
-    final shouldShowEditReminder =
-        onEditReminder != null && task.scheduledTimeMinutes != null;
-
     return Card(
       child: ListTile(
         onTap: onToggleCompleted,
@@ -72,135 +52,25 @@ class TaskCard extends StatelessWidget {
           task.isCompleted ? Icons.check_circle : Icons.radio_button_unchecked,
         ),
         title: Text(task.title, style: _titleStyle(context)),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (task.description.isNotEmpty) Text(task.description),
-            if (goal != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text(
-                  l10n.taskCardGoalLabel(goal!.title),
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
-            if (task.scheduledDate != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text(
-                  _scheduledDateLabel(l10n, task.scheduledDate!),
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
-            if (shouldShowScheduleButton)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton.icon(
-                    onPressed: onScheduleForToday,
-                    icon: const Icon(Icons.today),
-                    label: Text(l10n.taskCardPlanTodayButton),
-                  ),
-                ),
-              ),
-          ],
+        subtitle: TaskCardSubtitle(
+          task: task,
+          goal: goal,
+          onScheduleForToday: onScheduleForToday,
         ),
-        trailing: PopupMenuButton<_TaskAction>(
-          onSelected: (action) {
-            switch (action) {
-              case _TaskAction.edit:
-                onEdit();
-              case _TaskAction.attachToGoal:
-                onAttachToGoal?.call();
-              case _TaskAction.detachFromGoal:
-                onDetachFromGoal?.call();
-              case _TaskAction.moveToMilestone:
-                onMoveToMilestone?.call();
-              case _TaskAction.moveToDirectGoal:
-                onMoveToDirectGoal?.call();
-              case _TaskAction.removeFromToday:
-                onRemoveFromToday?.call();
-              case _TaskAction.unschedule:
-                onUnschedule?.call();
-              case _TaskAction.scheduleDate:
-                onScheduleDate?.call();
-              case _TaskAction.scheduleTime:
-                onScheduleTime?.call();
-              case _TaskAction.clearScheduledTime:
-                onClearScheduledTime?.call();
-              case _TaskAction.delete:
-                onDelete();
-              case _TaskAction.editReminder:
-                onEditReminder?.call();
-            }
-          },
-          itemBuilder: (context) {
-            return [
-              PopupMenuItem(
-                value: _TaskAction.edit,
-                child: Text(l10n.commonEdit),
-              ),
-              if (shouldShowRemoveFromToday)
-                PopupMenuItem(
-                  value: _TaskAction.removeFromToday,
-                  child: Text(l10n.taskActionRemoveFromToday),
-                ),
-              if (shouldShowAttachToGoal)
-                PopupMenuItem(
-                  value: _TaskAction.attachToGoal,
-                  child: Text(l10n.taskActionAttachToGoal),
-                ),
-              if (shouldShowDetachFromGoal)
-                PopupMenuItem(
-                  value: _TaskAction.detachFromGoal,
-                  child: Text(l10n.taskActionDetachFromGoal),
-                ),
-              if (shouldShowMoveToMilestone)
-                PopupMenuItem(
-                  value: _TaskAction.moveToMilestone,
-                  child: Text(l10n.taskActionMoveToMilestone),
-                ),
-              if (shouldShowMoveToDirectGoal)
-                PopupMenuItem(
-                  value: _TaskAction.moveToDirectGoal,
-                  child: Text(l10n.taskActionMoveToDirectGoal),
-                ),
-              PopupMenuItem(
-                value: _TaskAction.delete,
-                child: Text(l10n.commonDelete),
-              ),
-              if (shouldShowScheduleDate)
-                PopupMenuItem(
-                  value: _TaskAction.scheduleDate,
-                  child: Text(l10n.taskActionScheduleDate),
-                ),
-              if (shouldShowScheduleTime)
-                PopupMenuItem(
-                  value: _TaskAction.scheduleTime,
-                  child: Text(
-                    task.scheduledTimeMinutes == null
-                        ? l10n.taskActionSetTime
-                        : l10n.taskActionChangeTime,
-                  ),
-                ),
-              if (shouldShowClearScheduledTime)
-                PopupMenuItem(
-                  value: _TaskAction.clearScheduledTime,
-                  child: Text(l10n.taskActionClearTime),
-                ),
-              if (shouldShowUnschedule)
-                PopupMenuItem(
-                  value: _TaskAction.unschedule,
-                  child: Text(l10n.taskActionRemoveScheduledDate),
-                ),
-              if (shouldShowEditReminder)
-                PopupMenuItem(
-                  value: _TaskAction.editReminder,
-                  child: Text(l10n.taskReminderFieldLabel),
-                ),
-            ];
-          },
+        trailing: TaskCardActionMenu(
+          task: task,
+          onEdit: onEdit,
+          onDelete: onDelete,
+          onAttachToGoal: onAttachToGoal,
+          onDetachFromGoal: onDetachFromGoal,
+          onMoveToMilestone: onMoveToMilestone,
+          onMoveToDirectGoal: onMoveToDirectGoal,
+          onScheduleDate: onScheduleDate,
+          onScheduleTime: onScheduleTime,
+          onClearScheduledTime: onClearScheduledTime,
+          onRemoveFromToday: onRemoveFromToday,
+          onUnschedule: onUnschedule,
+          onEditReminder: onEditReminder,
         ),
       ),
     );
@@ -218,54 +88,4 @@ class TaskCard extends StatelessWidget {
       decorationThickness: 2,
     );
   }
-
-  String _scheduledDateLabel(AppLocalizations l10n, DateTime date) {
-    final dateLabel = task.isScheduledForToday
-        ? l10n.taskCardScheduledToday
-        : l10n.taskCardScheduledDate(formatPlannerDate(date));
-
-    final parts = <String>[dateLabel];
-
-    final scheduledTimeMinutes = task.scheduledTimeMinutes;
-    if (scheduledTimeMinutes != null) {
-      parts.add(formatPlannerTime(scheduledTimeMinutes));
-    }
-
-    final reminderMinutesBefore = task.reminderMinutesBefore;
-    if (reminderMinutesBefore != null) {
-      parts.add(
-        '${l10n.taskReminderFieldLabel}: '
-        '${_reminderLabel(l10n, reminderMinutesBefore)}',
-      );
-    }
-
-    return parts.join(' · ');
-  }
-
-  String _reminderLabel(AppLocalizations l10n, int minutesBefore) {
-    if (minutesBefore == 0) {
-      return l10n.taskReminderAtTimeOption;
-    }
-
-    if (minutesBefore % 60 == 0) {
-      return l10n.taskReminderHoursBeforeOption(minutesBefore ~/ 60);
-    }
-
-    return l10n.taskReminderMinutesBeforeOption(minutesBefore);
-  }
-}
-
-enum _TaskAction {
-  edit,
-  scheduleDate,
-  scheduleTime,
-  clearScheduledTime,
-  removeFromToday,
-  unschedule,
-  attachToGoal,
-  detachFromGoal,
-  moveToMilestone,
-  moveToDirectGoal,
-  delete,
-  editReminder,
 }
