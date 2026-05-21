@@ -4,6 +4,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
 import '../../../tasks/presentation/task_date_dialogs.dart';
+import '../../../tasks/presentation/task_schedule_dialog_actions.dart';
 import '../../../tasks/presentation/widgets/task_card.dart';
 import '../../../habits/application/habit_today_summary.dart';
 import '../../application/today_task_view_builder.dart';
@@ -61,81 +62,8 @@ class TodayScreen extends StatelessWidget {
   final VoidCallback onAddTask;
   final VoidCallback onAddRecurringTask;
   final TodayTaskViewBuilder _viewBuilder = const TodayTaskViewBuilder();
-
-  Future<void> _showScheduleTaskDatePicker(
-    BuildContext context,
-    PlannerTask task,
-  ) async {
-    final selectedDate = await showScheduleTaskDatePicker(
-      context,
-      initialDate: task.scheduledDate,
-    );
-
-    if (selectedDate == null) {
-      return;
-    }
-
-    onScheduleTaskForDate(taskId: task.id, scheduledDate: selectedDate);
-  }
-
-  Future<void> _showScheduleTaskTimePicker(
-    BuildContext context,
-    PlannerTask task,
-  ) async {
-    final scheduledDate = task.scheduledDate;
-
-    if (scheduledDate == null) {
-      return;
-    }
-
-    final selectedTime = await showScheduleTaskTimePicker(
-      context,
-      initialTimeMinutes: task.scheduledTimeMinutes,
-    );
-
-    if (selectedTime == null) {
-      return;
-    }
-
-    onScheduleTaskForDateAndTime(
-      taskId: task.id,
-      scheduledDate: scheduledDate,
-      scheduledTimeMinutes: selectedTime,
-    );
-  }
-
-  void _clearScheduledTaskTime(PlannerTask task) {
-    final scheduledDate = task.scheduledDate;
-
-    if (scheduledDate == null) {
-      return;
-    }
-
-    onScheduleTaskForDateAndTime(
-      taskId: task.id,
-      scheduledDate: scheduledDate,
-      scheduledTimeMinutes: null,
-    );
-  }
-
-  Future<void> _showTaskReminderPicker(
-    BuildContext context,
-    PlannerTask task,
-  ) async {
-    final result = await showTaskReminderPicker(
-      context,
-      initialReminderMinutesBefore: task.reminderMinutesBefore,
-    );
-
-    if (result == null) {
-      return;
-    }
-
-    onUpdateTaskReminder(
-      taskId: task.id,
-      reminderMinutesBefore: result.minutesBefore,
-    );
-  }
+  final TaskScheduleDialogActions _taskScheduleDialogActions =
+      const TaskScheduleDialogActions();
 
   Future<void> _showAddActionSheet(BuildContext context) async {
     final l10n = AppLocalizations.of(context);
@@ -259,10 +187,10 @@ class TodayScreen extends StatelessWidget {
     final goal = view.findGoalById(task.goalId);
     final isStandaloneTask = task.goalId == null;
     final isGoalLinkedTask = task.goalId != null;
-    final canEditScheduleTime =
-        task.scheduledDate != null && task.recurringRuleId == null;
-    final canEditReminder =
-        canEditScheduleTime && task.scheduledTimeMinutes != null;
+    final canEditScheduleTime = TaskScheduleDialogActions.canEditScheduleTime(
+      task,
+    );
+    final canEditReminder = TaskScheduleDialogActions.canEditReminder(task);
 
     return TaskCard(
       key: ValueKey(task.id),
@@ -288,22 +216,37 @@ class TodayScreen extends StatelessWidget {
           ? () => onRemoveTaskFromToday(task.id)
           : null,
       onScheduleDate: () {
-        _showScheduleTaskDatePicker(context, task);
+        _taskScheduleDialogActions.showScheduleDatePicker(
+          context,
+          task: task,
+          onScheduleTaskForDate: onScheduleTaskForDate,
+        );
       },
       onScheduleTime: canEditScheduleTime
           ? () {
-              _showScheduleTaskTimePicker(context, task);
+              _taskScheduleDialogActions.showScheduleTimePicker(
+                context,
+                task: task,
+                onScheduleTaskForDateAndTime: onScheduleTaskForDateAndTime,
+              );
             }
           : null,
       onClearScheduledTime:
           canEditScheduleTime && task.scheduledTimeMinutes != null
           ? () {
-              _clearScheduledTaskTime(task);
+              _taskScheduleDialogActions.clearScheduledTime(
+                task,
+                onScheduleTaskForDateAndTime: onScheduleTaskForDateAndTime,
+              );
             }
           : null,
       onEditReminder: canEditReminder
           ? () {
-              _showTaskReminderPicker(context, task);
+              _taskScheduleDialogActions.showReminderPicker(
+                context,
+                task: task,
+                onUpdateTaskReminder: onUpdateTaskReminder,
+              );
             }
           : null,
       onDelete: () => onDeleteTask(task.id),

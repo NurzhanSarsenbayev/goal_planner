@@ -4,6 +4,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
 import '../../../tasks/presentation/widgets/task_card.dart';
+import '../../../tasks/presentation/task_schedule_dialog_actions.dart';
 import '../../../../shared/presentation/widgets/section_header.dart';
 
 class DirectGoalTasksSection extends StatelessWidget {
@@ -31,12 +32,6 @@ class DirectGoalTasksSection extends StatelessWidget {
   final void Function(PlannerTask task) onScheduleTaskForDate;
   final void Function(PlannerTask task) onEditTaskReminder;
   final void Function(String taskId) onDeleteTask;
-
-  bool _canEditReminder(PlannerTask task) {
-    return task.scheduledDate != null &&
-        task.scheduledTimeMinutes != null &&
-        task.recurringRuleId == null;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +65,7 @@ class DirectGoalTasksSection extends StatelessWidget {
                 onScheduleDate: () {
                   onScheduleTaskForDate(task);
                 },
-                onEditReminder: _canEditReminder(task)
+                onEditReminder: TaskScheduleDialogActions.canEditReminder(task)
                     ? () => onEditTaskReminder(task)
                     : null,
                 onDelete: () => onDeleteTask(task.id),

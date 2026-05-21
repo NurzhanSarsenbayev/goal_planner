@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../tasks/presentation/task_date_dialogs.dart' as task_date_dialogs;
+import '../../tasks/presentation/task_schedule_dialog_actions.dart';
 import '../../tasks/presentation/task_dialogs.dart' as task_dialogs;
 import '../../milestones/presentation/milestone_dialogs.dart'
     as milestone_dialogs;
@@ -10,6 +11,8 @@ import '../../../models/planner_task.dart';
 
 class GoalDetailsDialogActions {
   const GoalDetailsDialogActions();
+  final TaskScheduleDialogActions _taskScheduleDialogActions =
+      const TaskScheduleDialogActions();
 
   Future<void> showAddTaskDialog(
     BuildContext context, {
@@ -90,17 +93,12 @@ class GoalDetailsDialogActions {
       required DateTime scheduledDate,
     })
     onScheduleTaskForDate,
-  }) async {
-    final selectedDate = await task_date_dialogs.showScheduleTaskDatePicker(
+  }) {
+    return _taskScheduleDialogActions.showScheduleDatePicker(
       context,
-      initialDate: task.scheduledDate,
+      task: task,
+      onScheduleTaskForDate: onScheduleTaskForDate,
     );
-
-    if (selectedDate == null) {
-      return;
-    }
-
-    onScheduleTaskForDate(taskId: task.id, scheduledDate: selectedDate);
   }
 
   Future<void> showTaskReminderPicker(
@@ -111,19 +109,11 @@ class GoalDetailsDialogActions {
       required int? reminderMinutesBefore,
     })
     onUpdateTaskReminder,
-  }) async {
-    final result = await task_date_dialogs.showTaskReminderPicker(
+  }) {
+    return _taskScheduleDialogActions.showReminderPicker(
       context,
-      initialReminderMinutesBefore: task.reminderMinutesBefore,
-    );
-
-    if (result == null) {
-      return;
-    }
-
-    onUpdateTaskReminder(
-      taskId: task.id,
-      reminderMinutesBefore: result.minutesBefore,
+      task: task,
+      onUpdateTaskReminder: onUpdateTaskReminder,
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../task_dialogs.dart' as task_dialogs;
 import '../../../tasks/presentation/task_date_dialogs.dart';
+import '../task_schedule_dialog_actions.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/milestone.dart';
 import '../../../../models/planner_task.dart';
@@ -46,6 +47,8 @@ class AllTasksScreen extends StatelessWidget {
   final void Function({required String taskId, required DateTime completedAt})
   onCompleteTaskOnDate;
   final AllTasksViewBuilder _viewBuilder = const AllTasksViewBuilder();
+  final TaskScheduleDialogActions _taskScheduleDialogActions =
+      const TaskScheduleDialogActions();
 
   final void Function({
     required String taskId,
@@ -100,47 +103,6 @@ class AllTasksScreen extends StatelessWidget {
       goalId: result.goalId,
       milestoneId: result.milestoneId,
     );
-  }
-
-  Future<void> _showScheduleTaskDatePicker(
-    BuildContext context,
-    PlannerTask task,
-  ) async {
-    final selectedDate = await showScheduleTaskDatePicker(
-      context,
-      initialDate: task.scheduledDate,
-    );
-
-    if (selectedDate == null) {
-      return;
-    }
-
-    onScheduleTaskForDate(taskId: task.id, scheduledDate: selectedDate);
-  }
-
-  Future<void> _showTaskReminderPicker(
-    BuildContext context,
-    PlannerTask task,
-  ) async {
-    final result = await showTaskReminderPicker(
-      context,
-      initialReminderMinutesBefore: task.reminderMinutesBefore,
-    );
-
-    if (result == null) {
-      return;
-    }
-
-    onUpdateTaskReminder(
-      taskId: task.id,
-      reminderMinutesBefore: result.minutesBefore,
-    );
-  }
-
-  bool _canEditReminder(PlannerTask task) {
-    return task.scheduledDate != null &&
-        task.scheduledTimeMinutes != null &&
-        task.recurringRuleId == null;
   }
 
   @override
@@ -236,11 +198,19 @@ class AllTasksScreen extends StatelessWidget {
               onScheduleTaskForToday(task.id);
             },
       onScheduleDate: () {
-        _showScheduleTaskDatePicker(context, task);
+        _taskScheduleDialogActions.showScheduleDatePicker(
+          context,
+          task: task,
+          onScheduleTaskForDate: onScheduleTaskForDate,
+        );
       },
-      onEditReminder: _canEditReminder(task)
+      onEditReminder: TaskScheduleDialogActions.canEditReminder(task)
           ? () {
-              _showTaskReminderPicker(context, task);
+              _taskScheduleDialogActions.showReminderPicker(
+                context,
+                task: task,
+                onUpdateTaskReminder: onUpdateTaskReminder,
+              );
             }
           : null,
       onDelete: () {

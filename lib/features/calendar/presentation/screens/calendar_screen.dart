@@ -5,6 +5,7 @@ import '../../../../models/goal.dart';
 import '../../../../models/planner_task.dart';
 import '../../../../shared/planner_dates.dart';
 import '../../../tasks/presentation/task_date_dialogs.dart';
+import '../../../tasks/presentation/task_schedule_dialog_actions.dart';
 import '../../../tasks/presentation/widgets/task_card.dart';
 import '../../application/calendar_task_view_builder.dart';
 import '../widgets/calendar_month_grid.dart';
@@ -62,6 +63,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   final CalendarTaskViewBuilder _taskViewBuilder =
       const CalendarTaskViewBuilder();
+
+  final TaskScheduleDialogActions _taskScheduleDialogActions =
+      const TaskScheduleDialogActions();
 
   @override
   void initState() {
@@ -134,26 +138,45 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     widget.onEditTask(task);
                   },
                   onScheduleDate: () {
-                    _showScheduleTaskDatePicker(context, task);
+                    _taskScheduleDialogActions.showScheduleDatePicker(
+                      context,
+                      task: task,
+                      onScheduleTaskForDate: widget.onScheduleTaskForDate,
+                    );
                   },
                   onUnschedule: () {
                     widget.onRemoveTaskFromSchedule(task.id);
                   },
-                  onScheduleTime: _canEditScheduleTime(task)
+                  onScheduleTime:
+                      TaskScheduleDialogActions.canEditScheduleTime(task)
                       ? () {
-                          _showScheduleTaskTimePicker(context, task);
+                          _taskScheduleDialogActions.showScheduleTimePicker(
+                            context,
+                            task: task,
+                            onScheduleTaskForDateAndTime:
+                                widget.onScheduleTaskForDateAndTime,
+                          );
                         }
                       : null,
                   onClearScheduledTime:
-                      _canEditScheduleTime(task) &&
+                      TaskScheduleDialogActions.canEditScheduleTime(task) &&
                           task.scheduledTimeMinutes != null
                       ? () {
-                          _clearScheduledTaskTime(task);
+                          _taskScheduleDialogActions.clearScheduledTime(
+                            task,
+                            onScheduleTaskForDateAndTime:
+                                widget.onScheduleTaskForDateAndTime,
+                          );
                         }
                       : null,
-                  onEditReminder: _canEditReminder(task)
+                  onEditReminder:
+                      TaskScheduleDialogActions.canEditReminder(task)
                       ? () {
-                          _showTaskReminderPicker(context, task);
+                          _taskScheduleDialogActions.showReminderPicker(
+                            context,
+                            task: task,
+                            onUpdateTaskReminder: widget.onUpdateTaskReminder,
+                          );
                         }
                       : null,
                   onDelete: () {
@@ -272,89 +295,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
     if (selectedAction == _CalendarAddAction.recurringTask) {
       widget.onAddRecurringTaskForDate(_selectedDate);
     }
-  }
-
-  Future<void> _showScheduleTaskDatePicker(
-    BuildContext context,
-    PlannerTask task,
-  ) async {
-    final selectedDate = await showScheduleTaskDatePicker(
-      context,
-      initialDate: task.scheduledDate,
-    );
-
-    if (selectedDate == null) {
-      return;
-    }
-
-    widget.onScheduleTaskForDate(taskId: task.id, scheduledDate: selectedDate);
-  }
-
-  bool _canEditScheduleTime(PlannerTask task) {
-    return task.scheduledDate != null && task.recurringRuleId == null;
-  }
-
-  bool _canEditReminder(PlannerTask task) {
-    return _canEditScheduleTime(task) && task.scheduledTimeMinutes != null;
-  }
-
-  Future<void> _showScheduleTaskTimePicker(
-    BuildContext context,
-    PlannerTask task,
-  ) async {
-    final scheduledDate = task.scheduledDate;
-
-    if (scheduledDate == null) {
-      return;
-    }
-
-    final selectedTime = await showScheduleTaskTimePicker(
-      context,
-      initialTimeMinutes: task.scheduledTimeMinutes,
-    );
-
-    if (selectedTime == null) {
-      return;
-    }
-
-    widget.onScheduleTaskForDateAndTime(
-      taskId: task.id,
-      scheduledDate: scheduledDate,
-      scheduledTimeMinutes: selectedTime,
-    );
-  }
-
-  void _clearScheduledTaskTime(PlannerTask task) {
-    final scheduledDate = task.scheduledDate;
-
-    if (scheduledDate == null) {
-      return;
-    }
-
-    widget.onScheduleTaskForDateAndTime(
-      taskId: task.id,
-      scheduledDate: scheduledDate,
-      scheduledTimeMinutes: null,
-    );
-  }
-
-  Future<void> _showTaskReminderPicker(
-    BuildContext context,
-    PlannerTask task,
-  ) async {
-    final result = await showTaskReminderPicker(
-      context,
-      initialReminderMinutesBefore: task.reminderMinutesBefore,
-    );
-
-    if (result == null) {
-      return;
-    }
-
-    widget.onUpdateTaskReminder(
-      taskId: task.id,
-      reminderMinutesBefore: result.minutesBefore,
-    );
   }
 
   String _selectedDateTitle(AppLocalizations l10n, DateTime date) {

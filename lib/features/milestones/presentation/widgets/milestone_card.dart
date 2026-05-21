@@ -7,6 +7,7 @@ import '../../../../models/planner_task.dart';
 import '../../../../models/recurring_task_rule.dart';
 import '../../../recurring/presentation/widgets/recurring_task_rule_card.dart';
 import '../../../tasks/presentation/widgets/task_card.dart';
+import '../../../tasks/presentation/task_schedule_dialog_actions.dart';
 
 class MilestoneCard extends StatelessWidget {
   const MilestoneCard({
@@ -50,12 +51,6 @@ class MilestoneCard extends StatelessWidget {
   final void Function(PlannerTask task) onScheduleTaskForDate;
   final void Function(PlannerTask task) onEditTaskReminder;
   final void Function(String taskId) onDeleteTask;
-
-  bool _canEditReminder(PlannerTask task) {
-    return task.scheduledDate != null &&
-        task.scheduledTimeMinutes != null &&
-        task.recurringRuleId == null;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +150,8 @@ class MilestoneCard extends StatelessWidget {
                   onScheduleDate: () {
                     onScheduleTaskForDate(task);
                   },
-                  onEditReminder: _canEditReminder(task)
+                  onEditReminder:
+                      TaskScheduleDialogActions.canEditReminder(task)
                       ? () => onEditTaskReminder(task)
                       : null,
                   onDelete: () => onDeleteTask(task.id),
