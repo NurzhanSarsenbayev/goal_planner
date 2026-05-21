@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:goal_planner/features/reminders/application/task_reminder_scheduler.dart';
+import 'package:goal_planner/features/reminders/application/reminder_notification_client.dart';
 import 'package:goal_planner/models/planner_task.dart';
 
 void main() {

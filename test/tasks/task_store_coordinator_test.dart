@@ -3,6 +3,7 @@ import 'package:goal_planner/features/recurring/application/recurring_occurrence
 import 'package:goal_planner/features/recurring/application/recurring_task_repository.dart';
 import 'package:goal_planner/features/reminders/application/task_reminder_scheduler.dart';
 import 'package:goal_planner/features/reminders/application/task_reminder_application_service.dart';
+import 'package:goal_planner/features/reminders/application/reminder_notification_client.dart';
 import 'package:goal_planner/features/tasks/application/task_repository.dart';
 import 'package:goal_planner/features/tasks/application/task_store_coordinator.dart';
 import 'package:goal_planner/models/planner_task.dart';

@@ -1,17 +1,6 @@
 import '../../../models/planner_task.dart';
 import '../../../shared/planner_dates.dart';
-
-abstract class ReminderNotificationClient {
-  Future<void> scheduleReminder({
-    required int id,
-    required String title,
-    required String body,
-    required DateTime scheduledAt,
-    String? payload,
-  });
-
-  Future<void> cancelReminder(int id);
-}
+import 'reminder_notification_client.dart';
 
 class TaskReminderScheduler {
   const TaskReminderScheduler({

@@ -3,7 +3,7 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as timezone_data;
 import 'package:timezone/timezone.dart' as timezone;
 
-import 'task_reminder_scheduler.dart';
+import 'reminder_notification_client.dart';
 
 class LocalNotificationService implements ReminderNotificationClient {
   LocalNotificationService({FlutterLocalNotificationsPlugin? plugin})
