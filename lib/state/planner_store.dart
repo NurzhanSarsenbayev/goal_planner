@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../features/goals/application/goal_store_coordinator.dart';
 import '../features/milestones/application/milestone_store_coordinator.dart';
 import '../features/tasks/application/task_store_coordinator.dart';
+import '../features/tasks/application/task_store_mutation.dart';
 import '../features/planner/application/planner_initialization_service.dart';
 import '../features/planner/application/planner_persistence_runner.dart';
 import '../features/recurring/application/recurring_rule_store_coordinator.dart';

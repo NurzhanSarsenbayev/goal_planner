@@ -4,18 +4,8 @@ import '../../recurring/application/recurring_occurrence_store_coordinator.dart'
 import '../../reminders/application/task_reminder_application_service.dart';
 import 'task_application_service.dart';
 import 'task_repository.dart';
-
-class TaskStoreMutation {
-  const TaskStoreMutation({
-    required this.tasks,
-    required this.recurringExceptions,
-    required this.persistOperation,
-  });
-
-  final List<PlannerTask> tasks;
-  final List<RecurringTaskException> recurringExceptions;
-  final Future<void> Function() persistOperation;
-}
+import 'task_store_mutation.dart';
+import 'task_store_mutation_factory.dart';
 
 class TaskStoreCoordinator {
   TaskStoreCoordinator({
@@ -24,18 +14,19 @@ class TaskStoreCoordinator {
     recurringOccurrenceStoreCoordinator,
     TaskApplicationService? taskApplicationService,
     TaskReminderApplicationService? taskReminderApplicationService,
-  }) : _taskRepository = taskRepository,
-       _recurringOccurrenceStoreCoordinator =
+  }) : _recurringOccurrenceStoreCoordinator =
            recurringOccurrenceStoreCoordinator,
        _taskApplicationService =
            taskApplicationService ?? const TaskApplicationService(),
-       _taskReminderApplicationService = taskReminderApplicationService;
+       _mutationFactory = TaskStoreMutationFactory(
+         taskRepository: taskRepository,
+         taskReminderApplicationService: taskReminderApplicationService,
+       );
 
-  final TaskRepository _taskRepository;
   final RecurringOccurrenceStoreCoordinator
   _recurringOccurrenceStoreCoordinator;
   final TaskApplicationService _taskApplicationService;
-  final TaskReminderApplicationService? _taskReminderApplicationService;
+  final TaskStoreMutationFactory _mutationFactory;
 
   TaskStoreMutation? addTask({
     required List<PlannerTask> tasks,
@@ -368,46 +359,16 @@ class TaskStoreCoordinator {
     TaskMutationResult result, {
     required List<RecurringTaskException> recurringExceptions,
   }) {
-    if (!result.hasChange) {
-      return null;
-    }
-
-    final taskToPersist = result.taskToPersist;
-    final taskIdToDelete = result.taskIdToDelete;
-
-    return TaskStoreMutation(
-      tasks: result.tasks,
+    return _mutationFactory.regularTaskMutation(
+      result,
       recurringExceptions: recurringExceptions,
-      persistOperation: () async {
-        if (taskToPersist != null) {
-          await _taskRepository.saveTask(taskToPersist);
-          await _taskReminderApplicationService?.syncAfterTaskSaved(
-            taskToPersist,
-          );
-        }
-
-        if (taskIdToDelete != null) {
-          await _taskRepository.deleteTask(taskIdToDelete);
-          await _taskReminderApplicationService?.cancelAfterTaskDeleted(
-            taskIdToDelete,
-          );
-        }
-      },
     );
   }
 
   TaskStoreMutation? _recurringOccurrenceMutation(
     RecurringOccurrenceStoreMutation? mutation,
   ) {
-    if (mutation == null) {
-      return null;
-    }
-
-    return TaskStoreMutation(
-      tasks: mutation.tasks,
-      recurringExceptions: mutation.exceptions,
-      persistOperation: mutation.persistOperation,
-    );
+    return _mutationFactory.recurringOccurrenceMutation(mutation);
   }
 
   PlannerTask? _findTaskById({
