@@ -42,6 +42,87 @@ Future<int?> showScheduleTaskTimePicker(
   return plannerTimeMinutes(hour: pickedTime.hour, minute: pickedTime.minute);
 }
 
+class TaskReminderSelection {
+  const TaskReminderSelection({required this.minutesBefore});
+
+  final int? minutesBefore;
+}
+
+Future<TaskReminderSelection?> showTaskReminderPicker(
+  BuildContext context, {
+  required int? initialReminderMinutesBefore,
+}) {
+  return showDialog<TaskReminderSelection>(
+    context: context,
+    builder: (context) {
+      final l10n = AppLocalizations.of(context);
+
+      return SimpleDialog(
+        title: Text(l10n.taskReminderFieldLabel),
+        children: [
+          _TaskReminderOption(
+            label: l10n.taskReminderNoneOption,
+            value: null,
+            selectedValue: initialReminderMinutesBefore,
+          ),
+          _TaskReminderOption(
+            label: l10n.taskReminderAtTimeOption,
+            value: 0,
+            selectedValue: initialReminderMinutesBefore,
+          ),
+          _TaskReminderOption(
+            label: l10n.taskReminderMinutesBeforeOption(5),
+            value: 5,
+            selectedValue: initialReminderMinutesBefore,
+          ),
+          _TaskReminderOption(
+            label: l10n.taskReminderMinutesBeforeOption(15),
+            value: 15,
+            selectedValue: initialReminderMinutesBefore,
+          ),
+          _TaskReminderOption(
+            label: l10n.taskReminderMinutesBeforeOption(30),
+            value: 30,
+            selectedValue: initialReminderMinutesBefore,
+          ),
+          _TaskReminderOption(
+            label: l10n.taskReminderHoursBeforeOption(1),
+            value: 60,
+            selectedValue: initialReminderMinutesBefore,
+          ),
+        ],
+      );
+    },
+  );
+}
+
+class _TaskReminderOption extends StatelessWidget {
+  const _TaskReminderOption({
+    required this.label,
+    required this.value,
+    required this.selectedValue,
+  });
+
+  final String label;
+  final int? value;
+  final int? selectedValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialogOption(
+      onPressed: () {
+        Navigator.of(context).pop(TaskReminderSelection(minutesBefore: value));
+      },
+      child: Row(
+        children: [
+          Expanded(child: Text(label)),
+          if (value == selectedValue) const Icon(Icons.check, size: 20),
+        ],
+      ),
+    );
+  }
+}
+
 Future<void> handleTaskCompletionWithDateFlow(
   BuildContext context, {
   required PlannerTask task,

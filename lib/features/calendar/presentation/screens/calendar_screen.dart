@@ -19,6 +19,7 @@ class CalendarScreen extends StatefulWidget {
     required this.onEditTask,
     required this.onScheduleTaskForDate,
     required this.onScheduleTaskForDateAndTime,
+    required this.onUpdateTaskReminder,
     required this.onRemoveTaskFromSchedule,
     required this.onDeleteTask,
     required this.onAddTaskForDate,
@@ -40,6 +41,11 @@ class CalendarScreen extends StatefulWidget {
     required int? scheduledTimeMinutes,
   })
   onScheduleTaskForDateAndTime;
+  final void Function({
+    required String taskId,
+    required int? reminderMinutesBefore,
+  })
+  onUpdateTaskReminder;
   final void Function(String taskId) onRemoveTaskFromSchedule;
   final void Function(String taskId) onDeleteTask;
   final void Function(DateTime date) onAddTaskForDate;
@@ -143,6 +149,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           task.scheduledTimeMinutes != null
                       ? () {
                           _clearScheduledTaskTime(task);
+                        }
+                      : null,
+                  onEditReminder: _canEditReminder(task)
+                      ? () {
+                          _showTaskReminderPicker(context, task);
                         }
                       : null,
                   onDelete: () {
@@ -283,6 +294,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return task.scheduledDate != null && task.recurringRuleId == null;
   }
 
+  bool _canEditReminder(PlannerTask task) {
+    return _canEditScheduleTime(task) && task.scheduledTimeMinutes != null;
+  }
+
   Future<void> _showScheduleTaskTimePicker(
     BuildContext context,
     PlannerTask task,
@@ -320,6 +335,25 @@ class _CalendarScreenState extends State<CalendarScreen> {
       taskId: task.id,
       scheduledDate: scheduledDate,
       scheduledTimeMinutes: null,
+    );
+  }
+
+  Future<void> _showTaskReminderPicker(
+    BuildContext context,
+    PlannerTask task,
+  ) async {
+    final result = await showTaskReminderPicker(
+      context,
+      initialReminderMinutesBefore: task.reminderMinutesBefore,
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    widget.onUpdateTaskReminder(
+      taskId: task.id,
+      reminderMinutesBefore: result.minutesBefore,
     );
   }
 

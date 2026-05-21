@@ -45,6 +45,7 @@ class AppNavigationActions {
                 onDeleteTask: _store.deleteTask,
                 onScheduleTaskForToday: _store.scheduleTaskForToday,
                 onScheduleTaskForDate: _store.scheduleTaskForDate,
+                onUpdateTaskReminder: _store.updateTaskReminder,
                 onCompleteTaskOnDate: _store.completeTaskOnDate,
               );
             },
@@ -139,6 +140,7 @@ class AppNavigationActions {
                 onMilestoneDeletedWithTasks: _store.deleteMilestoneWithTasks,
                 onScheduleTaskForToday: _store.scheduleTaskForToday,
                 onScheduleTaskForDate: _store.scheduleTaskForDate,
+                onUpdateTaskReminder: _store.updateTaskReminder,
                 onCompleteTaskOnDate: _store.completeTaskOnDate,
                 onAddDirectRecurringTask: () {
                   _recurringRuleDialogActions.showAddDialog(

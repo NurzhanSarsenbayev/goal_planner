@@ -69,6 +69,33 @@ void main() {
       expect(find.text('Set time'), findsOneWidget);
     });
 
+    testWidgets('shows reminder action for timed tasks', (tester) async {
+      var didOpenReminder = false;
+
+      await tester.pumpWidget(
+        _app(
+          task: PlannerTask(
+            id: 'task_1',
+            title: 'Plan day',
+            description: '',
+            scheduledDate: todayDate(),
+            scheduledTimeMinutes: 9 * 60 + 30,
+            createdAt: DateTime(2026, 5, 20),
+          ),
+          onEditReminder: () {
+            didOpenReminder = true;
+          },
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Reminder'));
+      await tester.pumpAndSettle();
+
+      expect(didOpenReminder, isTrue);
+    });
+
     testWidgets('shows clear time action when scheduled time exists', (
       tester,
     ) async {
@@ -95,21 +122,26 @@ void main() {
     });
 
     testWidgets('keeps scheduled date label without time for untimed tasks', (
-      tester,
-    ) async {
+        tester,
+        ) async {
+      final scheduledDate = todayDate().add(const Duration(days: 1));
+
       await tester.pumpWidget(
         _app(
           task: PlannerTask(
             id: 'task_1',
             title: 'Plan day',
             description: '',
-            scheduledDate: DateTime(2026, 5, 21),
+            scheduledDate: scheduledDate,
             createdAt: DateTime(2026, 5, 20),
           ),
         ),
       );
 
-      expect(find.text('Scheduled: 21.05.2026'), findsOneWidget);
+      expect(
+        find.text('Scheduled: ${formatPlannerDate(scheduledDate)}'),
+        findsOneWidget,
+      );
     });
   });
 }
@@ -118,6 +150,7 @@ Widget _app({
   required PlannerTask task,
   VoidCallback? onScheduleTime,
   VoidCallback? onClearScheduledTime,
+  VoidCallback? onEditReminder,
 }) {
   return MaterialApp(
     locale: const Locale('en'),
@@ -132,6 +165,7 @@ Widget _app({
         onDelete: () {},
         onScheduleTime: onScheduleTime,
         onClearScheduledTime: onClearScheduledTime,
+        onEditReminder: onEditReminder,
       ),
     ),
   );

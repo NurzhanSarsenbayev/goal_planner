@@ -29,6 +29,7 @@ class TodayScreen extends StatelessWidget {
     required this.onRemoveTaskFromToday,
     required this.onScheduleTaskForDate,
     required this.onScheduleTaskForDateAndTime,
+    required this.onUpdateTaskReminder,
     required this.onAddRecurringTask,
   });
 
@@ -49,6 +50,11 @@ class TodayScreen extends StatelessWidget {
     required int? scheduledTimeMinutes,
   })
   onScheduleTaskForDateAndTime;
+  final void Function({
+    required String taskId,
+    required int? reminderMinutesBefore,
+  })
+  onUpdateTaskReminder;
   final void Function(PlannerTask task) onAttachTaskToGoal;
   final void Function(String taskId) onDetachTaskFromGoal;
   final void Function(String taskId) onDeleteTask;
@@ -109,6 +115,25 @@ class TodayScreen extends StatelessWidget {
       taskId: task.id,
       scheduledDate: scheduledDate,
       scheduledTimeMinutes: null,
+    );
+  }
+
+  Future<void> _showTaskReminderPicker(
+    BuildContext context,
+    PlannerTask task,
+  ) async {
+    final result = await showTaskReminderPicker(
+      context,
+      initialReminderMinutesBefore: task.reminderMinutesBefore,
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    onUpdateTaskReminder(
+      taskId: task.id,
+      reminderMinutesBefore: result.minutesBefore,
     );
   }
 
@@ -236,6 +261,8 @@ class TodayScreen extends StatelessWidget {
     final isGoalLinkedTask = task.goalId != null;
     final canEditScheduleTime =
         task.scheduledDate != null && task.recurringRuleId == null;
+    final canEditReminder =
+        canEditScheduleTime && task.scheduledTimeMinutes != null;
 
     return TaskCard(
       key: ValueKey(task.id),
@@ -272,6 +299,11 @@ class TodayScreen extends StatelessWidget {
           canEditScheduleTime && task.scheduledTimeMinutes != null
           ? () {
               _clearScheduledTaskTime(task);
+            }
+          : null,
+      onEditReminder: canEditReminder
+          ? () {
+              _showTaskReminderPicker(context, task);
             }
           : null,
       onDelete: () => onDeleteTask(task.id),

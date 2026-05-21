@@ -17,6 +17,7 @@ class DirectGoalTasksSection extends StatelessWidget {
     required this.onMoveTaskToMilestone,
     required this.onScheduleTaskForToday,
     required this.onScheduleTaskForDate,
+    required this.onEditTaskReminder,
     required this.onDeleteTask,
   });
 
@@ -28,7 +29,14 @@ class DirectGoalTasksSection extends StatelessWidget {
   final void Function(PlannerTask task) onMoveTaskToMilestone;
   final void Function(String taskId) onScheduleTaskForToday;
   final void Function(PlannerTask task) onScheduleTaskForDate;
+  final void Function(PlannerTask task) onEditTaskReminder;
   final void Function(String taskId) onDeleteTask;
+
+  bool _canEditReminder(PlannerTask task) {
+    return task.scheduledDate != null &&
+        task.scheduledTimeMinutes != null &&
+        task.recurringRuleId == null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +70,9 @@ class DirectGoalTasksSection extends StatelessWidget {
                 onScheduleDate: () {
                   onScheduleTaskForDate(task);
                 },
+                onEditReminder: _canEditReminder(task)
+                    ? () => onEditTaskReminder(task)
+                    : null,
                 onDelete: () => onDeleteTask(task.id),
               ),
             ),

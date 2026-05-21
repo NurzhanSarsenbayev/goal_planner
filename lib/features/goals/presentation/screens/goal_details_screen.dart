@@ -30,6 +30,7 @@ class GoalDetailsScreen extends StatelessWidget {
     required this.onMilestoneDeletedWithTasks,
     required this.onScheduleTaskForToday,
     required this.onScheduleTaskForDate,
+    required this.onUpdateTaskReminder,
     required this.onCompleteTaskOnDate,
     required this.onAddDirectRecurringTask,
     required this.onAddRecurringTaskToMilestone,
@@ -74,6 +75,11 @@ class GoalDetailsScreen extends StatelessWidget {
   final void Function(String taskId) onScheduleTaskForToday;
   final void Function({required String taskId, required DateTime scheduledDate})
   onScheduleTaskForDate;
+  final void Function({
+    required String taskId,
+    required int? reminderMinutesBefore,
+  })
+  onUpdateTaskReminder;
   final void Function({required String taskId, required DateTime completedAt})
   onCompleteTaskOnDate;
   final VoidCallback onAddDirectRecurringTask;
@@ -172,6 +178,13 @@ class GoalDetailsScreen extends StatelessWidget {
                 onScheduleTaskForDate: onScheduleTaskForDate,
               );
             },
+            onEditTaskReminder: (task) {
+              _dialogActions.showTaskReminderPicker(
+                context,
+                task: task,
+                onUpdateTaskReminder: onUpdateTaskReminder,
+              );
+            },
             onDeleteTask: onDeleteTask,
           ),
           const SizedBox(height: 16),
@@ -224,6 +237,13 @@ class GoalDetailsScreen extends StatelessWidget {
                 context,
                 task: task,
                 onScheduleTaskForDate: onScheduleTaskForDate,
+              );
+            },
+            onEditTaskReminder: (task) {
+              _dialogActions.showTaskReminderPicker(
+                context,
+                task: task,
+                onUpdateTaskReminder: onUpdateTaskReminder,
               );
             },
             onDeleteTask: onDeleteTask,

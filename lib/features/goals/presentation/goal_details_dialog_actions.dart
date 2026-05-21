@@ -103,6 +103,30 @@ class GoalDetailsDialogActions {
     onScheduleTaskForDate(taskId: task.id, scheduledDate: selectedDate);
   }
 
+  Future<void> showTaskReminderPicker(
+    BuildContext context, {
+    required PlannerTask task,
+    required void Function({
+      required String taskId,
+      required int? reminderMinutesBefore,
+    })
+    onUpdateTaskReminder,
+  }) async {
+    final result = await task_date_dialogs.showTaskReminderPicker(
+      context,
+      initialReminderMinutesBefore: task.reminderMinutesBefore,
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    onUpdateTaskReminder(
+      taskId: task.id,
+      reminderMinutesBefore: result.minutesBefore,
+    );
+  }
+
   Future<void> showAddMilestoneDialog(
     BuildContext context, {
     required Goal goal,

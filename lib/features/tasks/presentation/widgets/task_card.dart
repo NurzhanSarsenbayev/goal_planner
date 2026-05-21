@@ -24,6 +24,7 @@ class TaskCard extends StatelessWidget {
     this.onClearScheduledTime,
     this.onRemoveFromToday,
     this.onUnschedule,
+    this.onEditReminder,
   });
 
   final PlannerTask task;
@@ -41,6 +42,7 @@ class TaskCard extends StatelessWidget {
   final VoidCallback? onClearScheduledTime;
   final VoidCallback? onRemoveFromToday;
   final VoidCallback? onUnschedule;
+  final VoidCallback? onEditReminder;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +62,8 @@ class TaskCard extends StatelessWidget {
     final shouldShowDetachFromGoal = onDetachFromGoal != null;
     final shouldShowMoveToMilestone = onMoveToMilestone != null;
     final shouldShowMoveToDirectGoal = onMoveToDirectGoal != null;
+    final shouldShowEditReminder =
+        onEditReminder != null && task.scheduledTimeMinutes != null;
 
     return Card(
       child: ListTile(
@@ -127,6 +131,8 @@ class TaskCard extends StatelessWidget {
                 onClearScheduledTime?.call();
               case _TaskAction.delete:
                 onDelete();
+              case _TaskAction.editReminder:
+                onEditReminder?.call();
             }
           },
           itemBuilder: (context) {
@@ -187,6 +193,11 @@ class TaskCard extends StatelessWidget {
                 PopupMenuItem(
                   value: _TaskAction.unschedule,
                   child: Text(l10n.taskActionRemoveScheduledDate),
+                ),
+              if (shouldShowEditReminder)
+                PopupMenuItem(
+                  value: _TaskAction.editReminder,
+                  child: Text(l10n.taskReminderFieldLabel),
                 ),
             ];
           },
@@ -256,4 +267,5 @@ enum _TaskAction {
   moveToMilestone,
   moveToDirectGoal,
   delete,
+  editReminder,
 }

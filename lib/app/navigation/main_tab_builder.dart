@@ -81,6 +81,7 @@ class MainTabBuilder {
         onRemoveTaskFromToday: _store.unscheduleTask,
         onScheduleTaskForDate: _store.scheduleTaskForDate,
         onScheduleTaskForDateAndTime: _store.scheduleTaskForDateAndTime,
+        onUpdateTaskReminder: _store.updateTaskReminder,
         onDeleteTask: _store.deleteTask,
         onAddTask: () {
           _taskDialogActions.showAddForTodayDialog(context);
@@ -115,6 +116,7 @@ class MainTabBuilder {
         },
         onScheduleTaskForDate: _store.scheduleTaskForDate,
         onScheduleTaskForDateAndTime: _store.scheduleTaskForDateAndTime,
+        onUpdateTaskReminder: _store.updateTaskReminder,
         onRemoveTaskFromSchedule: _store.unscheduleTask,
         onDeleteTask: _store.deleteTask,
         onAddTaskForDate: (date) {

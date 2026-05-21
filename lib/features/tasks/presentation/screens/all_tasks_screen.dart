@@ -26,6 +26,7 @@ class AllTasksScreen extends StatelessWidget {
     required this.onDeleteTask,
     required this.onScheduleTaskForToday,
     required this.onScheduleTaskForDate,
+    required this.onUpdateTaskReminder,
     required this.onCompleteTaskOnDate,
   });
 
@@ -37,6 +38,11 @@ class AllTasksScreen extends StatelessWidget {
   final void Function(String taskId) onScheduleTaskForToday;
   final void Function({required String taskId, required DateTime scheduledDate})
   onScheduleTaskForDate;
+  final void Function({
+    required String taskId,
+    required int? reminderMinutesBefore,
+  })
+  onUpdateTaskReminder;
   final void Function({required String taskId, required DateTime completedAt})
   onCompleteTaskOnDate;
   final AllTasksViewBuilder _viewBuilder = const AllTasksViewBuilder();
@@ -110,6 +116,31 @@ class AllTasksScreen extends StatelessWidget {
     }
 
     onScheduleTaskForDate(taskId: task.id, scheduledDate: selectedDate);
+  }
+
+  Future<void> _showTaskReminderPicker(
+    BuildContext context,
+    PlannerTask task,
+  ) async {
+    final result = await showTaskReminderPicker(
+      context,
+      initialReminderMinutesBefore: task.reminderMinutesBefore,
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    onUpdateTaskReminder(
+      taskId: task.id,
+      reminderMinutesBefore: result.minutesBefore,
+    );
+  }
+
+  bool _canEditReminder(PlannerTask task) {
+    return task.scheduledDate != null &&
+        task.scheduledTimeMinutes != null &&
+        task.recurringRuleId == null;
   }
 
   @override
@@ -207,6 +238,11 @@ class AllTasksScreen extends StatelessWidget {
       onScheduleDate: () {
         _showScheduleTaskDatePicker(context, task);
       },
+      onEditReminder: _canEditReminder(task)
+          ? () {
+              _showTaskReminderPicker(context, task);
+            }
+          : null,
       onDelete: () {
         onDeleteTask(task.id);
       },
