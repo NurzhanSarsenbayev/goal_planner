@@ -24,6 +24,7 @@ import '../../features/reminders/application/local_notification_service.dart';
 import '../../features/reminders/application/task_reminder_application_service.dart';
 import '../../features/reminders/application/task_reminder_scheduler.dart';
 import '../../features/reminders/application/task_reminder_resync_service.dart';
+import '../../features/reminders/application/task_reminder_lifecycle_service.dart';
 import '../../state/planner_store.dart';
 
 class AppDependencies {
@@ -34,9 +35,7 @@ class AppDependencies {
     required this.backupFileExportService,
     required this.backupFileStorage,
     required this.backupRestoreService,
-    required this.localNotificationService,
-    required this.taskReminderScheduler,
-    required this.taskReminderResyncService,
+    required this.taskReminderLifecycleService,
   }) : _database = database;
 
   factory AppDependencies.create() {
@@ -113,6 +112,11 @@ class AppDependencies {
       taskReminderScheduler: taskReminderScheduler,
     );
 
+    final taskReminderLifecycleService = TaskReminderLifecycleService(
+      notifications: localNotificationService,
+      taskReminderResyncService: taskReminderResyncService,
+    );
+
     final taskStoreCoordinator = TaskStoreCoordinator(
       taskRepository: taskRepository,
       recurringOccurrenceStoreCoordinator: recurringOccurrenceStoreCoordinator,
@@ -137,9 +141,7 @@ class AppDependencies {
       backupFileExportService: backupFileExportService,
       backupFileStorage: backupFileStorage,
       backupRestoreService: backupRestoreService,
-      localNotificationService: localNotificationService,
-      taskReminderScheduler: taskReminderScheduler,
-      taskReminderResyncService: taskReminderResyncService,
+      taskReminderLifecycleService: taskReminderLifecycleService,
     );
   }
 
@@ -149,9 +151,7 @@ class AppDependencies {
   final PlannerBackupFileExportService backupFileExportService;
   final PlannerBackupFileStorage backupFileStorage;
   final PlannerBackupRestoreService backupRestoreService;
-  final LocalNotificationService localNotificationService;
-  final TaskReminderScheduler taskReminderScheduler;
-  final TaskReminderResyncService taskReminderResyncService;
+  final TaskReminderLifecycleService taskReminderLifecycleService;
 
   Future<void> dispose() async {
     store.dispose();

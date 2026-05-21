@@ -13,8 +13,7 @@ import '../features/backup/application/planner_backup_restore_service.dart';
 import '../features/recurring/presentation/recurring_rule_dialog_actions.dart';
 import '../features/goals/presentation/goal_dialog_actions.dart';
 import '../features/tasks/presentation/task_dialog_actions.dart';
-import '../features/reminders/application/local_notification_service.dart';
-import '../features/reminders/application/task_reminder_resync_service.dart';
+import '../features/reminders/application/task_reminder_lifecycle_service.dart';
 import 'composition/app_dependencies.dart';
 import 'navigation/app_navigation_actions.dart';
 import 'navigation/main_tab_builder.dart';
@@ -50,8 +49,7 @@ class _AppShellState extends State<AppShell> {
   late final PlannerBackupFileStorage _backupFileStorage;
   late final PlannerBackupRestoreService _backupRestoreService;
   DateTime? _lastBackupAt;
-  late final LocalNotificationService _localNotificationService;
-  late final TaskReminderResyncService _taskReminderResyncService;
+  late final TaskReminderLifecycleService _taskReminderLifecycleService;
 
   int _selectedIndex = 0;
 
@@ -306,21 +304,13 @@ class _AppShellState extends State<AppShell> {
     }
   }
 
-  Future<void> _initializeNotifications() async {
-    try {
-      await _localNotificationService.initialize();
-      await _localNotificationService.requestTaskReminderPermissions();
-    } catch (_) {
-      // Notification setup must not block app startup.
-    }
-  }
-
   Future<void> _initializeStoreAndReminders() async {
     await _store.initialize();
 
     try {
-      await _initializeNotifications();
-      await _taskReminderResyncService.syncTaskReminders(_store.tasks);
+      await _taskReminderLifecycleService.initializeAndSyncTaskReminders(
+        _store.tasks,
+      );
     } catch (_) {
       // Reminder sync must not block app startup.
     }
@@ -328,9 +318,9 @@ class _AppShellState extends State<AppShell> {
 
   Future<void> _showTestNotification() async {
     try {
-      await _localNotificationService.initialize();
+      await _taskReminderLifecycleService.initializeNotifications();
 
-      final granted = await _localNotificationService
+      final granted = await _taskReminderLifecycleService
           .requestNotificationPermission();
 
       if (!mounted) {
@@ -346,7 +336,7 @@ class _AppShellState extends State<AppShell> {
         return;
       }
 
-      await _localNotificationService.showTestNotification();
+      await _taskReminderLifecycleService.showTestNotification();
 
       if (!mounted) {
         return;
@@ -380,8 +370,7 @@ class _AppShellState extends State<AppShell> {
     _backupFileExportService = _dependencies.backupFileExportService;
     _backupFileStorage = _dependencies.backupFileStorage;
     _backupRestoreService = _dependencies.backupRestoreService;
-    _localNotificationService = _dependencies.localNotificationService;
-    _taskReminderResyncService = _dependencies.taskReminderResyncService;
+    _taskReminderLifecycleService = _dependencies.taskReminderLifecycleService;
 
     unawaited(_loadBackupStatus());
 
@@ -431,9 +420,7 @@ class _AppShellState extends State<AppShell> {
     List<PlannerTask> previousTasks,
   ) async {
     try {
-      await _initializeNotifications();
-
-      await _taskReminderResyncService.syncAfterTaskSetReplacement(
+      await _taskReminderLifecycleService.syncAfterTaskSetReplacement(
         previousTasks: previousTasks,
         currentTasks: _store.tasks,
       );
