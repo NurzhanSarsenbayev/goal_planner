@@ -5,7 +5,7 @@ import 'package:goal_planner/models/planner_task.dart';
 void main() {
   group('TaskReminderScheduler', () {
     test('schedules reminder for eligible task', () async {
-      final notifications = FakeTaskReminderNotificationClient();
+      final notifications = FakeReminderNotificationClient();
       final scheduler = TaskReminderScheduler(
         notifications: notifications,
         now: () => DateTime(2026, 5, 20, 8),
@@ -40,7 +40,7 @@ void main() {
     test(
       'does not schedule reminder when task has no scheduled date',
       () async {
-        final notifications = FakeTaskReminderNotificationClient();
+        final notifications = FakeReminderNotificationClient();
         final scheduler = TaskReminderScheduler(
           notifications: notifications,
           now: () => DateTime(2026, 5, 20, 8),
@@ -67,7 +67,7 @@ void main() {
     test(
       'does not schedule reminder when task has no scheduled time',
       () async {
-        final notifications = FakeTaskReminderNotificationClient();
+        final notifications = FakeReminderNotificationClient();
         final scheduler = TaskReminderScheduler(
           notifications: notifications,
           now: () => DateTime(2026, 5, 20, 8),
@@ -91,7 +91,7 @@ void main() {
     );
 
     test('does not schedule reminder when reminder is not set', () async {
-      final notifications = FakeTaskReminderNotificationClient();
+      final notifications = FakeReminderNotificationClient();
       final scheduler = TaskReminderScheduler(
         notifications: notifications,
         now: () => DateTime(2026, 5, 20, 8),
@@ -113,7 +113,7 @@ void main() {
     });
 
     test('does not schedule reminder for completed task', () async {
-      final notifications = FakeTaskReminderNotificationClient();
+      final notifications = FakeReminderNotificationClient();
       final scheduler = TaskReminderScheduler(
         notifications: notifications,
         now: () => DateTime(2026, 5, 20, 8),
@@ -140,7 +140,7 @@ void main() {
     test(
       'does not schedule reminder when reminder time is in the past',
       () async {
-        final notifications = FakeTaskReminderNotificationClient();
+        final notifications = FakeReminderNotificationClient();
         final scheduler = TaskReminderScheduler(
           notifications: notifications,
           now: () => DateTime(2026, 5, 20, 10),
@@ -166,7 +166,7 @@ void main() {
     );
 
     test('does not schedule reminder for recurring occurrence yet', () async {
-      final notifications = FakeTaskReminderNotificationClient();
+      final notifications = FakeReminderNotificationClient();
       final scheduler = TaskReminderScheduler(
         notifications: notifications,
         now: () => DateTime(2026, 5, 20, 8),
@@ -190,7 +190,7 @@ void main() {
     });
 
     test('cancels reminder by task id', () async {
-      final notifications = FakeTaskReminderNotificationClient();
+      final notifications = FakeReminderNotificationClient();
       final scheduler = TaskReminderScheduler(
         notifications: notifications,
         now: () => DateTime(2026, 5, 20, 8),
@@ -215,18 +215,17 @@ void main() {
   });
 }
 
-class FakeTaskReminderNotificationClient
-    implements TaskReminderNotificationClient {
+class FakeReminderNotificationClient implements ReminderNotificationClient {
   final List<int> canceledIds = [];
   final List<ScheduledTaskReminderCall> scheduledReminders = [];
 
   @override
-  Future<void> cancelTaskReminder(int id) async {
+  Future<void> cancelReminder(int id) async {
     canceledIds.add(id);
   }
 
   @override
-  Future<void> scheduleTaskReminder({
+  Future<void> scheduleReminder({
     required int id,
     required String title,
     required String body,

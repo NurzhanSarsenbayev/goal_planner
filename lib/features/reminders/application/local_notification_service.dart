@@ -5,7 +5,7 @@ import 'package:timezone/timezone.dart' as timezone;
 
 import 'task_reminder_scheduler.dart';
 
-class LocalNotificationService implements TaskReminderNotificationClient {
+class LocalNotificationService implements ReminderNotificationClient {
   LocalNotificationService({FlutterLocalNotificationsPlugin? plugin})
     : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
 
@@ -84,7 +84,7 @@ class LocalNotificationService implements TaskReminderNotificationClient {
   }
 
   @override
-  Future<void> scheduleTaskReminder({
+  Future<void> scheduleReminder({
     required int id,
     required String title,
     required String body,
@@ -127,7 +127,7 @@ class LocalNotificationService implements TaskReminderNotificationClient {
   }
 
   @override
-  Future<void> cancelTaskReminder(int id) async {
+  Future<void> cancelReminder(int id) async {
     await initialize();
 
     await _plugin.cancel(id: id);

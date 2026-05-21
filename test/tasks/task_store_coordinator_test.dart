@@ -13,7 +13,7 @@ void main() {
   group('TaskStoreCoordinator reminders', () {
     test('syncs reminder after saving regular task', () async {
       final taskRepository = FakeTaskRepository();
-      final notifications = FakeTaskReminderNotificationClient();
+      final notifications = FakeReminderNotificationClient();
       final coordinator = _createCoordinator(
         taskRepository: taskRepository,
         notifications: notifications,
@@ -58,7 +58,7 @@ void main() {
 
     test('passes reminder minutes when creating task for date', () async {
       final taskRepository = FakeTaskRepository();
-      final notifications = FakeTaskReminderNotificationClient();
+      final notifications = FakeReminderNotificationClient();
       final coordinator = _createCoordinator(
         taskRepository: taskRepository,
         notifications: notifications,
@@ -85,7 +85,7 @@ void main() {
 
     test('cancels reminder after deleting regular task', () async {
       final taskRepository = FakeTaskRepository();
-      final notifications = FakeTaskReminderNotificationClient();
+      final notifications = FakeReminderNotificationClient();
       final coordinator = _createCoordinator(
         taskRepository: taskRepository,
         notifications: notifications,
@@ -119,7 +119,7 @@ void main() {
 
     test('syncs reminder after updating task reminder', () async {
       final taskRepository = FakeTaskRepository();
-      final notifications = FakeTaskReminderNotificationClient();
+      final notifications = FakeReminderNotificationClient();
       final coordinator = _createCoordinator(
         taskRepository: taskRepository,
         notifications: notifications,
@@ -159,7 +159,7 @@ void main() {
 
     test('cancels reminder after clearing task reminder', () async {
       final taskRepository = FakeTaskRepository();
-      final notifications = FakeTaskReminderNotificationClient();
+      final notifications = FakeReminderNotificationClient();
       final coordinator = _createCoordinator(
         taskRepository: taskRepository,
         notifications: notifications,
@@ -196,7 +196,7 @@ void main() {
 
 TaskStoreCoordinator _createCoordinator({
   required FakeTaskRepository taskRepository,
-  required FakeTaskReminderNotificationClient notifications,
+  required FakeReminderNotificationClient notifications,
 }) {
   return TaskStoreCoordinator(
     taskRepository: taskRepository,
@@ -238,18 +238,17 @@ class FakeTaskRepository implements TaskRepository {
   }
 }
 
-class FakeTaskReminderNotificationClient
-    implements TaskReminderNotificationClient {
+class FakeReminderNotificationClient implements ReminderNotificationClient {
   final List<int> canceledIds = [];
   final List<ScheduledTaskReminderCall> scheduledReminders = [];
 
   @override
-  Future<void> cancelTaskReminder(int id) async {
+  Future<void> cancelReminder(int id) async {
     canceledIds.add(id);
   }
 
   @override
-  Future<void> scheduleTaskReminder({
+  Future<void> scheduleReminder({
     required int id,
     required String title,
     required String body,

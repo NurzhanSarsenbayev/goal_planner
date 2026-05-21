@@ -6,7 +6,7 @@ import 'package:goal_planner/models/planner_task.dart';
 void main() {
   group('TaskReminderResyncService', () {
     test('syncs reminders for all provided tasks', () async {
-      final notifications = FakeTaskReminderNotificationClient();
+      final notifications = FakeReminderNotificationClient();
       final scheduler = TaskReminderScheduler(
         notifications: notifications,
         now: () => DateTime(2026, 5, 20, 8),
@@ -55,7 +55,7 @@ void main() {
     test(
       'cancels removed tasks and syncs current tasks after replacement',
       () async {
-        final notifications = FakeTaskReminderNotificationClient();
+        final notifications = FakeReminderNotificationClient();
         final scheduler = TaskReminderScheduler(
           notifications: notifications,
           now: () => DateTime(2026, 5, 20, 8),
@@ -115,18 +115,17 @@ void main() {
   });
 }
 
-class FakeTaskReminderNotificationClient
-    implements TaskReminderNotificationClient {
+class FakeReminderNotificationClient implements ReminderNotificationClient {
   final List<int> canceledIds = [];
   final List<ScheduledTaskReminderCall> scheduledReminders = [];
 
   @override
-  Future<void> cancelTaskReminder(int id) async {
+  Future<void> cancelReminder(int id) async {
     canceledIds.add(id);
   }
 
   @override
-  Future<void> scheduleTaskReminder({
+  Future<void> scheduleReminder({
     required int id,
     required String title,
     required String body,

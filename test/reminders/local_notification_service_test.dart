@@ -8,7 +8,7 @@ void main() {
       final service = LocalNotificationService();
 
       expect(service, isA<LocalNotificationService>());
-      expect(service, isA<TaskReminderNotificationClient>());
+      expect(service, isA<ReminderNotificationClient>());
     });
   });
 }

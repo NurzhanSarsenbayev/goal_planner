@@ -1,8 +1,8 @@
 import '../../../models/planner_task.dart';
 import '../../../shared/planner_dates.dart';
 
-abstract class TaskReminderNotificationClient {
-  Future<void> scheduleTaskReminder({
+abstract class ReminderNotificationClient {
+  Future<void> scheduleReminder({
     required int id,
     required String title,
     required String body,
@@ -10,23 +10,23 @@ abstract class TaskReminderNotificationClient {
     String? payload,
   });
 
-  Future<void> cancelTaskReminder(int id);
+  Future<void> cancelReminder(int id);
 }
 
 class TaskReminderScheduler {
   const TaskReminderScheduler({
-    required TaskReminderNotificationClient notifications,
+    required ReminderNotificationClient notifications,
     DateTime Function()? now,
   }) : _notifications = notifications,
        _now = now ?? DateTime.now;
 
-  final TaskReminderNotificationClient _notifications;
+  final ReminderNotificationClient _notifications;
   final DateTime Function() _now;
 
   Future<void> syncTaskReminder(PlannerTask task) async {
     final notificationId = taskReminderNotificationId(task.id);
 
-    await _notifications.cancelTaskReminder(notificationId);
+    await _notifications.cancelReminder(notificationId);
 
     final reminderAt = _reminderDateTimeFor(task);
 
@@ -34,7 +34,7 @@ class TaskReminderScheduler {
       return;
     }
 
-    await _notifications.scheduleTaskReminder(
+    await _notifications.scheduleReminder(
       id: notificationId,
       title: task.title,
       body: 'Task reminder',
@@ -44,9 +44,7 @@ class TaskReminderScheduler {
   }
 
   Future<void> cancelTaskReminder(String taskId) {
-    return _notifications.cancelTaskReminder(
-      taskReminderNotificationId(taskId),
-    );
+    return _notifications.cancelReminder(taskReminderNotificationId(taskId));
   }
 
   DateTime? _reminderDateTimeFor(PlannerTask task) {
