@@ -8,6 +8,7 @@ import '../../data/repositories/drift_recurring_task_repository.dart';
 import '../../data/repositories/drift_task_repository.dart';
 import '../../data/repositories/drift_habit_repository.dart';
 import '../../data/repositories/drift_planner_backup_restore_repository.dart';
+import '../../data/repositories/drift_standalone_reminder_repository.dart';
 import '../../features/backup/application/planner_backup_restore_service.dart';
 import '../../features/backup/application/planner_backup_validator.dart';
 import '../../features/planner/application/planner_initialization_service.dart';
@@ -25,6 +26,8 @@ import '../../features/reminders/application/task_reminder_application_service.d
 import '../../features/reminders/application/task_reminder_scheduler.dart';
 import '../../features/reminders/application/task_reminder_resync_service.dart';
 import '../../features/reminders/application/task_reminder_lifecycle_service.dart';
+import '../../features/reminders/application/standalone_reminder_application_service.dart';
+import '../../features/reminders/application/standalone_reminder_scheduler.dart';
 import '../../state/planner_store.dart';
 
 class AppDependencies {
@@ -36,6 +39,7 @@ class AppDependencies {
     required this.backupFileStorage,
     required this.backupRestoreService,
     required this.taskReminderLifecycleService,
+    required this.standaloneReminderApplicationService,
   }) : _database = database;
 
   factory AppDependencies.create() {
@@ -47,6 +51,9 @@ class AppDependencies {
     final taskRepository = DriftTaskRepository(database);
     final recurringTaskRepository = DriftRecurringTaskRepository(database);
     final habitRepository = DriftHabitRepository(database);
+    final standaloneReminderRepository = DriftStandaloneReminderRepository(
+      database,
+    );
     final backupRestoreRepository = DriftPlannerBackupRestoreRepository(
       database,
     );
@@ -104,6 +111,16 @@ class AppDependencies {
       notifications: localNotificationService,
     );
 
+    final standaloneReminderScheduler = StandaloneReminderScheduler(
+      notifications: localNotificationService,
+    );
+
+    final standaloneReminderApplicationService =
+        StandaloneReminderApplicationService(
+          repository: standaloneReminderRepository,
+          scheduler: standaloneReminderScheduler,
+        );
+
     final taskReminderApplicationService = TaskReminderApplicationService(
       taskReminderScheduler: taskReminderScheduler,
     );
@@ -142,6 +159,8 @@ class AppDependencies {
       backupFileStorage: backupFileStorage,
       backupRestoreService: backupRestoreService,
       taskReminderLifecycleService: taskReminderLifecycleService,
+      standaloneReminderApplicationService:
+          standaloneReminderApplicationService,
     );
   }
 
@@ -152,6 +171,8 @@ class AppDependencies {
   final PlannerBackupFileStorage backupFileStorage;
   final PlannerBackupRestoreService backupRestoreService;
   final TaskReminderLifecycleService taskReminderLifecycleService;
+  final StandaloneReminderApplicationService
+  standaloneReminderApplicationService;
 
   Future<void> dispose() async {
     store.dispose();
