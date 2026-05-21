@@ -51,10 +51,14 @@ class StandaloneReminderStore extends ChangeNotifier {
 
   Future<void> createStandaloneReminder({
     required String title,
+    required StandaloneReminderScheduleType scheduleType,
+    required DateTime? scheduledDate,
     required int timeMinutes,
   }) async {
     final reminder = await _applicationService.createStandaloneReminder(
       title: title,
+      scheduleType: scheduleType,
+      scheduledDate: scheduledDate,
       timeMinutes: timeMinutes,
     );
 
@@ -70,6 +74,8 @@ class StandaloneReminderStore extends ChangeNotifier {
   Future<void> updateStandaloneReminder({
     required String reminderId,
     required String title,
+    required StandaloneReminderScheduleType scheduleType,
+    required DateTime? scheduledDate,
     required int timeMinutes,
   }) async {
     final reminder = _findReminder(reminderId);
@@ -81,6 +87,8 @@ class StandaloneReminderStore extends ChangeNotifier {
     final updated = await _applicationService.updateStandaloneReminder(
       reminder: reminder,
       title: title,
+      scheduleType: scheduleType,
+      scheduledDate: scheduledDate,
       timeMinutes: timeMinutes,
     );
 

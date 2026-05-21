@@ -24,7 +24,7 @@ class StandaloneReminderScheduler {
       id: notificationId,
       title: reminder.title,
       body: 'Reminder',
-      scheduledAt: _nextReminderDateTime(reminder.timeMinutes),
+      scheduledAt: _nextReminderDateTime(reminder),
       payload: reminder.id,
     );
   }
@@ -35,7 +35,26 @@ class StandaloneReminderScheduler {
     );
   }
 
-  DateTime _nextReminderDateTime(int timeMinutes) {
+  DateTime _nextReminderDateTime(StandaloneReminder reminder) {
+    switch (reminder.scheduleType) {
+      case StandaloneReminderScheduleType.once:
+        return _oneTimeReminderDateTime(reminder);
+      case StandaloneReminderScheduleType.daily:
+        return _nextDailyReminderDateTime(reminder.timeMinutes);
+    }
+  }
+
+  DateTime _oneTimeReminderDateTime(StandaloneReminder reminder) {
+    final scheduledDate = reminder.scheduledDate!;
+
+    return DateTime(
+      scheduledDate.year,
+      scheduledDate.month,
+      scheduledDate.day,
+    ).add(Duration(minutes: reminder.timeMinutes));
+  }
+
+  DateTime _nextDailyReminderDateTime(int timeMinutes) {
     final currentTime = _now();
     final todayAtReminderTime = DateTime(
       currentTime.year,

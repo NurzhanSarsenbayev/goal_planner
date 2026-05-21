@@ -32,6 +32,10 @@ class DriftStandaloneReminderRepository
           local.StandaloneRemindersCompanion.insert(
             id: reminder.id,
             title: reminder.title,
+            scheduleType: drift.Value(
+              _scheduleTypeToStorage(reminder.scheduleType),
+            ),
+            scheduledDate: drift.Value(reminder.scheduledDate),
             timeMinutes: reminder.timeMinutes,
             isEnabled: drift.Value(reminder.isEnabled),
             createdAt: reminder.createdAt,
@@ -69,9 +73,33 @@ domain.StandaloneReminder _mapStandaloneReminder(local.StandaloneReminder row) {
   return domain.StandaloneReminder(
     id: row.id,
     title: row.title,
+    scheduleType: _scheduleTypeFromStorage(row.scheduleType),
+    scheduledDate: row.scheduledDate,
     timeMinutes: row.timeMinutes,
     isEnabled: row.isEnabled,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   );
+}
+
+String _scheduleTypeToStorage(
+  domain.StandaloneReminderScheduleType scheduleType,
+) {
+  switch (scheduleType) {
+    case domain.StandaloneReminderScheduleType.once:
+      return 'once';
+    case domain.StandaloneReminderScheduleType.daily:
+      return 'daily';
+  }
+}
+
+domain.StandaloneReminderScheduleType _scheduleTypeFromStorage(String value) {
+  switch (value) {
+    case 'once':
+      return domain.StandaloneReminderScheduleType.once;
+    case 'daily':
+      return domain.StandaloneReminderScheduleType.daily;
+    default:
+      return domain.StandaloneReminderScheduleType.daily;
+  }
 }

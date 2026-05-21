@@ -51,6 +51,8 @@ void main() {
       await store.initialize();
       await store.createStandaloneReminder(
         title: '  Plan your day  ',
+        scheduleType: StandaloneReminderScheduleType.daily,
+        scheduledDate: null,
         timeMinutes: 9 * 60,
       );
 
@@ -71,7 +73,12 @@ void main() {
       );
 
       await store.initialize();
-      await store.createStandaloneReminder(title: '   ', timeMinutes: 9 * 60);
+      await store.createStandaloneReminder(
+        title: '   ',
+        scheduleType: StandaloneReminderScheduleType.daily,
+        scheduledDate: null,
+        timeMinutes: 9 * 60,
+      );
 
       expect(store.reminders, isEmpty);
       expect(repository.savedReminders, isEmpty);
@@ -89,6 +96,8 @@ void main() {
       await store.updateStandaloneReminder(
         reminderId: reminder.id,
         title: 'Review today',
+        scheduleType: StandaloneReminderScheduleType.daily,
+        scheduledDate: null,
         timeMinutes: 21 * 60 + 30,
       );
 
@@ -137,6 +146,8 @@ void main() {
       await store.updateStandaloneReminder(
         reminderId: 'missing',
         title: 'Missing',
+        scheduleType: StandaloneReminderScheduleType.daily,
+        scheduledDate: null,
         timeMinutes: 9 * 60,
       );
       await store.setStandaloneReminderEnabled(
@@ -174,6 +185,9 @@ StandaloneReminderStore _store({
 StandaloneReminder _reminder({
   String id = 'reminder_1',
   String? title,
+  StandaloneReminderScheduleType scheduleType =
+      StandaloneReminderScheduleType.daily,
+  DateTime? scheduledDate,
   int timeMinutes = 9 * 60,
   bool isEnabled = true,
 }) {
@@ -182,6 +196,8 @@ StandaloneReminder _reminder({
   return StandaloneReminder(
     id: id,
     title: title ?? 'Reminder $id',
+    scheduleType: scheduleType,
+    scheduledDate: scheduledDate,
     timeMinutes: timeMinutes,
     isEnabled: isEnabled,
     createdAt: now,

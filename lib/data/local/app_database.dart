@@ -159,6 +159,10 @@ class StandaloneReminders extends Table {
 
   TextColumn get title => text()();
 
+  TextColumn get scheduleType => text().withDefault(const Constant('daily'))();
+
+  DateTimeColumn get scheduledDate => dateTime().nullable()();
+
   IntColumn get timeMinutes => integer()();
 
   BoolColumn get isEnabled => boolean().withDefault(const Constant(true))();
@@ -189,7 +193,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration {
@@ -216,6 +220,17 @@ class AppDatabase extends _$AppDatabase {
 
         if (from < 6) {
           await migrator.createTable(standaloneReminders);
+        }
+
+        if (from < 7) {
+          await migrator.addColumn(
+            standaloneReminders,
+            standaloneReminders.scheduleType,
+          );
+          await migrator.addColumn(
+            standaloneReminders,
+            standaloneReminders.scheduledDate,
+          );
         }
       },
     );

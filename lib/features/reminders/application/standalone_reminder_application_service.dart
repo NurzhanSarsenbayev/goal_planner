@@ -21,6 +21,8 @@ class StandaloneReminderApplicationService {
 
   Future<StandaloneReminder?> createStandaloneReminder({
     required String title,
+    required StandaloneReminderScheduleType scheduleType,
+    required DateTime? scheduledDate,
     required int timeMinutes,
   }) async {
     final normalizedTitle = title.trim();
@@ -33,6 +35,8 @@ class StandaloneReminderApplicationService {
     final reminder = StandaloneReminder(
       id: 'standalone_reminder_${timestamp.microsecondsSinceEpoch}',
       title: normalizedTitle,
+      scheduleType: scheduleType,
+      scheduledDate: scheduledDate,
       timeMinutes: timeMinutes,
       isEnabled: true,
       createdAt: timestamp,
@@ -48,10 +52,15 @@ class StandaloneReminderApplicationService {
   Future<StandaloneReminder> updateStandaloneReminder({
     required StandaloneReminder reminder,
     required String title,
+    required StandaloneReminderScheduleType scheduleType,
+    required DateTime? scheduledDate,
     required int timeMinutes,
   }) async {
     final updated = reminder.copyWith(
       title: title.trim(),
+      scheduleType: scheduleType,
+      scheduledDate: scheduledDate,
+      clearScheduledDate: scheduleType == StandaloneReminderScheduleType.daily,
       timeMinutes: timeMinutes,
       updatedAt: _now(),
     );

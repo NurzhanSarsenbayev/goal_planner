@@ -99,10 +99,36 @@ void main() {
       ]);
       expect(notifications.scheduledReminders, isEmpty);
     });
+
+    test('schedules one-time reminder at selected date and time', () async {
+      final notifications = FakeReminderNotificationClient();
+      final scheduler = StandaloneReminderScheduler(
+        notifications: notifications,
+        now: () => DateTime(2026, 5, 21, 8),
+      );
+
+      await scheduler.syncStandaloneReminder(
+        _reminder(
+          scheduleType: StandaloneReminderScheduleType.once,
+          scheduledDate: DateTime(2026, 5, 22),
+          timeMinutes: 18 * 60 + 30,
+          isEnabled: true,
+        ),
+      );
+
+      expect(notifications.scheduledReminders, hasLength(1));
+      expect(
+        notifications.scheduledReminders.single.scheduledAt,
+        DateTime(2026, 5, 22, 18, 30),
+      );
+    });
   });
 }
 
 StandaloneReminder _reminder({
+  StandaloneReminderScheduleType scheduleType =
+      StandaloneReminderScheduleType.daily,
+  DateTime? scheduledDate,
   required int timeMinutes,
   required bool isEnabled,
 }) {
@@ -111,6 +137,8 @@ StandaloneReminder _reminder({
   return StandaloneReminder(
     id: 'reminder_1',
     title: 'Plan your day',
+    scheduleType: scheduleType,
+    scheduledDate: scheduledDate,
     timeMinutes: timeMinutes,
     isEnabled: isEnabled,
     createdAt: now,

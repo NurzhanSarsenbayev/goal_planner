@@ -1,9 +1,13 @@
 import '../../../shared/planner_time.dart';
 
+enum StandaloneReminderScheduleType { once, daily }
+
 class StandaloneReminder {
   StandaloneReminder({
     required this.id,
     required this.title,
+    this.scheduleType = StandaloneReminderScheduleType.daily,
+    this.scheduledDate,
     required this.timeMinutes,
     required this.isEnabled,
     required this.createdAt,
@@ -11,10 +15,22 @@ class StandaloneReminder {
   }) : assert(
          isValidPlannerTimeMinutes(timeMinutes),
          'timeMinutes must be between 0 and 1439.',
+       ),
+       assert(
+         scheduleType != StandaloneReminderScheduleType.once ||
+             scheduledDate != null,
+         'scheduledDate is required for one-time standalone reminders.',
+       ),
+       assert(
+         scheduleType != StandaloneReminderScheduleType.daily ||
+             scheduledDate == null,
+         'scheduledDate must be null for daily standalone reminders.',
        );
 
   final String id;
   final String title;
+  final StandaloneReminderScheduleType scheduleType;
+  final DateTime? scheduledDate;
   final int timeMinutes;
   final bool isEnabled;
   final DateTime createdAt;
@@ -23,6 +39,9 @@ class StandaloneReminder {
   StandaloneReminder copyWith({
     String? id,
     String? title,
+    StandaloneReminderScheduleType? scheduleType,
+    DateTime? scheduledDate,
+    bool clearScheduledDate = false,
     int? timeMinutes,
     bool? isEnabled,
     DateTime? createdAt,
@@ -31,6 +50,10 @@ class StandaloneReminder {
     return StandaloneReminder(
       id: id ?? this.id,
       title: title ?? this.title,
+      scheduleType: scheduleType ?? this.scheduleType,
+      scheduledDate: clearScheduledDate
+          ? null
+          : scheduledDate ?? this.scheduledDate,
       timeMinutes: timeMinutes ?? this.timeMinutes,
       isEnabled: isEnabled ?? this.isEnabled,
       createdAt: createdAt ?? this.createdAt,

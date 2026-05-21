@@ -32,6 +32,34 @@ void main() {
       expect(reminders.single.isEnabled, isTrue);
       expect(reminders.single.createdAt, reminder.createdAt);
       expect(reminders.single.updatedAt, reminder.updatedAt);
+      expect(
+        reminders.single.scheduleType,
+        StandaloneReminderScheduleType.daily,
+      );
+      expect(reminders.single.scheduledDate, isNull);
+    });
+
+    test('persists one-time standalone reminder schedule date', () async {
+      final scheduledDate = DateTime(2026, 5, 22);
+
+      await repository.saveStandaloneReminder(
+        _reminder(
+          id: 'once',
+          title: 'Call vet',
+          scheduleType: StandaloneReminderScheduleType.once,
+          scheduledDate: scheduledDate,
+          timeMinutes: 18 * 60 + 30,
+        ),
+      );
+
+      final reminders = await repository.loadStandaloneReminders();
+
+      expect(
+        reminders.single.scheduleType,
+        StandaloneReminderScheduleType.once,
+      );
+      expect(reminders.single.scheduledDate, scheduledDate);
+      expect(reminders.single.timeMinutes, 1110);
     });
 
     test('loads standalone reminders ordered by time', () async {
@@ -55,6 +83,8 @@ void main() {
       await repository.updateStandaloneReminder(
         reminder.copyWith(
           title: 'Review today',
+          scheduleType: StandaloneReminderScheduleType.daily,
+          scheduledDate: null,
           timeMinutes: 21 * 60 + 30,
           isEnabled: false,
           updatedAt: updatedAt,
@@ -85,6 +115,9 @@ void main() {
 StandaloneReminder _reminder({
   String id = 'reminder_1',
   String title = 'Plan your day',
+  StandaloneReminderScheduleType scheduleType =
+      StandaloneReminderScheduleType.daily,
+  DateTime? scheduledDate,
   int timeMinutes = 9 * 60,
   bool isEnabled = true,
 }) {
@@ -93,6 +126,8 @@ StandaloneReminder _reminder({
   return StandaloneReminder(
     id: id,
     title: title,
+    scheduleType: scheduleType,
+    scheduledDate: scheduledDate,
     timeMinutes: timeMinutes,
     isEnabled: isEnabled,
     createdAt: now,

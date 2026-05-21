@@ -3645,6 +3645,30 @@ class $StandaloneRemindersTable extends StandaloneReminders
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _scheduleTypeMeta = const VerificationMeta(
+    'scheduleType',
+  );
+  @override
+  late final GeneratedColumn<String> scheduleType = GeneratedColumn<String>(
+    'schedule_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('daily'),
+  );
+  static const VerificationMeta _scheduledDateMeta = const VerificationMeta(
+    'scheduledDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> scheduledDate =
+      GeneratedColumn<DateTime>(
+        'scheduled_date',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
   static const VerificationMeta _timeMinutesMeta = const VerificationMeta(
     'timeMinutes',
   );
@@ -3697,6 +3721,8 @@ class $StandaloneRemindersTable extends StandaloneReminders
   List<GeneratedColumn> get $columns => [
     id,
     title,
+    scheduleType,
+    scheduledDate,
     timeMinutes,
     isEnabled,
     createdAt,
@@ -3726,6 +3752,24 @@ class $StandaloneRemindersTable extends StandaloneReminders
       );
     } else if (isInserting) {
       context.missing(_titleMeta);
+    }
+    if (data.containsKey('schedule_type')) {
+      context.handle(
+        _scheduleTypeMeta,
+        scheduleType.isAcceptableOrUnknown(
+          data['schedule_type']!,
+          _scheduleTypeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('scheduled_date')) {
+      context.handle(
+        _scheduledDateMeta,
+        scheduledDate.isAcceptableOrUnknown(
+          data['scheduled_date']!,
+          _scheduledDateMeta,
+        ),
+      );
     }
     if (data.containsKey('time_minutes')) {
       context.handle(
@@ -3777,6 +3821,14 @@ class $StandaloneRemindersTable extends StandaloneReminders
         DriftSqlType.string,
         data['${effectivePrefix}title'],
       )!,
+      scheduleType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}schedule_type'],
+      )!,
+      scheduledDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}scheduled_date'],
+      ),
       timeMinutes: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}time_minutes'],
@@ -3806,6 +3858,8 @@ class StandaloneReminder extends DataClass
     implements Insertable<StandaloneReminder> {
   final String id;
   final String title;
+  final String scheduleType;
+  final DateTime? scheduledDate;
   final int timeMinutes;
   final bool isEnabled;
   final DateTime createdAt;
@@ -3813,6 +3867,8 @@ class StandaloneReminder extends DataClass
   const StandaloneReminder({
     required this.id,
     required this.title,
+    required this.scheduleType,
+    this.scheduledDate,
     required this.timeMinutes,
     required this.isEnabled,
     required this.createdAt,
@@ -3823,6 +3879,10 @@ class StandaloneReminder extends DataClass
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['title'] = Variable<String>(title);
+    map['schedule_type'] = Variable<String>(scheduleType);
+    if (!nullToAbsent || scheduledDate != null) {
+      map['scheduled_date'] = Variable<DateTime>(scheduledDate);
+    }
     map['time_minutes'] = Variable<int>(timeMinutes);
     map['is_enabled'] = Variable<bool>(isEnabled);
     map['created_at'] = Variable<DateTime>(createdAt);
@@ -3834,6 +3894,10 @@ class StandaloneReminder extends DataClass
     return StandaloneRemindersCompanion(
       id: Value(id),
       title: Value(title),
+      scheduleType: Value(scheduleType),
+      scheduledDate: scheduledDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(scheduledDate),
       timeMinutes: Value(timeMinutes),
       isEnabled: Value(isEnabled),
       createdAt: Value(createdAt),
@@ -3849,6 +3913,8 @@ class StandaloneReminder extends DataClass
     return StandaloneReminder(
       id: serializer.fromJson<String>(json['id']),
       title: serializer.fromJson<String>(json['title']),
+      scheduleType: serializer.fromJson<String>(json['scheduleType']),
+      scheduledDate: serializer.fromJson<DateTime?>(json['scheduledDate']),
       timeMinutes: serializer.fromJson<int>(json['timeMinutes']),
       isEnabled: serializer.fromJson<bool>(json['isEnabled']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
@@ -3861,6 +3927,8 @@ class StandaloneReminder extends DataClass
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
       'title': serializer.toJson<String>(title),
+      'scheduleType': serializer.toJson<String>(scheduleType),
+      'scheduledDate': serializer.toJson<DateTime?>(scheduledDate),
       'timeMinutes': serializer.toJson<int>(timeMinutes),
       'isEnabled': serializer.toJson<bool>(isEnabled),
       'createdAt': serializer.toJson<DateTime>(createdAt),
@@ -3871,6 +3939,8 @@ class StandaloneReminder extends DataClass
   StandaloneReminder copyWith({
     String? id,
     String? title,
+    String? scheduleType,
+    Value<DateTime?> scheduledDate = const Value.absent(),
     int? timeMinutes,
     bool? isEnabled,
     DateTime? createdAt,
@@ -3878,6 +3948,10 @@ class StandaloneReminder extends DataClass
   }) => StandaloneReminder(
     id: id ?? this.id,
     title: title ?? this.title,
+    scheduleType: scheduleType ?? this.scheduleType,
+    scheduledDate: scheduledDate.present
+        ? scheduledDate.value
+        : this.scheduledDate,
     timeMinutes: timeMinutes ?? this.timeMinutes,
     isEnabled: isEnabled ?? this.isEnabled,
     createdAt: createdAt ?? this.createdAt,
@@ -3887,6 +3961,12 @@ class StandaloneReminder extends DataClass
     return StandaloneReminder(
       id: data.id.present ? data.id.value : this.id,
       title: data.title.present ? data.title.value : this.title,
+      scheduleType: data.scheduleType.present
+          ? data.scheduleType.value
+          : this.scheduleType,
+      scheduledDate: data.scheduledDate.present
+          ? data.scheduledDate.value
+          : this.scheduledDate,
       timeMinutes: data.timeMinutes.present
           ? data.timeMinutes.value
           : this.timeMinutes,
@@ -3901,6 +3981,8 @@ class StandaloneReminder extends DataClass
     return (StringBuffer('StandaloneReminder(')
           ..write('id: $id, ')
           ..write('title: $title, ')
+          ..write('scheduleType: $scheduleType, ')
+          ..write('scheduledDate: $scheduledDate, ')
           ..write('timeMinutes: $timeMinutes, ')
           ..write('isEnabled: $isEnabled, ')
           ..write('createdAt: $createdAt, ')
@@ -3910,14 +3992,24 @@ class StandaloneReminder extends DataClass
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, title, timeMinutes, isEnabled, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+    id,
+    title,
+    scheduleType,
+    scheduledDate,
+    timeMinutes,
+    isEnabled,
+    createdAt,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is StandaloneReminder &&
           other.id == this.id &&
           other.title == this.title &&
+          other.scheduleType == this.scheduleType &&
+          other.scheduledDate == this.scheduledDate &&
           other.timeMinutes == this.timeMinutes &&
           other.isEnabled == this.isEnabled &&
           other.createdAt == this.createdAt &&
@@ -3927,6 +4019,8 @@ class StandaloneReminder extends DataClass
 class StandaloneRemindersCompanion extends UpdateCompanion<StandaloneReminder> {
   final Value<String> id;
   final Value<String> title;
+  final Value<String> scheduleType;
+  final Value<DateTime?> scheduledDate;
   final Value<int> timeMinutes;
   final Value<bool> isEnabled;
   final Value<DateTime> createdAt;
@@ -3935,6 +4029,8 @@ class StandaloneRemindersCompanion extends UpdateCompanion<StandaloneReminder> {
   const StandaloneRemindersCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
+    this.scheduleType = const Value.absent(),
+    this.scheduledDate = const Value.absent(),
     this.timeMinutes = const Value.absent(),
     this.isEnabled = const Value.absent(),
     this.createdAt = const Value.absent(),
@@ -3944,6 +4040,8 @@ class StandaloneRemindersCompanion extends UpdateCompanion<StandaloneReminder> {
   StandaloneRemindersCompanion.insert({
     required String id,
     required String title,
+    this.scheduleType = const Value.absent(),
+    this.scheduledDate = const Value.absent(),
     required int timeMinutes,
     this.isEnabled = const Value.absent(),
     required DateTime createdAt,
@@ -3957,6 +4055,8 @@ class StandaloneRemindersCompanion extends UpdateCompanion<StandaloneReminder> {
   static Insertable<StandaloneReminder> custom({
     Expression<String>? id,
     Expression<String>? title,
+    Expression<String>? scheduleType,
+    Expression<DateTime>? scheduledDate,
     Expression<int>? timeMinutes,
     Expression<bool>? isEnabled,
     Expression<DateTime>? createdAt,
@@ -3966,6 +4066,8 @@ class StandaloneRemindersCompanion extends UpdateCompanion<StandaloneReminder> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (title != null) 'title': title,
+      if (scheduleType != null) 'schedule_type': scheduleType,
+      if (scheduledDate != null) 'scheduled_date': scheduledDate,
       if (timeMinutes != null) 'time_minutes': timeMinutes,
       if (isEnabled != null) 'is_enabled': isEnabled,
       if (createdAt != null) 'created_at': createdAt,
@@ -3977,6 +4079,8 @@ class StandaloneRemindersCompanion extends UpdateCompanion<StandaloneReminder> {
   StandaloneRemindersCompanion copyWith({
     Value<String>? id,
     Value<String>? title,
+    Value<String>? scheduleType,
+    Value<DateTime?>? scheduledDate,
     Value<int>? timeMinutes,
     Value<bool>? isEnabled,
     Value<DateTime>? createdAt,
@@ -3986,6 +4090,8 @@ class StandaloneRemindersCompanion extends UpdateCompanion<StandaloneReminder> {
     return StandaloneRemindersCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
+      scheduleType: scheduleType ?? this.scheduleType,
+      scheduledDate: scheduledDate ?? this.scheduledDate,
       timeMinutes: timeMinutes ?? this.timeMinutes,
       isEnabled: isEnabled ?? this.isEnabled,
       createdAt: createdAt ?? this.createdAt,
@@ -4002,6 +4108,12 @@ class StandaloneRemindersCompanion extends UpdateCompanion<StandaloneReminder> {
     }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
+    }
+    if (scheduleType.present) {
+      map['schedule_type'] = Variable<String>(scheduleType.value);
+    }
+    if (scheduledDate.present) {
+      map['scheduled_date'] = Variable<DateTime>(scheduledDate.value);
     }
     if (timeMinutes.present) {
       map['time_minutes'] = Variable<int>(timeMinutes.value);
@@ -4026,6 +4138,8 @@ class StandaloneRemindersCompanion extends UpdateCompanion<StandaloneReminder> {
     return (StringBuffer('StandaloneRemindersCompanion(')
           ..write('id: $id, ')
           ..write('title: $title, ')
+          ..write('scheduleType: $scheduleType, ')
+          ..write('scheduledDate: $scheduledDate, ')
           ..write('timeMinutes: $timeMinutes, ')
           ..write('isEnabled: $isEnabled, ')
           ..write('createdAt: $createdAt, ')
@@ -7604,6 +7718,8 @@ typedef $$StandaloneRemindersTableCreateCompanionBuilder =
     StandaloneRemindersCompanion Function({
       required String id,
       required String title,
+      Value<String> scheduleType,
+      Value<DateTime?> scheduledDate,
       required int timeMinutes,
       Value<bool> isEnabled,
       required DateTime createdAt,
@@ -7614,6 +7730,8 @@ typedef $$StandaloneRemindersTableUpdateCompanionBuilder =
     StandaloneRemindersCompanion Function({
       Value<String> id,
       Value<String> title,
+      Value<String> scheduleType,
+      Value<DateTime?> scheduledDate,
       Value<int> timeMinutes,
       Value<bool> isEnabled,
       Value<DateTime> createdAt,
@@ -7637,6 +7755,16 @@ class $$StandaloneRemindersTableFilterComposer
 
   ColumnFilters<String> get title => $composableBuilder(
     column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get scheduleType => $composableBuilder(
+    column: $table.scheduleType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get scheduledDate => $composableBuilder(
+    column: $table.scheduledDate,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -7680,6 +7808,16 @@ class $$StandaloneRemindersTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get scheduleType => $composableBuilder(
+    column: $table.scheduleType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get scheduledDate => $composableBuilder(
+    column: $table.scheduledDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get timeMinutes => $composableBuilder(
     column: $table.timeMinutes,
     builder: (column) => ColumnOrderings(column),
@@ -7715,6 +7853,16 @@ class $$StandaloneRemindersTableAnnotationComposer
 
   GeneratedColumn<String> get title =>
       $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get scheduleType => $composableBuilder(
+    column: $table.scheduleType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get scheduledDate => $composableBuilder(
+    column: $table.scheduledDate,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get timeMinutes => $composableBuilder(
     column: $table.timeMinutes,
@@ -7776,6 +7924,8 @@ class $$StandaloneRemindersTableTableManager
               ({
                 Value<String> id = const Value.absent(),
                 Value<String> title = const Value.absent(),
+                Value<String> scheduleType = const Value.absent(),
+                Value<DateTime?> scheduledDate = const Value.absent(),
                 Value<int> timeMinutes = const Value.absent(),
                 Value<bool> isEnabled = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
@@ -7784,6 +7934,8 @@ class $$StandaloneRemindersTableTableManager
               }) => StandaloneRemindersCompanion(
                 id: id,
                 title: title,
+                scheduleType: scheduleType,
+                scheduledDate: scheduledDate,
                 timeMinutes: timeMinutes,
                 isEnabled: isEnabled,
                 createdAt: createdAt,
@@ -7794,6 +7946,8 @@ class $$StandaloneRemindersTableTableManager
               ({
                 required String id,
                 required String title,
+                Value<String> scheduleType = const Value.absent(),
+                Value<DateTime?> scheduledDate = const Value.absent(),
                 required int timeMinutes,
                 Value<bool> isEnabled = const Value.absent(),
                 required DateTime createdAt,
@@ -7802,6 +7956,8 @@ class $$StandaloneRemindersTableTableManager
               }) => StandaloneRemindersCompanion.insert(
                 id: id,
                 title: title,
+                scheduleType: scheduleType,
+                scheduledDate: scheduledDate,
                 timeMinutes: timeMinutes,
                 isEnabled: isEnabled,
                 createdAt: createdAt,

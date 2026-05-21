@@ -30,6 +30,8 @@ void main() {
 
       final reminder = await service.createStandaloneReminder(
         title: '  Plan your day  ',
+        scheduleType: StandaloneReminderScheduleType.daily,
+        scheduledDate: null,
         timeMinutes: 9 * 60,
       );
 
@@ -55,6 +57,8 @@ void main() {
 
       final reminder = await service.createStandaloneReminder(
         title: '   ',
+        scheduleType: StandaloneReminderScheduleType.daily,
+        scheduledDate: null,
         timeMinutes: 9 * 60,
       );
 
@@ -76,6 +80,8 @@ void main() {
       final updated = await service.updateStandaloneReminder(
         reminder: _reminder(),
         title: '  Review today  ',
+        scheduleType: StandaloneReminderScheduleType.daily,
+        scheduledDate: null,
         timeMinutes: 21 * 60 + 30,
       );
 
@@ -151,6 +157,9 @@ StandaloneReminderApplicationService _service({
 StandaloneReminder _reminder({
   String id = 'reminder_1',
   String title = 'Plan your day',
+  StandaloneReminderScheduleType scheduleType =
+      StandaloneReminderScheduleType.daily,
+  DateTime? scheduledDate,
   int timeMinutes = 9 * 60,
   bool isEnabled = true,
 }) {
@@ -159,6 +168,8 @@ StandaloneReminder _reminder({
   return StandaloneReminder(
     id: id,
     title: title,
+    scheduleType: scheduleType,
+    scheduledDate: scheduledDate,
     timeMinutes: timeMinutes,
     isEnabled: isEnabled,
     createdAt: now,

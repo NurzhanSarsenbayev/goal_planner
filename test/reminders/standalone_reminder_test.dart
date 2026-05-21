@@ -108,5 +108,43 @@ void main() {
         throwsAssertionError,
       );
     });
+
+    test('stores one-time reminder date', () {
+      final now = DateTime(2026, 5, 21, 8);
+      final scheduledDate = DateTime(2026, 5, 22);
+
+      final reminder = StandaloneReminder(
+        id: 'once',
+        title: 'Call vet',
+        scheduleType: StandaloneReminderScheduleType.once,
+        scheduledDate: scheduledDate,
+        timeMinutes: 18 * 60 + 30,
+        isEnabled: true,
+        createdAt: now,
+        updatedAt: now,
+      );
+
+      expect(reminder.scheduleType, StandaloneReminderScheduleType.once);
+      expect(reminder.scheduledDate, scheduledDate);
+      expect(reminder.timeMinutes, 1110);
+    });
+
+    test('rejects one-time reminder without scheduled date', () {
+      final now = DateTime(2026, 5, 21);
+
+      expect(
+        () => StandaloneReminder(
+          id: 'invalid_once',
+          title: 'Invalid',
+          scheduleType: StandaloneReminderScheduleType.once,
+          scheduledDate: null,
+          timeMinutes: 9 * 60,
+          isEnabled: true,
+          createdAt: now,
+          updatedAt: now,
+        ),
+        throwsAssertionError,
+      );
+    });
   });
 }
