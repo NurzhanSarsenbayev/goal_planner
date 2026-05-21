@@ -108,5 +108,50 @@ void main() {
       expect(updatedTask.scheduledDate, DateTime(2026, 5, 20));
       expect(updatedTask.scheduledTimeMinutes, isNull);
     });
+
+    test('setReminder updates reminder for timed task', () {
+      final task = PlannerTask(
+        id: 'task_1',
+        title: 'Plan day',
+        description: '',
+        scheduledDate: DateTime(2026, 5, 20),
+        scheduledTimeMinutes: 570,
+        createdAt: DateTime(2026, 5, 20),
+      );
+
+      final updatedTask = task.setReminder(15);
+
+      expect(updatedTask.reminderMinutesBefore, 15);
+    });
+
+    test('setReminder clears reminder', () {
+      final task = PlannerTask(
+        id: 'task_1',
+        title: 'Plan day',
+        description: '',
+        scheduledDate: DateTime(2026, 5, 20),
+        scheduledTimeMinutes: 570,
+        reminderMinutesBefore: 15,
+        createdAt: DateTime(2026, 5, 20),
+      );
+
+      final updatedTask = task.setReminder(null);
+
+      expect(updatedTask.reminderMinutesBefore, isNull);
+    });
+
+    test('setReminder does not keep reminder for untimed task', () {
+      final task = PlannerTask(
+        id: 'task_1',
+        title: 'Plan day',
+        description: '',
+        scheduledDate: DateTime(2026, 5, 20),
+        createdAt: DateTime(2026, 5, 20),
+      );
+
+      final updatedTask = task.setReminder(15);
+
+      expect(updatedTask.reminderMinutesBefore, isNull);
+    });
   });
 }

@@ -268,6 +268,34 @@ class TaskStoreCoordinator {
     );
   }
 
+  TaskStoreMutation? updateTaskReminder({
+    required List<PlannerTask> tasks,
+    required List<RecurringTaskException> recurringExceptions,
+    required String taskId,
+    required int? reminderMinutesBefore,
+  }) {
+    final taskToUpdate = _findTaskById(tasks: tasks, taskId: taskId);
+
+    if (taskToUpdate == null) {
+      return null;
+    }
+
+    if (_isRecurringOccurrence(taskToUpdate)) {
+      return null;
+    }
+
+    final result = _taskApplicationService.updateTaskReminder(
+      tasks: tasks,
+      taskId: taskId,
+      reminderMinutesBefore: reminderMinutesBefore,
+    );
+
+    return _regularTaskMutation(
+      result,
+      recurringExceptions: recurringExceptions,
+    );
+  }
+
   TaskStoreMutation? unscheduleTask({
     required List<PlannerTask> tasks,
     required List<RecurringTaskException> recurringExceptions,

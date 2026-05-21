@@ -145,6 +145,18 @@ class TaskApplicationService {
     );
   }
 
+  TaskMutationResult updateTaskReminder({
+    required List<PlannerTask> tasks,
+    required String taskId,
+    required int? reminderMinutesBefore,
+  }) {
+    return _updateTaskById(
+      tasks: tasks,
+      taskId: taskId,
+      update: (task) => task.setReminder(reminderMinutesBefore),
+    );
+  }
+
   TaskMutationResult unscheduleTask({
     required List<PlannerTask> tasks,
     required String taskId,

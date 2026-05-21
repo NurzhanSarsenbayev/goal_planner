@@ -90,6 +90,14 @@ class PlannerTask {
     );
   }
 
+  PlannerTask setReminder(int? minutesBefore) {
+    return copyWith(
+      reminderMinutesBefore: scheduledTimeMinutes == null
+          ? null
+          : minutesBefore,
+    );
+  }
+
   PlannerTask unschedule() {
     return copyWith(
       scheduledDate: null,

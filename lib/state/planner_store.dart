@@ -395,6 +395,20 @@ class PlannerStore extends ChangeNotifier {
     _applyTaskStoreMutation(mutation);
   }
 
+  void updateTaskReminder({
+    required String taskId,
+    required int? reminderMinutesBefore,
+  }) {
+    final mutation = _taskStoreCoordinator.updateTaskReminder(
+      tasks: _tasks,
+      recurringExceptions: _recurringExceptions,
+      taskId: taskId,
+      reminderMinutesBefore: reminderMinutesBefore,
+    );
+
+    _applyTaskStoreMutation(mutation);
+  }
+
   void unscheduleTask(String taskId) {
     final mutation = _taskStoreCoordinator.unscheduleTask(
       tasks: _tasks,

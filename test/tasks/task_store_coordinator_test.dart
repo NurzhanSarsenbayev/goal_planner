@@ -115,6 +115,81 @@ void main() {
       expect(notifications.canceledIds, [taskReminderNotificationId(task.id)]);
       expect(notifications.scheduledReminders, isEmpty);
     });
+
+    test('syncs reminder after updating task reminder', () async {
+      final taskRepository = FakeTaskRepository();
+      final notifications = FakeTaskReminderNotificationClient();
+      final coordinator = _createCoordinator(
+        taskRepository: taskRepository,
+        notifications: notifications,
+      );
+
+      final task = PlannerTask(
+        id: 'task_1',
+        title: 'Plan day',
+        description: '',
+        scheduledDate: DateTime(2026, 5, 20),
+        scheduledTimeMinutes: 570,
+        createdAt: DateTime(2026, 5, 20),
+      );
+
+      final mutation = coordinator.updateTaskReminder(
+        tasks: [task],
+        recurringExceptions: const [],
+        taskId: task.id,
+        reminderMinutesBefore: 15,
+      );
+
+      expect(mutation, isNotNull);
+
+      await mutation!.persistOperation();
+
+      final expectedNotificationId = taskReminderNotificationId(task.id);
+
+      expect(taskRepository.savedTasks, hasLength(1));
+      expect(taskRepository.savedTasks.single.reminderMinutesBefore, 15);
+      expect(notifications.canceledIds, [expectedNotificationId]);
+      expect(notifications.scheduledReminders, hasLength(1));
+      expect(
+        notifications.scheduledReminders.single.scheduledAt,
+        DateTime(2026, 5, 20, 9, 15),
+      );
+    });
+
+    test('cancels reminder after clearing task reminder', () async {
+      final taskRepository = FakeTaskRepository();
+      final notifications = FakeTaskReminderNotificationClient();
+      final coordinator = _createCoordinator(
+        taskRepository: taskRepository,
+        notifications: notifications,
+      );
+
+      final task = PlannerTask(
+        id: 'task_1',
+        title: 'Plan day',
+        description: '',
+        scheduledDate: DateTime(2026, 5, 20),
+        scheduledTimeMinutes: 570,
+        reminderMinutesBefore: 15,
+        createdAt: DateTime(2026, 5, 20),
+      );
+
+      final mutation = coordinator.updateTaskReminder(
+        tasks: [task],
+        recurringExceptions: const [],
+        taskId: task.id,
+        reminderMinutesBefore: null,
+      );
+
+      expect(mutation, isNotNull);
+
+      await mutation!.persistOperation();
+
+      expect(taskRepository.savedTasks, hasLength(1));
+      expect(taskRepository.savedTasks.single.reminderMinutesBefore, isNull);
+      expect(notifications.canceledIds, [taskReminderNotificationId(task.id)]);
+      expect(notifications.scheduledReminders, isEmpty);
+    });
   });
 }
 
