@@ -165,6 +165,10 @@ class BackupFlowActions {
 
       await _restoreBackupFile(context, latestBackupFile);
     } catch (_) {
+      if (!_isMounted() || !context.mounted) {
+        return;
+      }
+
       _showRestoreFailure(context);
     }
   }
@@ -203,6 +207,10 @@ class BackupFlowActions {
 
       await _restoreBackupFile(context, File(pickedFile.path));
     } catch (_) {
+      if (!_isMounted() || !context.mounted) {
+        return;
+      }
+
       _showRestoreFailure(context);
     }
   }
