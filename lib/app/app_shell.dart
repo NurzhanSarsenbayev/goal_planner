@@ -1,16 +1,11 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
 
 import 'settings/app_language.dart';
 import '../l10n/app_localizations.dart';
-import '../features/backup/application/planner_backup_file_export_service.dart';
-import '../features/backup/application/planner_backup_file_storage.dart';
-import '../features/backup/application/planner_backup_restore_service.dart';
 import '../features/recurring/presentation/recurring_rule_dialog_actions.dart';
+import '../features/backup/presentation/backup_flow_actions.dart';
 import '../features/goals/presentation/goal_dialog_actions.dart';
 import '../features/tasks/presentation/task_dialog_actions.dart';
 import '../features/reminders/application/task_reminder_lifecycle_service.dart';
@@ -20,7 +15,6 @@ import 'navigation/main_tab_builder.dart';
 import '../state/planner_store.dart';
 import '../features/habits/application/habit_store.dart';
 import '../features/reports/application/habit_report_loader.dart';
-import '../models/planner_task.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({
@@ -45,263 +39,20 @@ class _AppShellState extends State<AppShell> {
   late final RecurringRuleDialogActions _recurringRuleDialogActions;
   late final AppNavigationActions _navigationActions;
   late final HabitReportLoader _habitReportLoader;
-  late final PlannerBackupFileExportService _backupFileExportService;
-  late final PlannerBackupFileStorage _backupFileStorage;
-  late final PlannerBackupRestoreService _backupRestoreService;
+  late final BackupFlowActions _backupFlowActions;
   DateTime? _lastBackupAt;
   late final TaskReminderLifecycleService _taskReminderLifecycleService;
 
   int _selectedIndex = 0;
 
-  Future<void> _exportBackupFile() async {
-    try {
-      final file = await _backupFileExportService.createBackupFile();
-      final latestBackup = await _backupFileStorage.readBackup(file);
-
-      if (!mounted) {
-        return;
-      }
-
-      setState(() {
-        _lastBackupAt = latestBackup.exportedAt;
-      });
-
-      final l10n = AppLocalizations.of(context);
-
-      final result = await SharePlus.instance.share(
-        ShareParams(
-          title: l10n.backupExportShareTitle,
-          subject: l10n.backupExportShareTitle,
-          text: l10n.backupExportShareText,
-          files: [XFile(file.path)],
-        ),
-      );
-
-      if (!mounted) {
-        return;
-      }
-
-      if (result.status == ShareResultStatus.dismissed) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.backupExportDismissedMessage)),
-        );
-        return;
-      }
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.backupExportSuccessMessage)));
-    } catch (_) {
-      if (!mounted) {
-        return;
-      }
-
-      final l10n = AppLocalizations.of(context);
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.backupExportFailureMessage)));
+  void _updateLastBackupAt(DateTime? backupAt) {
+    if (!mounted) {
+      return;
     }
-  }
 
-  Future<void> _createBackupFile() async {
-    try {
-      final file = await _backupFileExportService.createBackupFile();
-
-      final latestBackup = await _backupFileStorage.readBackup(file);
-
-      if (!mounted) {
-        return;
-      }
-
-      final l10n = AppLocalizations.of(context);
-
-      setState(() {
-        _lastBackupAt = latestBackup.exportedAt;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.backupCreateSuccessMessage(file.path))),
-      );
-    } catch (_) {
-      if (!mounted) {
-        return;
-      }
-
-      final l10n = AppLocalizations.of(context);
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.backupCreateFailureMessage)));
-    }
-  }
-
-  Future<void> _restoreLatestBackupFile() async {
-    try {
-      final latestBackupFile = await _backupFileStorage.findLatestBackupFile();
-
-      if (!mounted) {
-        return;
-      }
-
-      final l10n = AppLocalizations.of(context);
-
-      if (latestBackupFile == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.backupRestoreNoLocalBackupMessage)),
-        );
-        return;
-      }
-
-      final confirmed = await showDialog<bool>(
-        context: context,
-        builder: (context) {
-          final l10n = AppLocalizations.of(context);
-
-          return AlertDialog(
-            title: Text(l10n.backupRestoreConfirmTitle),
-            content: Text(l10n.backupRestoreConfirmMessage),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text(l10n.commonCancel),
-              ),
-              FilledButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: Text(l10n.backupRestoreConfirmAction),
-              ),
-            ],
-          );
-        },
-      );
-
-      if (!mounted || confirmed != true) {
-        return;
-      }
-
-      final previousTasks = List<PlannerTask>.of(_store.tasks);
-
-      final result = await _backupRestoreService.restoreFromFile(
-        latestBackupFile,
-      );
-
-      await _store.reload();
-      await _habitStore.reload();
-      await _resyncTaskRemindersAfterRestore(previousTasks);
-
-      if (!mounted) {
-        return;
-      }
-
-      setState(() {
-        _lastBackupAt = result.exportedAt;
-      });
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.backupRestoreSuccessMessage)));
-    } catch (_) {
-      if (!mounted) {
-        return;
-      }
-
-      final l10n = AppLocalizations.of(context);
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.backupRestoreFailureMessage)));
-    }
-  }
-
-  Future<void> _restoreExternalBackupFile() async {
-    try {
-      const backupFileType = XTypeGroup(
-        label: 'Goal Planner backup',
-        extensions: ['json'],
-        mimeTypes: ['application/json'],
-      );
-
-      final pickedFile = await openFile(acceptedTypeGroups: [backupFileType]);
-
-      if (!mounted) {
-        return;
-      }
-
-      final l10n = AppLocalizations.of(context);
-
-      if (pickedFile == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.backupRestorePickCancelledMessage)),
-        );
-        return;
-      }
-
-      final confirmed = await showDialog<bool>(
-        context: context,
-        builder: (context) {
-          final l10n = AppLocalizations.of(context);
-
-          return AlertDialog(
-            title: Text(l10n.backupRestoreConfirmTitle),
-            content: Text(l10n.backupRestoreExternalConfirmMessage),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text(l10n.commonCancel),
-              ),
-              FilledButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: Text(l10n.backupRestoreConfirmAction),
-              ),
-            ],
-          );
-        },
-      );
-
-      if (!mounted || confirmed != true) {
-        return;
-      }
-
-      final previousTasks = List<PlannerTask>.of(_store.tasks);
-
-      final result = await _backupRestoreService.restoreFromFile(
-        File(pickedFile.path),
-      );
-
-      await _store.reload();
-      await _habitStore.reload();
-      await _resyncTaskRemindersAfterRestore(previousTasks);
-
-      if (!mounted) {
-        return;
-      }
-
-      setState(() {
-        _lastBackupAt = result.exportedAt;
-      });
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.backupRestoreSuccessMessage)));
-    } catch (_) {
-      if (!mounted) {
-        return;
-      }
-
-      final l10n = AppLocalizations.of(context);
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.backupRestoreFailureMessage)));
-    }
+    setState(() {
+      _lastBackupAt = backupAt;
+    });
   }
 
   Future<void> _initializeStoreAndReminders() async {
@@ -367,12 +118,19 @@ class _AppShellState extends State<AppShell> {
     _dependencies = AppDependencies.create();
     _store = _dependencies.store;
     _habitStore = _dependencies.habitStore;
-    _backupFileExportService = _dependencies.backupFileExportService;
-    _backupFileStorage = _dependencies.backupFileStorage;
-    _backupRestoreService = _dependencies.backupRestoreService;
     _taskReminderLifecycleService = _dependencies.taskReminderLifecycleService;
+    _backupFlowActions = BackupFlowActions(
+      backupFileExportService: _dependencies.backupFileExportService,
+      backupFileStorage: _dependencies.backupFileStorage,
+      backupRestoreService: _dependencies.backupRestoreService,
+      store: _store,
+      habitStore: _habitStore,
+      taskReminderLifecycleService: _taskReminderLifecycleService,
+      isMounted: () => mounted,
+      onBackupStatusChanged: _updateLastBackupAt,
+    );
 
-    unawaited(_loadBackupStatus());
+    unawaited(_backupFlowActions.loadBackupStatus());
 
     _habitReportLoader = HabitReportLoader(habitStore: _habitStore);
 
@@ -392,41 +150,6 @@ class _AppShellState extends State<AppShell> {
 
     unawaited(_initializeStoreAndReminders());
     unawaited(_habitStore.initialize());
-  }
-
-  Future<void> _loadBackupStatus() async {
-    try {
-      final latestBackup = await _backupFileStorage.readLatestBackup();
-
-      if (!mounted) {
-        return;
-      }
-
-      setState(() {
-        _lastBackupAt = latestBackup?.exportedAt;
-      });
-    } catch (_) {
-      if (!mounted) {
-        return;
-      }
-
-      setState(() {
-        _lastBackupAt = null;
-      });
-    }
-  }
-
-  Future<void> _resyncTaskRemindersAfterRestore(
-    List<PlannerTask> previousTasks,
-  ) async {
-    try {
-      await _taskReminderLifecycleService.syncAfterTaskSetReplacement(
-        previousTasks: previousTasks,
-        currentTasks: _store.tasks,
-      );
-    } catch (_) {
-      // Reminder restore sync must not block backup restore.
-    }
   }
 
   @override
@@ -459,10 +182,18 @@ class _AppShellState extends State<AppShell> {
       navigationActions: _navigationActions,
       selectedLanguage: widget.selectedLanguage,
       onLanguageChanged: widget.onLanguageChanged,
-      onCreateBackup: _createBackupFile,
-      onExportBackup: _exportBackupFile,
-      onRestoreLatestBackup: _restoreLatestBackupFile,
-      onRestoreExternalBackup: _restoreExternalBackupFile,
+      onCreateBackup: () {
+        return _backupFlowActions.createBackupFile(context);
+      },
+      onExportBackup: () {
+        return _backupFlowActions.exportBackupFile(context);
+      },
+      onRestoreLatestBackup: () {
+        return _backupFlowActions.restoreLatestBackupFile(context);
+      },
+      onRestoreExternalBackup: () {
+        return _backupFlowActions.restoreExternalBackupFile(context);
+      },
       lastBackupAt: _lastBackupAt,
       onOpenHabits: () {
         _onDestinationSelected(3);
