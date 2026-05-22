@@ -634,6 +634,9 @@
 
     "standaloneReminderAddButton": "Добавить",
     "standaloneReminderDialogAddTitle": "Добавить напоминание",
+    "standaloneReminderDialogEditTitle": "Редактировать напоминание",
+    "standaloneReminderDeleteDialogTitle": "Удалить напоминание?",
+    "standaloneReminderDeleteDialogMessage": "Это напоминание будет удалено.",
     "standaloneReminderTitleFieldLabel": "Название",
     "standaloneReminderTitleFieldHint": "Например: Спланировать день",
     "standaloneReminderScheduleTypeFieldLabel": "Повтор",

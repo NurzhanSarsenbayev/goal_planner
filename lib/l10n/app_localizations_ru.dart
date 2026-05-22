@@ -792,6 +792,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get standaloneReminderDialogAddTitle => 'Добавить напоминание';
 
   @override
+  String get standaloneReminderDialogEditTitle => 'Редактировать напоминание';
+
+  @override
+  String get standaloneReminderDeleteDialogTitle => 'Удалить напоминание?';
+
+  @override
+  String get standaloneReminderDeleteDialogMessage =>
+      'Это напоминание будет удалено.';
+
+  @override
   String get standaloneReminderTitleFieldLabel => 'Название';
 
   @override

@@ -29,10 +29,15 @@ class _StandaloneRemindersScreenState extends State<StandaloneRemindersScreen> {
   }
 
   Future<void> _showAddReminderDialog() async {
+    final l10n = AppLocalizations.of(context);
+
     final draft = await showDialog<StandaloneReminderDraft>(
       context: context,
       builder: (context) {
-        return const StandaloneReminderDialog();
+        return StandaloneReminderDialog(
+          title: l10n.standaloneReminderDialogAddTitle,
+          submitLabel: l10n.commonAdd,
+        );
       },
     );
 
@@ -48,6 +53,70 @@ class _StandaloneRemindersScreenState extends State<StandaloneRemindersScreen> {
     );
   }
 
+  Future<void> _showEditReminderDialog(StandaloneReminder reminder) async {
+    final l10n = AppLocalizations.of(context);
+
+    final draft = await showDialog<StandaloneReminderDraft>(
+      context: context,
+      builder: (context) {
+        return StandaloneReminderDialog(
+          title: l10n.standaloneReminderDialogEditTitle,
+          submitLabel: l10n.commonSave,
+          initialTitle: reminder.title,
+          initialScheduleType: reminder.scheduleType,
+          initialScheduledDate: reminder.scheduledDate,
+          initialTimeMinutes: reminder.timeMinutes,
+        );
+      },
+    );
+
+    if (draft == null) {
+      return;
+    }
+
+    await widget.reminderStore.updateStandaloneReminder(
+      reminderId: reminder.id,
+      title: draft.title,
+      scheduleType: draft.scheduleType,
+      scheduledDate: draft.scheduledDate,
+      timeMinutes: draft.timeMinutes,
+    );
+  }
+
+  Future<void> _confirmDeleteReminder(StandaloneReminder reminder) async {
+    final l10n = AppLocalizations.of(context);
+
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(l10n.standaloneReminderDeleteDialogTitle),
+          content: Text(l10n.standaloneReminderDeleteDialogMessage),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text(l10n.commonCancel),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(l10n.commonDelete),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldDelete != true) {
+      return;
+    }
+
+    await widget.reminderStore.deleteStandaloneReminder(reminder.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -59,7 +128,11 @@ class _StandaloneRemindersScreenState extends State<StandaloneRemindersScreen> {
 
         return Scaffold(
           appBar: AppBar(title: Text(l10n.standaloneRemindersScreenTitle)),
-          body: _StandaloneRemindersBody(reminderStore: reminderStore),
+          body: _StandaloneRemindersBody(
+            reminderStore: reminderStore,
+            onEditReminder: _showEditReminderDialog,
+            onDeleteReminder: _confirmDeleteReminder,
+          ),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: _showAddReminderDialog,
             icon: const Icon(Icons.add),
@@ -72,9 +145,15 @@ class _StandaloneRemindersScreenState extends State<StandaloneRemindersScreen> {
 }
 
 class _StandaloneRemindersBody extends StatelessWidget {
-  const _StandaloneRemindersBody({required this.reminderStore});
+  const _StandaloneRemindersBody({
+    required this.reminderStore,
+    required this.onEditReminder,
+    required this.onDeleteReminder,
+  });
 
   final StandaloneReminderStore reminderStore;
+  final ValueChanged<StandaloneReminder> onEditReminder;
+  final ValueChanged<StandaloneReminder> onDeleteReminder;
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +188,12 @@ class _StandaloneRemindersBody extends StatelessWidget {
               ),
             );
           },
+          onEdit: () {
+            onEditReminder(reminder);
+          },
+          onDelete: () {
+            onDeleteReminder(reminder);
+          },
         );
       },
     );
@@ -119,10 +204,14 @@ class _StandaloneReminderCard extends StatelessWidget {
   const _StandaloneReminderCard({
     required this.reminder,
     required this.onEnabledChanged,
+    required this.onEdit,
+    required this.onDelete,
   });
 
   final StandaloneReminder reminder;
   final ValueChanged<bool> onEnabledChanged;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
 
   String _subtitle(BuildContext context, AppLocalizations l10n) {
     final time = formatPlannerTime(reminder.timeMinutes);
@@ -158,11 +247,37 @@ class _StandaloneReminderCard extends StatelessWidget {
         ),
         title: Text(reminder.title),
         subtitle: Text(_subtitle(context, l10n)),
-        trailing: Switch(
-          value: reminder.isEnabled,
-          onChanged: onEnabledChanged,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Switch(value: reminder.isEnabled, onChanged: onEnabledChanged),
+            PopupMenuButton<_StandaloneReminderAction>(
+              onSelected: (action) {
+                switch (action) {
+                  case _StandaloneReminderAction.edit:
+                    onEdit();
+                  case _StandaloneReminderAction.delete:
+                    onDelete();
+                }
+              },
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                    value: _StandaloneReminderAction.edit,
+                    child: Text(l10n.commonEdit),
+                  ),
+                  PopupMenuItem(
+                    value: _StandaloneReminderAction.delete,
+                    child: Text(l10n.commonDelete),
+                  ),
+                ];
+              },
+            ),
+          ],
         ),
       ),
     );
   }
 }
+
+enum _StandaloneReminderAction { edit, delete }

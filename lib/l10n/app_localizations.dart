@@ -1472,6 +1472,24 @@ abstract class AppLocalizations {
   /// **'Add reminder'**
   String get standaloneReminderDialogAddTitle;
 
+  /// No description provided for @standaloneReminderDialogEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit reminder'**
+  String get standaloneReminderDialogEditTitle;
+
+  /// No description provided for @standaloneReminderDeleteDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete reminder?'**
+  String get standaloneReminderDeleteDialogTitle;
+
+  /// No description provided for @standaloneReminderDeleteDialogMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This reminder will be removed.'**
+  String get standaloneReminderDeleteDialogMessage;
+
   /// No description provided for @standaloneReminderTitleFieldLabel.
   ///
   /// In en, this message translates to:

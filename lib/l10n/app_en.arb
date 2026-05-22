@@ -634,6 +634,9 @@
 
     "standaloneReminderAddButton": "Add reminder",
     "standaloneReminderDialogAddTitle": "Add reminder",
+    "standaloneReminderDialogEditTitle": "Edit reminder",
+    "standaloneReminderDeleteDialogTitle": "Delete reminder?",
+    "standaloneReminderDeleteDialogMessage": "This reminder will be removed.",
     "standaloneReminderTitleFieldLabel": "Title",
     "standaloneReminderTitleFieldHint": "e.g. Plan your day",
     "standaloneReminderScheduleTypeFieldLabel": "Repeat",

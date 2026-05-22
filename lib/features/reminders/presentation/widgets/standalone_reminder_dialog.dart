@@ -20,7 +20,22 @@ class StandaloneReminderDraft {
 }
 
 class StandaloneReminderDialog extends StatefulWidget {
-  const StandaloneReminderDialog({super.key});
+  const StandaloneReminderDialog({
+    super.key,
+    this.initialTitle = '',
+    this.initialScheduleType = StandaloneReminderScheduleType.daily,
+    this.initialScheduledDate,
+    this.initialTimeMinutes,
+    required this.title,
+    required this.submitLabel,
+  });
+
+  final String initialTitle;
+  final StandaloneReminderScheduleType initialScheduleType;
+  final DateTime? initialScheduledDate;
+  final int? initialTimeMinutes;
+  final String title;
+  final String submitLabel;
 
   @override
   State<StandaloneReminderDialog> createState() =>
@@ -28,7 +43,7 @@ class StandaloneReminderDialog extends StatefulWidget {
 }
 
 class _StandaloneReminderDialogState extends State<StandaloneReminderDialog> {
-  final _titleController = TextEditingController();
+  late final TextEditingController _titleController;
 
   late StandaloneReminderScheduleType _scheduleType;
   late DateTime _scheduledDate;
@@ -42,12 +57,15 @@ class _StandaloneReminderDialogState extends State<StandaloneReminderDialog> {
 
     final initialDateTime = DateTime.now().add(const Duration(minutes: 5));
 
-    _scheduleType = StandaloneReminderScheduleType.daily;
-    _scheduledDate = dateOnly(initialDateTime);
-    _timeMinutes = plannerTimeMinutes(
-      hour: initialDateTime.hour,
-      minute: initialDateTime.minute,
-    );
+    _titleController = TextEditingController(text: widget.initialTitle);
+    _scheduleType = widget.initialScheduleType;
+    _scheduledDate = dateOnly(widget.initialScheduledDate ?? initialDateTime);
+    _timeMinutes =
+        widget.initialTimeMinutes ??
+        plannerTimeMinutes(
+          hour: initialDateTime.hour,
+          minute: initialDateTime.minute,
+        );
   }
 
   @override
@@ -145,7 +163,7 @@ class _StandaloneReminderDialogState extends State<StandaloneReminderDialog> {
     final timeText = formatPlannerTime(_timeMinutes);
 
     return AlertDialog(
-      title: Text(l10n.standaloneReminderDialogAddTitle),
+      title: Text(widget.title),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -224,7 +242,7 @@ class _StandaloneReminderDialogState extends State<StandaloneReminderDialog> {
           },
           child: Text(l10n.commonCancel),
         ),
-        FilledButton(onPressed: _submit, child: Text(l10n.commonAdd)),
+        FilledButton(onPressed: _submit, child: Text(widget.submitLabel)),
       ],
     );
   }

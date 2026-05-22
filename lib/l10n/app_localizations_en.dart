@@ -789,6 +789,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get standaloneReminderDialogAddTitle => 'Add reminder';
 
   @override
+  String get standaloneReminderDialogEditTitle => 'Edit reminder';
+
+  @override
+  String get standaloneReminderDeleteDialogTitle => 'Delete reminder?';
+
+  @override
+  String get standaloneReminderDeleteDialogMessage =>
+      'This reminder will be removed.';
+
+  @override
   String get standaloneReminderTitleFieldLabel => 'Title';
 
   @override
