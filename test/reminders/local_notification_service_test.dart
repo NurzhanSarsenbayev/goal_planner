@@ -4,7 +4,7 @@ import 'package:goal_planner/features/reminders/application/reminder_notificatio
 
 void main() {
   group('LocalNotificationService', () {
-    test('implements task reminder notification client', () {
+    test('implements reminder notification client', () {
       final service = LocalNotificationService();
 
       expect(service, isA<LocalNotificationService>());

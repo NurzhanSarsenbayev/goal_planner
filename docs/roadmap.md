@@ -1343,7 +1343,7 @@ Deliberately left for later:
 
 ## Phase 8.2: Retention - Local reminders foundation
 
-Status: not started.
+Status: done.
 
 Reason:
 
@@ -1353,44 +1353,48 @@ Goal:
 
 Add a small local notification foundation without backend push notifications.
 
-Initial scope:
+Completed scope:
 
-- Add local notifications dependency.
-- Add notification permission request flow.
-- Add reminder settings in More.
-- Support one daily app reminder.
-- Allow enabling/disabling the daily reminder.
-- Allow choosing daily reminder time.
-- Save reminder settings locally.
-- Schedule/cancel daily local notification.
-- Test on real Android release build.
+- Added local notifications dependency and Android notification setup.
+- Added notification permission and exact alarm permission flow.
+- Added generic reminder notification client.
+- Added standalone time reminders in More -> Reminders.
+- Supported daily standalone reminders.
+- Supported one-time standalone reminders.
+- Added create/edit/delete/toggle UI for standalone reminders.
+- Added expired state for one-time standalone reminders.
+- Added startup notification resync.
+- Added backup/restore support for standalone reminders.
+- Added restore-time notification resync.
+- Kept reminders local-first.
 
 Out of scope for this phase:
 
 - Backend push notifications.
 - Syncing reminder settings across devices.
-- Per-task reminders.
-- Per-habit reminders.
 - Snooze.
 - Notification actions.
 
 
 ## Phase 8.3: Task reminders
 
-Status: not started.
+Status: done.
 
 Goal:
 
 Use task scheduled date and time to remind the user about concrete planned tasks.
 
-Initial scope:
+Completed scope:
 
-- Add optional reminder setting for timed tasks.
-- Schedule notification for task date/time.
-- Cancel notification when task is completed.
-- Cancel notification when task is deleted.
-- Cancel notification when task is unscheduled.
-- Reschedule notification when task date/time changes.
+- Added optional reminder setting for timed tasks.
+- Scheduled notification for task date/time.
+- Cancelled notification when task is completed.
+- Cancelled notification when task is deleted.
+- Cancelled notification when task is unscheduled.
+- Rescheduled notification when task date/time changes.
+- Added task reminder lifecycle service.
+- Added startup task reminder resync.
+- Added restore-time task reminder resync.
 
 Out of scope for this phase:
 

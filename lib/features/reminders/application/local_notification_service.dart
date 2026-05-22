@@ -66,11 +66,11 @@ class LocalNotificationService implements ReminderNotificationClient {
 
   Future<void> showTestNotification() async {
     const androidDetails = AndroidNotificationDetails(
-      'goal_planner_test',
-      'Goal Planner test notifications',
-      channelDescription: 'Used to verify local notification setup.',
-      importance: Importance.defaultImportance,
-      priority: Priority.defaultPriority,
+      'goal_planner_reminders',
+      'Goal Planner reminders',
+      channelDescription: 'Notifications for tasks and time reminders.',
+      importance: Importance.high,
+      priority: Priority.high,
     );
 
     const notificationDetails = NotificationDetails(android: androidDetails);
