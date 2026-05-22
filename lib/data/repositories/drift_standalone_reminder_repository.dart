@@ -53,6 +53,10 @@ class DriftStandaloneReminderRepository
     )..where((table) => table.id.equals(reminder.id))).write(
       local.StandaloneRemindersCompanion(
         title: drift.Value(reminder.title),
+        scheduleType: drift.Value(
+          _scheduleTypeToStorage(reminder.scheduleType),
+        ),
+        scheduledDate: drift.Value(reminder.scheduledDate),
         timeMinutes: drift.Value(reminder.timeMinutes),
         isEnabled: drift.Value(reminder.isEnabled),
         createdAt: drift.Value(reminder.createdAt),

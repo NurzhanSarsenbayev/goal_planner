@@ -26,6 +26,9 @@ class StandaloneReminderScheduler {
       body: 'Reminder',
       scheduledAt: _nextReminderDateTime(reminder),
       payload: reminder.id,
+      repeat: reminder.scheduleType == StandaloneReminderScheduleType.daily
+          ? ReminderRepeat.daily
+          : ReminderRepeat.none,
     );
   }
 

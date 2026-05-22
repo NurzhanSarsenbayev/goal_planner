@@ -80,11 +80,13 @@ void main() {
       final updatedAt = DateTime(2026, 5, 21, 12);
 
       await repository.saveStandaloneReminder(reminder);
+      final scheduledDate = DateTime(2026, 5, 22);
+
       await repository.updateStandaloneReminder(
         reminder.copyWith(
           title: 'Review today',
-          scheduleType: StandaloneReminderScheduleType.daily,
-          scheduledDate: null,
+          scheduleType: StandaloneReminderScheduleType.once,
+          scheduledDate: scheduledDate,
           timeMinutes: 21 * 60 + 30,
           isEnabled: false,
           updatedAt: updatedAt,
@@ -95,6 +97,11 @@ void main() {
 
       expect(reminders, hasLength(1));
       expect(reminders.single.title, 'Review today');
+      expect(
+        reminders.single.scheduleType,
+        StandaloneReminderScheduleType.once,
+      );
+      expect(reminders.single.scheduledDate, scheduledDate);
       expect(reminders.single.timeMinutes, 1290);
       expect(reminders.single.isEnabled, isFalse);
       expect(reminders.single.updatedAt, updatedAt);

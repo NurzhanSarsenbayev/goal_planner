@@ -90,6 +90,7 @@ class LocalNotificationService implements ReminderNotificationClient {
     required String body,
     required DateTime scheduledAt,
     String? payload,
+    ReminderRepeat repeat = ReminderRepeat.none,
   }) async {
     await initialize();
 
@@ -123,6 +124,9 @@ class LocalNotificationService implements ReminderNotificationClient {
       notificationDetails: notificationDetails,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       payload: payload,
+      matchDateTimeComponents: repeat == ReminderRepeat.daily
+          ? DateTimeComponents.time
+          : null,
     );
   }
 

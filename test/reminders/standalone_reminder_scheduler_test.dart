@@ -27,6 +27,10 @@ void main() {
       expect(notifications.scheduledReminders.single.title, 'Plan your day');
       expect(notifications.scheduledReminders.single.body, 'Reminder');
       expect(notifications.scheduledReminders.single.payload, 'reminder_1');
+      expect(
+        notifications.scheduledReminders.single.repeat,
+        ReminderRepeat.daily,
+      );
     });
 
     test(
@@ -47,6 +51,10 @@ void main() {
           notifications.scheduledReminders.single.scheduledAt,
           DateTime(2026, 5, 22, 9),
         );
+        expect(
+          notifications.scheduledReminders.single.repeat,
+          ReminderRepeat.daily,
+        );
       },
     );
 
@@ -65,6 +73,10 @@ void main() {
       expect(
         notifications.scheduledReminders.single.scheduledAt,
         DateTime(2026, 5, 22, 9),
+      );
+      expect(
+        notifications.scheduledReminders.single.repeat,
+        ReminderRepeat.daily,
       );
     });
 
@@ -121,6 +133,10 @@ void main() {
         notifications.scheduledReminders.single.scheduledAt,
         DateTime(2026, 5, 22, 18, 30),
       );
+      expect(
+        notifications.scheduledReminders.single.repeat,
+        ReminderRepeat.none,
+      );
     });
   });
 }
@@ -157,6 +173,7 @@ class FakeReminderNotificationClient implements ReminderNotificationClient {
     required String body,
     required DateTime scheduledAt,
     String? payload,
+    ReminderRepeat repeat = ReminderRepeat.none,
   }) async {
     scheduledReminders.add(
       ScheduledReminder(
@@ -165,6 +182,7 @@ class FakeReminderNotificationClient implements ReminderNotificationClient {
         body: body,
         scheduledAt: scheduledAt,
         payload: payload,
+        repeat: repeat,
       ),
     );
   }
@@ -182,6 +200,7 @@ class ScheduledReminder {
     required this.body,
     required this.scheduledAt,
     required this.payload,
+    required this.repeat,
   });
 
   final int id;
@@ -189,4 +208,5 @@ class ScheduledReminder {
   final String body;
   final DateTime scheduledAt;
   final String? payload;
+  final ReminderRepeat repeat;
 }

@@ -255,6 +255,7 @@ class FakeReminderNotificationClient implements ReminderNotificationClient {
     required String body,
     required DateTime scheduledAt,
     String? payload,
+    ReminderRepeat repeat = ReminderRepeat.none,
   }) async {
     scheduledReminders.add(
       ScheduledTaskReminderCall(

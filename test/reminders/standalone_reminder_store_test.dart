@@ -62,6 +62,10 @@ void main() {
       ]);
       expect(repository.savedReminders, hasLength(1));
       expect(notifications.scheduledReminders, hasLength(1));
+      expect(
+        notifications.scheduledReminders.single.repeat,
+        ReminderRepeat.daily,
+      );
     });
 
     test('does not create reminder with empty title', () async {
@@ -258,6 +262,7 @@ class _FakeReminderNotificationClient implements ReminderNotificationClient {
     required String body,
     required DateTime scheduledAt,
     String? payload,
+    ReminderRepeat repeat = ReminderRepeat.none,
   }) async {
     scheduledReminders.add(
       _ScheduledReminder(
@@ -266,6 +271,7 @@ class _FakeReminderNotificationClient implements ReminderNotificationClient {
         body: body,
         scheduledAt: scheduledAt,
         payload: payload,
+        repeat: repeat,
       ),
     );
   }
@@ -283,6 +289,7 @@ class _ScheduledReminder {
     required this.body,
     required this.scheduledAt,
     required this.payload,
+    required this.repeat,
   });
 
   final int id;
@@ -290,4 +297,5 @@ class _ScheduledReminder {
   final String body;
   final DateTime scheduledAt;
   final String? payload;
+  final ReminderRepeat repeat;
 }

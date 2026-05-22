@@ -45,6 +45,10 @@ void main() {
         notifications.scheduledReminders.single.id,
         standaloneReminderNotificationId(reminder.id),
       );
+      expect(
+        notifications.scheduledReminders.single.repeat,
+        ReminderRepeat.daily,
+      );
     });
 
     test('does not create reminder with empty title', () async {
@@ -92,6 +96,10 @@ void main() {
       expect(
         notifications.scheduledReminders.single.scheduledAt,
         DateTime(2026, 5, 21, 21, 30),
+      );
+      expect(
+        notifications.scheduledReminders.single.repeat,
+        ReminderRepeat.daily,
       );
     });
 
@@ -219,6 +227,7 @@ class FakeReminderNotificationClient implements ReminderNotificationClient {
     required String body,
     required DateTime scheduledAt,
     String? payload,
+    ReminderRepeat repeat = ReminderRepeat.none,
   }) async {
     scheduledReminders.add(
       ScheduledReminder(
@@ -227,6 +236,7 @@ class FakeReminderNotificationClient implements ReminderNotificationClient {
         body: body,
         scheduledAt: scheduledAt,
         payload: payload,
+        repeat: repeat,
       ),
     );
   }
@@ -244,6 +254,7 @@ class ScheduledReminder {
     required this.body,
     required this.scheduledAt,
     required this.payload,
+    required this.repeat,
   });
 
   final int id;
@@ -251,4 +262,5 @@ class ScheduledReminder {
   final String body;
   final DateTime scheduledAt;
   final String? payload;
+  final ReminderRepeat repeat;
 }
