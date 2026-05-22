@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 
 import '../../features/backup/application/planner_backup_restore_repository.dart';
 import '../../features/backup/domain/planner_backup.dart';
+import '../../features/reminders/domain/standalone_reminder.dart';
 import '../local/app_database.dart' as local;
 import 'habit_mappers.dart';
 import 'planner_mappers.dart';
@@ -21,6 +22,7 @@ class DriftPlannerBackupRestoreRepository
   }
 
   Future<void> _deleteExistingData() async {
+    await _database.delete(_database.standaloneReminders).go();
     await _database.delete(_database.habitEntries).go();
     await _database.delete(_database.tasks).go();
     await _database.delete(_database.recurringTaskExceptions).go();
@@ -152,5 +154,37 @@ class DriftPlannerBackupRestoreRepository
             ),
           );
     }
+
+    for (final reminder in data.standaloneReminders) {
+      await _database
+          .into(_database.standaloneReminders)
+          .insert(
+            local.StandaloneRemindersCompanion.insert(
+              id: reminder.id,
+              title: reminder.title,
+              scheduleType: drift.Value(
+                _standaloneReminderScheduleTypeToDatabaseValue(
+                  reminder.scheduleType,
+                ),
+              ),
+              scheduledDate: drift.Value(reminder.scheduledDate),
+              timeMinutes: reminder.timeMinutes,
+              isEnabled: drift.Value(reminder.isEnabled),
+              createdAt: reminder.createdAt,
+              updatedAt: reminder.updatedAt,
+            ),
+          );
+    }
+  }
+}
+
+String _standaloneReminderScheduleTypeToDatabaseValue(
+  StandaloneReminderScheduleType scheduleType,
+) {
+  switch (scheduleType) {
+    case StandaloneReminderScheduleType.once:
+      return 'once';
+    case StandaloneReminderScheduleType.daily:
+      return 'daily';
   }
 }

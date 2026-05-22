@@ -7,6 +7,7 @@ import '../../habits/domain/habit.dart';
 import '../../habits/domain/habit_entry.dart';
 import '../../habits/domain/habit_entry_status.dart';
 import '../../habits/domain/habit_tracking_type.dart';
+import '../../reminders/domain/standalone_reminder.dart';
 
 part 'planner_backup_json_mappers.dart';
 
@@ -68,6 +69,7 @@ class PlannerBackupData {
     required this.recurringExceptions,
     required this.habits,
     required this.habitEntries,
+    this.standaloneReminders = const [],
   });
 
   const PlannerBackupData.empty()
@@ -77,7 +79,8 @@ class PlannerBackupData {
       recurringRules = const [],
       recurringExceptions = const [],
       habits = const [],
-      habitEntries = const [];
+      habitEntries = const [],
+      standaloneReminders = const [];
 
   final List<Goal> goals;
   final List<Milestone> milestones;
@@ -86,6 +89,7 @@ class PlannerBackupData {
   final List<RecurringTaskException> recurringExceptions;
   final List<Habit> habits;
   final List<HabitEntry> habitEntries;
+  final List<StandaloneReminder> standaloneReminders;
 
   factory PlannerBackupData.fromJson(Map<String, dynamic> json) {
     return PlannerBackupData(
@@ -117,6 +121,10 @@ class PlannerBackupData {
         json,
         'habitEntries',
       ).map(_habitEntryFromJson).toList(growable: false),
+      standaloneReminders: _mapListFromJson(
+        json,
+        'standaloneReminders',
+      ).map(_standaloneReminderFromJson).toList(growable: false),
     );
   }
 
@@ -134,6 +142,9 @@ class PlannerBackupData {
       'habits': habits.map(_habitToJson).toList(growable: false),
       'habitEntries': habitEntries
           .map(_habitEntryToJson)
+          .toList(growable: false),
+      'standaloneReminders': standaloneReminders
+          .map(_standaloneReminderToJson)
           .toList(growable: false),
     };
   }

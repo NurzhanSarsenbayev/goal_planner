@@ -5,6 +5,7 @@ import 'package:goal_planner/features/habits/domain/habit.dart';
 import 'package:goal_planner/features/habits/domain/habit_entry.dart';
 import 'package:goal_planner/features/habits/domain/habit_entry_status.dart';
 import 'package:goal_planner/features/habits/domain/habit_tracking_type.dart';
+import 'package:goal_planner/features/reminders/domain/standalone_reminder.dart';
 import 'package:goal_planner/models/goal.dart';
 import 'package:goal_planner/models/milestone.dart';
 import 'package:goal_planner/models/planner_task.dart';
@@ -20,6 +21,48 @@ void main() {
 
       expect(result.isValid, isTrue);
       expect(result.errors, isEmpty);
+    });
+
+    test('reports duplicate standalone reminder ids', () {
+      final now = DateTime(2026, 5, 13);
+
+      final result = validator.validateData(
+        PlannerBackupData(
+          goals: const [],
+          milestones: const [],
+          tasks: const [],
+          recurringRules: const [],
+          recurringExceptions: const [],
+          habits: const [],
+          habitEntries: const [],
+          standaloneReminders: [
+            StandaloneReminder(
+              id: 'reminder-1',
+              title: 'First',
+              scheduleType: StandaloneReminderScheduleType.daily,
+              scheduledDate: null,
+              timeMinutes: 9 * 60,
+              isEnabled: true,
+              createdAt: now,
+              updatedAt: now,
+            ),
+            StandaloneReminder(
+              id: 'reminder-1',
+              title: 'Second',
+              scheduleType: StandaloneReminderScheduleType.daily,
+              scheduledDate: null,
+              timeMinutes: 10 * 60,
+              isEnabled: true,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          ],
+        ),
+      );
+
+      expect(result.isValid, isFalse);
+      expect(_errorCodes(result), contains('duplicate_id'));
+      expect(result.errors.single.message, contains('standaloneReminders'));
     });
 
     test('throws when invalid result is requested to throw', () {
@@ -402,6 +445,18 @@ PlannerBackupData _validBackupData() {
         date: scheduledDate,
         status: HabitEntryStatus.done,
         completedCount: 3,
+        createdAt: now,
+        updatedAt: now,
+      ),
+    ],
+    standaloneReminders: [
+      StandaloneReminder(
+        id: 'standalone-reminder-1',
+        title: 'Plan your day',
+        scheduleType: StandaloneReminderScheduleType.daily,
+        scheduledDate: null,
+        timeMinutes: 9 * 60,
+        isEnabled: true,
         createdAt: now,
         updatedAt: now,
       ),

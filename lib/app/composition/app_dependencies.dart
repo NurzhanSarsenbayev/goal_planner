@@ -66,6 +66,7 @@ class AppDependencies {
       taskRepository: taskRepository,
       recurringTaskRepository: recurringTaskRepository,
       habitRepository: habitRepository,
+      standaloneReminderRepository: standaloneReminderRepository,
     );
 
     const backupFileStorage = PlannerBackupFileStorage();

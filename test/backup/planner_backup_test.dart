@@ -11,6 +11,7 @@ import 'package:goal_planner/models/milestone.dart';
 import 'package:goal_planner/models/planner_task.dart';
 import 'package:goal_planner/models/recurring_task_exception.dart';
 import 'package:goal_planner/models/recurring_task_rule.dart';
+import 'package:goal_planner/features/reminders/domain/standalone_reminder.dart';
 
 void main() {
   group('PlannerBackup', () {
@@ -19,6 +20,7 @@ void main() {
       final scheduledDate = DateTime(2026, 5, 14);
       final completedAt = DateTime(2026, 5, 15);
       final habitDate = DateTime(2026, 5, 16);
+      final reminderDate = DateTime(2026, 5, 17);
 
       final backup = PlannerBackup.create(
         exportedAt: now,
@@ -106,6 +108,18 @@ void main() {
               updatedAt: now,
             ),
           ],
+          standaloneReminders: [
+            StandaloneReminder(
+              id: 'standalone-reminder-1',
+              title: 'Call vet',
+              scheduleType: StandaloneReminderScheduleType.once,
+              scheduledDate: reminderDate,
+              timeMinutes: 18 * 60 + 30,
+              isEnabled: true,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          ],
         ),
       );
 
@@ -158,6 +172,22 @@ void main() {
       );
       expect(restored.data.habitEntries.single.completedCount, 2);
       expect(restored.data.habitEntries.single.note, 'Almost done');
+
+      expect(
+        restored.data.standaloneReminders.single.id,
+        'standalone-reminder-1',
+      );
+      expect(restored.data.standaloneReminders.single.title, 'Call vet');
+      expect(
+        restored.data.standaloneReminders.single.scheduleType,
+        StandaloneReminderScheduleType.once,
+      );
+      expect(
+        restored.data.standaloneReminders.single.scheduledDate,
+        reminderDate,
+      );
+      expect(restored.data.standaloneReminders.single.timeMinutes, 1110);
+      expect(restored.data.standaloneReminders.single.isEnabled, isTrue);
     });
 
     test('rejects unsupported schema version', () {
@@ -218,6 +248,7 @@ void main() {
       expect(restored.data.recurringExceptions, isEmpty);
       expect(restored.data.habits, isEmpty);
       expect(restored.data.habitEntries, isEmpty);
+      expect(restored.data.standaloneReminders, isEmpty);
     });
   });
 }

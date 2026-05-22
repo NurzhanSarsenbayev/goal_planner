@@ -186,6 +186,36 @@ HabitEntry _habitEntryFromJson(Map<String, dynamic> json) {
   );
 }
 
+Map<String, Object?> _standaloneReminderToJson(StandaloneReminder reminder) {
+  return {
+    'id': reminder.id,
+    'title': reminder.title,
+    'scheduleType': reminder.scheduleType.name,
+    'scheduledDate': _nullableDateToJson(reminder.scheduledDate),
+    'timeMinutes': reminder.timeMinutes,
+    'isEnabled': reminder.isEnabled,
+    'createdAt': _dateToJson(reminder.createdAt),
+    'updatedAt': _dateToJson(reminder.updatedAt),
+  };
+}
+
+StandaloneReminder _standaloneReminderFromJson(Map<String, dynamic> json) {
+  return StandaloneReminder(
+    id: _stringFromJson(json, 'id'),
+    title: _stringFromJson(json, 'title'),
+    scheduleType: _enumFromJson(
+      StandaloneReminderScheduleType.values,
+      json,
+      'scheduleType',
+    ),
+    scheduledDate: _nullableDateFromJson(json, 'scheduledDate'),
+    timeMinutes: _intFromJson(json, 'timeMinutes'),
+    isEnabled: _boolFromJson(json, 'isEnabled'),
+    createdAt: _dateFromJson(json, 'createdAt'),
+    updatedAt: _dateFromJson(json, 'updatedAt'),
+  );
+}
+
 String _dateToJson(DateTime date) {
   return date.toIso8601String();
 }

@@ -9,6 +9,8 @@ import 'package:goal_planner/features/habits/domain/habit_tracking_type.dart';
 import 'package:goal_planner/features/milestones/application/milestone_repository.dart';
 import 'package:goal_planner/features/recurring/application/recurring_task_repository.dart';
 import 'package:goal_planner/features/tasks/application/task_repository.dart';
+import 'package:goal_planner/features/reminders/application/standalone_reminder_repository.dart';
+import 'package:goal_planner/features/reminders/domain/standalone_reminder.dart';
 import 'package:goal_planner/models/goal.dart';
 import 'package:goal_planner/models/milestone.dart';
 import 'package:goal_planner/models/planner_task.dart';
@@ -82,6 +84,16 @@ void main() {
         createdAt: now,
         updatedAt: now,
       );
+      final standaloneReminder = StandaloneReminder(
+        id: 'standalone-reminder-1',
+        title: 'Plan your day',
+        scheduleType: StandaloneReminderScheduleType.daily,
+        scheduledDate: null,
+        timeMinutes: 9 * 60,
+        isEnabled: true,
+        createdAt: now,
+        updatedAt: now,
+      );
 
       final service = PlannerBackupExportService(
         goalRepository: _FakeGoalRepository([goal]),
@@ -95,6 +107,9 @@ void main() {
           habits: [habit],
           entries: [habitEntry],
         ),
+        standaloneReminderRepository: _FakeStandaloneReminderRepository([
+          standaloneReminder,
+        ]),
         now: () => now,
       );
 
@@ -109,6 +124,7 @@ void main() {
       expect(backup.data.recurringExceptions.single.id, recurringException.id);
       expect(backup.data.habits.single.id, habit.id);
       expect(backup.data.habitEntries.single.id, habitEntry.id);
+      expect(backup.data.standaloneReminders.single.id, standaloneReminder.id);
     });
 
     test('supports empty repositories', () async {
@@ -120,6 +136,7 @@ void main() {
         taskRepository: _FakeTaskRepository(),
         recurringTaskRepository: _FakeRecurringTaskRepository(),
         habitRepository: _FakeHabitRepository(),
+        standaloneReminderRepository: _FakeStandaloneReminderRepository(),
         now: () => now,
       );
 
@@ -133,6 +150,7 @@ void main() {
       expect(backup.data.recurringExceptions, isEmpty);
       expect(backup.data.habits, isEmpty);
       expect(backup.data.habitEntries, isEmpty);
+      expect(backup.data.standaloneReminders, isEmpty);
     });
   });
 }
@@ -277,4 +295,25 @@ class _FakeHabitRepository implements HabitRepository {
 
   @override
   Future<void> deleteHabit(String habitId) async {}
+}
+
+class _FakeStandaloneReminderRepository
+    implements StandaloneReminderRepository {
+  const _FakeStandaloneReminderRepository([this.reminders = const []]);
+
+  final List<StandaloneReminder> reminders;
+
+  @override
+  Future<List<StandaloneReminder>> loadStandaloneReminders() async {
+    return reminders;
+  }
+
+  @override
+  Future<void> saveStandaloneReminder(StandaloneReminder reminder) async {}
+
+  @override
+  Future<void> updateStandaloneReminder(StandaloneReminder reminder) async {}
+
+  @override
+  Future<void> deleteStandaloneReminder(String reminderId) async {}
 }

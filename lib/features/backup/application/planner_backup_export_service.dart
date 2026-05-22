@@ -3,6 +3,7 @@ import '../../habits/application/habit_repository.dart';
 import '../../milestones/application/milestone_repository.dart';
 import '../../recurring/application/recurring_task_repository.dart';
 import '../../tasks/application/task_repository.dart';
+import '../../reminders/application/standalone_reminder_repository.dart';
 import '../domain/planner_backup.dart';
 
 class PlannerBackupExportService {
@@ -12,12 +13,14 @@ class PlannerBackupExportService {
     required TaskRepository taskRepository,
     required RecurringTaskRepository recurringTaskRepository,
     required HabitRepository habitRepository,
+    required StandaloneReminderRepository standaloneReminderRepository,
     DateTime Function()? now,
   }) : _goalRepository = goalRepository,
        _milestoneRepository = milestoneRepository,
        _taskRepository = taskRepository,
        _recurringTaskRepository = recurringTaskRepository,
        _habitRepository = habitRepository,
+       _standaloneReminderRepository = standaloneReminderRepository,
        _now = now ?? DateTime.now;
 
   final GoalRepository _goalRepository;
@@ -25,6 +28,7 @@ class PlannerBackupExportService {
   final TaskRepository _taskRepository;
   final RecurringTaskRepository _recurringTaskRepository;
   final HabitRepository _habitRepository;
+  final StandaloneReminderRepository _standaloneReminderRepository;
   final DateTime Function() _now;
 
   Future<PlannerBackup> createBackup() async {
@@ -37,6 +41,8 @@ class PlannerBackupExportService {
         .loadRecurringTaskExceptions();
     final habits = await _habitRepository.loadHabits();
     final habitEntries = await _habitRepository.loadAllEntries();
+    final standaloneReminders = await _standaloneReminderRepository
+        .loadStandaloneReminders();
 
     return PlannerBackup.create(
       exportedAt: _now(),
@@ -48,6 +54,7 @@ class PlannerBackupExportService {
         recurringExceptions: recurringExceptions,
         habits: habits,
         habitEntries: habitEntries,
+        standaloneReminders: standaloneReminders,
       ),
     );
   }

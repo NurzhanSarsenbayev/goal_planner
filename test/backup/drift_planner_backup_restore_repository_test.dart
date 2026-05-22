@@ -7,6 +7,8 @@ import 'package:goal_planner/data/repositories/drift_milestone_repository.dart';
 import 'package:goal_planner/data/repositories/drift_planner_backup_restore_repository.dart';
 import 'package:goal_planner/data/repositories/drift_recurring_task_repository.dart';
 import 'package:goal_planner/data/repositories/drift_task_repository.dart';
+import 'package:goal_planner/data/repositories/drift_standalone_reminder_repository.dart';
+import 'package:goal_planner/features/reminders/domain/standalone_reminder.dart';
 import 'package:goal_planner/features/backup/domain/planner_backup.dart';
 import 'package:goal_planner/features/habits/domain/habit.dart';
 import 'package:goal_planner/features/habits/domain/habit_entry.dart';
@@ -54,6 +56,9 @@ void main() {
       final habitEntries = await DriftHabitRepository(
         database,
       ).loadAllEntries();
+      final standaloneReminders = await DriftStandaloneReminderRepository(
+        database,
+      ).loadStandaloneReminders();
 
       expect(goals.map((goal) => goal.id), ['new-goal']);
       expect(milestones.map((milestone) => milestone.id), ['new-milestone']);
@@ -71,6 +76,16 @@ void main() {
       expect(tasks.single.recurringRuleId, 'new-rule');
       expect(tasks.single.scheduledTimeMinutes, 570);
       expect(habitEntries.single.habitId, 'new-habit');
+
+      expect(standaloneReminders.map((reminder) => reminder.id), [
+        'new-standalone-reminder',
+      ]);
+      expect(
+        standaloneReminders.single.scheduleType,
+        StandaloneReminderScheduleType.once,
+      );
+      expect(standaloneReminders.single.scheduledDate, DateTime(2026, 5, 14));
+      expect(standaloneReminders.single.timeMinutes, 1110);
     });
 
     test('can restore empty backup data and clear database', () async {
@@ -96,6 +111,12 @@ void main() {
       );
       expect(await DriftHabitRepository(database).loadHabits(), isEmpty);
       expect(await DriftHabitRepository(database).loadAllEntries(), isEmpty);
+      expect(
+        await DriftStandaloneReminderRepository(
+          database,
+        ).loadStandaloneReminders(),
+        isEmpty,
+      );
     });
 
     test('rolls back when restore insert fails', () async {
@@ -225,6 +246,18 @@ PlannerBackupData _backupData({required String idPrefix}) {
         status: HabitEntryStatus.done,
         completedCount: 3,
         note: null,
+        createdAt: now,
+        updatedAt: now,
+      ),
+    ],
+    standaloneReminders: [
+      StandaloneReminder(
+        id: '$idPrefix-standalone-reminder',
+        title: '$idPrefix standalone reminder',
+        scheduleType: StandaloneReminderScheduleType.once,
+        scheduledDate: scheduledDate,
+        timeMinutes: 18 * 60 + 30,
+        isEnabled: true,
         createdAt: now,
         updatedAt: now,
       ),
