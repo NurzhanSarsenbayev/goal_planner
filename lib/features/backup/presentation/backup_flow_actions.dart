@@ -9,6 +9,9 @@ import '../../../models/planner_task.dart';
 import '../../../state/planner_store.dart';
 import '../../habits/application/habit_store.dart';
 import '../../reminders/application/task_reminder_lifecycle_service.dart';
+import '../../reminders/application/standalone_reminder_resync_service.dart';
+import '../../reminders/application/standalone_reminder_store.dart';
+import '../../reminders/domain/standalone_reminder.dart';
 import '../application/planner_backup_file_export_service.dart';
 import '../application/planner_backup_file_storage.dart';
 import '../application/planner_backup_restore_service.dart';
@@ -21,6 +24,8 @@ class BackupFlowActions {
     required PlannerStore store,
     required HabitStore habitStore,
     required TaskReminderLifecycleService taskReminderLifecycleService,
+    required StandaloneReminderStore standaloneReminderStore,
+    required StandaloneReminderResyncService standaloneReminderResyncService,
     required bool Function() isMounted,
     required ValueChanged<DateTime?> onBackupStatusChanged,
   }) : _backupFileExportService = backupFileExportService,
@@ -29,6 +34,8 @@ class BackupFlowActions {
        _store = store,
        _habitStore = habitStore,
        _taskReminderLifecycleService = taskReminderLifecycleService,
+       _standaloneReminderStore = standaloneReminderStore,
+       _standaloneReminderResyncService = standaloneReminderResyncService,
        _isMounted = isMounted,
        _onBackupStatusChanged = onBackupStatusChanged;
 
@@ -38,6 +45,8 @@ class BackupFlowActions {
   final PlannerStore _store;
   final HabitStore _habitStore;
   final TaskReminderLifecycleService _taskReminderLifecycleService;
+  final StandaloneReminderStore _standaloneReminderStore;
+  final StandaloneReminderResyncService _standaloneReminderResyncService;
   final bool Function() _isMounted;
   final ValueChanged<DateTime?> _onBackupStatusChanged;
 
@@ -250,12 +259,16 @@ class BackupFlowActions {
 
   Future<void> _restoreBackupFile(BuildContext context, File file) async {
     final previousTasks = List<PlannerTask>.of(_store.tasks);
+    final previousStandaloneReminders = await _standaloneReminderResyncService
+        .loadStandaloneReminders();
 
     final result = await _backupRestoreService.restoreFromFile(file);
 
     await _store.reload();
     await _habitStore.reload();
+    await _standaloneReminderStore.reload();
     await _resyncTaskRemindersAfterRestore(previousTasks);
+    await _resyncStandaloneRemindersAfterRestore(previousStandaloneReminders);
 
     if (!_isMounted() || !context.mounted) {
       return;
@@ -280,6 +293,20 @@ class BackupFlowActions {
       );
     } catch (_) {
       // Reminder restore sync must not block backup restore.
+    }
+  }
+
+  Future<void> _resyncStandaloneRemindersAfterRestore(
+    List<StandaloneReminder> previousReminders,
+  ) async {
+    try {
+      await _standaloneReminderResyncService
+          .syncAfterStandaloneReminderSetReplacement(
+            previousReminders: previousReminders,
+            currentReminders: _standaloneReminderStore.reminders,
+          );
+    } catch (_) {
+      // Standalone reminder restore sync must not block backup restore.
     }
   }
 

@@ -29,6 +29,7 @@ import '../../features/reminders/application/task_reminder_lifecycle_service.dar
 import '../../features/reminders/application/standalone_reminder_application_service.dart';
 import '../../features/reminders/application/standalone_reminder_scheduler.dart';
 import '../../features/reminders/application/standalone_reminder_store.dart';
+import '../../features/reminders/application/standalone_reminder_resync_service.dart';
 import '../../state/planner_store.dart';
 
 class AppDependencies {
@@ -42,6 +43,7 @@ class AppDependencies {
     required this.taskReminderLifecycleService,
     required this.standaloneReminderApplicationService,
     required this.standaloneReminderStore,
+    required this.standaloneReminderResyncService,
   }) : _database = database;
 
   factory AppDependencies.create() {
@@ -118,6 +120,11 @@ class AppDependencies {
       notifications: localNotificationService,
     );
 
+    final standaloneReminderResyncService = StandaloneReminderResyncService(
+      repository: standaloneReminderRepository,
+      scheduler: standaloneReminderScheduler,
+    );
+
     final standaloneReminderApplicationService =
         StandaloneReminderApplicationService(
           repository: standaloneReminderRepository,
@@ -169,6 +176,7 @@ class AppDependencies {
       standaloneReminderApplicationService:
           standaloneReminderApplicationService,
       standaloneReminderStore: standaloneReminderStore,
+      standaloneReminderResyncService: standaloneReminderResyncService,
     );
   }
 
@@ -182,6 +190,7 @@ class AppDependencies {
   final StandaloneReminderApplicationService
   standaloneReminderApplicationService;
   final StandaloneReminderStore standaloneReminderStore;
+  final StandaloneReminderResyncService standaloneReminderResyncService;
 
   Future<void> dispose() async {
     store.dispose();

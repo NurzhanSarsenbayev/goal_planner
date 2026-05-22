@@ -9,6 +9,7 @@ import '../features/backup/presentation/backup_flow_actions.dart';
 import '../features/goals/presentation/goal_dialog_actions.dart';
 import '../features/tasks/presentation/task_dialog_actions.dart';
 import '../features/reminders/application/task_reminder_lifecycle_service.dart';
+import '../features/reminders/application/standalone_reminder_resync_service.dart';
 import 'composition/app_dependencies.dart';
 import 'navigation/app_navigation_actions.dart';
 import 'navigation/main_tab_builder.dart';
@@ -42,6 +43,7 @@ class _AppShellState extends State<AppShell> {
   late final BackupFlowActions _backupFlowActions;
   DateTime? _lastBackupAt;
   late final TaskReminderLifecycleService _taskReminderLifecycleService;
+  late final StandaloneReminderResyncService _standaloneReminderResyncService;
 
   int _selectedIndex = 0;
 
@@ -64,6 +66,12 @@ class _AppShellState extends State<AppShell> {
       );
     } catch (_) {
       // Reminder sync must not block app startup.
+    }
+
+    try {
+      await _standaloneReminderResyncService.syncStandaloneReminders();
+    } catch (_) {
+      // Standalone reminder sync must not block app startup.
     }
   }
 
@@ -119,6 +127,8 @@ class _AppShellState extends State<AppShell> {
     _store = _dependencies.store;
     _habitStore = _dependencies.habitStore;
     _taskReminderLifecycleService = _dependencies.taskReminderLifecycleService;
+    _standaloneReminderResyncService =
+        _dependencies.standaloneReminderResyncService;
     _backupFlowActions = BackupFlowActions(
       backupFileExportService: _dependencies.backupFileExportService,
       backupFileStorage: _dependencies.backupFileStorage,
@@ -128,6 +138,8 @@ class _AppShellState extends State<AppShell> {
       taskReminderLifecycleService: _taskReminderLifecycleService,
       isMounted: () => mounted,
       onBackupStatusChanged: _updateLastBackupAt,
+      standaloneReminderStore: _dependencies.standaloneReminderStore,
+      standaloneReminderResyncService: _standaloneReminderResyncService,
     );
 
     unawaited(_backupFlowActions.loadBackupStatus());
