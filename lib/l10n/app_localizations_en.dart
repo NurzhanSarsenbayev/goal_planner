@@ -749,6 +749,40 @@ class AppLocalizationsEn extends AppLocalizations {
       'Manage repeated weekday and monthly tasks.';
 
   @override
+  String get moreStandaloneRemindersTitle => 'Reminders';
+
+  @override
+  String get moreStandaloneRemindersSubtitle =>
+      'Manage one-time and daily time reminders.';
+
+  @override
+  String get standaloneRemindersScreenTitle => 'Reminders';
+
+  @override
+  String get standaloneRemindersEmptyDescription => 'No time reminders yet.';
+
+  @override
+  String standaloneReminderDailySubtitle(String time) {
+    return 'Daily at $time';
+  }
+
+  @override
+  String standaloneReminderOnceSubtitle(String date, String time) {
+    return '$date at $time';
+  }
+
+  @override
+  String standaloneReminderOnceMissingDateSubtitle(String time) {
+    return 'One-time reminder at $time';
+  }
+
+  @override
+  String get standaloneReminderEnabledStatus => 'On';
+
+  @override
+  String get standaloneReminderDisabledStatus => 'Off';
+
+  @override
   String get goalsEmptyDescription =>
       'No goals yet. Create your first long-term goal.';
 

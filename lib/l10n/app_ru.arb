@@ -598,6 +598,40 @@
     "moreRecurringTasksTitle": "Повторяющиеся задачи",
     "moreRecurringTasksSubtitle": "Управление задачами по дням недели и месяцам.",
 
+    "moreStandaloneRemindersTitle": "Напоминания",
+    "moreStandaloneRemindersSubtitle": "Разовые и ежедневные напоминания по времени.",
+    "standaloneRemindersScreenTitle": "Напоминания",
+    "standaloneRemindersEmptyDescription": "Напоминаний по времени пока нет.",
+    "standaloneReminderDailySubtitle": "Каждый день в {time}",
+    "@standaloneReminderDailySubtitle": {
+      "placeholders": {
+        "time": {
+          "type": "String"
+        }
+      }
+    },
+    "standaloneReminderOnceSubtitle": "{date} в {time}",
+    "@standaloneReminderOnceSubtitle": {
+      "placeholders": {
+        "date": {
+          "type": "String"
+        },
+        "time": {
+          "type": "String"
+        }
+      }
+    },
+    "standaloneReminderOnceMissingDateSubtitle": "Разовое напоминание в {time}",
+    "@standaloneReminderOnceMissingDateSubtitle": {
+      "placeholders": {
+        "time": {
+          "type": "String"
+        }
+      }
+    },
+    "standaloneReminderEnabledStatus": "Вкл",
+    "standaloneReminderDisabledStatus": "Выкл",
+
     "goalsEmptyDescription": "Целей пока нет. Создайте первую долгосрочную цель.",
     "goalDialogAddTitle": "Добавить цель",
     "goalDialogEditTitle": "Изменить цель",

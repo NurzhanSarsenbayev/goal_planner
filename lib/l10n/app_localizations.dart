@@ -1406,6 +1406,60 @@ abstract class AppLocalizations {
   /// **'Manage repeated weekday and monthly tasks.'**
   String get moreRecurringTasksSubtitle;
 
+  /// No description provided for @moreStandaloneRemindersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get moreStandaloneRemindersTitle;
+
+  /// No description provided for @moreStandaloneRemindersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage one-time and daily time reminders.'**
+  String get moreStandaloneRemindersSubtitle;
+
+  /// No description provided for @standaloneRemindersScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get standaloneRemindersScreenTitle;
+
+  /// No description provided for @standaloneRemindersEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No time reminders yet.'**
+  String get standaloneRemindersEmptyDescription;
+
+  /// No description provided for @standaloneReminderDailySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily at {time}'**
+  String standaloneReminderDailySubtitle(String time);
+
+  /// No description provided for @standaloneReminderOnceSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{date} at {time}'**
+  String standaloneReminderOnceSubtitle(String date, String time);
+
+  /// No description provided for @standaloneReminderOnceMissingDateSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time reminder at {time}'**
+  String standaloneReminderOnceMissingDateSubtitle(String time);
+
+  /// No description provided for @standaloneReminderEnabledStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get standaloneReminderEnabledStatus;
+
+  /// No description provided for @standaloneReminderDisabledStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get standaloneReminderDisabledStatus;
+
   /// No description provided for @goalsEmptyDescription.
   ///
   /// In en, this message translates to:

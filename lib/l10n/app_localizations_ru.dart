@@ -751,6 +751,41 @@ class AppLocalizationsRu extends AppLocalizations {
       'Управление задачами по дням недели и месяцам.';
 
   @override
+  String get moreStandaloneRemindersTitle => 'Напоминания';
+
+  @override
+  String get moreStandaloneRemindersSubtitle =>
+      'Разовые и ежедневные напоминания по времени.';
+
+  @override
+  String get standaloneRemindersScreenTitle => 'Напоминания';
+
+  @override
+  String get standaloneRemindersEmptyDescription =>
+      'Напоминаний по времени пока нет.';
+
+  @override
+  String standaloneReminderDailySubtitle(String time) {
+    return 'Каждый день в $time';
+  }
+
+  @override
+  String standaloneReminderOnceSubtitle(String date, String time) {
+    return '$date в $time';
+  }
+
+  @override
+  String standaloneReminderOnceMissingDateSubtitle(String time) {
+    return 'Разовое напоминание в $time';
+  }
+
+  @override
+  String get standaloneReminderEnabledStatus => 'Вкл';
+
+  @override
+  String get standaloneReminderDisabledStatus => 'Выкл';
+
+  @override
   String get goalsEmptyDescription =>
       'Целей пока нет. Создайте первую долгосрочную цель.';
 

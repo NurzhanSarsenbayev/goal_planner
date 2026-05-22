@@ -598,6 +598,40 @@
     "moreRecurringTasksTitle": "Recurring tasks",
     "moreRecurringTasksSubtitle": "Manage repeated weekday and monthly tasks.",
 
+    "moreStandaloneRemindersTitle": "Reminders",
+    "moreStandaloneRemindersSubtitle": "Manage one-time and daily time reminders.",
+    "standaloneRemindersScreenTitle": "Reminders",
+    "standaloneRemindersEmptyDescription": "No time reminders yet.",
+    "standaloneReminderDailySubtitle": "Daily at {time}",
+    "@standaloneReminderDailySubtitle": {
+      "placeholders": {
+        "time": {
+          "type": "String"
+        }
+      }
+    },
+    "standaloneReminderOnceSubtitle": "{date} at {time}",
+    "@standaloneReminderOnceSubtitle": {
+      "placeholders": {
+        "date": {
+          "type": "String"
+        },
+        "time": {
+          "type": "String"
+        }
+      }
+    },
+    "standaloneReminderOnceMissingDateSubtitle": "One-time reminder at {time}",
+    "@standaloneReminderOnceMissingDateSubtitle": {
+      "placeholders": {
+        "time": {
+          "type": "String"
+        }
+      }
+    },
+    "standaloneReminderEnabledStatus": "On",
+    "standaloneReminderDisabledStatus": "Off",
+
     "goalsEmptyDescription": "No goals yet. Create your first long-term goal.",
     "goalDialogAddTitle": "Add goal",
     "goalDialogEditTitle": "Edit goal",

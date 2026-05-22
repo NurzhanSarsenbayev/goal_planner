@@ -5,10 +5,12 @@ import '../../features/goals/presentation/screens/goal_details_screen.dart';
 import '../../features/tasks/presentation/screens/all_tasks_screen.dart';
 import '../../features/recurring/presentation/screens/recurring_tasks_screen.dart';
 import '../../features/reports/presentation/screens/reports_screen.dart';
+import '../../features/reminders/presentation/screens/standalone_reminders_screen.dart';
 import '../../state/planner_store.dart';
 import '../../features/recurring/presentation/recurring_rule_dialog_actions.dart';
 import '../../features/tasks/presentation/task_dialog_actions.dart';
 import '../../features/reports/application/habit_report_loader.dart';
+import '../../features/reminders/application/standalone_reminder_store.dart';
 
 class AppNavigationActions {
   const AppNavigationActions({
@@ -16,13 +18,16 @@ class AppNavigationActions {
     required TaskDialogActions taskDialogActions,
     required RecurringRuleDialogActions recurringRuleDialogActions,
     required HabitReportLoader habitReportLoader,
+    required StandaloneReminderStore standaloneReminderStore,
   }) : _store = store,
        _taskDialogActions = taskDialogActions,
        _habitReportLoader = habitReportLoader,
+       _standaloneReminderStore = standaloneReminderStore,
        _recurringRuleDialogActions = recurringRuleDialogActions;
 
   final PlannerStore _store;
   final HabitReportLoader _habitReportLoader;
+  final StandaloneReminderStore _standaloneReminderStore;
   final TaskDialogActions _taskDialogActions;
   final RecurringRuleDialogActions _recurringRuleDialogActions;
 
@@ -105,6 +110,18 @@ class AppNavigationActions {
                 },
               );
             },
+          );
+        },
+      ),
+    );
+  }
+
+  void openStandaloneReminders(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return StandaloneRemindersScreen(
+            reminderStore: _standaloneReminderStore,
           );
         },
       ),

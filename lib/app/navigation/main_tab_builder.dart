@@ -30,6 +30,7 @@ class MainTabBuilder {
     required ValueChanged<AppLanguage> onLanguageChanged,
     required VoidCallback onOpenHabits,
     required Future<void> Function() onShowTestNotification,
+    required VoidCallback onOpenStandaloneReminders,
   }) : _store = store,
        _habitStore = habitStore,
        _onCreateBackup = onCreateBackup,
@@ -44,6 +45,7 @@ class MainTabBuilder {
        _navigationActions = navigationActions,
        _selectedLanguage = selectedLanguage,
        _onShowTestNotification = onShowTestNotification,
+       _onOpenStandaloneReminders = onOpenStandaloneReminders,
        _onLanguageChanged = onLanguageChanged;
 
   final PlannerStore _store;
@@ -61,6 +63,7 @@ class MainTabBuilder {
   final Future<void> Function() _onShowTestNotification;
   final ValueChanged<AppLanguage> _onLanguageChanged;
   final VoidCallback _onOpenHabits;
+  final VoidCallback _onOpenStandaloneReminders;
 
   List<Widget> buildScreens(BuildContext context) {
     return [
@@ -147,6 +150,7 @@ class MainTabBuilder {
           _navigationActions.openRecurringTasks(context);
         },
         onShowTestNotification: _onShowTestNotification,
+        onOpenStandaloneReminders: _onOpenStandaloneReminders,
       ),
     ];
   }

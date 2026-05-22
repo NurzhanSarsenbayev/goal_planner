@@ -185,6 +185,7 @@ class AppDependencies {
   Future<void> dispose() async {
     store.dispose();
     habitStore.dispose();
+    standaloneReminderStore.dispose();
     await _database.close();
   }
 }

@@ -143,6 +143,7 @@ class _AppShellState extends State<AppShell> {
       taskDialogActions: _taskDialogActions,
       recurringRuleDialogActions: _recurringRuleDialogActions,
       habitReportLoader: _habitReportLoader,
+      standaloneReminderStore: _dependencies.standaloneReminderStore,
     );
 
     _store.addListener(_onStoreChanged);
@@ -197,6 +198,9 @@ class _AppShellState extends State<AppShell> {
       lastBackupAt: _lastBackupAt,
       onOpenHabits: () {
         _onDestinationSelected(3);
+      },
+      onOpenStandaloneReminders: () {
+        _navigationActions.openStandaloneReminders(context);
       },
       onShowTestNotification: _showTestNotification,
     );
