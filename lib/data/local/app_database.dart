@@ -223,17 +223,28 @@ class AppDatabase extends _$AppDatabase {
         }
 
         if (from < 7) {
-          await migrator.addColumn(
-            standaloneReminders,
-            standaloneReminders.scheduleType,
-          );
-          await migrator.addColumn(
-            standaloneReminders,
-            standaloneReminders.scheduledDate,
-          );
+          if (!await _columnExists('standalone_reminders', 'schedule_type')) {
+            await migrator.addColumn(
+              standaloneReminders,
+              standaloneReminders.scheduleType,
+            );
+          }
+
+          if (!await _columnExists('standalone_reminders', 'scheduled_date')) {
+            await migrator.addColumn(
+              standaloneReminders,
+              standaloneReminders.scheduledDate,
+            );
+          }
         }
       },
     );
+  }
+
+  Future<bool> _columnExists(String tableName, String columnName) async {
+    final rows = await customSelect('PRAGMA table_info($tableName)').get();
+
+    return rows.any((row) => row.data['name'] == columnName);
   }
 }
 
