@@ -53,6 +53,60 @@ void main() {
       expect(changed.updatedAt, nextUpdatedAt);
     });
 
+    test('daily reminder is never expired', () {
+      final now = DateTime(2026, 5, 21, 12);
+
+      final reminder = StandaloneReminder(
+        id: 'daily',
+        title: 'Plan your day',
+        scheduleType: StandaloneReminderScheduleType.daily,
+        scheduledDate: null,
+        timeMinutes: 9 * 60,
+        isEnabled: true,
+        createdAt: now,
+        updatedAt: now,
+      );
+
+      expect(isStandaloneReminderExpired(reminder, now), isFalse);
+      expect(standaloneReminderDateTime(reminder), isNull);
+    });
+
+    test('detects expired one-time reminder', () {
+      final now = DateTime(2026, 5, 21, 12);
+
+      final reminder = StandaloneReminder(
+        id: 'once',
+        title: 'Call vet',
+        scheduleType: StandaloneReminderScheduleType.once,
+        scheduledDate: DateTime(2026, 5, 21),
+        timeMinutes: 11 * 60,
+        isEnabled: true,
+        createdAt: now,
+        updatedAt: now,
+      );
+
+      expect(standaloneReminderDateTime(reminder), DateTime(2026, 5, 21, 11));
+      expect(isStandaloneReminderExpired(reminder, now), isTrue);
+    });
+
+    test('keeps future one-time reminder active', () {
+      final now = DateTime(2026, 5, 21, 12);
+
+      final reminder = StandaloneReminder(
+        id: 'once',
+        title: 'Call vet',
+        scheduleType: StandaloneReminderScheduleType.once,
+        scheduledDate: DateTime(2026, 5, 21),
+        timeMinutes: 13 * 60,
+        isEnabled: true,
+        createdAt: now,
+        updatedAt: now,
+      );
+
+      expect(standaloneReminderDateTime(reminder), DateTime(2026, 5, 21, 13));
+      expect(isStandaloneReminderExpired(reminder, now), isFalse);
+    });
+
     test('allows midnight and end of day time values', () {
       final now = DateTime(2026, 5, 21);
 

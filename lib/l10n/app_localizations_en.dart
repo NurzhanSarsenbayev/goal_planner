@@ -783,6 +783,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get standaloneReminderDisabledStatus => 'Off';
 
   @override
+  String get standaloneReminderExpiredStatus => 'Expired';
+
+  @override
+  String standaloneReminderExpiredSubtitle(String date, String time) {
+    return 'Expired · $date at $time';
+  }
+
+  @override
   String get standaloneReminderAddButton => 'Add reminder';
 
   @override

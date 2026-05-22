@@ -632,6 +632,19 @@
     "standaloneReminderEnabledStatus": "On",
     "standaloneReminderDisabledStatus": "Off",
 
+    "standaloneReminderExpiredStatus": "Expired",
+    "standaloneReminderExpiredSubtitle": "Expired · {date} at {time}",
+    "@standaloneReminderExpiredSubtitle": {
+      "placeholders": {
+        "date": {
+          "type": "String"
+        },
+        "time": {
+          "type": "String"
+        }
+      }
+    },
+
     "standaloneReminderAddButton": "Add reminder",
     "standaloneReminderDialogAddTitle": "Add reminder",
     "standaloneReminderDialogEditTitle": "Edit reminder",

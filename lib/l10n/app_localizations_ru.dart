@@ -786,6 +786,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String get standaloneReminderDisabledStatus => 'Выкл';
 
   @override
+  String get standaloneReminderExpiredStatus => 'Просрочено';
+
+  @override
+  String standaloneReminderExpiredSubtitle(String date, String time) {
+    return 'Просрочено · $date в $time';
+  }
+
+  @override
   String get standaloneReminderAddButton => 'Добавить';
 
   @override

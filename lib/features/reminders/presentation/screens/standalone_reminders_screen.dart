@@ -213,7 +213,11 @@ class _StandaloneReminderCard extends StatelessWidget {
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
-  String _subtitle(BuildContext context, AppLocalizations l10n) {
+  String _subtitle(
+    BuildContext context,
+    AppLocalizations l10n, {
+    required bool isExpired,
+  }) {
     final time = formatPlannerTime(reminder.timeMinutes);
 
     switch (reminder.scheduleType) {
@@ -227,6 +231,10 @@ class _StandaloneReminderCard extends StatelessWidget {
 
         final date = DateFormat.yMMMd(locale).format(scheduledDate.toLocal());
 
+        if (isExpired) {
+          return l10n.standaloneReminderExpiredSubtitle(date, time);
+        }
+
         return l10n.standaloneReminderOnceSubtitle(date, time);
 
       case StandaloneReminderScheduleType.daily:
@@ -237,6 +245,7 @@ class _StandaloneReminderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final isExpired = isStandaloneReminderExpired(reminder, DateTime.now());
 
     return Card(
       child: ListTile(
@@ -246,11 +255,20 @@ class _StandaloneReminderCard extends StatelessWidget {
               : Icons.event_outlined,
         ),
         title: Text(reminder.title),
-        subtitle: Text(_subtitle(context, l10n)),
+        subtitle: Text(_subtitle(context, l10n, isExpired: isExpired)),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Switch(value: reminder.isEnabled, onChanged: onEnabledChanged),
+            if (isExpired)
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Text(
+                  l10n.standaloneReminderExpiredStatus,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+              )
+            else
+              Switch(value: reminder.isEnabled, onChanged: onEnabledChanged),
             PopupMenuButton<_StandaloneReminderAction>(
               onSelected: (action) {
                 switch (action) {

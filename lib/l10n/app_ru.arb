@@ -632,6 +632,19 @@
     "standaloneReminderEnabledStatus": "Вкл",
     "standaloneReminderDisabledStatus": "Выкл",
 
+    "standaloneReminderExpiredStatus": "Просрочено",
+    "standaloneReminderExpiredSubtitle": "Просрочено · {date} в {time}",
+    "@standaloneReminderExpiredSubtitle": {
+      "placeholders": {
+        "date": {
+          "type": "String"
+        },
+        "time": {
+          "type": "String"
+        }
+      }
+    },
+
     "standaloneReminderAddButton": "Добавить",
     "standaloneReminderDialogAddTitle": "Добавить напоминание",
     "standaloneReminderDialogEditTitle": "Редактировать напоминание",

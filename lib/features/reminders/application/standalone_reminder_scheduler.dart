@@ -16,7 +16,7 @@ class StandaloneReminderScheduler {
 
     await _notifications.cancelReminder(notificationId);
 
-    if (!reminder.isEnabled) {
+    if (!reminder.isEnabled || isStandaloneReminderExpired(reminder, _now())) {
       return;
     }
 
@@ -48,13 +48,7 @@ class StandaloneReminderScheduler {
   }
 
   DateTime _oneTimeReminderDateTime(StandaloneReminder reminder) {
-    final scheduledDate = reminder.scheduledDate!;
-
-    return DateTime(
-      scheduledDate.year,
-      scheduledDate.month,
-      scheduledDate.day,
-    ).add(Duration(minutes: reminder.timeMinutes));
+    return standaloneReminderDateTime(reminder)!;
   }
 
   DateTime _nextDailyReminderDateTime(int timeMinutes) {

@@ -61,3 +61,38 @@ class StandaloneReminder {
     );
   }
 }
+
+DateTime? standaloneReminderDateTime(StandaloneReminder reminder) {
+  if (reminder.scheduleType == StandaloneReminderScheduleType.daily) {
+    return null;
+  }
+
+  final scheduledDate = reminder.scheduledDate;
+
+  if (scheduledDate == null) {
+    return null;
+  }
+
+  return DateTime(
+    scheduledDate.year,
+    scheduledDate.month,
+    scheduledDate.day,
+  ).add(Duration(minutes: reminder.timeMinutes));
+}
+
+bool isStandaloneReminderExpired(
+  StandaloneReminder reminder,
+  DateTime currentTime,
+) {
+  if (reminder.scheduleType == StandaloneReminderScheduleType.daily) {
+    return false;
+  }
+
+  final scheduledAt = standaloneReminderDateTime(reminder);
+
+  if (scheduledAt == null) {
+    return false;
+  }
+
+  return !scheduledAt.isAfter(currentTime);
+}

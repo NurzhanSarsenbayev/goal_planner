@@ -33,6 +33,28 @@ void main() {
       );
     });
 
+    test('cancels expired one-time reminder without scheduling it', () async {
+      final notifications = FakeReminderNotificationClient();
+      final scheduler = StandaloneReminderScheduler(
+        notifications: notifications,
+        now: () => DateTime(2026, 5, 22, 19),
+      );
+
+      await scheduler.syncStandaloneReminder(
+        _reminder(
+          scheduleType: StandaloneReminderScheduleType.once,
+          scheduledDate: DateTime(2026, 5, 22),
+          timeMinutes: 18 * 60 + 30,
+          isEnabled: true,
+        ),
+      );
+
+      expect(notifications.canceledIds, [
+        standaloneReminderNotificationId('reminder_1'),
+      ]);
+      expect(notifications.scheduledReminders, isEmpty);
+    });
+
     test(
       'schedules enabled reminder tomorrow when time already passed',
       () async {

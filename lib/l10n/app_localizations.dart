@@ -1460,6 +1460,18 @@ abstract class AppLocalizations {
   /// **'Off'**
   String get standaloneReminderDisabledStatus;
 
+  /// No description provided for @standaloneReminderExpiredStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get standaloneReminderExpiredStatus;
+
+  /// No description provided for @standaloneReminderExpiredSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired · {date} at {time}'**
+  String standaloneReminderExpiredSubtitle(String date, String time);
+
   /// No description provided for @standaloneReminderAddButton.
   ///
   /// In en, this message translates to:
