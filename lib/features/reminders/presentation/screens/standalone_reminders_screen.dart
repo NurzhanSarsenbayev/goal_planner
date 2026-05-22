@@ -99,16 +99,30 @@ class _StandaloneRemindersBody extends StatelessWidget {
       itemBuilder: (context, index) {
         final reminder = reminderStore.reminders[index];
 
-        return _StandaloneReminderCard(reminder: reminder);
+        return _StandaloneReminderCard(
+          reminder: reminder,
+          onEnabledChanged: (isEnabled) {
+            unawaited(
+              reminderStore.setStandaloneReminderEnabled(
+                reminderId: reminder.id,
+                isEnabled: isEnabled,
+              ),
+            );
+          },
+        );
       },
     );
   }
 }
 
 class _StandaloneReminderCard extends StatelessWidget {
-  const _StandaloneReminderCard({required this.reminder});
+  const _StandaloneReminderCard({
+    required this.reminder,
+    required this.onEnabledChanged,
+  });
 
   final StandaloneReminder reminder;
+  final ValueChanged<bool> onEnabledChanged;
 
   String _subtitle(BuildContext context, AppLocalizations l10n) {
     final time = formatPlannerTime(reminder.timeMinutes);
@@ -144,10 +158,9 @@ class _StandaloneReminderCard extends StatelessWidget {
         ),
         title: Text(reminder.title),
         subtitle: Text(_subtitle(context, l10n)),
-        trailing: Text(
-          reminder.isEnabled
-              ? l10n.standaloneReminderEnabledStatus
-              : l10n.standaloneReminderDisabledStatus,
+        trailing: Switch(
+          value: reminder.isEnabled,
+          onChanged: onEnabledChanged,
         ),
       ),
     );
