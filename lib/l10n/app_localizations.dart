@@ -1460,6 +1460,72 @@ abstract class AppLocalizations {
   /// **'Off'**
   String get standaloneReminderDisabledStatus;
 
+  /// No description provided for @standaloneReminderAddButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add reminder'**
+  String get standaloneReminderAddButton;
+
+  /// No description provided for @standaloneReminderDialogAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add reminder'**
+  String get standaloneReminderDialogAddTitle;
+
+  /// No description provided for @standaloneReminderTitleFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get standaloneReminderTitleFieldLabel;
+
+  /// No description provided for @standaloneReminderTitleFieldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Plan your day'**
+  String get standaloneReminderTitleFieldHint;
+
+  /// No description provided for @standaloneReminderScheduleTypeFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat'**
+  String get standaloneReminderScheduleTypeFieldLabel;
+
+  /// No description provided for @standaloneReminderScheduleDailyOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get standaloneReminderScheduleDailyOption;
+
+  /// No description provided for @standaloneReminderScheduleOnceOption.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time'**
+  String get standaloneReminderScheduleOnceOption;
+
+  /// No description provided for @standaloneReminderDateButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Date: {date}'**
+  String standaloneReminderDateButton(String date);
+
+  /// No description provided for @standaloneReminderTimeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Time: {time}'**
+  String standaloneReminderTimeButton(String time);
+
+  /// No description provided for @standaloneReminderTitleRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter reminder title.'**
+  String get standaloneReminderTitleRequiredError;
+
+  /// No description provided for @standaloneReminderPastDateTimeError.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a future date and time.'**
+  String get standaloneReminderPastDateTimeError;
+
   /// No description provided for @goalsEmptyDescription.
   ///
   /// In en, this message translates to:

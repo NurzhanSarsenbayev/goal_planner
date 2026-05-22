@@ -783,6 +783,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get standaloneReminderDisabledStatus => 'Off';
 
   @override
+  String get standaloneReminderAddButton => 'Add reminder';
+
+  @override
+  String get standaloneReminderDialogAddTitle => 'Add reminder';
+
+  @override
+  String get standaloneReminderTitleFieldLabel => 'Title';
+
+  @override
+  String get standaloneReminderTitleFieldHint => 'e.g. Plan your day';
+
+  @override
+  String get standaloneReminderScheduleTypeFieldLabel => 'Repeat';
+
+  @override
+  String get standaloneReminderScheduleDailyOption => 'Daily';
+
+  @override
+  String get standaloneReminderScheduleOnceOption => 'One-time';
+
+  @override
+  String standaloneReminderDateButton(String date) {
+    return 'Date: $date';
+  }
+
+  @override
+  String standaloneReminderTimeButton(String time) {
+    return 'Time: $time';
+  }
+
+  @override
+  String get standaloneReminderTitleRequiredError => 'Enter reminder title.';
+
+  @override
+  String get standaloneReminderPastDateTimeError =>
+      'Choose a future date and time.';
+
+  @override
   String get goalsEmptyDescription =>
       'No goals yet. Create your first long-term goal.';
 

@@ -632,6 +632,32 @@
     "standaloneReminderEnabledStatus": "On",
     "standaloneReminderDisabledStatus": "Off",
 
+    "standaloneReminderAddButton": "Add reminder",
+    "standaloneReminderDialogAddTitle": "Add reminder",
+    "standaloneReminderTitleFieldLabel": "Title",
+    "standaloneReminderTitleFieldHint": "e.g. Plan your day",
+    "standaloneReminderScheduleTypeFieldLabel": "Repeat",
+    "standaloneReminderScheduleDailyOption": "Daily",
+    "standaloneReminderScheduleOnceOption": "One-time",
+    "standaloneReminderDateButton": "Date: {date}",
+    "@standaloneReminderDateButton": {
+      "placeholders": {
+        "date": {
+          "type": "String"
+        }
+      }
+    },
+    "standaloneReminderTimeButton": "Time: {time}",
+    "@standaloneReminderTimeButton": {
+      "placeholders": {
+        "time": {
+          "type": "String"
+        }
+      }
+    },
+    "standaloneReminderTitleRequiredError": "Enter reminder title.",
+    "standaloneReminderPastDateTimeError": "Choose a future date and time.",
+
     "goalsEmptyDescription": "No goals yet. Create your first long-term goal.",
     "goalDialogAddTitle": "Add goal",
     "goalDialogEditTitle": "Edit goal",

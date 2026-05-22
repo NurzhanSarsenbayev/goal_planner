@@ -632,6 +632,32 @@
     "standaloneReminderEnabledStatus": "Вкл",
     "standaloneReminderDisabledStatus": "Выкл",
 
+    "standaloneReminderAddButton": "Добавить",
+    "standaloneReminderDialogAddTitle": "Добавить напоминание",
+    "standaloneReminderTitleFieldLabel": "Название",
+    "standaloneReminderTitleFieldHint": "Например: Спланировать день",
+    "standaloneReminderScheduleTypeFieldLabel": "Повтор",
+    "standaloneReminderScheduleDailyOption": "Каждый день",
+    "standaloneReminderScheduleOnceOption": "Один раз",
+    "standaloneReminderDateButton": "Дата: {date}",
+    "@standaloneReminderDateButton": {
+      "placeholders": {
+        "date": {
+          "type": "String"
+        }
+      }
+    },
+    "standaloneReminderTimeButton": "Время: {time}",
+    "@standaloneReminderTimeButton": {
+      "placeholders": {
+        "time": {
+          "type": "String"
+        }
+      }
+    },
+    "standaloneReminderTitleRequiredError": "Введите название напоминания.",
+    "standaloneReminderPastDateTimeError": "Выберите будущие дату и время.",
+
     "goalsEmptyDescription": "Целей пока нет. Создайте первую долгосрочную цель.",
     "goalDialogAddTitle": "Добавить цель",
     "goalDialogEditTitle": "Изменить цель",

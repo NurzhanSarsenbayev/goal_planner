@@ -786,6 +786,45 @@ class AppLocalizationsRu extends AppLocalizations {
   String get standaloneReminderDisabledStatus => 'Выкл';
 
   @override
+  String get standaloneReminderAddButton => 'Добавить';
+
+  @override
+  String get standaloneReminderDialogAddTitle => 'Добавить напоминание';
+
+  @override
+  String get standaloneReminderTitleFieldLabel => 'Название';
+
+  @override
+  String get standaloneReminderTitleFieldHint => 'Например: Спланировать день';
+
+  @override
+  String get standaloneReminderScheduleTypeFieldLabel => 'Повтор';
+
+  @override
+  String get standaloneReminderScheduleDailyOption => 'Каждый день';
+
+  @override
+  String get standaloneReminderScheduleOnceOption => 'Один раз';
+
+  @override
+  String standaloneReminderDateButton(String date) {
+    return 'Дата: $date';
+  }
+
+  @override
+  String standaloneReminderTimeButton(String time) {
+    return 'Время: $time';
+  }
+
+  @override
+  String get standaloneReminderTitleRequiredError =>
+      'Введите название напоминания.';
+
+  @override
+  String get standaloneReminderPastDateTimeError =>
+      'Выберите будущие дату и время.';
+
+  @override
   String get goalsEmptyDescription =>
       'Целей пока нет. Создайте первую долгосрочную цель.';
 

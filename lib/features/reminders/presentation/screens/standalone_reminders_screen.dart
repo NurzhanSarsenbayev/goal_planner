@@ -8,6 +8,7 @@ import '../../../../shared/planner_time.dart';
 import '../../../../shared/presentation/widgets/placeholder_screen.dart';
 import '../../application/standalone_reminder_store.dart';
 import '../../domain/standalone_reminder.dart';
+import '../widgets/standalone_reminder_dialog.dart';
 
 class StandaloneRemindersScreen extends StatefulWidget {
   const StandaloneRemindersScreen({super.key, required this.reminderStore});
@@ -27,6 +28,26 @@ class _StandaloneRemindersScreenState extends State<StandaloneRemindersScreen> {
     unawaited(widget.reminderStore.initialize());
   }
 
+  Future<void> _showAddReminderDialog() async {
+    final draft = await showDialog<StandaloneReminderDraft>(
+      context: context,
+      builder: (context) {
+        return const StandaloneReminderDialog();
+      },
+    );
+
+    if (draft == null) {
+      return;
+    }
+
+    await widget.reminderStore.createStandaloneReminder(
+      title: draft.title,
+      scheduleType: draft.scheduleType,
+      scheduledDate: draft.scheduledDate,
+      timeMinutes: draft.timeMinutes,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -39,6 +60,11 @@ class _StandaloneRemindersScreenState extends State<StandaloneRemindersScreen> {
         return Scaffold(
           appBar: AppBar(title: Text(l10n.standaloneRemindersScreenTitle)),
           body: _StandaloneRemindersBody(reminderStore: reminderStore),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: _showAddReminderDialog,
+            icon: const Icon(Icons.add),
+            label: Text(l10n.standaloneReminderAddButton),
+          ),
         );
       },
     );
