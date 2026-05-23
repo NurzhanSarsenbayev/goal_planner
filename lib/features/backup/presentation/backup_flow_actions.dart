@@ -11,6 +11,7 @@ import '../../habits/application/habit_store.dart';
 import '../../reminders/application/task_reminder_lifecycle_service.dart';
 import '../../reminders/application/standalone_reminder_resync_service.dart';
 import '../../reminders/application/standalone_reminder_store.dart';
+import '../../reminders/application/daily_review_reminder_scheduler.dart';
 import '../../reminders/domain/standalone_reminder.dart';
 import '../application/planner_backup_file_export_service.dart';
 import '../application/planner_backup_file_storage.dart';
@@ -26,6 +27,7 @@ class BackupFlowActions {
     required TaskReminderLifecycleService taskReminderLifecycleService,
     required StandaloneReminderStore standaloneReminderStore,
     required StandaloneReminderResyncService standaloneReminderResyncService,
+    required DailyReviewReminderScheduler dailyReviewReminderScheduler,
     required bool Function() isMounted,
     required ValueChanged<DateTime?> onBackupStatusChanged,
   }) : _backupFileExportService = backupFileExportService,
@@ -36,6 +38,7 @@ class BackupFlowActions {
        _taskReminderLifecycleService = taskReminderLifecycleService,
        _standaloneReminderStore = standaloneReminderStore,
        _standaloneReminderResyncService = standaloneReminderResyncService,
+       _dailyReviewReminderScheduler = dailyReviewReminderScheduler,
        _isMounted = isMounted,
        _onBackupStatusChanged = onBackupStatusChanged;
 
@@ -47,6 +50,7 @@ class BackupFlowActions {
   final TaskReminderLifecycleService _taskReminderLifecycleService;
   final StandaloneReminderStore _standaloneReminderStore;
   final StandaloneReminderResyncService _standaloneReminderResyncService;
+  final DailyReviewReminderScheduler _dailyReviewReminderScheduler;
   final bool Function() _isMounted;
   final ValueChanged<DateTime?> _onBackupStatusChanged;
 
@@ -269,6 +273,7 @@ class BackupFlowActions {
     await _standaloneReminderStore.reload();
     await _resyncTaskRemindersAfterRestore(previousTasks);
     await _resyncStandaloneRemindersAfterRestore(previousStandaloneReminders);
+    await _resyncDailyReviewReminderAfterRestore();
 
     if (!_isMounted() || !context.mounted) {
       return;
@@ -307,6 +312,14 @@ class BackupFlowActions {
           );
     } catch (_) {
       // Standalone reminder restore sync must not block backup restore.
+    }
+  }
+
+  Future<void> _resyncDailyReviewReminderAfterRestore() async {
+    try {
+      await _dailyReviewReminderScheduler.syncDailyReviewReminder();
+    } catch (_) {
+      // Daily review reminder restore sync must not block backup restore.
     }
   }
 

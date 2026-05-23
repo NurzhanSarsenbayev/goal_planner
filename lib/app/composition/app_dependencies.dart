@@ -9,6 +9,7 @@ import '../../data/repositories/drift_task_repository.dart';
 import '../../data/repositories/drift_habit_repository.dart';
 import '../../data/repositories/drift_planner_backup_restore_repository.dart';
 import '../../data/repositories/drift_standalone_reminder_repository.dart';
+import '../../data/repositories/drift_daily_review_reminder_settings_repository.dart';
 import '../../features/backup/application/planner_backup_restore_service.dart';
 import '../../features/backup/application/planner_backup_validator.dart';
 import '../../features/planner/application/planner_initialization_service.dart';
@@ -30,6 +31,8 @@ import '../../features/reminders/application/standalone_reminder_application_ser
 import '../../features/reminders/application/standalone_reminder_scheduler.dart';
 import '../../features/reminders/application/standalone_reminder_store.dart';
 import '../../features/reminders/application/standalone_reminder_resync_service.dart';
+import '../../features/reminders/application/daily_review_pending_checker.dart';
+import '../../features/reminders/application/daily_review_reminder_scheduler.dart';
 import '../../state/planner_store.dart';
 
 class AppDependencies {
@@ -44,6 +47,7 @@ class AppDependencies {
     required this.standaloneReminderApplicationService,
     required this.standaloneReminderStore,
     required this.standaloneReminderResyncService,
+    required this.dailyReviewReminderScheduler,
   }) : _database = database;
 
   factory AppDependencies.create() {
@@ -58,8 +62,15 @@ class AppDependencies {
     final standaloneReminderRepository = DriftStandaloneReminderRepository(
       database,
     );
+    final dailyReviewReminderSettingsRepository =
+        DriftDailyReviewReminderSettingsRepository(database);
     final backupRestoreRepository = DriftPlannerBackupRestoreRepository(
       database,
+    );
+
+    final dailyReviewPendingChecker = DailyReviewPendingChecker(
+      taskRepository: taskRepository,
+      habitRepository: habitRepository,
     );
 
     final backupExportService = PlannerBackupExportService(
@@ -111,6 +122,12 @@ class AppDependencies {
         );
 
     final localNotificationService = LocalNotificationService();
+
+    final dailyReviewReminderScheduler = DailyReviewReminderScheduler(
+      settingsRepository: dailyReviewReminderSettingsRepository,
+      pendingChecker: dailyReviewPendingChecker,
+      notifications: localNotificationService,
+    );
 
     final taskReminderScheduler = TaskReminderScheduler(
       notifications: localNotificationService,
@@ -177,6 +194,7 @@ class AppDependencies {
           standaloneReminderApplicationService,
       standaloneReminderStore: standaloneReminderStore,
       standaloneReminderResyncService: standaloneReminderResyncService,
+      dailyReviewReminderScheduler: dailyReviewReminderScheduler,
     );
   }
 
@@ -191,6 +209,7 @@ class AppDependencies {
   standaloneReminderApplicationService;
   final StandaloneReminderStore standaloneReminderStore;
   final StandaloneReminderResyncService standaloneReminderResyncService;
+  final DailyReviewReminderScheduler dailyReviewReminderScheduler;
 
   Future<void> dispose() async {
     store.dispose();

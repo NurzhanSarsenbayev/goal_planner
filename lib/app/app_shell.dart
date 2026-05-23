@@ -10,6 +10,7 @@ import '../features/goals/presentation/goal_dialog_actions.dart';
 import '../features/tasks/presentation/task_dialog_actions.dart';
 import '../features/reminders/application/task_reminder_lifecycle_service.dart';
 import '../features/reminders/application/standalone_reminder_resync_service.dart';
+import '../features/reminders/application/daily_review_reminder_scheduler.dart';
 import 'composition/app_dependencies.dart';
 import 'navigation/app_navigation_actions.dart';
 import 'navigation/main_tab_builder.dart';
@@ -44,6 +45,7 @@ class _AppShellState extends State<AppShell> {
   DateTime? _lastBackupAt;
   late final TaskReminderLifecycleService _taskReminderLifecycleService;
   late final StandaloneReminderResyncService _standaloneReminderResyncService;
+  late final DailyReviewReminderScheduler _dailyReviewReminderScheduler;
 
   int _selectedIndex = 0;
 
@@ -72,6 +74,12 @@ class _AppShellState extends State<AppShell> {
       await _standaloneReminderResyncService.syncStandaloneReminders();
     } catch (_) {
       // Standalone reminder sync must not block app startup.
+    }
+
+    try {
+      await _dailyReviewReminderScheduler.syncDailyReviewReminder();
+    } catch (_) {
+      // Daily review reminder sync must not block app startup.
     }
   }
 
@@ -129,6 +137,7 @@ class _AppShellState extends State<AppShell> {
     _taskReminderLifecycleService = _dependencies.taskReminderLifecycleService;
     _standaloneReminderResyncService =
         _dependencies.standaloneReminderResyncService;
+    _dailyReviewReminderScheduler = _dependencies.dailyReviewReminderScheduler;
     _backupFlowActions = BackupFlowActions(
       backupFileExportService: _dependencies.backupFileExportService,
       backupFileStorage: _dependencies.backupFileStorage,
@@ -140,6 +149,7 @@ class _AppShellState extends State<AppShell> {
       onBackupStatusChanged: _updateLastBackupAt,
       standaloneReminderStore: _dependencies.standaloneReminderStore,
       standaloneReminderResyncService: _standaloneReminderResyncService,
+      dailyReviewReminderScheduler: _dailyReviewReminderScheduler,
     );
 
     unawaited(_backupFlowActions.loadBackupStatus());
