@@ -1366,6 +1366,7 @@ Completed scope:
 - Added startup notification resync.
 - Added backup/restore support for standalone reminders.
 - Added restore-time notification resync.
+- Established the local reminder architecture later reused by task reminders, standalone reminders, and Daily Review Reminder.
 - Kept reminders local-first.
 
 Out of scope for this phase:
@@ -1403,8 +1404,38 @@ Out of scope for this phase:
 - Smart reminders.
 - Backend push notifications.
 
+## Phase 8.4: Daily review reminder
 
-## Phase 8.4: Habit reminders
+Status: done.
+
+Goal:
+
+Add a simple daily return loop that reminds the user to review the day.
+
+Completed scope:
+
+- Added persistent Daily Review Reminder settings.
+- Supported enabling and disabling the reminder.
+- Supported configurable reminder time.
+- Added pending checker so the reminder is only useful when there is something to review.
+- Added scheduler for the daily review reminder.
+- Added startup resync.
+- Added restore-time resync.
+- Added resync after relevant app state changes.
+- Added settings UI.
+- Added backup/restore support for Daily Review Reminder settings.
+- Reloaded Daily Review Reminder settings after restore.
+- Kept Daily Review Reminder separate from standalone reminders and task reminders.
+
+Out of scope for this phase:
+
+- Snooze.
+- Notification actions.
+- Smart review summaries.
+- Backend push notifications.
+- Cross-device reminder sync.
+
+## Phase 8.5: Habit reminders
 
 Status: not started.
 
@@ -1428,7 +1459,7 @@ Out of scope for this phase:
 - Backend push notifications.
 
 
-## Phase 8.5: Snooze and notification actions
+## Phase 8.6: Snooze and notification actions
 
 Status: not started.
 

@@ -124,6 +124,19 @@ Observe:
 - Is the wording scary enough for restore?
 - Is the backup area too technical?
 
+### 9. Reminder return loop check
+
+Task:
+
+Find where reminder settings live and explain when you expect the app to remind you.
+
+Observe:
+
+- Can the tester find reminders without help?
+- Does the tester understand the difference between standalone reminders and Daily Review Reminder?
+- Is the Daily Review Reminder useful or annoying?
+- Does the tester expect task reminders, habit reminders or a general daily reminder first?
+
 ## Questions after the test
 
 Ask:
