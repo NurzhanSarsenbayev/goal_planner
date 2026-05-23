@@ -4150,6 +4150,286 @@ class StandaloneRemindersCompanion extends UpdateCompanion<StandaloneReminder> {
   }
 }
 
+class $DailyReviewReminderSettingsTableTable
+    extends DailyReviewReminderSettingsTable
+    with
+        TableInfo<
+          $DailyReviewReminderSettingsTableTable,
+          DailyReviewReminderSettingsTableData
+        > {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DailyReviewReminderSettingsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _isEnabledMeta = const VerificationMeta(
+    'isEnabled',
+  );
+  @override
+  late final GeneratedColumn<bool> isEnabled = GeneratedColumn<bool>(
+    'is_enabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_enabled" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _timeMinutesMeta = const VerificationMeta(
+    'timeMinutes',
+  );
+  @override
+  late final GeneratedColumn<int> timeMinutes = GeneratedColumn<int>(
+    'time_minutes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(21 * 60),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, isEnabled, timeMinutes];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'daily_review_reminder_settings';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<DailyReviewReminderSettingsTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('is_enabled')) {
+      context.handle(
+        _isEnabledMeta,
+        isEnabled.isAcceptableOrUnknown(data['is_enabled']!, _isEnabledMeta),
+      );
+    }
+    if (data.containsKey('time_minutes')) {
+      context.handle(
+        _timeMinutesMeta,
+        timeMinutes.isAcceptableOrUnknown(
+          data['time_minutes']!,
+          _timeMinutesMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  DailyReviewReminderSettingsTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DailyReviewReminderSettingsTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      isEnabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_enabled'],
+      )!,
+      timeMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}time_minutes'],
+      )!,
+    );
+  }
+
+  @override
+  $DailyReviewReminderSettingsTableTable createAlias(String alias) {
+    return $DailyReviewReminderSettingsTableTable(attachedDatabase, alias);
+  }
+}
+
+class DailyReviewReminderSettingsTableData extends DataClass
+    implements Insertable<DailyReviewReminderSettingsTableData> {
+  final String id;
+  final bool isEnabled;
+  final int timeMinutes;
+  const DailyReviewReminderSettingsTableData({
+    required this.id,
+    required this.isEnabled,
+    required this.timeMinutes,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['is_enabled'] = Variable<bool>(isEnabled);
+    map['time_minutes'] = Variable<int>(timeMinutes);
+    return map;
+  }
+
+  DailyReviewReminderSettingsTableCompanion toCompanion(bool nullToAbsent) {
+    return DailyReviewReminderSettingsTableCompanion(
+      id: Value(id),
+      isEnabled: Value(isEnabled),
+      timeMinutes: Value(timeMinutes),
+    );
+  }
+
+  factory DailyReviewReminderSettingsTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DailyReviewReminderSettingsTableData(
+      id: serializer.fromJson<String>(json['id']),
+      isEnabled: serializer.fromJson<bool>(json['isEnabled']),
+      timeMinutes: serializer.fromJson<int>(json['timeMinutes']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'isEnabled': serializer.toJson<bool>(isEnabled),
+      'timeMinutes': serializer.toJson<int>(timeMinutes),
+    };
+  }
+
+  DailyReviewReminderSettingsTableData copyWith({
+    String? id,
+    bool? isEnabled,
+    int? timeMinutes,
+  }) => DailyReviewReminderSettingsTableData(
+    id: id ?? this.id,
+    isEnabled: isEnabled ?? this.isEnabled,
+    timeMinutes: timeMinutes ?? this.timeMinutes,
+  );
+  DailyReviewReminderSettingsTableData copyWithCompanion(
+    DailyReviewReminderSettingsTableCompanion data,
+  ) {
+    return DailyReviewReminderSettingsTableData(
+      id: data.id.present ? data.id.value : this.id,
+      isEnabled: data.isEnabled.present ? data.isEnabled.value : this.isEnabled,
+      timeMinutes: data.timeMinutes.present
+          ? data.timeMinutes.value
+          : this.timeMinutes,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DailyReviewReminderSettingsTableData(')
+          ..write('id: $id, ')
+          ..write('isEnabled: $isEnabled, ')
+          ..write('timeMinutes: $timeMinutes')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, isEnabled, timeMinutes);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DailyReviewReminderSettingsTableData &&
+          other.id == this.id &&
+          other.isEnabled == this.isEnabled &&
+          other.timeMinutes == this.timeMinutes);
+}
+
+class DailyReviewReminderSettingsTableCompanion
+    extends UpdateCompanion<DailyReviewReminderSettingsTableData> {
+  final Value<String> id;
+  final Value<bool> isEnabled;
+  final Value<int> timeMinutes;
+  final Value<int> rowid;
+  const DailyReviewReminderSettingsTableCompanion({
+    this.id = const Value.absent(),
+    this.isEnabled = const Value.absent(),
+    this.timeMinutes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  DailyReviewReminderSettingsTableCompanion.insert({
+    required String id,
+    this.isEnabled = const Value.absent(),
+    this.timeMinutes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id);
+  static Insertable<DailyReviewReminderSettingsTableData> custom({
+    Expression<String>? id,
+    Expression<bool>? isEnabled,
+    Expression<int>? timeMinutes,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (isEnabled != null) 'is_enabled': isEnabled,
+      if (timeMinutes != null) 'time_minutes': timeMinutes,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  DailyReviewReminderSettingsTableCompanion copyWith({
+    Value<String>? id,
+    Value<bool>? isEnabled,
+    Value<int>? timeMinutes,
+    Value<int>? rowid,
+  }) {
+    return DailyReviewReminderSettingsTableCompanion(
+      id: id ?? this.id,
+      isEnabled: isEnabled ?? this.isEnabled,
+      timeMinutes: timeMinutes ?? this.timeMinutes,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (isEnabled.present) {
+      map['is_enabled'] = Variable<bool>(isEnabled.value);
+    }
+    if (timeMinutes.present) {
+      map['time_minutes'] = Variable<int>(timeMinutes.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DailyReviewReminderSettingsTableCompanion(')
+          ..write('id: $id, ')
+          ..write('isEnabled: $isEnabled, ')
+          ..write('timeMinutes: $timeMinutes, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -4164,6 +4444,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $HabitEntriesTable habitEntries = $HabitEntriesTable(this);
   late final $StandaloneRemindersTable standaloneReminders =
       $StandaloneRemindersTable(this);
+  late final $DailyReviewReminderSettingsTableTable
+  dailyReviewReminderSettingsTable = $DailyReviewReminderSettingsTableTable(
+    this,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4177,6 +4461,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     habits,
     habitEntries,
     standaloneReminders,
+    dailyReviewReminderSettingsTable,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -7993,6 +8278,189 @@ typedef $$StandaloneRemindersTableProcessedTableManager =
       StandaloneReminder,
       PrefetchHooks Function()
     >;
+typedef $$DailyReviewReminderSettingsTableTableCreateCompanionBuilder =
+    DailyReviewReminderSettingsTableCompanion Function({
+      required String id,
+      Value<bool> isEnabled,
+      Value<int> timeMinutes,
+      Value<int> rowid,
+    });
+typedef $$DailyReviewReminderSettingsTableTableUpdateCompanionBuilder =
+    DailyReviewReminderSettingsTableCompanion Function({
+      Value<String> id,
+      Value<bool> isEnabled,
+      Value<int> timeMinutes,
+      Value<int> rowid,
+    });
+
+class $$DailyReviewReminderSettingsTableTableFilterComposer
+    extends Composer<_$AppDatabase, $DailyReviewReminderSettingsTableTable> {
+  $$DailyReviewReminderSettingsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isEnabled => $composableBuilder(
+    column: $table.isEnabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get timeMinutes => $composableBuilder(
+    column: $table.timeMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$DailyReviewReminderSettingsTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $DailyReviewReminderSettingsTableTable> {
+  $$DailyReviewReminderSettingsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isEnabled => $composableBuilder(
+    column: $table.isEnabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get timeMinutes => $composableBuilder(
+    column: $table.timeMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$DailyReviewReminderSettingsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DailyReviewReminderSettingsTableTable> {
+  $$DailyReviewReminderSettingsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<bool> get isEnabled =>
+      $composableBuilder(column: $table.isEnabled, builder: (column) => column);
+
+  GeneratedColumn<int> get timeMinutes => $composableBuilder(
+    column: $table.timeMinutes,
+    builder: (column) => column,
+  );
+}
+
+class $$DailyReviewReminderSettingsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $DailyReviewReminderSettingsTableTable,
+          DailyReviewReminderSettingsTableData,
+          $$DailyReviewReminderSettingsTableTableFilterComposer,
+          $$DailyReviewReminderSettingsTableTableOrderingComposer,
+          $$DailyReviewReminderSettingsTableTableAnnotationComposer,
+          $$DailyReviewReminderSettingsTableTableCreateCompanionBuilder,
+          $$DailyReviewReminderSettingsTableTableUpdateCompanionBuilder,
+          (
+            DailyReviewReminderSettingsTableData,
+            BaseReferences<
+              _$AppDatabase,
+              $DailyReviewReminderSettingsTableTable,
+              DailyReviewReminderSettingsTableData
+            >,
+          ),
+          DailyReviewReminderSettingsTableData,
+          PrefetchHooks Function()
+        > {
+  $$DailyReviewReminderSettingsTableTableTableManager(
+    _$AppDatabase db,
+    $DailyReviewReminderSettingsTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DailyReviewReminderSettingsTableTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$DailyReviewReminderSettingsTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$DailyReviewReminderSettingsTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<bool> isEnabled = const Value.absent(),
+                Value<int> timeMinutes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DailyReviewReminderSettingsTableCompanion(
+                id: id,
+                isEnabled: isEnabled,
+                timeMinutes: timeMinutes,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                Value<bool> isEnabled = const Value.absent(),
+                Value<int> timeMinutes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DailyReviewReminderSettingsTableCompanion.insert(
+                id: id,
+                isEnabled: isEnabled,
+                timeMinutes: timeMinutes,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$DailyReviewReminderSettingsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $DailyReviewReminderSettingsTableTable,
+      DailyReviewReminderSettingsTableData,
+      $$DailyReviewReminderSettingsTableTableFilterComposer,
+      $$DailyReviewReminderSettingsTableTableOrderingComposer,
+      $$DailyReviewReminderSettingsTableTableAnnotationComposer,
+      $$DailyReviewReminderSettingsTableTableCreateCompanionBuilder,
+      $$DailyReviewReminderSettingsTableTableUpdateCompanionBuilder,
+      (
+        DailyReviewReminderSettingsTableData,
+        BaseReferences<
+          _$AppDatabase,
+          $DailyReviewReminderSettingsTableTable,
+          DailyReviewReminderSettingsTableData
+        >,
+      ),
+      DailyReviewReminderSettingsTableData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -8016,4 +8484,10 @@ class $AppDatabaseManager {
       $$HabitEntriesTableTableManager(_db, _db.habitEntries);
   $$StandaloneRemindersTableTableManager get standaloneReminders =>
       $$StandaloneRemindersTableTableManager(_db, _db.standaloneReminders);
+  $$DailyReviewReminderSettingsTableTableTableManager
+  get dailyReviewReminderSettingsTable =>
+      $$DailyReviewReminderSettingsTableTableTableManager(
+        _db,
+        _db.dailyReviewReminderSettingsTable,
+      );
 }
