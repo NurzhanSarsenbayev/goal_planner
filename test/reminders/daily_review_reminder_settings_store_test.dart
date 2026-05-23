@@ -32,6 +32,28 @@ void main() {
       expect(repository.loadCount, 1);
     });
 
+    test('reloads settings after initialization', () async {
+      final repository = _FakeDailyReviewReminderSettingsRepository(
+        const DailyReviewReminderSettings.defaults(),
+      );
+      final store = _store(repository: repository);
+
+      await store.initialize();
+
+      repository.settings = DailyReviewReminderSettings(
+        isEnabled: false,
+        timeMinutes: 22 * 60 + 15,
+      );
+
+      await store.reload();
+
+      expect(store.isInitialized, isTrue);
+      expect(store.isLoading, isFalse);
+      expect(store.settings.isEnabled, isFalse);
+      expect(store.settings.timeMinutes, 1335);
+      expect(repository.loadCount, 2);
+    });
+
     test('updates enabled setting and syncs reminder', () async {
       final repository = _FakeDailyReviewReminderSettingsRepository(
         const DailyReviewReminderSettings.defaults(),

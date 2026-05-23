@@ -41,6 +41,23 @@ class DailyReviewReminderSettingsStore extends ChangeNotifier {
     }
   }
 
+  Future<void> reload() async {
+    if (_isLoading) {
+      return;
+    }
+
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      _settings = await _settingsRepository.loadSettings();
+      _isInitialized = true;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> setEnabled(bool isEnabled) async {
     if (_settings.isEnabled == isEnabled) {
       return;

@@ -151,6 +151,8 @@ class _AppShellState extends State<AppShell> {
       standaloneReminderStore: _dependencies.standaloneReminderStore,
       standaloneReminderResyncService: _standaloneReminderResyncService,
       dailyReviewReminderScheduler: _dailyReviewReminderScheduler,
+      dailyReviewReminderSettingsStore:
+          _dependencies.dailyReviewReminderSettingsStore,
     );
 
     unawaited(_backupFlowActions.loadBackupStatus());
