@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:goal_planner/features/reminders/application/daily_review_reminder_settings_repository.dart';
-import 'package:goal_planner/features/reminders/application/daily_review_reminder_settings_store.dart';
-import 'package:goal_planner/features/reminders/domain/daily_review_reminder_settings.dart';
+import 'package:goal_planner/features/reminders/daily_review/application/daily_review_reminder_settings_repository.dart';
+import 'package:goal_planner/features/reminders/daily_review/application/daily_review_reminder_settings_store.dart';
+import 'package:goal_planner/features/reminders/daily_review/domain/daily_review_reminder_settings.dart';
 
 void main() {
   group('DailyReviewReminderSettingsStore', () {

@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' as drift;
 
-import '../../features/reminders/application/standalone_reminder_repository.dart';
-import '../../features/reminders/domain/standalone_reminder.dart' as domain;
+import '../../features/reminders/standalone/application/standalone_reminder_repository.dart';
+import '../../features/reminders/standalone/domain/standalone_reminder.dart' as domain;
 import '../local/app_database.dart' as local;
 
 class DriftStandaloneReminderRepository

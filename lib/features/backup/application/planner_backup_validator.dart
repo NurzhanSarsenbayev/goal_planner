@@ -2,7 +2,7 @@ import '../../../models/planner_task.dart';
 import '../../../models/recurring_task_rule.dart';
 import '../domain/planner_backup.dart';
 import 'planner_backup_validation_result.dart';
-import '../../reminders/domain/standalone_reminder.dart';
+import '../../reminders/standalone/domain/standalone_reminder.dart';
 
 export 'planner_backup_validation_result.dart';
 

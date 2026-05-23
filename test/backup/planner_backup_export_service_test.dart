@@ -9,8 +9,10 @@ import 'package:goal_planner/features/habits/domain/habit_tracking_type.dart';
 import 'package:goal_planner/features/milestones/application/milestone_repository.dart';
 import 'package:goal_planner/features/recurring/application/recurring_task_repository.dart';
 import 'package:goal_planner/features/tasks/application/task_repository.dart';
-import 'package:goal_planner/features/reminders/application/standalone_reminder_repository.dart';
-import 'package:goal_planner/features/reminders/domain/standalone_reminder.dart';
+import 'package:goal_planner/features/reminders/standalone/application/standalone_reminder_repository.dart';
+import 'package:goal_planner/features/reminders/standalone/domain/standalone_reminder.dart';
+import 'package:goal_planner/features/reminders/daily_review/application/daily_review_reminder_settings_repository.dart';
+import 'package:goal_planner/features/reminders/daily_review/domain/daily_review_reminder_settings.dart';
 import 'package:goal_planner/models/goal.dart';
 import 'package:goal_planner/models/milestone.dart';
 import 'package:goal_planner/models/planner_task.dart';
@@ -94,6 +96,10 @@ void main() {
         createdAt: now,
         updatedAt: now,
       );
+      final dailyReviewReminderSettings = DailyReviewReminderSettings(
+        isEnabled: false,
+        timeMinutes: 20 * 60,
+      );
 
       final service = PlannerBackupExportService(
         goalRepository: _FakeGoalRepository([goal]),
@@ -110,6 +116,10 @@ void main() {
         standaloneReminderRepository: _FakeStandaloneReminderRepository([
           standaloneReminder,
         ]),
+        dailyReviewReminderSettingsRepository:
+            _FakeDailyReviewReminderSettingsRepository(
+              dailyReviewReminderSettings,
+            ),
         now: () => now,
       );
 
@@ -125,6 +135,8 @@ void main() {
       expect(backup.data.habits.single.id, habit.id);
       expect(backup.data.habitEntries.single.id, habitEntry.id);
       expect(backup.data.standaloneReminders.single.id, standaloneReminder.id);
+      expect(backup.data.dailyReviewReminderSettings.isEnabled, isFalse);
+      expect(backup.data.dailyReviewReminderSettings.timeMinutes, 1200);
     });
 
     test('supports empty repositories', () async {
@@ -137,6 +149,10 @@ void main() {
         recurringTaskRepository: _FakeRecurringTaskRepository(),
         habitRepository: _FakeHabitRepository(),
         standaloneReminderRepository: _FakeStandaloneReminderRepository(),
+        dailyReviewReminderSettingsRepository:
+            const _FakeDailyReviewReminderSettingsRepository(
+              DailyReviewReminderSettings.defaults(),
+            ),
         now: () => now,
       );
 
@@ -151,6 +167,11 @@ void main() {
       expect(backup.data.habits, isEmpty);
       expect(backup.data.habitEntries, isEmpty);
       expect(backup.data.standaloneReminders, isEmpty);
+      expect(backup.data.dailyReviewReminderSettings.isEnabled, isTrue);
+      expect(
+        backup.data.dailyReviewReminderSettings.timeMinutes,
+        defaultDailyReviewReminderTimeMinutes,
+      );
     });
   });
 }
@@ -316,4 +337,19 @@ class _FakeStandaloneReminderRepository
 
   @override
   Future<void> deleteStandaloneReminder(String reminderId) async {}
+}
+
+class _FakeDailyReviewReminderSettingsRepository
+    implements DailyReviewReminderSettingsRepository {
+  const _FakeDailyReviewReminderSettingsRepository(this.settings);
+
+  final DailyReviewReminderSettings settings;
+
+  @override
+  Future<DailyReviewReminderSettings> loadSettings() async {
+    return settings;
+  }
+
+  @override
+  Future<void> saveSettings(DailyReviewReminderSettings settings) async {}
 }

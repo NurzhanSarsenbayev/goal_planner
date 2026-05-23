@@ -11,7 +11,8 @@ import 'package:goal_planner/models/milestone.dart';
 import 'package:goal_planner/models/planner_task.dart';
 import 'package:goal_planner/models/recurring_task_exception.dart';
 import 'package:goal_planner/models/recurring_task_rule.dart';
-import 'package:goal_planner/features/reminders/domain/standalone_reminder.dart';
+import 'package:goal_planner/features/reminders/standalone/domain/standalone_reminder.dart';
+import 'package:goal_planner/features/reminders/daily_review/domain/daily_review_reminder_settings.dart';
 
 void main() {
   group('PlannerBackup', () {
@@ -120,6 +121,10 @@ void main() {
               updatedAt: now,
             ),
           ],
+          dailyReviewReminderSettings: DailyReviewReminderSettings(
+            isEnabled: false,
+            timeMinutes: 20 * 60 + 15,
+          ),
         ),
       );
 
@@ -188,7 +193,28 @@ void main() {
       );
       expect(restored.data.standaloneReminders.single.timeMinutes, 1110);
       expect(restored.data.standaloneReminders.single.isEnabled, isTrue);
+      expect(restored.data.dailyReviewReminderSettings.isEnabled, isFalse);
+      expect(restored.data.dailyReviewReminderSettings.timeMinutes, 1215);
     });
+
+    test(
+      'restores old backup without daily review reminder settings as defaults',
+      () {
+        final now = DateTime(2026, 5, 13);
+
+        final restored = PlannerBackup.fromJson({
+          'schemaVersion': PlannerBackup.currentSchemaVersion,
+          'exportedAt': now.toIso8601String(),
+          'data': const {},
+        });
+
+        expect(restored.data.dailyReviewReminderSettings.isEnabled, isTrue);
+        expect(
+          restored.data.dailyReviewReminderSettings.timeMinutes,
+          defaultDailyReviewReminderTimeMinutes,
+        );
+      },
+    );
 
     test('rejects unsupported schema version', () {
       expect(
@@ -249,6 +275,11 @@ void main() {
       expect(restored.data.habits, isEmpty);
       expect(restored.data.habitEntries, isEmpty);
       expect(restored.data.standaloneReminders, isEmpty);
+      expect(restored.data.dailyReviewReminderSettings.isEnabled, isTrue);
+      expect(
+        restored.data.dailyReviewReminderSettings.timeMinutes,
+        defaultDailyReviewReminderTimeMinutes,
+      );
     });
   });
 }

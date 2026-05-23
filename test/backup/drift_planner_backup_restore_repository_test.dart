@@ -8,7 +8,9 @@ import 'package:goal_planner/data/repositories/drift_planner_backup_restore_repo
 import 'package:goal_planner/data/repositories/drift_recurring_task_repository.dart';
 import 'package:goal_planner/data/repositories/drift_task_repository.dart';
 import 'package:goal_planner/data/repositories/drift_standalone_reminder_repository.dart';
-import 'package:goal_planner/features/reminders/domain/standalone_reminder.dart';
+import 'package:goal_planner/features/reminders/standalone/domain/standalone_reminder.dart';
+import 'package:goal_planner/data/repositories/drift_daily_review_reminder_settings_repository.dart';
+import 'package:goal_planner/features/reminders/daily_review/domain/daily_review_reminder_settings.dart';
 import 'package:goal_planner/features/backup/domain/planner_backup.dart';
 import 'package:goal_planner/features/habits/domain/habit.dart';
 import 'package:goal_planner/features/habits/domain/habit_entry.dart';
@@ -59,6 +61,10 @@ void main() {
       final standaloneReminders = await DriftStandaloneReminderRepository(
         database,
       ).loadStandaloneReminders();
+      final dailyReviewReminderSettings =
+          await DriftDailyReviewReminderSettingsRepository(
+            database,
+          ).loadSettings();
 
       expect(goals.map((goal) => goal.id), ['new-goal']);
       expect(milestones.map((milestone) => milestone.id), ['new-milestone']);
@@ -86,6 +92,8 @@ void main() {
       );
       expect(standaloneReminders.single.scheduledDate, DateTime(2026, 5, 14));
       expect(standaloneReminders.single.timeMinutes, 1110);
+      expect(dailyReviewReminderSettings.isEnabled, isFalse);
+      expect(dailyReviewReminderSettings.timeMinutes, 1234);
     });
 
     test('can restore empty backup data and clear database', () async {
@@ -116,6 +124,16 @@ void main() {
           database,
         ).loadStandaloneReminders(),
         isEmpty,
+      );
+      final dailyReviewReminderSettings =
+          await DriftDailyReviewReminderSettingsRepository(
+            database,
+          ).loadSettings();
+
+      expect(dailyReviewReminderSettings.isEnabled, isTrue);
+      expect(
+        dailyReviewReminderSettings.timeMinutes,
+        defaultDailyReviewReminderTimeMinutes,
       );
     });
 
@@ -262,5 +280,11 @@ PlannerBackupData _backupData({required String idPrefix}) {
         updatedAt: now,
       ),
     ],
+    dailyReviewReminderSettings: DailyReviewReminderSettings(
+      isEnabled: idPrefix != 'new',
+      timeMinutes: idPrefix == 'new'
+          ? 1234
+          : defaultDailyReviewReminderTimeMinutes,
+    ),
   );
 }

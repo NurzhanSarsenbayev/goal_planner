@@ -1,6 +1,6 @@
 import '../../../models/recurring_task_exception.dart';
 import '../../recurring/application/recurring_occurrence_store_coordinator.dart';
-import '../../reminders/application/task_reminder_application_service.dart';
+import '../../reminders/task/application/task_reminder_application_service.dart';
 import 'task_application_service.dart';
 import 'task_repository.dart';
 import 'task_store_mutation.dart';

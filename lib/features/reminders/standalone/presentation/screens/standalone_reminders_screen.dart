@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/planner_time.dart';
-import '../../../../shared/presentation/widgets/placeholder_screen.dart';
+import '../../../../../l10n/app_localizations.dart';
+import '../../../../../shared/planner_time.dart';
+import '../../../../../shared/presentation/widgets/placeholder_screen.dart';
 import '../../application/standalone_reminder_store.dart';
 import '../../domain/standalone_reminder.dart';
 import '../widgets/standalone_reminder_dialog.dart';

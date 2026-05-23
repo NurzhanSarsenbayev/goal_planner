@@ -1,5 +1,5 @@
 import '../domain/standalone_reminder.dart';
-import 'reminder_notification_client.dart';
+import '../../common/application/reminder_notification_client.dart';
 
 class StandaloneReminderScheduler {
   const StandaloneReminderScheduler({

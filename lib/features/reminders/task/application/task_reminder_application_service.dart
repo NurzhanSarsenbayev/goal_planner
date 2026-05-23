@@ -1,4 +1,4 @@
-import '../../../models/planner_task.dart';
+import '../../../../models/planner_task.dart';
 import 'task_reminder_scheduler.dart';
 
 class TaskReminderApplicationService {

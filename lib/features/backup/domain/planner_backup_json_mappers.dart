@@ -216,6 +216,34 @@ StandaloneReminder _standaloneReminderFromJson(Map<String, dynamic> json) {
   );
 }
 
+Map<String, Object?> _dailyReviewReminderSettingsToJson(
+    DailyReviewReminderSettings settings,
+    ) {
+  return {
+    'isEnabled': settings.isEnabled,
+    'timeMinutes': settings.timeMinutes,
+  };
+}
+
+DailyReviewReminderSettings _dailyReviewReminderSettingsFromJson(
+    Map<String, dynamic> json,
+    ) {
+  final value = json['dailyReviewReminderSettings'];
+
+  if (value == null) {
+    return const DailyReviewReminderSettings.defaults();
+  }
+
+  final settingsJson = value is Map<String, dynamic>
+      ? value
+      : Map<String, dynamic>.from(value as Map);
+
+  return DailyReviewReminderSettings(
+    isEnabled: _boolFromJson(settingsJson, 'isEnabled'),
+    timeMinutes: _intFromJson(settingsJson, 'timeMinutes'),
+  );
+}
+
 String _dateToJson(DateTime date) {
   return date.toIso8601String();
 }

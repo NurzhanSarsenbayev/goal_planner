@@ -4,7 +4,7 @@ import 'package:goal_planner/features/habits/domain/habit.dart';
 import 'package:goal_planner/features/habits/domain/habit_entry.dart';
 import 'package:goal_planner/features/habits/domain/habit_entry_status.dart';
 import 'package:goal_planner/features/habits/domain/habit_tracking_type.dart';
-import 'package:goal_planner/features/reminders/application/daily_review_pending_checker.dart';
+import 'package:goal_planner/features/reminders/daily_review/application/daily_review_pending_checker.dart';
 import 'package:goal_planner/features/tasks/application/task_repository.dart';
 import 'package:goal_planner/models/planner_task.dart';
 

@@ -3,7 +3,8 @@ import '../../habits/application/habit_repository.dart';
 import '../../milestones/application/milestone_repository.dart';
 import '../../recurring/application/recurring_task_repository.dart';
 import '../../tasks/application/task_repository.dart';
-import '../../reminders/application/standalone_reminder_repository.dart';
+import '../../reminders/standalone/application/standalone_reminder_repository.dart';
+import '../../reminders/daily_review/application/daily_review_reminder_settings_repository.dart';
 import '../domain/planner_backup.dart';
 
 class PlannerBackupExportService {
@@ -14,6 +15,8 @@ class PlannerBackupExportService {
     required RecurringTaskRepository recurringTaskRepository,
     required HabitRepository habitRepository,
     required StandaloneReminderRepository standaloneReminderRepository,
+    required DailyReviewReminderSettingsRepository
+    dailyReviewReminderSettingsRepository,
     DateTime Function()? now,
   }) : _goalRepository = goalRepository,
        _milestoneRepository = milestoneRepository,
@@ -21,6 +24,8 @@ class PlannerBackupExportService {
        _recurringTaskRepository = recurringTaskRepository,
        _habitRepository = habitRepository,
        _standaloneReminderRepository = standaloneReminderRepository,
+       _dailyReviewReminderSettingsRepository =
+           dailyReviewReminderSettingsRepository,
        _now = now ?? DateTime.now;
 
   final GoalRepository _goalRepository;
@@ -29,6 +34,8 @@ class PlannerBackupExportService {
   final RecurringTaskRepository _recurringTaskRepository;
   final HabitRepository _habitRepository;
   final StandaloneReminderRepository _standaloneReminderRepository;
+  final DailyReviewReminderSettingsRepository
+  _dailyReviewReminderSettingsRepository;
   final DateTime Function() _now;
 
   Future<PlannerBackup> createBackup() async {
@@ -43,6 +50,8 @@ class PlannerBackupExportService {
     final habitEntries = await _habitRepository.loadAllEntries();
     final standaloneReminders = await _standaloneReminderRepository
         .loadStandaloneReminders();
+    final dailyReviewReminderSettings =
+        await _dailyReviewReminderSettingsRepository.loadSettings();
 
     return PlannerBackup.create(
       exportedAt: _now(),
@@ -55,6 +64,7 @@ class PlannerBackupExportService {
         habits: habits,
         habitEntries: habitEntries,
         standaloneReminders: standaloneReminders,
+        dailyReviewReminderSettings: dailyReviewReminderSettings,
       ),
     );
   }

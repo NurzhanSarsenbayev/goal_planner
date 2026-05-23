@@ -1,4 +1,4 @@
-import '../../../shared/planner_time.dart';
+import '../../../../shared/planner_time.dart';
 
 const defaultDailyReviewReminderTimeMinutes = 21 * 60;
 

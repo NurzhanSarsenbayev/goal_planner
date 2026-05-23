@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' as drift;
 
-import '../../features/reminders/application/daily_review_reminder_settings_repository.dart';
-import '../../features/reminders/domain/daily_review_reminder_settings.dart'
+import '../../features/reminders/daily_review/application/daily_review_reminder_settings_repository.dart';
+import '../../features/reminders/daily_review/domain/daily_review_reminder_settings.dart'
     as domain;
 import '../local/app_database.dart' as local;
 

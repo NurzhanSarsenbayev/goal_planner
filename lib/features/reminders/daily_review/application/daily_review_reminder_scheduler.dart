@@ -1,7 +1,7 @@
-import '../../../shared/planner_time.dart';
+import '../../../../shared/planner_time.dart';
 import 'daily_review_pending_checker.dart';
 import 'daily_review_reminder_settings_repository.dart';
-import 'reminder_notification_client.dart';
+import '../../common/application/reminder_notification_client.dart';
 
 const dailyReviewReminderNotificationId = 73001;
 const dailyReviewReminderPayload = 'daily_review_reminder';

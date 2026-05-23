@@ -2,7 +2,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:goal_planner/data/local/app_database.dart' as local;
 import 'package:goal_planner/data/repositories/drift_standalone_reminder_repository.dart';
-import 'package:goal_planner/features/reminders/domain/standalone_reminder.dart';
+import 'package:goal_planner/features/reminders/standalone/domain/standalone_reminder.dart';
 
 void main() {
   group('DriftStandaloneReminderRepository', () {

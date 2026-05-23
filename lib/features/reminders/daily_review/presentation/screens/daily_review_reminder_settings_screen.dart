@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/planner_time.dart';
+import '../../../../../l10n/app_localizations.dart';
+import '../../../../../shared/planner_time.dart';
 import '../../application/daily_review_reminder_settings_store.dart';
 
 class DailyReviewReminderSettingsScreen extends StatefulWidget {

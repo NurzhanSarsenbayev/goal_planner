@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:goal_planner/features/reminders/domain/standalone_reminder.dart';
+import 'package:goal_planner/features/reminders/standalone/domain/standalone_reminder.dart';
 
 void main() {
   group('StandaloneReminder', () {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/planner_dates.dart';
-import '../../../../shared/planner_time.dart';
+import '../../../../../l10n/app_localizations.dart';
+import '../../../../../shared/planner_dates.dart';
+import '../../../../../shared/planner_time.dart';
 import '../../domain/standalone_reminder.dart';
 
 class StandaloneReminderDraft {

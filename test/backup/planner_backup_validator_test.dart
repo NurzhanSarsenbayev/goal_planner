@@ -5,7 +5,7 @@ import 'package:goal_planner/features/habits/domain/habit.dart';
 import 'package:goal_planner/features/habits/domain/habit_entry.dart';
 import 'package:goal_planner/features/habits/domain/habit_entry_status.dart';
 import 'package:goal_planner/features/habits/domain/habit_tracking_type.dart';
-import 'package:goal_planner/features/reminders/domain/standalone_reminder.dart';
+import 'package:goal_planner/features/reminders/standalone/domain/standalone_reminder.dart';
 import 'package:goal_planner/models/goal.dart';
 import 'package:goal_planner/models/milestone.dart';
 import 'package:goal_planner/models/planner_task.dart';

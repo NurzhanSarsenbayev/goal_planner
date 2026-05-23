@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:goal_planner/features/reminders/application/reminder_notification_client.dart';
-import 'package:goal_planner/features/reminders/application/standalone_reminder_scheduler.dart';
-import 'package:goal_planner/features/reminders/domain/standalone_reminder.dart';
+import 'package:goal_planner/features/reminders/common/application/reminder_notification_client.dart';
+import 'package:goal_planner/features/reminders/standalone/application/standalone_reminder_scheduler.dart';
+import 'package:goal_planner/features/reminders/standalone/domain/standalone_reminder.dart';
 
 void main() {
   group('StandaloneReminderScheduler', () {

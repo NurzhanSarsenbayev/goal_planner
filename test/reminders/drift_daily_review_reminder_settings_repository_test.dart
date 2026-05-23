@@ -2,7 +2,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:goal_planner/data/local/app_database.dart' as local;
 import 'package:goal_planner/data/repositories/drift_daily_review_reminder_settings_repository.dart';
-import 'package:goal_planner/features/reminders/domain/daily_review_reminder_settings.dart';
+import 'package:goal_planner/features/reminders/daily_review/domain/daily_review_reminder_settings.dart';
 
 void main() {
   group('DriftDailyReviewReminderSettingsRepository', () {

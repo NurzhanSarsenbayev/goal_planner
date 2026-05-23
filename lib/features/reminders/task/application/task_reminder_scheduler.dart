@@ -1,6 +1,6 @@
-import '../../../models/planner_task.dart';
-import '../../../shared/planner_dates.dart';
-import 'reminder_notification_client.dart';
+import '../../../../models/planner_task.dart';
+import '../../../../shared/planner_dates.dart';
+import '../../common/application/reminder_notification_client.dart';
 
 class TaskReminderScheduler {
   const TaskReminderScheduler({

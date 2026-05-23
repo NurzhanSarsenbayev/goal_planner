@@ -1,5 +1,5 @@
-import '../../../models/planner_task.dart';
-import 'local_notification_service.dart';
+import '../../../../models/planner_task.dart';
+import '../../common/application/local_notification_service.dart';
 import 'task_reminder_resync_service.dart';
 
 class TaskReminderLifecycleService {

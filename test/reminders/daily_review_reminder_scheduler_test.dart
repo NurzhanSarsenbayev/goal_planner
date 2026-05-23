@@ -2,11 +2,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:goal_planner/features/habits/application/habit_repository.dart';
 import 'package:goal_planner/features/habits/domain/habit.dart';
 import 'package:goal_planner/features/habits/domain/habit_entry.dart';
-import 'package:goal_planner/features/reminders/application/daily_review_pending_checker.dart';
-import 'package:goal_planner/features/reminders/application/daily_review_reminder_scheduler.dart';
-import 'package:goal_planner/features/reminders/application/daily_review_reminder_settings_repository.dart';
-import 'package:goal_planner/features/reminders/application/reminder_notification_client.dart';
-import 'package:goal_planner/features/reminders/domain/daily_review_reminder_settings.dart';
+import 'package:goal_planner/features/reminders/daily_review/application/daily_review_pending_checker.dart';
+import 'package:goal_planner/features/reminders/daily_review/application/daily_review_reminder_scheduler.dart';
+import 'package:goal_planner/features/reminders/daily_review/application/daily_review_reminder_settings_repository.dart';
+import 'package:goal_planner/features/reminders/common/application/reminder_notification_client.dart';
+import 'package:goal_planner/features/reminders/daily_review/domain/daily_review_reminder_settings.dart';
 import 'package:goal_planner/features/tasks/application/task_repository.dart';
 import 'package:goal_planner/models/planner_task.dart';
 

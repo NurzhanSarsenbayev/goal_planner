@@ -2,7 +2,7 @@ import 'package:drift/drift.dart' as drift;
 
 import '../../features/backup/application/planner_backup_restore_repository.dart';
 import '../../features/backup/domain/planner_backup.dart';
-import '../../features/reminders/domain/standalone_reminder.dart';
+import '../../features/reminders/standalone/domain/standalone_reminder.dart';
 import '../local/app_database.dart' as local;
 import 'habit_mappers.dart';
 import 'planner_mappers.dart';
@@ -22,6 +22,7 @@ class DriftPlannerBackupRestoreRepository
   }
 
   Future<void> _deleteExistingData() async {
+    await _database.delete(_database.dailyReviewReminderSettingsTable).go();
     await _database.delete(_database.standaloneReminders).go();
     await _database.delete(_database.habitEntries).go();
     await _database.delete(_database.tasks).go();
@@ -33,6 +34,18 @@ class DriftPlannerBackupRestoreRepository
   }
 
   Future<void> _insertBackupData(PlannerBackupData data) async {
+    await _database
+        .into(_database.dailyReviewReminderSettingsTable)
+        .insert(
+          local.DailyReviewReminderSettingsTableCompanion.insert(
+            id: 'default',
+            isEnabled: drift.Value(data.dailyReviewReminderSettings.isEnabled),
+            timeMinutes: drift.Value(
+              data.dailyReviewReminderSettings.timeMinutes,
+            ),
+          ),
+        );
+
     for (final goal in data.goals) {
       await _database
           .into(_database.goals)

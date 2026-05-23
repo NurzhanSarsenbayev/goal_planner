@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:goal_planner/features/reminders/application/local_notification_service.dart';
-import 'package:goal_planner/features/reminders/application/reminder_notification_client.dart';
+import 'package:goal_planner/features/reminders/common/application/local_notification_service.dart';
+import 'package:goal_planner/features/reminders/common/application/reminder_notification_client.dart';
 
 void main() {
   group('LocalNotificationService', () {

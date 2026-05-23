@@ -5,14 +5,14 @@ import '../../features/goals/presentation/screens/goal_details_screen.dart';
 import '../../features/tasks/presentation/screens/all_tasks_screen.dart';
 import '../../features/recurring/presentation/screens/recurring_tasks_screen.dart';
 import '../../features/reports/presentation/screens/reports_screen.dart';
-import '../../features/reminders/presentation/screens/standalone_reminders_screen.dart';
+import '../../features/reminders/standalone/presentation/screens/standalone_reminders_screen.dart';
 import '../../state/planner_store.dart';
 import '../../features/recurring/presentation/recurring_rule_dialog_actions.dart';
 import '../../features/tasks/presentation/task_dialog_actions.dart';
 import '../../features/reports/application/habit_report_loader.dart';
-import '../../features/reminders/application/standalone_reminder_store.dart';
-import '../../features/reminders/application/daily_review_reminder_settings_store.dart';
-import '../../features/reminders/presentation/screens/daily_review_reminder_settings_screen.dart';
+import '../../features/reminders/standalone/application/standalone_reminder_store.dart';
+import '../../features/reminders/daily_review/application/daily_review_reminder_settings_store.dart';
+import '../../features/reminders/daily_review/presentation/screens/daily_review_reminder_settings_screen.dart';
 
 class AppNavigationActions {
   const AppNavigationActions({
