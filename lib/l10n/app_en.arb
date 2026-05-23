@@ -599,6 +599,21 @@
     "moreRecurringTasksSubtitle": "Manage repeated weekday and monthly tasks.",
 
     "moreStandaloneRemindersTitle": "Reminders",
+    "moreDailyReviewReminderTitle": "Daily review reminder",
+    "moreDailyReviewReminderSubtitle": "Remind me to close the day if anything is unfinished.",
+    "dailyReviewReminderSettingsTitle": "Daily review reminder",
+    "dailyReviewReminderSettingsDescription": "Goal Planner will remind you near the end of the day only if you still have unfinished tasks or unfilled habits.",
+    "dailyReviewReminderEnabledTitle": "Daily review reminder",
+    "dailyReviewReminderEnabledSubtitle": "Send an evening reminder when the day is not closed.",
+    "dailyReviewReminderTimeTitle": "Reminder time",
+    "dailyReviewReminderTimeSubtitle": "At {time}",
+    "@dailyReviewReminderTimeSubtitle": {
+      "placeholders": {
+        "time": {
+          "type": "String"
+        }
+      }
+    },
     "moreStandaloneRemindersSubtitle": "Manage one-time and daily time reminders.",
     "standaloneRemindersScreenTitle": "Reminders",
     "standaloneRemindersEmptyDescription": "No time reminders yet.",

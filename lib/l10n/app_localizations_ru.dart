@@ -754,6 +754,35 @@ class AppLocalizationsRu extends AppLocalizations {
   String get moreStandaloneRemindersTitle => 'Напоминания';
 
   @override
+  String get moreDailyReviewReminderTitle => 'Вечернее напоминание';
+
+  @override
+  String get moreDailyReviewReminderSubtitle =>
+      'Напоминать закрыть день, если остались незавершённые пункты.';
+
+  @override
+  String get dailyReviewReminderSettingsTitle => 'Вечернее напоминание';
+
+  @override
+  String get dailyReviewReminderSettingsDescription =>
+      'Goal Planner напомнит ближе к концу дня только если остались незавершённые задачи или незаполненные привычки.';
+
+  @override
+  String get dailyReviewReminderEnabledTitle => 'Вечернее напоминание';
+
+  @override
+  String get dailyReviewReminderEnabledSubtitle =>
+      'Присылать напоминание, если день ещё не закрыт.';
+
+  @override
+  String get dailyReviewReminderTimeTitle => 'Время напоминания';
+
+  @override
+  String dailyReviewReminderTimeSubtitle(String time) {
+    return 'В $time';
+  }
+
+  @override
   String get moreStandaloneRemindersSubtitle =>
       'Разовые и ежедневные напоминания по времени.';
 

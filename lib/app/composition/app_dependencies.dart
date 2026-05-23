@@ -33,6 +33,7 @@ import '../../features/reminders/application/standalone_reminder_store.dart';
 import '../../features/reminders/application/standalone_reminder_resync_service.dart';
 import '../../features/reminders/application/daily_review_pending_checker.dart';
 import '../../features/reminders/application/daily_review_reminder_scheduler.dart';
+import '../../features/reminders/application/daily_review_reminder_settings_store.dart';
 import '../../state/planner_store.dart';
 
 class AppDependencies {
@@ -48,6 +49,7 @@ class AppDependencies {
     required this.standaloneReminderStore,
     required this.standaloneReminderResyncService,
     required this.dailyReviewReminderScheduler,
+    required this.dailyReviewReminderSettingsStore,
   }) : _database = database;
 
   factory AppDependencies.create() {
@@ -165,6 +167,12 @@ class AppDependencies {
       taskReminderResyncService: taskReminderResyncService,
     );
 
+    final dailyReviewReminderSettingsStore = DailyReviewReminderSettingsStore(
+      settingsRepository: dailyReviewReminderSettingsRepository,
+      syncDailyReviewReminder:
+          dailyReviewReminderScheduler.syncDailyReviewReminder,
+    );
+
     final taskStoreCoordinator = TaskStoreCoordinator(
       taskRepository: taskRepository,
       recurringOccurrenceStoreCoordinator: recurringOccurrenceStoreCoordinator,
@@ -195,6 +203,7 @@ class AppDependencies {
       standaloneReminderStore: standaloneReminderStore,
       standaloneReminderResyncService: standaloneReminderResyncService,
       dailyReviewReminderScheduler: dailyReviewReminderScheduler,
+      dailyReviewReminderSettingsStore: dailyReviewReminderSettingsStore,
     );
   }
 
@@ -210,11 +219,13 @@ class AppDependencies {
   final StandaloneReminderStore standaloneReminderStore;
   final StandaloneReminderResyncService standaloneReminderResyncService;
   final DailyReviewReminderScheduler dailyReviewReminderScheduler;
+  final DailyReviewReminderSettingsStore dailyReviewReminderSettingsStore;
 
   Future<void> dispose() async {
     store.dispose();
     habitStore.dispose();
     standaloneReminderStore.dispose();
+    dailyReviewReminderSettingsStore.dispose();
     await _database.close();
   }
 }

@@ -167,6 +167,8 @@ class _AppShellState extends State<AppShell> {
       recurringRuleDialogActions: _recurringRuleDialogActions,
       habitReportLoader: _habitReportLoader,
       standaloneReminderStore: _dependencies.standaloneReminderStore,
+      dailyReviewReminderSettingsStore:
+          _dependencies.dailyReviewReminderSettingsStore,
     );
 
     _store.addListener(_onStoreChanged);
@@ -249,6 +251,9 @@ class _AppShellState extends State<AppShell> {
       },
       onOpenStandaloneReminders: () {
         _navigationActions.openStandaloneReminders(context);
+      },
+      onOpenDailyReviewReminderSettings: () {
+        _navigationActions.openDailyReviewReminderSettings(context);
       },
       onShowTestNotification: _showTestNotification,
     );

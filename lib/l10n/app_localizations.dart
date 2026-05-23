@@ -1412,6 +1412,54 @@ abstract class AppLocalizations {
   /// **'Reminders'**
   String get moreStandaloneRemindersTitle;
 
+  /// No description provided for @moreDailyReviewReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily review reminder'**
+  String get moreDailyReviewReminderTitle;
+
+  /// No description provided for @moreDailyReviewReminderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind me to close the day if anything is unfinished.'**
+  String get moreDailyReviewReminderSubtitle;
+
+  /// No description provided for @dailyReviewReminderSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily review reminder'**
+  String get dailyReviewReminderSettingsTitle;
+
+  /// No description provided for @dailyReviewReminderSettingsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal Planner will remind you near the end of the day only if you still have unfinished tasks or unfilled habits.'**
+  String get dailyReviewReminderSettingsDescription;
+
+  /// No description provided for @dailyReviewReminderEnabledTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily review reminder'**
+  String get dailyReviewReminderEnabledTitle;
+
+  /// No description provided for @dailyReviewReminderEnabledSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send an evening reminder when the day is not closed.'**
+  String get dailyReviewReminderEnabledSubtitle;
+
+  /// No description provided for @dailyReviewReminderTimeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder time'**
+  String get dailyReviewReminderTimeTitle;
+
+  /// No description provided for @dailyReviewReminderTimeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'At {time}'**
+  String dailyReviewReminderTimeSubtitle(String time);
+
   /// No description provided for @moreStandaloneRemindersSubtitle.
   ///
   /// In en, this message translates to:

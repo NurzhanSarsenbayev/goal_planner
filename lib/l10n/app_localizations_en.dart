@@ -752,6 +752,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get moreStandaloneRemindersTitle => 'Reminders';
 
   @override
+  String get moreDailyReviewReminderTitle => 'Daily review reminder';
+
+  @override
+  String get moreDailyReviewReminderSubtitle =>
+      'Remind me to close the day if anything is unfinished.';
+
+  @override
+  String get dailyReviewReminderSettingsTitle => 'Daily review reminder';
+
+  @override
+  String get dailyReviewReminderSettingsDescription =>
+      'Goal Planner will remind you near the end of the day only if you still have unfinished tasks or unfilled habits.';
+
+  @override
+  String get dailyReviewReminderEnabledTitle => 'Daily review reminder';
+
+  @override
+  String get dailyReviewReminderEnabledSubtitle =>
+      'Send an evening reminder when the day is not closed.';
+
+  @override
+  String get dailyReviewReminderTimeTitle => 'Reminder time';
+
+  @override
+  String dailyReviewReminderTimeSubtitle(String time) {
+    return 'At $time';
+  }
+
+  @override
   String get moreStandaloneRemindersSubtitle =>
       'Manage one-time and daily time reminders.';
 

@@ -599,6 +599,21 @@
     "moreRecurringTasksSubtitle": "Управление задачами по дням недели и месяцам.",
 
     "moreStandaloneRemindersTitle": "Напоминания",
+    "moreDailyReviewReminderTitle": "Вечернее напоминание",
+    "moreDailyReviewReminderSubtitle": "Напоминать закрыть день, если остались незавершённые пункты.",
+    "dailyReviewReminderSettingsTitle": "Вечернее напоминание",
+    "dailyReviewReminderSettingsDescription": "Goal Planner напомнит ближе к концу дня только если остались незавершённые задачи или незаполненные привычки.",
+    "dailyReviewReminderEnabledTitle": "Вечернее напоминание",
+    "dailyReviewReminderEnabledSubtitle": "Присылать напоминание, если день ещё не закрыт.",
+    "dailyReviewReminderTimeTitle": "Время напоминания",
+    "dailyReviewReminderTimeSubtitle": "В {time}",
+    "@dailyReviewReminderTimeSubtitle": {
+      "placeholders": {
+        "time": {
+          "type": "String"
+        }
+      }
+    },
     "moreStandaloneRemindersSubtitle": "Разовые и ежедневные напоминания по времени.",
     "standaloneRemindersScreenTitle": "Напоминания",
     "standaloneRemindersEmptyDescription": "Напоминаний по времени пока нет.",

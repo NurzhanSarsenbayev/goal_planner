@@ -20,6 +20,7 @@ class MoreScreen extends StatelessWidget {
     required this.onOpenRecurringTasks,
     required this.onShowTestNotification,
     required this.onOpenStandaloneReminders,
+    required this.onOpenDailyReviewReminderSettings,
   });
 
   final AppLanguage selectedLanguage;
@@ -34,6 +35,7 @@ class MoreScreen extends StatelessWidget {
   final VoidCallback onOpenRecurringTasks;
   final Future<void> Function() onShowTestNotification;
   final VoidCallback onOpenStandaloneReminders;
+  final VoidCallback onOpenDailyReviewReminderSettings;
 
   String _backupSubtitle(BuildContext context, AppLocalizations l10n) {
     final backupAt = lastBackupAt;
@@ -95,6 +97,16 @@ class MoreScreen extends StatelessWidget {
                 },
               ),
             ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Card(
+          child: ListTile(
+            leading: const Icon(Icons.nightlight_outlined),
+            title: Text(l10n.moreDailyReviewReminderTitle),
+            subtitle: Text(l10n.moreDailyReviewReminderSubtitle),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: onOpenDailyReviewReminderSettings,
           ),
         ),
         Text(
