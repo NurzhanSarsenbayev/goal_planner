@@ -46,6 +46,7 @@ class _AppShellState extends State<AppShell> {
   late final TaskReminderLifecycleService _taskReminderLifecycleService;
   late final StandaloneReminderResyncService _standaloneReminderResyncService;
   late final DailyReviewReminderScheduler _dailyReviewReminderScheduler;
+  Timer? _dailyReviewReminderResyncDebounce;
 
   int _selectedIndex = 0;
 
@@ -177,6 +178,8 @@ class _AppShellState extends State<AppShell> {
 
   @override
   void dispose() {
+    _dailyReviewReminderResyncDebounce?.cancel();
+
     _store.removeListener(_onStoreChanged);
     _habitStore.removeListener(_onStoreChanged);
 
@@ -187,6 +190,29 @@ class _AppShellState extends State<AppShell> {
 
   void _onStoreChanged() {
     setState(() {});
+    _scheduleDailyReviewReminderResync();
+  }
+
+  void _scheduleDailyReviewReminderResync() {
+    _dailyReviewReminderResyncDebounce?.cancel();
+    _dailyReviewReminderResyncDebounce = Timer(
+      const Duration(milliseconds: 750),
+      () {
+        if (!mounted) {
+          return;
+        }
+
+        unawaited(_syncDailyReviewReminderAfterStateChange());
+      },
+    );
+  }
+
+  Future<void> _syncDailyReviewReminderAfterStateChange() async {
+    try {
+      await _dailyReviewReminderScheduler.syncDailyReviewReminder();
+    } catch (_) {
+      // Daily review reminder sync must not block app state updates.
+    }
   }
 
   void _onDestinationSelected(int index) {
