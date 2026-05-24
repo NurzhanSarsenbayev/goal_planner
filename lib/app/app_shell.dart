@@ -49,6 +49,7 @@ class _AppShellState extends State<AppShell> {
   late final DailyReviewReminderScheduler _dailyReviewReminderScheduler;
   Timer? _dailyReviewReminderResyncDebounce;
   late final HabitReminderResyncService _habitReminderResyncService;
+  Locale? _lastReminderTextsLocale;
 
   int _selectedIndex = 0;
 
@@ -154,11 +155,50 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
+  Future<void> _resyncRemindersAfterLocaleChange() async {
+    if (!_store.isInitialized) {
+      return;
+    }
+
+    try {
+      await _taskReminderLifecycleService.syncTaskReminders(_store.tasks);
+    } catch (_) {
+      // Reminder localization resync must not block the app.
+    }
+
+    try {
+      await _standaloneReminderResyncService.syncStandaloneReminders();
+    } catch (_) {
+      // Standalone reminder localization resync must not block the app.
+    }
+
+    try {
+      await _habitReminderResyncService.syncHabitReminders();
+    } catch (_) {
+      // Habit reminder localization resync must not block the app.
+    }
+
+    try {
+      await _dailyReviewReminderScheduler.syncDailyReviewReminder();
+    } catch (_) {
+      // Daily review reminder localization resync must not block the app.
+    }
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
+    final currentLocale = Localizations.localeOf(context);
+    final previousLocale = _lastReminderTextsLocale;
+
     _updateLocalizedReminderNotificationTexts();
+
+    if (previousLocale != null && previousLocale != currentLocale) {
+      unawaited(_resyncRemindersAfterLocaleChange());
+    }
+
+    _lastReminderTextsLocale = currentLocale;
   }
 
   @override

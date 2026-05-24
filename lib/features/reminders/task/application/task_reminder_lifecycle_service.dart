@@ -31,6 +31,10 @@ class TaskReminderLifecycleService {
     );
   }
 
+  Future<void> syncTaskReminders(Iterable<PlannerTask> tasks) {
+    return _taskReminderResyncService.syncTaskReminders(tasks);
+  }
+
   Future<void> initializeTaskReminderNotifications() async {
     await _notifications.initialize();
     await _notifications.requestTaskReminderPermissions();
