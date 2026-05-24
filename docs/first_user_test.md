@@ -137,6 +137,20 @@ Observe:
 - Is the Daily Review Reminder useful or annoying?
 - Does the tester expect task reminders, habit reminders or a general daily reminder first?
 
+### 10. Habit reminder check
+
+Task:
+
+Create a habit, enable a reminder for it, choose a time, then mark the habit as done/skipped and explain what you expect from the reminder.
+
+Observe:
+
+- Can the tester find the reminder option inside the habit dialog?
+- Does the reminder control feel too hidden or too heavy?
+- Does the tester understand that done/skipped/failed suppress today's reminder?
+- Does the tester expect habit reminders to be separate from standalone reminders?
+- Does the tester understand that changing app language updates future reminder notifications?
+
 ## Questions after the test
 
 Ask:

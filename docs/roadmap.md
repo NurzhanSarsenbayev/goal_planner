@@ -1437,26 +1437,40 @@ Out of scope for this phase:
 
 ## Phase 8.5: Habit reminders
 
-Status: not started.
+Status: done.
 
 Goal:
 
-Let users configure reminders for habits they want to perform at a specific time.
+Allow users to attach a simple local reminder to a habit.
 
-Initial scope:
+Completed scope:
 
-- Add optional reminder time per habit.
-- Allow enabling/disabling reminder per habit.
-- Schedule habit reminder notification.
-- Cancel/reschedule habit reminder when habit settings change.
-- Keep habit reminders separate from PlannerStore.
+- Added optional reminder fields to Habit.
+- Persisted habit reminder settings in Drift.
+- Included habit reminder settings in backup/restore through Habit data.
+- Added HabitStore and HabitApplicationService mutation flow for enabling, disabling and changing habit reminders.
+- Added pending checker logic:
+  - remind only if habit is active;
+  - remind only if reminder is enabled;
+  - remind only if the habit is pending today;
+  - suppress reminder after done, skipped or failed entry for today.
+- Added one-shot HabitReminderScheduler.
+- Wired reminder sync after habit mutations.
+- Wired reminder sync after today's habit entry changes.
+- Added startup resync.
+- Added restore-time resync.
+- Added reminder controls to Add/Edit Habit dialog.
+- Localized reminder notification texts.
+- Resynced reminders after app language changes.
 
 Out of scope for this phase:
 
-- Multiple reminder times per habit.
 - Snooze.
 - Notification actions.
+- Multiple reminder times per habit.
+- Per-weekday habit reminder schedules.
 - Backend push notifications.
+- Cross-device reminder sync.
 
 
 ## Phase 8.6: Snooze and notification actions
