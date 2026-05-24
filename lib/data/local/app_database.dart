@@ -124,6 +124,11 @@ class Habits extends Table {
 
   BoolColumn get isArchived => boolean().withDefault(const Constant(false))();
 
+  BoolColumn get isReminderEnabled =>
+      boolean().withDefault(const Constant(false))();
+
+  IntColumn get reminderTimeMinutes => integer().nullable()();
+
   DateTimeColumn get createdAt => dateTime()();
 
   DateTimeColumn get updatedAt => dateTime()();
@@ -208,7 +213,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   MigrationStrategy get migration {
@@ -255,6 +260,16 @@ class AppDatabase extends _$AppDatabase {
 
         if (from < 8) {
           await migrator.createTable(dailyReviewReminderSettingsTable);
+        }
+
+        if (from < 9) {
+          if (!await _columnExists('habits', 'is_reminder_enabled')) {
+            await migrator.addColumn(habits, habits.isReminderEnabled);
+          }
+
+          if (!await _columnExists('habits', 'reminder_time_minutes')) {
+            await migrator.addColumn(habits, habits.reminderTimeMinutes);
+          }
         }
       },
     );

@@ -13,6 +13,8 @@ domain.Habit mapHabit(local.Habit row) {
     targetCount: row.targetCount,
     sortOrder: row.sortOrder,
     isArchived: row.isArchived,
+    isReminderEnabled: row.isReminderEnabled,
+    reminderTimeMinutes: row.reminderTimeMinutes,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   );

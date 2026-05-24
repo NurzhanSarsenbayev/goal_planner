@@ -67,6 +67,8 @@ class DriftHabitRepository implements HabitRepository {
             targetCount: drift.Value(habit.targetCount),
             sortOrder: habit.sortOrder,
             isArchived: drift.Value(habit.isArchived),
+            isReminderEnabled: drift.Value(habit.isReminderEnabled),
+            reminderTimeMinutes: drift.Value(habit.reminderTimeMinutes),
             createdAt: habit.createdAt,
             updatedAt: habit.updatedAt,
           ),

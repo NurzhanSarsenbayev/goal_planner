@@ -36,6 +36,8 @@ void main() {
         targetCount: 8,
         sortOrder: 2,
         isArchived: false,
+        isReminderEnabled: true,
+        reminderTimeMinutes: 20 * 60 + 15,
         createdAt: DateTime(2026, 5, 1),
         updatedAt: DateTime(2026, 5, 2),
       );
@@ -49,6 +51,8 @@ void main() {
       expect(habit.targetCount, 8);
       expect(habit.sortOrder, 2);
       expect(habit.isArchived, isFalse);
+      expect(habit.isReminderEnabled, isTrue);
+      expect(habit.reminderTimeMinutes, 1215);
     });
 
     test('maps habit entry database row to domain model', () {

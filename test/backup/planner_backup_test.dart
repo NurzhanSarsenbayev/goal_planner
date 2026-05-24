@@ -93,6 +93,8 @@ void main() {
               targetCount: 3,
               sortOrder: 1,
               isArchived: false,
+              isReminderEnabled: true,
+              reminderTimeMinutes: 19 * 60 + 45,
               createdAt: now,
               updatedAt: now,
             ),
@@ -170,6 +172,8 @@ void main() {
       expect(restored.data.habits.single.trackingType, HabitTrackingType.count);
       expect(restored.data.habits.single.targetCount, 3);
       expect(restored.data.habits.single.isArchived, isFalse);
+      expect(restored.data.habits.single.isReminderEnabled, isTrue);
+      expect(restored.data.habits.single.reminderTimeMinutes, 1185);
 
       expect(
         restored.data.habitEntries.single.status,

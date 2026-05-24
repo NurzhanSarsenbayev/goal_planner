@@ -141,6 +141,8 @@ Map<String, Object?> _habitToJson(Habit habit) {
     'targetCount': habit.targetCount,
     'sortOrder': habit.sortOrder,
     'isArchived': habit.isArchived,
+    'isReminderEnabled': habit.isReminderEnabled,
+    'reminderTimeMinutes': habit.reminderTimeMinutes,
     'createdAt': _dateToJson(habit.createdAt),
     'updatedAt': _dateToJson(habit.updatedAt),
   };
@@ -155,9 +157,33 @@ Habit _habitFromJson(Map<String, dynamic> json) {
     targetCount: _nullableIntFromJson(json, 'targetCount'),
     sortOrder: _intFromJson(json, 'sortOrder'),
     isArchived: _boolFromJson(json, 'isArchived'),
+    isReminderEnabled: _optionalBoolFromJson(
+      json,
+      'isReminderEnabled',
+      defaultValue: false,
+    ),
+    reminderTimeMinutes: _nullableIntFromJson(json, 'reminderTimeMinutes'),
     createdAt: _dateFromJson(json, 'createdAt'),
     updatedAt: _dateFromJson(json, 'updatedAt'),
   );
+}
+
+bool _optionalBoolFromJson(
+  Map<String, dynamic> json,
+  String field, {
+  required bool defaultValue,
+}) {
+  final value = json[field];
+
+  if (value == null) {
+    return defaultValue;
+  }
+
+  if (value is bool) {
+    return value;
+  }
+
+  throw FormatException('$field must be a bool.');
 }
 
 Map<String, Object?> _habitEntryToJson(HabitEntry entry) {
@@ -217,17 +243,14 @@ StandaloneReminder _standaloneReminderFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, Object?> _dailyReviewReminderSettingsToJson(
-    DailyReviewReminderSettings settings,
-    ) {
-  return {
-    'isEnabled': settings.isEnabled,
-    'timeMinutes': settings.timeMinutes,
-  };
+  DailyReviewReminderSettings settings,
+) {
+  return {'isEnabled': settings.isEnabled, 'timeMinutes': settings.timeMinutes};
 }
 
 DailyReviewReminderSettings _dailyReviewReminderSettingsFromJson(
-    Map<String, dynamic> json,
-    ) {
+  Map<String, dynamic> json,
+) {
   final value = json['dailyReviewReminderSettings'];
 
   if (value == null) {
