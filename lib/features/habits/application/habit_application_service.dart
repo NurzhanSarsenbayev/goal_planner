@@ -121,6 +121,40 @@ class HabitApplicationService {
     return HabitMutationResult(habits: updatedHabits, habitToPersist: updated);
   }
 
+  HabitMutationResult updateHabitReminder({
+    required List<Habit> habits,
+    required String habitId,
+    required bool isReminderEnabled,
+    required int? reminderTimeMinutes,
+    DateTime? now,
+  }) {
+    final index = habits.indexWhere((habit) => habit.id == habitId);
+
+    if (index == -1) {
+      return HabitMutationResult(habits: habits);
+    }
+
+    if (isReminderEnabled && reminderTimeMinutes == null) {
+      return HabitMutationResult(habits: habits);
+    }
+
+    if (!_isValidReminderTimeMinutes(reminderTimeMinutes)) {
+      return HabitMutationResult(habits: habits);
+    }
+
+    final current = habits[index];
+    final updated = current.copyWith(
+      isReminderEnabled: isReminderEnabled,
+      reminderTimeMinutes: isReminderEnabled ? reminderTimeMinutes : null,
+      updatedAt: now ?? DateTime.now(),
+    );
+
+    final updatedHabits = [...habits];
+    updatedHabits[index] = updated;
+
+    return HabitMutationResult(habits: updatedHabits, habitToPersist: updated);
+  }
+
   HabitMutationResult archiveHabit({
     required List<Habit> habits,
     required String habitId,
@@ -324,6 +358,11 @@ class HabitApplicationService {
     }
 
     return completedCount < 0 ? 0 : completedCount;
+  }
+
+  bool _isValidReminderTimeMinutes(int? reminderTimeMinutes) {
+    return reminderTimeMinutes == null ||
+        reminderTimeMinutes >= 0 && reminderTimeMinutes < 24 * 60;
   }
 
   bool _isSameDate(DateTime left, DateTime right) {

@@ -89,6 +89,27 @@ void main() {
       expect(repository.savedHabits, [store.habits.single]);
     });
 
+    test('updates habit reminder and persists it', () async {
+      final habit = _habit();
+      final repository = _FakeHabitRepository(habits: [habit]);
+      final store = HabitStore(
+        habitRepository: repository,
+        initialWeekStart: DateTime(2026, 5, 4),
+      );
+
+      await store.initialize();
+      await store.updateHabitReminder(
+        habitId: habit.id,
+        isReminderEnabled: true,
+        reminderTimeMinutes: 20 * 60 + 30,
+      );
+
+      expect(store.habits.single.isReminderEnabled, isTrue);
+      expect(store.habits.single.reminderTimeMinutes, 1230);
+      expect(repository.savedHabits.single.isReminderEnabled, isTrue);
+      expect(repository.savedHabits.single.reminderTimeMinutes, 1230);
+    });
+
     test('updates habit and persists it', () async {
       final habit = _habit(title: 'Old');
       final repository = _FakeHabitRepository(habits: [habit]);
@@ -345,6 +366,8 @@ Habit _habit({
   int? targetCount,
   int sortOrder = 0,
   bool isArchived = false,
+  bool isReminderEnabled = false,
+  int? reminderTimeMinutes,
 }) {
   return Habit(
     id: id,
@@ -354,6 +377,8 @@ Habit _habit({
     targetCount: targetCount,
     sortOrder: sortOrder,
     isArchived: isArchived,
+    isReminderEnabled: isReminderEnabled,
+    reminderTimeMinutes: reminderTimeMinutes,
     createdAt: DateTime(2026, 5, 1),
     updatedAt: DateTime(2026, 5, 1),
   );

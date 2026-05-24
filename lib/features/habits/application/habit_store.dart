@@ -173,6 +173,21 @@ class HabitStore extends ChangeNotifier {
     await _applyHabitMutation(result);
   }
 
+  Future<void> updateHabitReminder({
+    required String habitId,
+    required bool isReminderEnabled,
+    required int? reminderTimeMinutes,
+  }) async {
+    final result = _habitApplicationService.updateHabitReminder(
+      habits: _habits,
+      habitId: habitId,
+      isReminderEnabled: isReminderEnabled,
+      reminderTimeMinutes: reminderTimeMinutes,
+    );
+
+    await _applyHabitMutation(result);
+  }
+
   Future<void> archiveHabit(String habitId) async {
     final result = _habitApplicationService.archiveHabit(
       habits: _habits,

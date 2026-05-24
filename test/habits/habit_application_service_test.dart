@@ -93,6 +93,94 @@ void main() {
       expect(result.habits.single.title, 'New');
     });
 
+    test('enables habit reminder with valid time', () {
+      final now = DateTime(2026, 5, 24, 10);
+      final habit = _habit();
+
+      final result = service.updateHabitReminder(
+        habits: [habit],
+        habitId: habit.id,
+        isReminderEnabled: true,
+        reminderTimeMinutes: 20 * 60 + 15,
+        now: now,
+      );
+
+      final updated = result.habitToPersist!;
+
+      expect(result.hasChange, isTrue);
+      expect(updated.isReminderEnabled, isTrue);
+      expect(updated.reminderTimeMinutes, 1215);
+      expect(updated.updatedAt, now);
+      expect(result.habits.single.isReminderEnabled, isTrue);
+    });
+
+    test('disables habit reminder and clears reminder time', () {
+      final now = DateTime(2026, 5, 24, 11);
+      final habit = _habit(
+        isReminderEnabled: true,
+        reminderTimeMinutes: 20 * 60,
+      );
+
+      final result = service.updateHabitReminder(
+        habits: [habit],
+        habitId: habit.id,
+        isReminderEnabled: false,
+        reminderTimeMinutes: null,
+        now: now,
+      );
+
+      final updated = result.habitToPersist!;
+
+      expect(result.hasChange, isTrue);
+      expect(updated.isReminderEnabled, isFalse);
+      expect(updated.reminderTimeMinutes, isNull);
+      expect(updated.updatedAt, now);
+    });
+
+    test('does not enable habit reminder without time', () {
+      final habit = _habit();
+
+      final result = service.updateHabitReminder(
+        habits: [habit],
+        habitId: habit.id,
+        isReminderEnabled: true,
+        reminderTimeMinutes: null,
+      );
+
+      expect(result.hasChange, isFalse);
+      expect(result.habits, hasLength(1));
+      expect(result.habits.single, same(habit));
+    });
+
+    test('does not update habit reminder with invalid time', () {
+      final habit = _habit();
+
+      final result = service.updateHabitReminder(
+        habits: [habit],
+        habitId: habit.id,
+        isReminderEnabled: true,
+        reminderTimeMinutes: 24 * 60,
+      );
+
+      expect(result.hasChange, isFalse);
+      expect(result.habits, hasLength(1));
+      expect(result.habits.single, same(habit));
+    });
+
+    test('does not update reminder for missing habit', () {
+      final habits = [_habit()];
+
+      final result = service.updateHabitReminder(
+        habits: habits,
+        habitId: 'missing',
+        isReminderEnabled: true,
+        reminderTimeMinutes: 20 * 60,
+      );
+
+      expect(result.hasChange, isFalse);
+      expect(result.habits, same(habits));
+    });
+
     test('does not update missing habit', () {
       final habits = [_habit()];
 
@@ -331,6 +419,8 @@ Habit _habit({
   int? targetCount,
   int sortOrder = 0,
   bool isArchived = false,
+  bool isReminderEnabled = false,
+  int? reminderTimeMinutes,
 }) {
   return Habit(
     id: id,
@@ -340,6 +430,8 @@ Habit _habit({
     targetCount: targetCount,
     sortOrder: sortOrder,
     isArchived: isArchived,
+    isReminderEnabled: isReminderEnabled,
+    reminderTimeMinutes: reminderTimeMinutes,
     createdAt: DateTime(2026, 5, 1),
     updatedAt: DateTime(2026, 5, 1),
   );
