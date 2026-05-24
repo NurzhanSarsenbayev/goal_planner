@@ -268,6 +268,27 @@
     "archivedHabitRestoreTooltip": "Restore habit",
     "archivedHabitDeleteTooltip": "Delete habit",
 
+    "habitReminderNotificationBody": "Habit reminder",
+
+    "habitReminderEnabledTitle": "Reminder",
+    "habitReminderDisabledSubtitle": "No reminder for this habit.",
+    "habitReminderTimeSubtitle": "Reminder at {time}",
+    "@habitReminderTimeSubtitle": {
+      "placeholders": {
+        "time": {
+          "type": "String"
+        }
+      }
+    },
+    "habitReminderTimeButton": "Time: {time}",
+    "@habitReminderTimeButton": {
+      "placeholders": {
+        "time": {
+          "type": "String"
+        }
+      }
+    },
+
     "reportsTitle": "Reports",
     "reportsTasksSection": "Tasks",
     "reportsHabitBreakdownSection": "Habit breakdown",

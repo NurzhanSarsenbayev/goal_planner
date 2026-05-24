@@ -34,6 +34,34 @@ void main() {
       expect(created.updatedAt, now);
     });
 
+    test('creates habit with enabled reminder', () {
+      final result = service.createHabit(
+        habits: const [],
+        title: 'Drink water',
+        description: '',
+        isReminderEnabled: true,
+        reminderTimeMinutes: 20 * 60 + 15,
+      );
+
+      final created = result.habitToPersist!;
+
+      expect(created.isReminderEnabled, isTrue);
+      expect(created.reminderTimeMinutes, 1215);
+    });
+
+    test('does not create habit with enabled reminder without time', () {
+      final result = service.createHabit(
+        habits: const [],
+        title: 'Drink water',
+        description: '',
+        isReminderEnabled: true,
+        reminderTimeMinutes: null,
+      );
+
+      expect(result.hasChange, isFalse);
+      expect(result.habits, isEmpty);
+    });
+
     test('does not create habit with empty title', () {
       final habits = [_habit()];
 

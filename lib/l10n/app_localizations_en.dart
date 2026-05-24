@@ -299,6 +299,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get archivedHabitDeleteTooltip => 'Delete habit';
 
   @override
+  String get habitReminderNotificationBody => 'Habit reminder';
+
+  @override
+  String get habitReminderEnabledTitle => 'Reminder';
+
+  @override
+  String get habitReminderDisabledSubtitle => 'No reminder for this habit.';
+
+  @override
+  String habitReminderTimeSubtitle(String time) {
+    return 'Reminder at $time';
+  }
+
+  @override
+  String habitReminderTimeButton(String time) {
+    return 'Time: $time';
+  }
+
+  @override
   String get reportsTitle => 'Reports';
 
   @override

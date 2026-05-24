@@ -136,6 +136,14 @@ class _AppShellState extends State<AppShell> {
     }
   }
 
+  void _updateLocalizedReminderNotificationTexts() {
+    final l10n = AppLocalizations.of(context);
+
+    _dependencies.habitReminderNotificationTexts.update(
+      habitReminderBody: l10n.habitReminderNotificationBody,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -188,6 +196,14 @@ class _AppShellState extends State<AppShell> {
 
     unawaited(_initializeStoreAndReminders());
     unawaited(_habitStore.initialize());
+  }
+
+  void _updateLocalizedReminderNotificationTexts() {
+    final l10n = AppLocalizations.of(context);
+
+    _dependencies.habitReminderNotificationTexts.update(
+      habitReminderBody: l10n.habitReminderNotificationBody,
+    );
   }
 
   @override

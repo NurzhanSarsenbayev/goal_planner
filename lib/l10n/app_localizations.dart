@@ -620,6 +620,36 @@ abstract class AppLocalizations {
   /// **'Delete habit'**
   String get archivedHabitDeleteTooltip;
 
+  /// No description provided for @habitReminderNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Habit reminder'**
+  String get habitReminderNotificationBody;
+
+  /// No description provided for @habitReminderEnabledTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder'**
+  String get habitReminderEnabledTitle;
+
+  /// No description provided for @habitReminderDisabledSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No reminder for this habit.'**
+  String get habitReminderDisabledSubtitle;
+
+  /// No description provided for @habitReminderTimeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder at {time}'**
+  String habitReminderTimeSubtitle(String time);
+
+  /// No description provided for @habitReminderTimeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Time: {time}'**
+  String habitReminderTimeButton(String time);
+
   /// No description provided for @reportsTitle.
   ///
   /// In en, this message translates to:

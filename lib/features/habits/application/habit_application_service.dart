@@ -46,12 +46,22 @@ class HabitApplicationService {
     required String description,
     HabitTrackingType trackingType = HabitTrackingType.binary,
     int? targetCount,
+    bool isReminderEnabled = false,
+    int? reminderTimeMinutes,
     DateTime? now,
   }) {
     final normalizedTitle = title.trim();
     final normalizedDescription = description.trim();
 
     if (normalizedTitle.isEmpty) {
+      return HabitMutationResult(habits: habits);
+    }
+
+    if (isReminderEnabled && reminderTimeMinutes == null) {
+      return HabitMutationResult(habits: habits);
+    }
+
+    if (!_isValidReminderTimeMinutes(reminderTimeMinutes)) {
       return HabitMutationResult(habits: habits);
     }
 
@@ -68,6 +78,8 @@ class HabitApplicationService {
         targetCount: targetCount,
       ),
       sortOrder: nextSortOrder,
+      isReminderEnabled: isReminderEnabled,
+      reminderTimeMinutes: isReminderEnabled ? reminderTimeMinutes : null,
       isArchived: false,
       createdAt: timestamp,
       updatedAt: timestamp,

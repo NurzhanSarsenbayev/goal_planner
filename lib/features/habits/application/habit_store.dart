@@ -148,6 +148,8 @@ class HabitStore extends ChangeNotifier {
     required String description,
     HabitTrackingType trackingType = HabitTrackingType.binary,
     int? targetCount,
+    bool isReminderEnabled = false,
+    int? reminderTimeMinutes,
   }) async {
     final result = _habitApplicationService.createHabit(
       habits: _habits,
@@ -155,6 +157,8 @@ class HabitStore extends ChangeNotifier {
       description: description,
       trackingType: trackingType,
       targetCount: targetCount,
+      isReminderEnabled: isReminderEnabled,
+      reminderTimeMinutes: reminderTimeMinutes,
     );
 
     await _applyHabitMutation(result);

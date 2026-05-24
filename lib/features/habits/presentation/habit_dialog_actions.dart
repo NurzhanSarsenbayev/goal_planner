@@ -29,6 +29,8 @@ class HabitDialogActions {
     await _habitStore.createHabit(
       title: draft.title,
       description: draft.description,
+      isReminderEnabled: draft.isReminderEnabled,
+      reminderTimeMinutes: draft.reminderTimeMinutes,
     );
   }
 
@@ -41,6 +43,8 @@ class HabitDialogActions {
         return AddHabitDialog(
           initialTitle: habit.title,
           initialDescription: habit.description,
+          initialIsReminderEnabled: habit.isReminderEnabled,
+          initialReminderTimeMinutes: habit.reminderTimeMinutes,
           dialogTitle: l10n.habitEditDialogTitle,
           actionLabel: l10n.commonSave,
         );
@@ -55,6 +59,12 @@ class HabitDialogActions {
       habitId: habit.id,
       title: draft.title,
       description: draft.description,
+    );
+
+    await _habitStore.updateHabitReminder(
+      habitId: habit.id,
+      isReminderEnabled: draft.isReminderEnabled,
+      reminderTimeMinutes: draft.reminderTimeMinutes,
     );
   }
 

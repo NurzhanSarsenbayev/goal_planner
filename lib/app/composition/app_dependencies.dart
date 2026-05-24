@@ -37,6 +37,7 @@ import '../../features/reminders/daily_review/application/daily_review_reminder_
 import '../../features/reminders/habit/application/habit_reminder_pending_checker.dart';
 import '../../features/reminders/habit/application/habit_reminder_scheduler.dart';
 import '../../features/reminders/habit/application/habit_reminder_resync_service.dart';
+import '../../features/reminders/habit/application/habit_reminder_notification_texts.dart';
 import '../../state/planner_store.dart';
 
 class AppDependencies {
@@ -55,6 +56,7 @@ class AppDependencies {
     required this.dailyReviewReminderSettingsStore,
     required this.habitReminderScheduler,
     required this.habitReminderResyncService,
+    required this.habitReminderNotificationTexts,
   }) : _database = database;
 
   factory AppDependencies.create() {
@@ -136,9 +138,12 @@ class AppDependencies {
 
     final localNotificationService = LocalNotificationService();
 
+    final habitReminderNotificationTexts = HabitReminderNotificationTexts();
+
     final habitReminderScheduler = HabitReminderScheduler(
       pendingChecker: habitReminderPendingChecker,
       notifications: localNotificationService,
+      notificationTexts: habitReminderNotificationTexts,
     );
 
     final habitReminderResyncService = HabitReminderResyncService(
@@ -231,6 +236,7 @@ class AppDependencies {
       dailyReviewReminderSettingsStore: dailyReviewReminderSettingsStore,
       habitReminderScheduler: habitReminderScheduler,
       habitReminderResyncService: habitReminderResyncService,
+      habitReminderNotificationTexts: habitReminderNotificationTexts,
     );
   }
 
@@ -249,6 +255,7 @@ class AppDependencies {
   final DailyReviewReminderSettingsStore dailyReviewReminderSettingsStore;
   final HabitReminderScheduler habitReminderScheduler;
   final HabitReminderResyncService habitReminderResyncService;
+  final HabitReminderNotificationTexts habitReminderNotificationTexts;
 
   Future<void> dispose() async {
     store.dispose();

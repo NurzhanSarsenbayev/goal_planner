@@ -7,6 +7,7 @@ import 'package:goal_planner/features/habits/domain/habit_tracking_type.dart';
 import 'package:goal_planner/features/reminders/common/application/reminder_notification_client.dart';
 import 'package:goal_planner/features/reminders/habit/application/habit_reminder_pending_checker.dart';
 import 'package:goal_planner/features/reminders/habit/application/habit_reminder_scheduler.dart';
+import 'package:goal_planner/features/reminders/habit/application/habit_reminder_notification_texts.dart';
 
 void main() {
   group('HabitReminderScheduler', () {
@@ -25,9 +26,10 @@ void main() {
         habitReminderNotificationId('habit-1'),
       ]);
       expect(notifications.scheduledReminders, hasLength(1));
-      expect(notifications.scheduledReminders.single.id, [
-        habitReminderNotificationId('habit-1'),
-      ].single);
+      expect(
+        notifications.scheduledReminders.single.id,
+        [habitReminderNotificationId('habit-1')].single,
+      );
       expect(notifications.scheduledReminders.single.title, 'Drink water');
       expect(notifications.scheduledReminders.single.body, 'Habit reminder');
       expect(
@@ -122,6 +124,26 @@ void main() {
       ]);
       expect(notifications.scheduledReminders, isEmpty);
     });
+
+    test('uses localized notification body', () async {
+      final notifications = _FakeReminderNotificationClient();
+      final scheduler = _scheduler(
+        notifications: notifications,
+        now: () => DateTime(2026, 5, 24, 8),
+        notificationTexts: HabitReminderNotificationTexts(
+          habitReminderBody: 'Напоминание о привычке',
+        ),
+      );
+
+      await scheduler.syncHabitReminder(
+        _habit(timeMinutes: 9 * 60, isReminderEnabled: true),
+      );
+
+      expect(
+        notifications.scheduledReminders.single.body,
+        'Напоминание о привычке',
+      );
+    });
   });
 }
 
@@ -129,6 +151,7 @@ HabitReminderScheduler _scheduler({
   _FakeReminderNotificationClient? notifications,
   List<HabitEntry> entries = const [],
   DateTime Function()? now,
+  HabitReminderNotificationTexts? notificationTexts,
 }) {
   final todayProvider = now ?? () => DateTime(2026, 5, 24, 8);
 
@@ -139,6 +162,7 @@ HabitReminderScheduler _scheduler({
     ),
     notifications: notifications ?? _FakeReminderNotificationClient(),
     now: todayProvider,
+    notificationTexts: notificationTexts,
   );
 }
 

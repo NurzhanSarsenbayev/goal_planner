@@ -302,6 +302,26 @@ class AppLocalizationsRu extends AppLocalizations {
   String get archivedHabitDeleteTooltip => 'Удалить привычку';
 
   @override
+  String get habitReminderNotificationBody => 'Напоминание о привычке';
+
+  @override
+  String get habitReminderEnabledTitle => 'Напоминание';
+
+  @override
+  String get habitReminderDisabledSubtitle =>
+      'Для этой привычки напоминание выключено.';
+
+  @override
+  String habitReminderTimeSubtitle(String time) {
+    return 'Напомнить в $time';
+  }
+
+  @override
+  String habitReminderTimeButton(String time) {
+    return 'Время: $time';
+  }
+
+  @override
   String get reportsTitle => 'Отчёты';
 
   @override

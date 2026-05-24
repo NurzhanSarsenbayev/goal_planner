@@ -89,6 +89,32 @@ void main() {
       expect(repository.savedHabits, [store.habits.single]);
     });
 
+    test('creates habit with reminder and persists it', () async {
+      final syncedHabits = <Habit>[];
+      final repository = _FakeHabitRepository();
+      final store = HabitStore(
+        habitRepository: repository,
+        initialWeekStart: DateTime(2026, 5, 4),
+        syncHabitReminder: (habit) async {
+          syncedHabits.add(habit);
+        },
+      );
+
+      await store.initialize();
+      await store.createHabit(
+        title: 'Water',
+        description: '',
+        isReminderEnabled: true,
+        reminderTimeMinutes: 20 * 60 + 15,
+      );
+
+      expect(store.habits.single.isReminderEnabled, isTrue);
+      expect(store.habits.single.reminderTimeMinutes, 1215);
+      expect(repository.savedHabits.single.isReminderEnabled, isTrue);
+      expect(repository.savedHabits.single.reminderTimeMinutes, 1215);
+      expect(syncedHabits.single.id, store.habits.single.id);
+    });
+
     test('updates habit reminder and persists it', () async {
       final habit = _habit();
       final repository = _FakeHabitRepository(habits: [habit]);
