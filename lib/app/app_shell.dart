@@ -11,6 +11,7 @@ import '../features/tasks/presentation/task_dialog_actions.dart';
 import '../features/reminders/task/application/task_reminder_lifecycle_service.dart';
 import '../features/reminders/standalone/application/standalone_reminder_resync_service.dart';
 import '../features/reminders/daily_review/application/daily_review_reminder_scheduler.dart';
+import '../features/reminders/habit/application/habit_reminder_resync_service.dart';
 import 'composition/app_dependencies.dart';
 import 'navigation/app_navigation_actions.dart';
 import 'navigation/main_tab_builder.dart';
@@ -47,6 +48,7 @@ class _AppShellState extends State<AppShell> {
   late final StandaloneReminderResyncService _standaloneReminderResyncService;
   late final DailyReviewReminderScheduler _dailyReviewReminderScheduler;
   Timer? _dailyReviewReminderResyncDebounce;
+  late final HabitReminderResyncService _habitReminderResyncService;
 
   int _selectedIndex = 0;
 
@@ -75,6 +77,12 @@ class _AppShellState extends State<AppShell> {
       await _standaloneReminderResyncService.syncStandaloneReminders();
     } catch (_) {
       // Standalone reminder sync must not block app startup.
+    }
+
+    try {
+      await _habitReminderResyncService.syncHabitReminders();
+    } catch (_) {
+      // Habit reminder sync must not block app startup.
     }
 
     try {
@@ -139,6 +147,7 @@ class _AppShellState extends State<AppShell> {
     _standaloneReminderResyncService =
         _dependencies.standaloneReminderResyncService;
     _dailyReviewReminderScheduler = _dependencies.dailyReviewReminderScheduler;
+    _habitReminderResyncService = _dependencies.habitReminderResyncService;
     _backupFlowActions = BackupFlowActions(
       backupFileExportService: _dependencies.backupFileExportService,
       backupFileStorage: _dependencies.backupFileStorage,
@@ -150,6 +159,7 @@ class _AppShellState extends State<AppShell> {
       onBackupStatusChanged: _updateLastBackupAt,
       standaloneReminderStore: _dependencies.standaloneReminderStore,
       standaloneReminderResyncService: _standaloneReminderResyncService,
+      habitReminderResyncService: _habitReminderResyncService,
       dailyReviewReminderScheduler: _dailyReviewReminderScheduler,
       dailyReviewReminderSettingsStore:
           _dependencies.dailyReviewReminderSettingsStore,
