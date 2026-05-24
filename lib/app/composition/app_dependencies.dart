@@ -34,6 +34,8 @@ import '../../features/reminders/standalone/application/standalone_reminder_resy
 import '../../features/reminders/daily_review/application/daily_review_pending_checker.dart';
 import '../../features/reminders/daily_review/application/daily_review_reminder_scheduler.dart';
 import '../../features/reminders/daily_review/application/daily_review_reminder_settings_store.dart';
+import '../../features/reminders/habit/application/habit_reminder_pending_checker.dart';
+import '../../features/reminders/habit/application/habit_reminder_scheduler.dart';
 import '../../state/planner_store.dart';
 
 class AppDependencies {
@@ -50,6 +52,7 @@ class AppDependencies {
     required this.standaloneReminderResyncService,
     required this.dailyReviewReminderScheduler,
     required this.dailyReviewReminderSettingsStore,
+    required this.habitReminderScheduler,
   }) : _database = database;
 
   factory AppDependencies.create() {
@@ -72,6 +75,10 @@ class AppDependencies {
 
     final dailyReviewPendingChecker = DailyReviewPendingChecker(
       taskRepository: taskRepository,
+      habitRepository: habitRepository,
+    );
+
+    final habitReminderPendingChecker = HabitReminderPendingChecker(
       habitRepository: habitRepository,
     );
 
@@ -126,6 +133,11 @@ class AppDependencies {
         );
 
     final localNotificationService = LocalNotificationService();
+
+    final habitReminderScheduler = HabitReminderScheduler(
+      pendingChecker: habitReminderPendingChecker,
+      notifications: localNotificationService,
+    );
 
     final dailyReviewReminderScheduler = DailyReviewReminderScheduler(
       settingsRepository: dailyReviewReminderSettingsRepository,
@@ -190,7 +202,11 @@ class AppDependencies {
       recurringOccurrenceStoreCoordinator: recurringOccurrenceStoreCoordinator,
     );
 
-    final habitStore = HabitStore(habitRepository: habitRepository);
+    final habitStore = HabitStore(
+      habitRepository: habitRepository,
+      syncHabitReminder: habitReminderScheduler.syncHabitReminder,
+      cancelHabitReminder: habitReminderScheduler.cancelHabitReminder,
+    );
 
     return AppDependencies._(
       database: database,
@@ -206,6 +222,7 @@ class AppDependencies {
       standaloneReminderResyncService: standaloneReminderResyncService,
       dailyReviewReminderScheduler: dailyReviewReminderScheduler,
       dailyReviewReminderSettingsStore: dailyReviewReminderSettingsStore,
+      habitReminderScheduler: habitReminderScheduler,
     );
   }
 
@@ -222,6 +239,7 @@ class AppDependencies {
   final StandaloneReminderResyncService standaloneReminderResyncService;
   final DailyReviewReminderScheduler dailyReviewReminderScheduler;
   final DailyReviewReminderSettingsStore dailyReviewReminderSettingsStore;
+  final HabitReminderScheduler habitReminderScheduler;
 
   Future<void> dispose() async {
     store.dispose();

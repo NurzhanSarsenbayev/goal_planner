@@ -110,6 +110,31 @@ void main() {
       expect(repository.savedHabits.single.reminderTimeMinutes, 1230);
     });
 
+    test('syncs habit reminder after habit reminder update', () async {
+      final habit = _habit();
+      final syncedHabits = <Habit>[];
+      final repository = _FakeHabitRepository(habits: [habit]);
+      final store = HabitStore(
+        habitRepository: repository,
+        initialWeekStart: DateTime(2026, 5, 4),
+        syncHabitReminder: (habit) async {
+          syncedHabits.add(habit);
+        },
+      );
+
+      await store.initialize();
+      await store.updateHabitReminder(
+        habitId: habit.id,
+        isReminderEnabled: true,
+        reminderTimeMinutes: 20 * 60 + 30,
+      );
+
+      expect(syncedHabits, hasLength(1));
+      expect(syncedHabits.single.id, habit.id);
+      expect(syncedHabits.single.isReminderEnabled, isTrue);
+      expect(syncedHabits.single.reminderTimeMinutes, 1230);
+    });
+
     test('updates habit and persists it', () async {
       final habit = _habit(title: 'Old');
       final repository = _FakeHabitRepository(habits: [habit]);
@@ -179,6 +204,24 @@ void main() {
       expect(repository.deletedHabitIds, [habit.id]);
     });
 
+    test('cancels habit reminder after deleting habit', () async {
+      final habit = _habit(isReminderEnabled: true, reminderTimeMinutes: 1200);
+      final canceledHabitIds = <String>[];
+      final repository = _FakeHabitRepository(habits: [habit]);
+      final store = HabitStore(
+        habitRepository: repository,
+        initialWeekStart: DateTime(2026, 5, 4),
+        cancelHabitReminder: (habitId) async {
+          canceledHabitIds.add(habitId);
+        },
+      );
+
+      await store.initialize();
+      await store.deleteHabit(habit.id);
+
+      expect(canceledHabitIds, [habit.id]);
+    });
+
     test('marks entry and persists it', () async {
       final habit = _habit();
       final repository = _FakeHabitRepository(habits: [habit]);
@@ -198,6 +241,58 @@ void main() {
       expect(store.visibleWeekEntries.single.status, HabitEntryStatus.done);
       expect(repository.savedEntries, [store.visibleWeekEntries.single]);
     });
+
+    test('syncs habit reminder after marking today entry', () async {
+      final habit = _habit(isReminderEnabled: true, reminderTimeMinutes: 1200);
+      final syncedHabitIds = <String>[];
+      final repository = _FakeHabitRepository(habits: [habit]);
+      final store = HabitStore(
+        habitRepository: repository,
+        todayProvider: () => DateTime(2026, 5, 6),
+        initialWeekStart: DateTime(2026, 5, 4),
+        syncHabitReminder: (habit) async {
+          syncedHabitIds.add(habit.id);
+        },
+      );
+
+      await store.initialize();
+      await store.markEntry(
+        habitId: habit.id,
+        date: DateTime(2026, 5, 6),
+        status: HabitEntryStatus.done,
+      );
+
+      expect(syncedHabitIds, [habit.id]);
+    });
+
+    test(
+      'does not sync habit reminder after marking non-today entry',
+      () async {
+        final habit = _habit(
+          isReminderEnabled: true,
+          reminderTimeMinutes: 1200,
+        );
+        final syncedHabitIds = <String>[];
+        final repository = _FakeHabitRepository(habits: [habit]);
+        final store = HabitStore(
+          habitRepository: repository,
+          todayProvider: () => DateTime(2026, 5, 6),
+          initialWeekStart: DateTime(2026, 5, 4),
+          syncHabitReminder: (habit) async {
+            syncedHabitIds.add(habit.id);
+          },
+        );
+
+        await store.initialize();
+        await store.markEntry(
+          habitId: habit.id,
+          date: DateTime(2026, 5, 5),
+          status: HabitEntryStatus.done,
+        );
+
+        expect(syncedHabitIds, isEmpty);
+      },
+    );
 
     test('updates today summary when today entry is marked', () async {
       final habit = _habit();
@@ -291,6 +386,29 @@ void main() {
 
       expect(store.visibleWeekEntries, isEmpty);
       expect(repository.deletedEntryIds, [entry.id]);
+    });
+
+    test('syncs habit reminder after clearing today entry', () async {
+      final habit = _habit(isReminderEnabled: true, reminderTimeMinutes: 1200);
+      final entry = _entry(habitId: habit.id, date: DateTime(2026, 5, 6));
+      final syncedHabitIds = <String>[];
+      final repository = _FakeHabitRepository(
+        habits: [habit],
+        entries: [entry],
+      );
+      final store = HabitStore(
+        habitRepository: repository,
+        todayProvider: () => DateTime(2026, 5, 6),
+        initialWeekStart: DateTime(2026, 5, 4),
+        syncHabitReminder: (habit) async {
+          syncedHabitIds.add(habit.id);
+        },
+      );
+
+      await store.initialize();
+      await store.clearEntry(habitId: habit.id, date: DateTime(2026, 5, 6));
+
+      expect(syncedHabitIds, [habit.id]);
     });
   });
 }

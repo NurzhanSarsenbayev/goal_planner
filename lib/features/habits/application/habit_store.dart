@@ -18,12 +18,16 @@ class HabitStore extends ChangeNotifier {
     HabitWeekViewBuilder habitWeekViewBuilder = const HabitWeekViewBuilder(),
     HabitTodaySummaryBuilder habitTodaySummaryBuilder =
         const HabitTodaySummaryBuilder(),
+    Future<void> Function(Habit habit)? syncHabitReminder,
+    Future<void> Function(String habitId)? cancelHabitReminder,
     DateTime Function() todayProvider = todayDate,
     DateTime? initialWeekStart,
   }) : _habitRepository = habitRepository,
        _habitApplicationService = habitApplicationService,
        _habitWeekViewBuilder = habitWeekViewBuilder,
        _habitTodaySummaryBuilder = habitTodaySummaryBuilder,
+       _syncHabitReminder = syncHabitReminder ?? _noopSyncHabitReminder,
+       _cancelHabitReminder = cancelHabitReminder ?? _noopCancelHabitReminder,
        _todayProvider = todayProvider,
        _visibleWeekStart = dateOnly(
          initialWeekStart ?? _startOfWeek(DateTime.now()),
@@ -33,6 +37,8 @@ class HabitStore extends ChangeNotifier {
   final HabitApplicationService _habitApplicationService;
   final HabitWeekViewBuilder _habitWeekViewBuilder;
   final HabitTodaySummaryBuilder _habitTodaySummaryBuilder;
+  final Future<void> Function(Habit habit) _syncHabitReminder;
+  final Future<void> Function(String habitId) _cancelHabitReminder;
   final DateTime Function() _todayProvider;
 
   List<Habit> _habits = [];
@@ -235,20 +241,22 @@ class HabitStore extends ChangeNotifier {
       completedCount: completedCount,
     );
 
-    await _applyEntryMutation(result, affectedDate: date);
+    await _applyEntryMutation(result, affectedDate: date, affectedHabit: habit);
   }
 
   Future<void> clearEntry({
     required String habitId,
     required DateTime date,
   }) async {
+    final habit = _findHabit(habitId);
+
     final result = _habitApplicationService.clearEntry(
       entries: _visibleWeekEntries,
       habitId: habitId,
       date: date,
     );
 
-    await _applyEntryMutation(result, affectedDate: date);
+    await _applyEntryMutation(result, affectedDate: date, affectedHabit: habit);
   }
 
   Future<List<HabitEntry>> loadEntriesForRange({
@@ -284,10 +292,12 @@ class HabitStore extends ChangeNotifier {
 
     if (habitToPersist != null) {
       await _habitRepository.saveHabit(habitToPersist);
+      await _syncHabitReminder(habitToPersist);
     }
 
     if (habitIdToDelete != null) {
       await _habitRepository.deleteHabit(habitIdToDelete);
+      await _cancelHabitReminder(habitIdToDelete);
       _visibleWeekEntries = [
         for (final entry in _visibleWeekEntries)
           if (entry.habitId != habitIdToDelete) entry,
@@ -303,6 +313,7 @@ class HabitStore extends ChangeNotifier {
   Future<void> _applyEntryMutation(
     HabitEntryMutationResult result, {
     required DateTime affectedDate,
+    Habit? affectedHabit,
   }) async {
     if (!result.hasChange) {
       return;
@@ -329,6 +340,10 @@ class HabitStore extends ChangeNotifier {
     if (entryIdToDelete != null) {
       await _habitRepository.deleteEntry(entryIdToDelete);
     }
+
+    if (affectedHabit != null && dateOnly(affectedDate) == _todayDate) {
+      await _syncHabitReminder(affectedHabit);
+    }
   }
 
   DateTime get _visibleWeekEnd {
@@ -347,3 +362,7 @@ class HabitStore extends ChangeNotifier {
     );
   }
 }
+
+Future<void> _noopSyncHabitReminder(Habit habit) async {}
+
+Future<void> _noopCancelHabitReminder(String habitId) async {}
