@@ -650,6 +650,66 @@ abstract class AppLocalizations {
   /// **'Time: {time}'**
   String habitReminderTimeButton(String time);
 
+  /// No description provided for @taskReminderNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Task reminder'**
+  String get taskReminderNotificationBody;
+
+  /// No description provided for @standaloneReminderNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder'**
+  String get standaloneReminderNotificationBody;
+
+  /// No description provided for @dailyReviewReminderNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review your day'**
+  String get dailyReviewReminderNotificationTitle;
+
+  /// No description provided for @dailyReviewReminderNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You still have {count} item(s) to review.'**
+  String dailyReviewReminderNotificationBody(int count);
+
+  /// No description provided for @notificationTestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal Planner'**
+  String get notificationTestTitle;
+
+  /// No description provided for @notificationTestBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are working.'**
+  String get notificationTestBody;
+
+  /// No description provided for @notificationReminderChannelName.
+  ///
+  /// In en, this message translates to:
+  /// **'Task reminders'**
+  String get notificationReminderChannelName;
+
+  /// No description provided for @notificationReminderChannelDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications for scheduled Goal Planner tasks.'**
+  String get notificationReminderChannelDescription;
+
+  /// No description provided for @notificationTestChannelName.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal Planner reminders'**
+  String get notificationTestChannelName;
+
+  /// No description provided for @notificationTestChannelDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications for tasks and time reminders.'**
+  String get notificationTestChannelDescription;
+
   /// No description provided for @reportsTitle.
   ///
   /// In en, this message translates to:

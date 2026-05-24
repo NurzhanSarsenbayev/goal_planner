@@ -1,24 +1,23 @@
 import '../../../habits/domain/habit.dart';
 import '../../common/application/reminder_notification_client.dart';
+import '../../common/application/reminder_notification_texts.dart';
 import 'habit_reminder_pending_checker.dart';
-import 'habit_reminder_notification_texts.dart';
 
 class HabitReminderScheduler {
   HabitReminderScheduler({
     required HabitReminderPendingChecker pendingChecker,
     required ReminderNotificationClient notifications,
     DateTime Function()? now,
-    HabitReminderNotificationTexts? notificationTexts,
+    ReminderNotificationTexts? notificationTexts,
   }) : _pendingChecker = pendingChecker,
        _notifications = notifications,
        _now = now ?? DateTime.now,
-       _notificationTexts =
-           notificationTexts ?? HabitReminderNotificationTexts();
+       _notificationTexts = notificationTexts ?? ReminderNotificationTexts();
 
   final HabitReminderPendingChecker _pendingChecker;
   final ReminderNotificationClient _notifications;
   final DateTime Function() _now;
-  final HabitReminderNotificationTexts _notificationTexts;
+  final ReminderNotificationTexts _notificationTexts;
 
   Future<void> syncHabitReminder(Habit habit) async {
     final notificationId = habitReminderNotificationId(habit.id);

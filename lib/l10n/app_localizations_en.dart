@@ -318,6 +318,40 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get taskReminderNotificationBody => 'Task reminder';
+
+  @override
+  String get standaloneReminderNotificationBody => 'Reminder';
+
+  @override
+  String get dailyReviewReminderNotificationTitle => 'Review your day';
+
+  @override
+  String dailyReviewReminderNotificationBody(int count) {
+    return 'You still have $count item(s) to review.';
+  }
+
+  @override
+  String get notificationTestTitle => 'Goal Planner';
+
+  @override
+  String get notificationTestBody => 'Notifications are working.';
+
+  @override
+  String get notificationReminderChannelName => 'Task reminders';
+
+  @override
+  String get notificationReminderChannelDescription =>
+      'Notifications for scheduled Goal Planner tasks.';
+
+  @override
+  String get notificationTestChannelName => 'Goal Planner reminders';
+
+  @override
+  String get notificationTestChannelDescription =>
+      'Notifications for tasks and time reminders.';
+
+  @override
   String get reportsTitle => 'Reports';
 
   @override

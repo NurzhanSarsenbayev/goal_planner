@@ -1,16 +1,20 @@
 import '../../../../models/planner_task.dart';
 import '../../../../shared/planner_dates.dart';
 import '../../common/application/reminder_notification_client.dart';
+import '../../common/application/reminder_notification_texts.dart';
 
 class TaskReminderScheduler {
-  const TaskReminderScheduler({
+  TaskReminderScheduler({
     required ReminderNotificationClient notifications,
     DateTime Function()? now,
+    ReminderNotificationTexts? notificationTexts,
   }) : _notifications = notifications,
-       _now = now ?? DateTime.now;
+       _now = now ?? DateTime.now,
+       _notificationTexts = notificationTexts ?? ReminderNotificationTexts();
 
   final ReminderNotificationClient _notifications;
   final DateTime Function() _now;
+  final ReminderNotificationTexts _notificationTexts;
 
   Future<void> syncTaskReminder(PlannerTask task) async {
     final notificationId = taskReminderNotificationId(task.id);
@@ -26,7 +30,7 @@ class TaskReminderScheduler {
     await _notifications.scheduleReminder(
       id: notificationId,
       title: task.title,
-      body: 'Task reminder',
+      body: _notificationTexts.taskReminderBody,
       scheduledAt: reminderAt,
       payload: task.id,
     );

@@ -1,15 +1,19 @@
 import '../domain/standalone_reminder.dart';
 import '../../common/application/reminder_notification_client.dart';
+import '../../common/application/reminder_notification_texts.dart';
 
 class StandaloneReminderScheduler {
-  const StandaloneReminderScheduler({
+  StandaloneReminderScheduler({
     required ReminderNotificationClient notifications,
     DateTime Function()? now,
+    ReminderNotificationTexts? notificationTexts,
   }) : _notifications = notifications,
-       _now = now ?? DateTime.now;
+       _now = now ?? DateTime.now,
+       _notificationTexts = notificationTexts ?? ReminderNotificationTexts();
 
   final ReminderNotificationClient _notifications;
   final DateTime Function() _now;
+  final ReminderNotificationTexts _notificationTexts;
 
   Future<void> syncStandaloneReminder(StandaloneReminder reminder) async {
     final notificationId = standaloneReminderNotificationId(reminder.id);
@@ -23,7 +27,7 @@ class StandaloneReminderScheduler {
     await _notifications.scheduleReminder(
       id: notificationId,
       title: reminder.title,
-      body: 'Reminder',
+      body: _notificationTexts.standaloneReminderBody,
       scheduledAt: _nextReminderDateTime(reminder),
       payload: reminder.id,
       repeat: reminder.scheduleType == StandaloneReminderScheduleType.daily

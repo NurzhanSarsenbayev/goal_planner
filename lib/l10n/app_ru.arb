@@ -289,6 +289,24 @@
       }
     },
 
+    "taskReminderNotificationBody": "Напоминание о задаче",
+    "standaloneReminderNotificationBody": "Напоминание",
+    "dailyReviewReminderNotificationTitle": "Закройте день",
+    "dailyReviewReminderNotificationBody": "Осталось пунктов для проверки: {count}.",
+    "@dailyReviewReminderNotificationBody": {
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "notificationTestTitle": "Goal Planner",
+    "notificationTestBody": "Уведомления работают.",
+    "notificationReminderChannelName": "Напоминания",
+    "notificationReminderChannelDescription": "Уведомления о задачах, привычках и напоминаниях.",
+    "notificationTestChannelName": "Уведомления Goal Planner",
+    "notificationTestChannelDescription": "Проверка локальных уведомлений.",
+
     "reportsTitle": "Отчёты",
     "reportsTasksSection": "Задачи",
     "reportsHabitBreakdownSection": "Разбор привычек",

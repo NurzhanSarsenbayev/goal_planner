@@ -9,6 +9,7 @@ import 'package:goal_planner/features/reminders/common/application/reminder_noti
 import 'package:goal_planner/features/reminders/daily_review/domain/daily_review_reminder_settings.dart';
 import 'package:goal_planner/features/tasks/application/task_repository.dart';
 import 'package:goal_planner/models/planner_task.dart';
+import 'package:goal_planner/features/reminders/common/application/reminder_notification_texts.dart';
 
 void main() {
   group('DailyReviewReminderScheduler', () {
@@ -57,6 +58,25 @@ void main() {
       expect(notifications.canceledIds, [dailyReviewReminderNotificationId]);
       expect(notifications.scheduledReminders, isEmpty);
       expect(pendingChecker.loadCount, 1);
+    });
+
+    test('uses configured notification title and body', () async {
+      final notifications = _FakeReminderNotificationClient();
+      final scheduler = _scheduler(
+        notifications: notifications,
+        notificationTexts: ReminderNotificationTexts(
+          dailyReviewTitle: 'Закройте день',
+          dailyReviewBody: (count) => 'Осталось пунктов: $count.',
+        ),
+      );
+
+      await scheduler.syncDailyReviewReminder();
+
+      expect(notifications.scheduledReminders.single.title, 'Закройте день');
+      expect(
+        notifications.scheduledReminders.single.body,
+        'Осталось пунктов: 1.',
+      );
     });
 
     test('schedules reminder today when review time is still ahead', () async {
@@ -163,6 +183,7 @@ DailyReviewReminderScheduler _scheduler({
   _FakeDailyReviewPendingChecker? pendingChecker,
   DailyReviewReminderSettings? settings,
   DateTime Function()? now,
+  ReminderNotificationTexts? notificationTexts,
 }) {
   return DailyReviewReminderScheduler(
     settingsRepository: _FakeDailyReviewReminderSettingsRepository(
@@ -180,6 +201,7 @@ DailyReviewReminderScheduler _scheduler({
         ),
     notifications: notifications ?? _FakeReminderNotificationClient(),
     now: now ?? () => DateTime(2026, 5, 21, 18),
+    notificationTexts: notificationTexts,
   );
 }
 

@@ -2,25 +2,29 @@ import '../../../../shared/planner_time.dart';
 import 'daily_review_pending_checker.dart';
 import 'daily_review_reminder_settings_repository.dart';
 import '../../common/application/reminder_notification_client.dart';
+import '../../common/application/reminder_notification_texts.dart';
 
 const dailyReviewReminderNotificationId = 73001;
 const dailyReviewReminderPayload = 'daily_review_reminder';
 
 class DailyReviewReminderScheduler {
-  const DailyReviewReminderScheduler({
+  DailyReviewReminderScheduler({
     required DailyReviewReminderSettingsRepository settingsRepository,
     required DailyReviewPendingChecker pendingChecker,
     required ReminderNotificationClient notifications,
     DateTime Function()? now,
+    ReminderNotificationTexts? notificationTexts,
   }) : _settingsRepository = settingsRepository,
        _pendingChecker = pendingChecker,
        _notifications = notifications,
-       _now = now ?? DateTime.now;
+       _now = now ?? DateTime.now,
+       _notificationTexts = notificationTexts ?? ReminderNotificationTexts();
 
   final DailyReviewReminderSettingsRepository _settingsRepository;
   final DailyReviewPendingChecker _pendingChecker;
   final ReminderNotificationClient _notifications;
   final DateTime Function() _now;
+  final ReminderNotificationTexts _notificationTexts;
 
   Future<void> syncDailyReviewReminder() async {
     await _notifications.cancelReminder(dailyReviewReminderNotificationId);
@@ -39,8 +43,8 @@ class DailyReviewReminderScheduler {
 
     await _notifications.scheduleReminder(
       id: dailyReviewReminderNotificationId,
-      title: 'Review your day',
-      body: _notificationBody(summary),
+      title: _notificationTexts.dailyReviewTitle,
+      body: _notificationTexts.dailyReviewBody(summary.pendingItemCount),
       scheduledAt: _nextReviewDateTime(settings.timeMinutes),
       payload: dailyReviewReminderPayload,
     );
@@ -68,9 +72,5 @@ class DailyReviewReminderScheduler {
     }
 
     return todayAtReviewTime.add(const Duration(days: 1));
-  }
-
-  String _notificationBody(DailyReviewPendingSummary summary) {
-    return 'You still have ${summary.pendingItemCount} item(s) to review.';
   }
 }

@@ -7,7 +7,7 @@ import 'package:goal_planner/features/habits/domain/habit_tracking_type.dart';
 import 'package:goal_planner/features/reminders/common/application/reminder_notification_client.dart';
 import 'package:goal_planner/features/reminders/habit/application/habit_reminder_pending_checker.dart';
 import 'package:goal_planner/features/reminders/habit/application/habit_reminder_scheduler.dart';
-import 'package:goal_planner/features/reminders/habit/application/habit_reminder_notification_texts.dart';
+import 'package:goal_planner/features/reminders/common/application/reminder_notification_texts.dart';
 
 void main() {
   group('HabitReminderScheduler', () {
@@ -130,7 +130,7 @@ void main() {
       final scheduler = _scheduler(
         notifications: notifications,
         now: () => DateTime(2026, 5, 24, 8),
-        notificationTexts: HabitReminderNotificationTexts(
+        notificationTexts: ReminderNotificationTexts(
           habitReminderBody: 'Напоминание о привычке',
         ),
       );
@@ -151,7 +151,7 @@ HabitReminderScheduler _scheduler({
   _FakeReminderNotificationClient? notifications,
   List<HabitEntry> entries = const [],
   DateTime Function()? now,
-  HabitReminderNotificationTexts? notificationTexts,
+  ReminderNotificationTexts? notificationTexts,
 }) {
   final todayProvider = now ?? () => DateTime(2026, 5, 24, 8);
 

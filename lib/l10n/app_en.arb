@@ -289,6 +289,24 @@
       }
     },
 
+    "taskReminderNotificationBody": "Task reminder",
+    "standaloneReminderNotificationBody": "Reminder",
+    "dailyReviewReminderNotificationTitle": "Review your day",
+    "dailyReviewReminderNotificationBody": "You still have {count} item(s) to review.",
+    "@dailyReviewReminderNotificationBody": {
+      "placeholders": {
+        "count": {
+          "type": "int"
+        }
+      }
+    },
+    "notificationTestTitle": "Goal Planner",
+    "notificationTestBody": "Notifications are working.",
+    "notificationReminderChannelName": "Task reminders",
+    "notificationReminderChannelDescription": "Notifications for scheduled Goal Planner tasks.",
+    "notificationTestChannelName": "Goal Planner reminders",
+    "notificationTestChannelDescription": "Notifications for tasks and time reminders.",
+
     "reportsTitle": "Reports",
     "reportsTasksSection": "Tasks",
     "reportsHabitBreakdownSection": "Habit breakdown",

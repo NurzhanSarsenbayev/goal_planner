@@ -3,13 +3,18 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as timezone_data;
 import 'package:timezone/timezone.dart' as timezone;
 
+import 'reminder_notification_texts.dart';
 import 'reminder_notification_client.dart';
 
 class LocalNotificationService implements ReminderNotificationClient {
-  LocalNotificationService({FlutterLocalNotificationsPlugin? plugin})
-    : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
+  LocalNotificationService({
+    FlutterLocalNotificationsPlugin? plugin,
+    ReminderNotificationTexts? notificationTexts,
+  }) : _plugin = plugin ?? FlutterLocalNotificationsPlugin(),
+       _notificationTexts = notificationTexts ?? ReminderNotificationTexts();
 
   final FlutterLocalNotificationsPlugin _plugin;
+  final ReminderNotificationTexts _notificationTexts;
 
   Future<void>? _initializeFuture;
 
@@ -65,20 +70,20 @@ class LocalNotificationService implements ReminderNotificationClient {
   }
 
   Future<void> showTestNotification() async {
-    const androidDetails = AndroidNotificationDetails(
+    final androidDetails = AndroidNotificationDetails(
       'goal_planner_reminders',
-      'Goal Planner reminders',
-      channelDescription: 'Notifications for tasks and time reminders.',
+      _notificationTexts.testChannelName,
+      channelDescription: _notificationTexts.testChannelDescription,
       importance: Importance.high,
       priority: Priority.high,
     );
 
-    const notificationDetails = NotificationDetails(android: androidDetails);
+    final notificationDetails = NotificationDetails(android: androidDetails);
 
     await _plugin.show(
       id: 1,
-      title: 'Goal Planner',
-      body: 'Notifications are working.',
+      title: _notificationTexts.testNotificationTitle,
+      body: _notificationTexts.testNotificationBody,
       notificationDetails: notificationDetails,
     );
   }
@@ -106,15 +111,15 @@ class LocalNotificationService implements ReminderNotificationClient {
       return;
     }
 
-    const androidDetails = AndroidNotificationDetails(
+    final androidDetails = AndroidNotificationDetails(
       'goal_planner_task_reminders',
-      'Task reminders',
-      channelDescription: 'Notifications for scheduled Goal Planner tasks.',
+      _notificationTexts.reminderChannelName,
+      channelDescription: _notificationTexts.reminderChannelDescription,
       importance: Importance.high,
       priority: Priority.high,
     );
 
-    const notificationDetails = NotificationDetails(android: androidDetails);
+    final notificationDetails = NotificationDetails(android: androidDetails);
 
     await _plugin.zonedSchedule(
       id: id,

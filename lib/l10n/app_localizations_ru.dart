@@ -322,6 +322,40 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get taskReminderNotificationBody => 'Напоминание о задаче';
+
+  @override
+  String get standaloneReminderNotificationBody => 'Напоминание';
+
+  @override
+  String get dailyReviewReminderNotificationTitle => 'Закройте день';
+
+  @override
+  String dailyReviewReminderNotificationBody(int count) {
+    return 'Осталось пунктов для проверки: $count.';
+  }
+
+  @override
+  String get notificationTestTitle => 'Goal Planner';
+
+  @override
+  String get notificationTestBody => 'Уведомления работают.';
+
+  @override
+  String get notificationReminderChannelName => 'Напоминания';
+
+  @override
+  String get notificationReminderChannelDescription =>
+      'Уведомления о задачах, привычках и напоминаниях.';
+
+  @override
+  String get notificationTestChannelName => 'Уведомления Goal Planner';
+
+  @override
+  String get notificationTestChannelDescription =>
+      'Проверка локальных уведомлений.';
+
+  @override
   String get reportsTitle => 'Отчёты';
 
   @override

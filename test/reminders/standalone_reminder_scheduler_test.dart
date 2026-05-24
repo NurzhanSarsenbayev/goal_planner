@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:goal_planner/features/reminders/common/application/reminder_notification_client.dart';
 import 'package:goal_planner/features/reminders/standalone/application/standalone_reminder_scheduler.dart';
 import 'package:goal_planner/features/reminders/standalone/domain/standalone_reminder.dart';
+import 'package:goal_planner/features/reminders/common/application/reminder_notification_texts.dart';
 
 void main() {
   group('StandaloneReminderScheduler', () {
@@ -31,6 +32,23 @@ void main() {
         notifications.scheduledReminders.single.repeat,
         ReminderRepeat.daily,
       );
+    });
+
+    test('uses configured notification body', () async {
+      final notifications = FakeReminderNotificationClient();
+      final scheduler = StandaloneReminderScheduler(
+        notifications: notifications,
+        now: () => DateTime(2026, 5, 21, 8),
+        notificationTexts: ReminderNotificationTexts(
+          standaloneReminderBody: 'Напоминание',
+        ),
+      );
+
+      await scheduler.syncStandaloneReminder(
+        _reminder(timeMinutes: 9 * 60, isEnabled: true),
+      );
+
+      expect(notifications.scheduledReminders.single.body, 'Напоминание');
     });
 
     test('cancels expired one-time reminder without scheduling it', () async {

@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:goal_planner/features/reminders/task/application/task_reminder_scheduler.dart';
 import 'package:goal_planner/features/reminders/common/application/reminder_notification_client.dart';
 import 'package:goal_planner/models/planner_task.dart';
+import 'package:goal_planner/features/reminders/common/application/reminder_notification_texts.dart';
 
 void main() {
   group('TaskReminderScheduler', () {
@@ -36,6 +37,34 @@ void main() {
         DateTime(2026, 5, 20, 9, 15),
       );
       expect(notifications.scheduledReminders.single.payload, 'task_1');
+    });
+
+    test('uses configured notification body', () async {
+      final notifications = FakeReminderNotificationClient();
+      final scheduler = TaskReminderScheduler(
+        notifications: notifications,
+        now: () => DateTime(2026, 5, 20, 8),
+        notificationTexts: ReminderNotificationTexts(
+          taskReminderBody: 'Напоминание о задаче',
+        ),
+      );
+
+      final task = PlannerTask(
+        id: 'task_1',
+        title: 'Plan day',
+        description: '',
+        scheduledDate: DateTime(2026, 5, 20),
+        scheduledTimeMinutes: 570,
+        reminderMinutesBefore: 15,
+        createdAt: DateTime(2026, 5, 20),
+      );
+
+      await scheduler.syncTaskReminder(task);
+
+      expect(
+        notifications.scheduledReminders.single.body,
+        'Напоминание о задаче',
+      );
     });
 
     test(
