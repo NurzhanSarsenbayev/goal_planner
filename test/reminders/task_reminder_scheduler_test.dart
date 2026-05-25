@@ -229,6 +229,39 @@ void main() {
       expect(notifications.scheduledReminders.single.payload, task.id);
     });
 
+    test(
+      'uses configured notification body for recurring occurrence',
+      () async {
+        final notifications = FakeReminderNotificationClient();
+        final scheduler = TaskReminderScheduler(
+          notifications: notifications,
+          now: () => DateTime(2026, 5, 20, 8),
+          notificationTexts: ReminderNotificationTexts(
+            taskReminderBody: 'Напоминание о задаче',
+          ),
+        );
+
+        final task = PlannerTask(
+          id: 'task_1',
+          title: 'Workout',
+          description: '',
+          recurringRuleId: 'rule_1',
+          scheduledDate: DateTime(2026, 5, 20),
+          scheduledTimeMinutes: 570,
+          reminderMinutesBefore: 15,
+          createdAt: DateTime(2026, 5, 20),
+        );
+
+        await scheduler.syncTaskReminder(task);
+
+        expect(notifications.scheduledReminders, hasLength(1));
+        expect(
+          notifications.scheduledReminders.single.body,
+          'Напоминание о задаче',
+        );
+      },
+    );
+
     test('cancels reminder by task id', () async {
       final notifications = FakeReminderNotificationClient();
       final scheduler = TaskReminderScheduler(

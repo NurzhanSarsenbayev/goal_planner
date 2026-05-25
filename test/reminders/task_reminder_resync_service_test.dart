@@ -91,6 +91,17 @@ void main() {
           createdAt: DateTime(2026, 5, 19),
         );
 
+        final removedRecurringOccurrence = PlannerTask(
+          id: 'old_recurring_task',
+          title: 'Old recurring task',
+          description: '',
+          recurringRuleId: 'rule_1',
+          scheduledDate: DateTime(2026, 5, 20),
+          scheduledTimeMinutes: 540,
+          reminderMinutesBefore: 15,
+          createdAt: DateTime(2026, 5, 19),
+        );
+
         final keptTask = PlannerTask(
           id: 'kept_task',
           title: 'Kept task',
@@ -111,22 +122,41 @@ void main() {
           createdAt: DateTime(2026, 5, 20),
         );
 
+        final restoredRecurringOccurrence = PlannerTask(
+          id: 'restored_recurring_task',
+          title: 'Restored recurring task',
+          description: '',
+          recurringRuleId: 'rule_2',
+          scheduledDate: DateTime(2026, 5, 20),
+          scheduledTimeMinutes: 660,
+          reminderMinutesBefore: 30,
+          createdAt: DateTime(2026, 5, 20),
+        );
+
         await service.syncAfterTaskSetReplacement(
-          previousTasks: [removedTask, keptTask],
-          currentTasks: [keptTask, restoredTask],
+          previousTasks: [removedTask, removedRecurringOccurrence, keptTask],
+          currentTasks: [keptTask, restoredTask, restoredRecurringOccurrence],
         );
 
         expect(notifications.canceledIds, [
           taskReminderNotificationId('old_task'),
+          taskReminderNotificationId('old_recurring_task'),
           taskReminderNotificationId('kept_task'),
           taskReminderNotificationId('restored_task'),
+          taskReminderNotificationId('restored_recurring_task'),
         ]);
 
-        expect(notifications.scheduledReminders, hasLength(2));
+        expect(notifications.scheduledReminders, hasLength(3));
         expect(notifications.scheduledReminders.map((call) => call.id), [
           taskReminderNotificationId('kept_task'),
           taskReminderNotificationId('restored_task'),
+          taskReminderNotificationId('restored_recurring_task'),
         ]);
+
+        expect(
+          notifications.scheduledReminders.map((call) => call.scheduledAt),
+          contains(DateTime(2026, 5, 20, 10, 30)),
+        );
       },
     );
   });
