@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../shared/planner_time.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/recurring_task_rule.dart';
 
@@ -75,9 +76,15 @@ class RecurringTaskRuleCard extends StatelessWidget {
   String _ruleSubtitle(AppLocalizations l10n) {
     final placement = _placementLabel(l10n);
     final recurrence = _recurrenceLabel(l10n);
-    final baseLabel = placement == null
+    final schedule = _scheduleLabel(l10n);
+
+    final recurrenceLabel = placement == null
         ? recurrence
         : l10n.recurringRuleSubtitleWithPlacement(recurrence, placement);
+
+    final baseLabel = schedule == null
+        ? recurrenceLabel
+        : l10n.recurringRuleSubtitleWithPlacement(recurrenceLabel, schedule);
 
     if (rule.isActive) {
       return baseLabel;
@@ -140,6 +147,41 @@ class RecurringTaskRuleCard extends StatelessWidget {
       DateTime.sunday => l10n.recurringWeekdaySunShort,
       _ => '?',
     };
+  }
+
+  String? _scheduleLabel(AppLocalizations l10n) {
+    final scheduledTimeMinutes = rule.scheduledTimeMinutes;
+
+    if (scheduledTimeMinutes == null) {
+      return null;
+    }
+
+    final timeLabel = l10n.taskTimeSelectedButton(
+      formatPlannerTime(scheduledTimeMinutes),
+    );
+
+    final reminderMinutesBefore = rule.reminderMinutesBefore;
+
+    if (reminderMinutesBefore == null) {
+      return timeLabel;
+    }
+
+    return l10n.recurringRuleSubtitleWithPlacement(
+      timeLabel,
+      _reminderLabel(l10n, reminderMinutesBefore),
+    );
+  }
+
+  String _reminderLabel(AppLocalizations l10n, int reminderMinutesBefore) {
+    if (reminderMinutesBefore == 0) {
+      return l10n.taskReminderAtTimeOption;
+    }
+
+    if (reminderMinutesBefore % 60 == 0) {
+      return l10n.taskReminderHoursBeforeOption(reminderMinutesBefore ~/ 60);
+    }
+
+    return l10n.taskReminderMinutesBeforeOption(reminderMinutesBefore);
   }
 }
 
