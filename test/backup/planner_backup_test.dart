@@ -74,6 +74,8 @@ void main() {
               endDate: null,
               isActive: true,
               createdAt: now,
+              scheduledTimeMinutes: 9 * 60 + 30,
+              reminderMinutesBefore: 15,
             ),
           ],
           recurringExceptions: [
@@ -165,6 +167,9 @@ void main() {
       ]);
       expect(restored.data.recurringRules.single.monthDay, isNull);
       expect(restored.data.recurringRules.single.endDate, isNull);
+
+      expect(restored.data.recurringRules.single.scheduledTimeMinutes, 570);
+      expect(restored.data.recurringRules.single.reminderMinutesBefore, 15);
 
       expect(restored.data.recurringExceptions.single.ruleId, 'rule-1');
       expect(restored.data.recurringExceptions.single.date, scheduledDate);

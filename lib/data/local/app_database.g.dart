@@ -870,6 +870,26 @@ class $RecurringTaskRulesTable extends RecurringTaskRules
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _scheduledTimeMinutesMeta =
+      const VerificationMeta('scheduledTimeMinutes');
+  @override
+  late final GeneratedColumn<int> scheduledTimeMinutes = GeneratedColumn<int>(
+    'scheduled_time_minutes',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _reminderMinutesBeforeMeta =
+      const VerificationMeta('reminderMinutesBefore');
+  @override
+  late final GeneratedColumn<int> reminderMinutesBefore = GeneratedColumn<int>(
+    'reminder_minutes_before',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -884,6 +904,8 @@ class $RecurringTaskRulesTable extends RecurringTaskRules
     endDate,
     isActive,
     createdAt,
+    scheduledTimeMinutes,
+    reminderMinutesBefore,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -985,6 +1007,24 @@ class $RecurringTaskRulesTable extends RecurringTaskRules
     } else if (isInserting) {
       context.missing(_createdAtMeta);
     }
+    if (data.containsKey('scheduled_time_minutes')) {
+      context.handle(
+        _scheduledTimeMinutesMeta,
+        scheduledTimeMinutes.isAcceptableOrUnknown(
+          data['scheduled_time_minutes']!,
+          _scheduledTimeMinutesMeta,
+        ),
+      );
+    }
+    if (data.containsKey('reminder_minutes_before')) {
+      context.handle(
+        _reminderMinutesBeforeMeta,
+        reminderMinutesBefore.isAcceptableOrUnknown(
+          data['reminder_minutes_before']!,
+          _reminderMinutesBeforeMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -1042,6 +1082,14 @@ class $RecurringTaskRulesTable extends RecurringTaskRules
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
       )!,
+      scheduledTimeMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}scheduled_time_minutes'],
+      ),
+      reminderMinutesBefore: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}reminder_minutes_before'],
+      ),
     );
   }
 
@@ -1065,6 +1113,8 @@ class RecurringTaskRule extends DataClass
   final DateTime? endDate;
   final bool isActive;
   final DateTime createdAt;
+  final int? scheduledTimeMinutes;
+  final int? reminderMinutesBefore;
   const RecurringTaskRule({
     required this.id,
     this.goalId,
@@ -1078,6 +1128,8 @@ class RecurringTaskRule extends DataClass
     this.endDate,
     required this.isActive,
     required this.createdAt,
+    this.scheduledTimeMinutes,
+    this.reminderMinutesBefore,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1104,6 +1156,12 @@ class RecurringTaskRule extends DataClass
     }
     map['is_active'] = Variable<bool>(isActive);
     map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || scheduledTimeMinutes != null) {
+      map['scheduled_time_minutes'] = Variable<int>(scheduledTimeMinutes);
+    }
+    if (!nullToAbsent || reminderMinutesBefore != null) {
+      map['reminder_minutes_before'] = Variable<int>(reminderMinutesBefore);
+    }
     return map;
   }
 
@@ -1131,6 +1189,12 @@ class RecurringTaskRule extends DataClass
           : Value(endDate),
       isActive: Value(isActive),
       createdAt: Value(createdAt),
+      scheduledTimeMinutes: scheduledTimeMinutes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(scheduledTimeMinutes),
+      reminderMinutesBefore: reminderMinutesBefore == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reminderMinutesBefore),
     );
   }
 
@@ -1152,6 +1216,12 @@ class RecurringTaskRule extends DataClass
       endDate: serializer.fromJson<DateTime?>(json['endDate']),
       isActive: serializer.fromJson<bool>(json['isActive']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      scheduledTimeMinutes: serializer.fromJson<int?>(
+        json['scheduledTimeMinutes'],
+      ),
+      reminderMinutesBefore: serializer.fromJson<int?>(
+        json['reminderMinutesBefore'],
+      ),
     );
   }
   @override
@@ -1170,6 +1240,8 @@ class RecurringTaskRule extends DataClass
       'endDate': serializer.toJson<DateTime?>(endDate),
       'isActive': serializer.toJson<bool>(isActive),
       'createdAt': serializer.toJson<DateTime>(createdAt),
+      'scheduledTimeMinutes': serializer.toJson<int?>(scheduledTimeMinutes),
+      'reminderMinutesBefore': serializer.toJson<int?>(reminderMinutesBefore),
     };
   }
 
@@ -1186,6 +1258,8 @@ class RecurringTaskRule extends DataClass
     Value<DateTime?> endDate = const Value.absent(),
     bool? isActive,
     DateTime? createdAt,
+    Value<int?> scheduledTimeMinutes = const Value.absent(),
+    Value<int?> reminderMinutesBefore = const Value.absent(),
   }) => RecurringTaskRule(
     id: id ?? this.id,
     goalId: goalId.present ? goalId.value : this.goalId,
@@ -1199,6 +1273,12 @@ class RecurringTaskRule extends DataClass
     endDate: endDate.present ? endDate.value : this.endDate,
     isActive: isActive ?? this.isActive,
     createdAt: createdAt ?? this.createdAt,
+    scheduledTimeMinutes: scheduledTimeMinutes.present
+        ? scheduledTimeMinutes.value
+        : this.scheduledTimeMinutes,
+    reminderMinutesBefore: reminderMinutesBefore.present
+        ? reminderMinutesBefore.value
+        : this.reminderMinutesBefore,
   );
   RecurringTaskRule copyWithCompanion(RecurringTaskRulesCompanion data) {
     return RecurringTaskRule(
@@ -1220,6 +1300,12 @@ class RecurringTaskRule extends DataClass
       endDate: data.endDate.present ? data.endDate.value : this.endDate,
       isActive: data.isActive.present ? data.isActive.value : this.isActive,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      scheduledTimeMinutes: data.scheduledTimeMinutes.present
+          ? data.scheduledTimeMinutes.value
+          : this.scheduledTimeMinutes,
+      reminderMinutesBefore: data.reminderMinutesBefore.present
+          ? data.reminderMinutesBefore.value
+          : this.reminderMinutesBefore,
     );
   }
 
@@ -1237,7 +1323,9 @@ class RecurringTaskRule extends DataClass
           ..write('startDate: $startDate, ')
           ..write('endDate: $endDate, ')
           ..write('isActive: $isActive, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('scheduledTimeMinutes: $scheduledTimeMinutes, ')
+          ..write('reminderMinutesBefore: $reminderMinutesBefore')
           ..write(')'))
         .toString();
   }
@@ -1256,6 +1344,8 @@ class RecurringTaskRule extends DataClass
     endDate,
     isActive,
     createdAt,
+    scheduledTimeMinutes,
+    reminderMinutesBefore,
   );
   @override
   bool operator ==(Object other) =>
@@ -1272,7 +1362,9 @@ class RecurringTaskRule extends DataClass
           other.startDate == this.startDate &&
           other.endDate == this.endDate &&
           other.isActive == this.isActive &&
-          other.createdAt == this.createdAt);
+          other.createdAt == this.createdAt &&
+          other.scheduledTimeMinutes == this.scheduledTimeMinutes &&
+          other.reminderMinutesBefore == this.reminderMinutesBefore);
 }
 
 class RecurringTaskRulesCompanion extends UpdateCompanion<RecurringTaskRule> {
@@ -1288,6 +1380,8 @@ class RecurringTaskRulesCompanion extends UpdateCompanion<RecurringTaskRule> {
   final Value<DateTime?> endDate;
   final Value<bool> isActive;
   final Value<DateTime> createdAt;
+  final Value<int?> scheduledTimeMinutes;
+  final Value<int?> reminderMinutesBefore;
   final Value<int> rowid;
   const RecurringTaskRulesCompanion({
     this.id = const Value.absent(),
@@ -1302,6 +1396,8 @@ class RecurringTaskRulesCompanion extends UpdateCompanion<RecurringTaskRule> {
     this.endDate = const Value.absent(),
     this.isActive = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.scheduledTimeMinutes = const Value.absent(),
+    this.reminderMinutesBefore = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   RecurringTaskRulesCompanion.insert({
@@ -1317,6 +1413,8 @@ class RecurringTaskRulesCompanion extends UpdateCompanion<RecurringTaskRule> {
     this.endDate = const Value.absent(),
     this.isActive = const Value.absent(),
     required DateTime createdAt,
+    this.scheduledTimeMinutes = const Value.absent(),
+    this.reminderMinutesBefore = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        title = Value(title),
@@ -1336,6 +1434,8 @@ class RecurringTaskRulesCompanion extends UpdateCompanion<RecurringTaskRule> {
     Expression<DateTime>? endDate,
     Expression<bool>? isActive,
     Expression<DateTime>? createdAt,
+    Expression<int>? scheduledTimeMinutes,
+    Expression<int>? reminderMinutesBefore,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1351,6 +1451,10 @@ class RecurringTaskRulesCompanion extends UpdateCompanion<RecurringTaskRule> {
       if (endDate != null) 'end_date': endDate,
       if (isActive != null) 'is_active': isActive,
       if (createdAt != null) 'created_at': createdAt,
+      if (scheduledTimeMinutes != null)
+        'scheduled_time_minutes': scheduledTimeMinutes,
+      if (reminderMinutesBefore != null)
+        'reminder_minutes_before': reminderMinutesBefore,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1368,6 +1472,8 @@ class RecurringTaskRulesCompanion extends UpdateCompanion<RecurringTaskRule> {
     Value<DateTime?>? endDate,
     Value<bool>? isActive,
     Value<DateTime>? createdAt,
+    Value<int?>? scheduledTimeMinutes,
+    Value<int?>? reminderMinutesBefore,
     Value<int>? rowid,
   }) {
     return RecurringTaskRulesCompanion(
@@ -1383,6 +1489,9 @@ class RecurringTaskRulesCompanion extends UpdateCompanion<RecurringTaskRule> {
       endDate: endDate ?? this.endDate,
       isActive: isActive ?? this.isActive,
       createdAt: createdAt ?? this.createdAt,
+      scheduledTimeMinutes: scheduledTimeMinutes ?? this.scheduledTimeMinutes,
+      reminderMinutesBefore:
+          reminderMinutesBefore ?? this.reminderMinutesBefore,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1426,6 +1535,14 @@ class RecurringTaskRulesCompanion extends UpdateCompanion<RecurringTaskRule> {
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
+    if (scheduledTimeMinutes.present) {
+      map['scheduled_time_minutes'] = Variable<int>(scheduledTimeMinutes.value);
+    }
+    if (reminderMinutesBefore.present) {
+      map['reminder_minutes_before'] = Variable<int>(
+        reminderMinutesBefore.value,
+      );
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1447,6 +1564,8 @@ class RecurringTaskRulesCompanion extends UpdateCompanion<RecurringTaskRule> {
           ..write('endDate: $endDate, ')
           ..write('isActive: $isActive, ')
           ..write('createdAt: $createdAt, ')
+          ..write('scheduledTimeMinutes: $scheduledTimeMinutes, ')
+          ..write('reminderMinutesBefore: $reminderMinutesBefore, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -5618,6 +5737,8 @@ typedef $$RecurringTaskRulesTableCreateCompanionBuilder =
       Value<DateTime?> endDate,
       Value<bool> isActive,
       required DateTime createdAt,
+      Value<int?> scheduledTimeMinutes,
+      Value<int?> reminderMinutesBefore,
       Value<int> rowid,
     });
 typedef $$RecurringTaskRulesTableUpdateCompanionBuilder =
@@ -5634,6 +5755,8 @@ typedef $$RecurringTaskRulesTableUpdateCompanionBuilder =
       Value<DateTime?> endDate,
       Value<bool> isActive,
       Value<DateTime> createdAt,
+      Value<int?> scheduledTimeMinutes,
+      Value<int?> reminderMinutesBefore,
       Value<int> rowid,
     });
 
@@ -5799,6 +5922,16 @@ class $$RecurringTaskRulesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<int> get scheduledTimeMinutes => $composableBuilder(
+    column: $table.scheduledTimeMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get reminderMinutesBefore => $composableBuilder(
+    column: $table.reminderMinutesBefore,
+    builder: (column) => ColumnFilters(column),
+  );
+
   $$GoalsTableFilterComposer get goalId {
     final $$GoalsTableFilterComposer composer = $composerBuilder(
       composer: this,
@@ -5956,6 +6089,16 @@ class $$RecurringTaskRulesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get scheduledTimeMinutes => $composableBuilder(
+    column: $table.scheduledTimeMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get reminderMinutesBefore => $composableBuilder(
+    column: $table.reminderMinutesBefore,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$GoalsTableOrderingComposer get goalId {
     final $$GoalsTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -6045,6 +6188,16 @@ class $$RecurringTaskRulesTableAnnotationComposer
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<int> get scheduledTimeMinutes => $composableBuilder(
+    column: $table.scheduledTimeMinutes,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get reminderMinutesBefore => $composableBuilder(
+    column: $table.reminderMinutesBefore,
+    builder: (column) => column,
+  );
 
   $$GoalsTableAnnotationComposer get goalId {
     final $$GoalsTableAnnotationComposer composer = $composerBuilder(
@@ -6195,6 +6348,8 @@ class $$RecurringTaskRulesTableTableManager
                 Value<DateTime?> endDate = const Value.absent(),
                 Value<bool> isActive = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
+                Value<int?> scheduledTimeMinutes = const Value.absent(),
+                Value<int?> reminderMinutesBefore = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RecurringTaskRulesCompanion(
                 id: id,
@@ -6209,6 +6364,8 @@ class $$RecurringTaskRulesTableTableManager
                 endDate: endDate,
                 isActive: isActive,
                 createdAt: createdAt,
+                scheduledTimeMinutes: scheduledTimeMinutes,
+                reminderMinutesBefore: reminderMinutesBefore,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -6225,6 +6382,8 @@ class $$RecurringTaskRulesTableTableManager
                 Value<DateTime?> endDate = const Value.absent(),
                 Value<bool> isActive = const Value.absent(),
                 required DateTime createdAt,
+                Value<int?> scheduledTimeMinutes = const Value.absent(),
+                Value<int?> reminderMinutesBefore = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RecurringTaskRulesCompanion.insert(
                 id: id,
@@ -6239,6 +6398,8 @@ class $$RecurringTaskRulesTableTableManager
                 endDate: endDate,
                 isActive: isActive,
                 createdAt: createdAt,
+                scheduledTimeMinutes: scheduledTimeMinutes,
+                reminderMinutesBefore: reminderMinutesBefore,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

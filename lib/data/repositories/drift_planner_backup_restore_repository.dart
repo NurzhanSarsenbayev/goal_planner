@@ -93,6 +93,8 @@ class DriftPlannerBackupRestoreRepository
               endDate: drift.Value(rule.endDate),
               isActive: drift.Value(rule.isActive),
               createdAt: rule.createdAt,
+              scheduledTimeMinutes: drift.Value(rule.scheduledTimeMinutes),
+              reminderMinutesBefore: drift.Value(rule.reminderMinutesBefore),
             ),
           );
     }

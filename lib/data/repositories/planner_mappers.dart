@@ -56,6 +56,8 @@ domain.RecurringTaskRule mapRecurringTaskRule(local.RecurringTaskRule row) {
     endDate: row.endDate,
     isActive: row.isActive,
     createdAt: row.createdAt,
+    scheduledTimeMinutes: row.scheduledTimeMinutes,
+    reminderMinutesBefore: row.reminderMinutesBefore,
   );
 }
 

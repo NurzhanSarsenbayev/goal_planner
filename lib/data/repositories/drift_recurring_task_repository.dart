@@ -155,6 +155,8 @@ class DriftRecurringTaskRepository implements RecurringTaskRepository {
             endDate: drift.Value(rule.endDate),
             isActive: drift.Value(rule.isActive),
             createdAt: rule.createdAt,
+            scheduledTimeMinutes: drift.Value(rule.scheduledTimeMinutes),
+            reminderMinutesBefore: drift.Value(rule.reminderMinutesBefore),
           ),
         );
   }
@@ -189,6 +191,8 @@ class DriftRecurringTaskRepository implements RecurringTaskRepository {
             isCompleted: drift.Value(task.isCompleted),
             completedAt: drift.Value(task.completedAt),
             createdAt: task.createdAt,
+            scheduledTimeMinutes: drift.Value(task.scheduledTimeMinutes),
+            reminderMinutesBefore: drift.Value(task.reminderMinutesBefore),
           ),
         );
   }
@@ -207,6 +211,8 @@ class DriftRecurringTaskRepository implements RecurringTaskRepository {
         isCompleted: drift.Value(task.isCompleted),
         completedAt: drift.Value(task.completedAt),
         createdAt: drift.Value(task.createdAt),
+        scheduledTimeMinutes: drift.Value(task.scheduledTimeMinutes),
+        reminderMinutesBefore: drift.Value(task.reminderMinutesBefore),
       ),
     );
   }

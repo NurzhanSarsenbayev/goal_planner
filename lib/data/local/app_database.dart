@@ -62,6 +62,10 @@ class RecurringTaskRules extends Table {
 
   DateTimeColumn get createdAt => dateTime()();
 
+  IntColumn get scheduledTimeMinutes => integer().nullable()();
+
+  IntColumn get reminderMinutesBefore => integer().nullable()();
+
   @override
   Set<Column> get primaryKey => {id};
 }
@@ -213,7 +217,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => 10;
 
   @override
   MigrationStrategy get migration {
@@ -269,6 +273,28 @@ class AppDatabase extends _$AppDatabase {
 
           if (!await _columnExists('habits', 'reminder_time_minutes')) {
             await migrator.addColumn(habits, habits.reminderTimeMinutes);
+          }
+        }
+
+        if (from < 10) {
+          if (!await _columnExists(
+            'recurring_task_rules',
+            'scheduled_time_minutes',
+          )) {
+            await migrator.addColumn(
+              recurringTaskRules,
+              recurringTaskRules.scheduledTimeMinutes,
+            );
+          }
+
+          if (!await _columnExists(
+            'recurring_task_rules',
+            'reminder_minutes_before',
+          )) {
+            await migrator.addColumn(
+              recurringTaskRules,
+              recurringTaskRules.reminderMinutesBefore,
+            );
           }
         }
       },

@@ -90,6 +90,10 @@ void main() {
         standaloneReminders.single.scheduleType,
         StandaloneReminderScheduleType.once,
       );
+
+      expect(recurringRules.single.scheduledTimeMinutes, 570);
+      expect(recurringRules.single.reminderMinutesBefore, 15);
+
       expect(standaloneReminders.single.scheduledDate, DateTime(2026, 5, 14));
       expect(standaloneReminders.single.timeMinutes, 1110);
       expect(dailyReviewReminderSettings.isEnabled, isFalse);
@@ -233,6 +237,8 @@ PlannerBackupData _backupData({required String idPrefix}) {
         endDate: null,
         isActive: true,
         createdAt: now,
+        scheduledTimeMinutes: 9 * 60 + 30,
+        reminderMinutesBefore: 15,
       ),
     ],
     recurringExceptions: [

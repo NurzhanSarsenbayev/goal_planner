@@ -88,6 +88,8 @@ Map<String, Object?> _recurringRuleToJson(RecurringTaskRule rule) {
     'endDate': _nullableDateToJson(rule.endDate),
     'isActive': rule.isActive,
     'createdAt': _dateToJson(rule.createdAt),
+    'scheduledTimeMinutes': rule.scheduledTimeMinutes,
+    'reminderMinutesBefore': rule.reminderMinutesBefore,
   };
 }
 
@@ -109,6 +111,8 @@ RecurringTaskRule _recurringRuleFromJson(Map<String, dynamic> json) {
     endDate: _nullableDateFromJson(json, 'endDate'),
     isActive: _boolFromJson(json, 'isActive'),
     createdAt: _dateFromJson(json, 'createdAt'),
+    scheduledTimeMinutes: _nullableIntFromJson(json, 'scheduledTimeMinutes'),
+    reminderMinutesBefore: _nullableIntFromJson(json, 'reminderMinutesBefore'),
   );
 }
 
