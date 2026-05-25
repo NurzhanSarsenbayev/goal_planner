@@ -127,15 +127,6 @@ class AppDependencies {
       recurringTaskRepository: recurringTaskRepository,
     );
 
-    final recurringRuleStoreCoordinator = RecurringRuleStoreCoordinator(
-      recurringTaskRepository: recurringTaskRepository,
-    );
-
-    final recurringOccurrenceStoreCoordinator =
-        RecurringOccurrenceStoreCoordinator(
-          recurringTaskRepository: recurringTaskRepository,
-        );
-
     final reminderNotificationTexts = ReminderNotificationTexts();
 
     final localNotificationService = LocalNotificationService(
@@ -192,6 +183,17 @@ class AppDependencies {
     final taskReminderResyncService = TaskReminderResyncService(
       taskReminderScheduler: taskReminderScheduler,
     );
+
+    final recurringRuleStoreCoordinator = RecurringRuleStoreCoordinator(
+      recurringTaskRepository: recurringTaskRepository,
+      taskReminderResyncService: taskReminderResyncService,
+    );
+
+    final recurringOccurrenceStoreCoordinator =
+        RecurringOccurrenceStoreCoordinator(
+          recurringTaskRepository: recurringTaskRepository,
+          taskReminderResyncService: taskReminderResyncService,
+        );
 
     final taskReminderLifecycleService = TaskReminderLifecycleService(
       notifications: localNotificationService,

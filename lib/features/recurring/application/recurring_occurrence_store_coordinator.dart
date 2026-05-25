@@ -1,6 +1,7 @@
 import '../../../models/planner_task.dart';
 import '../../../models/recurring_task_exception.dart';
 import '../../../models/recurring_task_rule.dart';
+import '../../reminders/task/application/task_reminder_resync_service.dart';
 import 'recurring_task_application_service.dart';
 import 'recurring_task_repository.dart';
 
@@ -20,12 +21,15 @@ class RecurringOccurrenceStoreCoordinator {
   RecurringOccurrenceStoreCoordinator({
     required RecurringTaskRepository recurringTaskRepository,
     RecurringTaskApplicationService? recurringTaskApplicationService,
+    TaskReminderResyncService? taskReminderResyncService,
   }) : _recurringTaskRepository = recurringTaskRepository,
        _recurringTaskApplicationService =
-           recurringTaskApplicationService ?? RecurringTaskApplicationService();
+           recurringTaskApplicationService ?? RecurringTaskApplicationService(),
+       _taskReminderResyncService = taskReminderResyncService;
 
   final RecurringTaskRepository _recurringTaskRepository;
   final RecurringTaskApplicationService _recurringTaskApplicationService;
+  final TaskReminderResyncService? _taskReminderResyncService;
 
   RecurringOccurrenceStoreMutation? ensureOccurrencesForMonth({
     required DateTime visibleMonth,
@@ -52,8 +56,10 @@ class RecurringOccurrenceStoreCoordinator {
     return RecurringOccurrenceStoreMutation(
       tasks: [...tasks, ...generatedTasks],
       exceptions: exceptions,
-      persistOperation: () =>
-          _recurringTaskRepository.saveGeneratedOccurrences(generatedTasks),
+      persistOperation: () async {
+        await _recurringTaskRepository.saveGeneratedOccurrences(generatedTasks);
+        await _taskReminderResyncService?.syncTaskReminders(generatedTasks);
+      },
     );
   }
 
@@ -80,11 +86,17 @@ class RecurringOccurrenceStoreCoordinator {
     return RecurringOccurrenceStoreMutation(
       tasks: result.tasks,
       exceptions: result.exceptions,
-      persistOperation: () =>
-          _recurringTaskRepository.deleteTaskWithRecurringException(
-            taskId: taskIdToDelete,
-            exception: exceptionToPersist,
-          ),
+      persistOperation: () async {
+        await _recurringTaskRepository.deleteTaskWithRecurringException(
+          taskId: taskIdToDelete,
+          exception: exceptionToPersist,
+        );
+
+        await _syncTaskRemindersAfterTaskSetReplacement(
+          previousTasks: tasks,
+          currentTasks: result.tasks,
+        );
+      },
     );
   }
 
@@ -113,11 +125,17 @@ class RecurringOccurrenceStoreCoordinator {
     return RecurringOccurrenceStoreMutation(
       tasks: result.tasks,
       exceptions: result.exceptions,
-      persistOperation: () =>
-          _recurringTaskRepository.updateTaskWithRecurringException(
-            task: taskToPersist,
-            exception: exceptionToPersist,
-          ),
+      persistOperation: () async {
+        await _recurringTaskRepository.updateTaskWithRecurringException(
+          task: taskToPersist,
+          exception: exceptionToPersist,
+        );
+
+        await _syncTaskRemindersAfterTaskSetReplacement(
+          previousTasks: tasks,
+          currentTasks: result.tasks,
+        );
+      },
     );
   }
 
@@ -144,11 +162,27 @@ class RecurringOccurrenceStoreCoordinator {
     return RecurringOccurrenceStoreMutation(
       tasks: result.tasks,
       exceptions: result.exceptions,
-      persistOperation: () =>
-          _recurringTaskRepository.updateTaskWithRecurringException(
-            task: taskToPersist,
-            exception: exceptionToPersist,
-          ),
+      persistOperation: () async {
+        await _recurringTaskRepository.updateTaskWithRecurringException(
+          task: taskToPersist,
+          exception: exceptionToPersist,
+        );
+
+        await _syncTaskRemindersAfterTaskSetReplacement(
+          previousTasks: tasks,
+          currentTasks: result.tasks,
+        );
+      },
+    );
+  }
+
+  Future<void> _syncTaskRemindersAfterTaskSetReplacement({
+    required Iterable<PlannerTask> previousTasks,
+    required Iterable<PlannerTask> currentTasks,
+  }) async {
+    await _taskReminderResyncService?.syncAfterTaskSetReplacement(
+      previousTasks: previousTasks,
+      currentTasks: currentTasks,
     );
   }
 }

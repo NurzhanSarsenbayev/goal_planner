@@ -1,6 +1,7 @@
 import '../../../models/planner_task.dart';
 import '../../../models/recurring_task_exception.dart';
 import '../../../models/recurring_task_rule.dart';
+import '../../reminders/task/application/task_reminder_resync_service.dart';
 import 'recurring_task_application_service.dart';
 import 'recurring_task_repository.dart';
 
@@ -22,12 +23,15 @@ class RecurringRuleStoreCoordinator {
   RecurringRuleStoreCoordinator({
     required RecurringTaskRepository recurringTaskRepository,
     RecurringTaskApplicationService? recurringTaskApplicationService,
+    TaskReminderResyncService? taskReminderResyncService,
   }) : _recurringTaskRepository = recurringTaskRepository,
        _recurringTaskApplicationService =
-           recurringTaskApplicationService ?? RecurringTaskApplicationService();
+           recurringTaskApplicationService ?? RecurringTaskApplicationService(),
+       _taskReminderResyncService = taskReminderResyncService;
 
   final RecurringTaskRepository _recurringTaskRepository;
   final RecurringTaskApplicationService _recurringTaskApplicationService;
+  final TaskReminderResyncService? _taskReminderResyncService;
 
   RecurringRuleStoreMutation? addRule({
     required RecurringTaskRule rule,
@@ -54,11 +58,17 @@ class RecurringRuleStoreCoordinator {
       rules: result.rules,
       tasks: result.tasks,
       exceptions: result.exceptions,
-      persistOperation: () =>
-          _recurringTaskRepository.saveRecurringTaskRuleWithOccurrences(
-            rule: ruleToPersist,
-            generatedTasks: result.generatedTasks,
-          ),
+      persistOperation: () async {
+        await _recurringTaskRepository.saveRecurringTaskRuleWithOccurrences(
+          rule: ruleToPersist,
+          generatedTasks: result.generatedTasks,
+        );
+
+        await _syncTaskRemindersAfterTaskSetReplacement(
+          previousTasks: tasks,
+          currentTasks: result.tasks,
+        );
+      },
     );
   }
 
@@ -87,11 +97,18 @@ class RecurringRuleStoreCoordinator {
       rules: result.rules,
       tasks: result.tasks,
       exceptions: result.exceptions,
-      persistOperation: () => _recurringTaskRepository
-          .updateRecurringTaskRuleAndReplaceUnfinishedOccurrences(
-            rule: ruleToPersist,
-            generatedTasks: result.generatedTasks,
-          ),
+      persistOperation: () async {
+        await _recurringTaskRepository
+            .updateRecurringTaskRuleAndReplaceUnfinishedOccurrences(
+              rule: ruleToPersist,
+              generatedTasks: result.generatedTasks,
+            );
+
+        await _syncTaskRemindersAfterTaskSetReplacement(
+          previousTasks: tasks,
+          currentTasks: result.tasks,
+        );
+      },
     );
   }
 
@@ -118,8 +135,16 @@ class RecurringRuleStoreCoordinator {
       rules: result.rules,
       tasks: result.tasks,
       exceptions: result.exceptions,
-      persistOperation: () => _recurringTaskRepository
-          .deleteRecurringTaskRuleAndCleanSeries(ruleIdToDelete),
+      persistOperation: () async {
+        await _recurringTaskRepository.deleteRecurringTaskRuleAndCleanSeries(
+          ruleIdToDelete,
+        );
+
+        await _syncTaskRemindersAfterTaskSetReplacement(
+          previousTasks: tasks,
+          currentTasks: result.tasks,
+        );
+      },
     );
   }
 
@@ -148,11 +173,17 @@ class RecurringRuleStoreCoordinator {
       rules: result.rules,
       tasks: result.tasks,
       exceptions: result.exceptions,
-      persistOperation: () =>
-          _recurringTaskRepository.saveRecurringTaskRuleWithOccurrences(
-            rule: ruleToPersist,
-            generatedTasks: result.generatedTasks,
-          ),
+      persistOperation: () async {
+        await _recurringTaskRepository.saveRecurringTaskRuleWithOccurrences(
+          rule: ruleToPersist,
+          generatedTasks: result.generatedTasks,
+        );
+
+        await _syncTaskRemindersAfterTaskSetReplacement(
+          previousTasks: tasks,
+          currentTasks: result.tasks,
+        );
+      },
     );
   }
 
@@ -179,10 +210,27 @@ class RecurringRuleStoreCoordinator {
       rules: result.rules,
       tasks: result.tasks,
       exceptions: result.exceptions,
-      persistOperation: () => _recurringTaskRepository
-          .deactivateRecurringTaskRuleAndDeleteUnfinishedOccurrences(
-            ruleToPersist,
-          ),
+      persistOperation: () async {
+        await _recurringTaskRepository
+            .deactivateRecurringTaskRuleAndDeleteUnfinishedOccurrences(
+              ruleToPersist,
+            );
+
+        await _syncTaskRemindersAfterTaskSetReplacement(
+          previousTasks: tasks,
+          currentTasks: result.tasks,
+        );
+      },
+    );
+  }
+
+  Future<void> _syncTaskRemindersAfterTaskSetReplacement({
+    required Iterable<PlannerTask> previousTasks,
+    required Iterable<PlannerTask> currentTasks,
+  }) async {
+    await _taskReminderResyncService?.syncAfterTaskSetReplacement(
+      previousTasks: previousTasks,
+      currentTasks: currentTasks,
     );
   }
 }

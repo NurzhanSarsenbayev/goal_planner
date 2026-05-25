@@ -4,6 +4,7 @@ import 'package:goal_planner/features/recurring/application/recurring_task_repos
 import 'package:goal_planner/features/reminders/task/application/task_reminder_scheduler.dart';
 import 'package:goal_planner/features/reminders/task/application/task_reminder_application_service.dart';
 import 'package:goal_planner/features/reminders/common/application/reminder_notification_client.dart';
+import 'package:goal_planner/features/reminders/task/application/task_reminder_resync_service.dart';
 import 'package:goal_planner/features/tasks/application/task_repository.dart';
 import 'package:goal_planner/features/tasks/application/task_store_coordinator.dart';
 import 'package:goal_planner/models/planner_task.dart';
@@ -82,6 +83,43 @@ void main() {
       expect(taskRepository.savedTasks, hasLength(1));
       expect(taskRepository.savedTasks.single.reminderMinutesBefore, 15);
       expect(notifications.scheduledReminders, hasLength(1));
+    });
+
+    test('cancels reminder after deleting recurring occurrence', () async {
+      final taskRepository = FakeTaskRepository();
+      final notifications = FakeReminderNotificationClient();
+      final coordinator = _createCoordinator(
+        taskRepository: taskRepository,
+        notifications: notifications,
+      );
+
+      final task = PlannerTask(
+        id: 'task_recurring_rule_1_20260520',
+        title: 'Workout',
+        description: '',
+        recurringRuleId: 'rule_1',
+        scheduledDate: DateTime(2026, 5, 20),
+        scheduledTimeMinutes: 570,
+        reminderMinutesBefore: 15,
+        createdAt: DateTime(2026, 5, 20),
+      );
+
+      final mutation = coordinator.deleteTask(
+        tasks: [task],
+        recurringExceptions: const [],
+        taskId: task.id,
+        now: DateTime(2026, 5, 20),
+      );
+
+      expect(mutation, isNotNull);
+
+      await mutation!.persistOperation();
+
+      expect(
+        notifications.canceledIds,
+        contains(taskReminderNotificationId(task.id)),
+      );
+      expect(notifications.scheduledReminders, isEmpty);
     });
 
     test('cancels reminder after deleting regular task', () async {
@@ -199,16 +237,21 @@ TaskStoreCoordinator _createCoordinator({
   required FakeTaskRepository taskRepository,
   required FakeReminderNotificationClient notifications,
 }) {
+  final taskReminderScheduler = TaskReminderScheduler(
+    notifications: notifications,
+    now: () => DateTime(2026, 5, 20, 8),
+  );
+
   return TaskStoreCoordinator(
     taskRepository: taskRepository,
     recurringOccurrenceStoreCoordinator: RecurringOccurrenceStoreCoordinator(
       recurringTaskRepository: FakeRecurringTaskRepository(),
+      taskReminderResyncService: TaskReminderResyncService(
+        taskReminderScheduler: taskReminderScheduler,
+      ),
     ),
     taskReminderApplicationService: TaskReminderApplicationService(
-      taskReminderScheduler: TaskReminderScheduler(
-        notifications: notifications,
-        now: () => DateTime(2026, 5, 20, 8),
-      ),
+      taskReminderScheduler: taskReminderScheduler,
     ),
   );
 }
