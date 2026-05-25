@@ -376,6 +376,8 @@ A recurring rule defines the repeated task.
 Generated occurrences are normal `PlannerTask` items with:
 
 - concrete `scheduledDate`;
+- optional `scheduledTimeMinutes` inherited from the recurring rule;
+- optional `reminderMinutesBefore` inherited from the recurring rule;
 - optional `goalId`;
 - optional `milestoneId`;
 - `recurringRuleId` linking them back to the rule.
@@ -511,6 +513,12 @@ Implemented:
   - preselect weekday based on selected date;
   - preselect monthly day based on selected date;
   - show past-date warning when creating from a past date.
+- Support optional time and reminder controls in recurring rule create/edit dialog.
+- Show recurring rule time and reminder on recurring rule cards.
+- Use TaskCard edit-actions bottom sheet for recurring occurrences:
+  - `Only this task` changes only the selected occurrence;
+  - `Whole series` exposes recurring-rule actions;
+  - `Edit repeat rule` opens the recurring rule edit flow.
 
 ### Occurrence behavior
 
@@ -526,11 +534,17 @@ Implemented:
   - creates a `RecurringTaskException` for the old date;
   - detaches the task from the recurring rule;
   - keeps the task as a one-off unscheduled task.
+- Changing time or reminder for one generated recurring occurrence:
+  - creates a `RecurringTaskException` for the original occurrence date;
+  - detaches the selected occurrence from the recurring rule;
+  - keeps the changed occurrence as a one-off `PlannerTask`;
+  - does not change the recurring rule defaults.
 - Completing one occurrence affects only that occurrence.
 - Editing a recurring rule:
-  - updates the rule;
+  - updates the rule schedule, placement, time and reminder defaults;
   - removes future unfinished generated occurrences from the old rule shape;
   - generates future occurrences from the updated rule;
+  - resyncs generated occurrence reminders through the normal task reminder pipeline;
   - keeps completed history.
 - Deactivating a recurring rule:
   - marks the rule inactive;
@@ -1336,8 +1350,6 @@ Deliberately left for later:
 - Local notifications.
 - Per-task reminders.
 - Per-habit reminders.
-- Recurring rule default time.
-- Editing time for recurring occurrences.
 - Timeline calendar UI.
 - Drag-and-drop scheduling.
 - Reports by hour.
@@ -1403,6 +1415,12 @@ Completed scope:
 - Resynced recurring occurrence reminders after rule create/update/delete/activate/deactivate flows.
 - Resynced recurring occurrence reminders after restore, startup and language changes through the existing task reminder pipeline.
 - Allowed overriding time/reminder for a single recurring occurrence from Today/Calendar by detaching that occurrence through a recurring exception.
+- Kept `TaskReminderScheduler` rule-agnostic:
+  - it schedules `PlannerTask` instances;
+  - it does not depend on `RecurringTaskRule`.
+- Added recurring occurrence edit UX:
+  - `Only this task` for single-occurrence changes;
+  - `Whole series -> Edit repeat rule` for recurring rule changes.
 
 Out of scope for this phase:
 
@@ -1549,10 +1567,17 @@ Main differentiator:
 ## Current limitations
 
 - Recurring task planning MVP exists, but advanced recurrence rules are not supported yet.
-- Time-of-day scheduling exists for regular scheduled tasks, but there is no timeline/day agenda UI yet.
-- Recurring tasks do not have default time-of-day support yet.
-- No reminders / notifications. 
-- Habits MVP exists with Today summary and Reports integration, but there are no reminders, notes, timed habits, optional weekdays, count-based habit UI or advanced graphs yet.
+- Recurring rules support default time and reminder settings for generated occurrences, but there is no `this and following` editing mode yet.
+- Time-of-day scheduling exists, but there is no timeline/day agenda UI yet.
+- Basic local reminders exist for:
+  - standalone reminders;
+  - task reminders;
+  - recurring task occurrences through generated `PlannerTask` reminders;
+  - Daily Review Reminder;
+  - habit reminders.
+- Reminder system does not support snooze or notification actions yet.
+- Reminder settings are local-first and are not synced across devices.
+- Habits MVP exists with Today summary, Reports integration and one reminder time, but there are no habit notes, timed habits, optional weekdays, count-based habit UI or advanced graphs yet.
 - Architecture stabilization before Habits is completed, but further feature-store decomposition remains a later improvement.
 - Reports support only Today / Last 7 days / Last 14 days.
 - No custom selected-day report yet.
@@ -1563,7 +1588,6 @@ Main differentiator:
 - No drag-and-drop planning.
 - No week/day/year calendar views.
 - No separate meeting / birthday event model.
-- No reminders / notifications.
 - No cloud sync/backend.
 - No auth.
 - No serious design polish yet.

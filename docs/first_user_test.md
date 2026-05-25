@@ -133,9 +133,10 @@ Find where reminder settings live and explain when you expect the app to remind 
 Observe:
 
 - Can the tester find reminders without help?
-- Does the tester understand the difference between standalone reminders and Daily Review Reminder?
+- Does the tester understand the difference between standalone reminders, task reminders, habit reminders and Daily Review Reminder?
 - Is the Daily Review Reminder useful or annoying?
-- Does the tester expect task reminders, habit reminders or a general daily reminder first?
+- Does the tester understand that task reminders belong to scheduled tasks with time?
+- Does the tester understand that habit reminders belong to habits?
 
 ### 10. Habit reminder check
 
@@ -150,6 +151,22 @@ Observe:
 - Does the tester understand that done/skipped/failed suppress today's reminder?
 - Does the tester expect habit reminders to be separate from standalone reminders?
 - Does the tester understand that changing app language updates future reminder notifications?
+
+### 11. Recurring task reminder and edit sheet check
+
+Task:
+
+Create a recurring task with a time and reminder. Find one generated occurrence in Today or Calendar. Change or remove the reminder only for that occurrence. Then find `Whole series -> Edit repeat rule`.
+
+Observe:
+
+- Can the tester create a recurring task with time and reminder?
+- Can the tester find the generated occurrence in Today or Calendar?
+- Does the tester understand that `Only this task` changes only the selected occurrence?
+- Does the tester understand that changing one occurrence detaches it from the recurring rule?
+- Can the tester find `Whole series -> Edit repeat rule`?
+- Does the tester understand that `Whole series` changes the recurring rule and future generated occurrences?
+- Is the bottom sheet wording clear enough, or does it need stronger explanation?
 
 ## Questions after the test
 
