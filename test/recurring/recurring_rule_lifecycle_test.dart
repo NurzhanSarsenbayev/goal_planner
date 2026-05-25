@@ -162,6 +162,61 @@ void main() {
       );
     });
 
+    test(
+      'updates rule and rebuilds unfinished occurrences with new reminder settings',
+      () {
+        final oldRule = _weeklyRule(
+          id: 'rule-1',
+          weekdays: [DateTime.monday],
+          scheduledTimeMinutes: 9 * 60,
+          reminderMinutesBefore: 15,
+        );
+
+        final updatedRule = oldRule.copyWith(
+          weekdays: [DateTime.wednesday],
+          scheduledTimeMinutes: 10 * 60,
+          reminderMinutesBefore: 30,
+        );
+
+        final oldUnfinishedOccurrence = _recurringTask(
+          id: 'task-1',
+          ruleId: oldRule.id,
+          isCompleted: false,
+          scheduledDate: DateTime(2026, 5, 4),
+        );
+
+        final completedOccurrence = _recurringTask(
+          id: 'task-2',
+          ruleId: oldRule.id,
+          isCompleted: true,
+          scheduledDate: DateTime(2026, 5, 4),
+        );
+
+        final result = lifecycle.updateRuleAndRebuildOccurrences(
+          updatedRule: updatedRule,
+          rules: [oldRule],
+          tasks: [oldUnfinishedOccurrence, completedOccurrence],
+          exceptions: [],
+          today: today,
+        );
+
+        expect(result.generatedTasks, isNotEmpty);
+
+        for (final task in result.generatedTasks) {
+          expect(task.recurringRuleId, updatedRule.id);
+          expect(task.scheduledTimeMinutes, 10 * 60);
+          expect(task.reminderMinutesBefore, 30);
+        }
+
+        expect(
+          result.tasks.any((task) => task.id == oldUnfinishedOccurrence.id),
+          isFalse,
+        );
+
+        expect(result.tasks, contains(completedOccurrence));
+      },
+    );
+
     test('returns no-op result when rule is missing', () {
       final rule = _weeklyRule(id: 'rule-1', weekdays: [DateTime.friday]);
 
@@ -187,6 +242,8 @@ RecurringTaskRule _weeklyRule({
   required String id,
   required List<int> weekdays,
   bool isActive = true,
+  int? scheduledTimeMinutes,
+  int? reminderMinutesBefore,
 }) {
   return RecurringTaskRule(
     id: id,
@@ -198,6 +255,8 @@ RecurringTaskRule _weeklyRule({
     startDate: DateTime(2026, 5, 1),
     isActive: isActive,
     createdAt: DateTime(2026, 4, 1),
+    scheduledTimeMinutes: scheduledTimeMinutes,
+    reminderMinutesBefore: reminderMinutesBefore,
   );
 }
 

@@ -16,6 +16,8 @@ class AddRecurringTaskRuleDraft {
     required this.recurrenceType,
     required this.weekdays,
     required this.monthDay,
+    required this.scheduledTimeMinutes,
+    required this.reminderMinutesBefore,
   });
 
   final String title;
@@ -25,6 +27,8 @@ class AddRecurringTaskRuleDraft {
   final RecurrenceType recurrenceType;
   final List<int> weekdays;
   final int? monthDay;
+  final int? scheduledTimeMinutes;
+  final int? reminderMinutesBefore;
 }
 
 class AddRecurringTaskRuleDialog extends StatefulWidget {
@@ -65,6 +69,8 @@ class _AddRecurringTaskRuleDialogState
   RecurrenceType _recurrenceType = RecurrenceType.weekly;
   final Set<int> _selectedWeekdays = {};
   int _selectedMonthDay = 1;
+  int? _scheduledTimeMinutes;
+  int? _reminderMinutesBefore;
   String? _selectedGoalId;
   String? _selectedMilestoneId;
 
@@ -96,6 +102,8 @@ class _AddRecurringTaskRuleDialogState
         ..clear()
         ..addAll(initialRule.weekdays);
       _selectedMonthDay = initialRule.monthDay ?? 1;
+      _scheduledTimeMinutes = initialRule.scheduledTimeMinutes;
+      _reminderMinutesBefore = initialRule.reminderMinutesBefore;
       _selectedGoalId = initialRule.goalId;
       _selectedMilestoneId = initialRule.milestoneId;
     } else {
@@ -229,6 +237,8 @@ class _AddRecurringTaskRuleDialogState
         monthDay: _recurrenceType == RecurrenceType.monthly
             ? _selectedMonthDay
             : null,
+        scheduledTimeMinutes: _scheduledTimeMinutes,
+        reminderMinutesBefore: _reminderMinutesBefore,
       ),
     );
   }

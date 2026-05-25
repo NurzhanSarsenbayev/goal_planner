@@ -43,6 +43,8 @@ class RecurringRuleDialogActions {
       monthDay: result.monthDay,
       startDate: dateOnly(startDate ?? todayDate()),
       createdAt: now,
+      scheduledTimeMinutes: result.scheduledTimeMinutes,
+      reminderMinutesBefore: result.reminderMinutesBefore,
     );
 
     _store.addRecurringTaskRule(rule);
@@ -77,6 +79,8 @@ class RecurringRuleDialogActions {
       recurrenceType: result.recurrenceType,
       weekdays: result.weekdays,
       monthDay: result.monthDay,
+      scheduledTimeMinutes: result.scheduledTimeMinutes,
+      reminderMinutesBefore: result.reminderMinutesBefore,
     );
 
     _store.updateRecurringTaskRule(updatedRule);
