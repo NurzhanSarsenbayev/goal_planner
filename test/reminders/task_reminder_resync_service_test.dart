@@ -35,22 +35,38 @@ void main() {
         createdAt: DateTime(2026, 5, 20),
       );
 
-      await service.syncTaskReminders([eligibleTask, taskWithoutReminder]);
+      final recurringOccurrence = PlannerTask(
+        id: 'task_3',
+        title: 'Workout',
+        description: '',
+        recurringRuleId: 'rule_1',
+        scheduledDate: DateTime(2026, 5, 20),
+        scheduledTimeMinutes: 630,
+        reminderMinutesBefore: 30,
+        createdAt: DateTime(2026, 5, 20),
+      );
+
+      await service.syncTaskReminders([
+        eligibleTask,
+        taskWithoutReminder,
+        recurringOccurrence,
+      ]);
 
       expect(notifications.canceledIds, [
         taskReminderNotificationId('task_1'),
         taskReminderNotificationId('task_2'),
+        taskReminderNotificationId('task_3'),
       ]);
 
-      expect(notifications.scheduledReminders, hasLength(1));
-      expect(
-        notifications.scheduledReminders.single.id,
+      expect(notifications.scheduledReminders, hasLength(2));
+      expect(notifications.scheduledReminders.map((call) => call.id), [
         taskReminderNotificationId('task_1'),
-      );
-      expect(
-        notifications.scheduledReminders.single.scheduledAt,
+        taskReminderNotificationId('task_3'),
+      ]);
+      expect(notifications.scheduledReminders.map((call) => call.scheduledAt), [
         DateTime(2026, 5, 20, 9, 15),
-      );
+        DateTime(2026, 5, 20, 10),
+      ]);
     });
 
     test(

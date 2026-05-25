@@ -195,7 +195,7 @@ void main() {
       },
     );
 
-    test('does not schedule reminder for recurring occurrence yet', () async {
+    test('schedules reminder for recurring occurrence', () async {
       final notifications = FakeReminderNotificationClient();
       final scheduler = TaskReminderScheduler(
         notifications: notifications,
@@ -215,8 +215,18 @@ void main() {
 
       await scheduler.syncTaskReminder(task);
 
-      expect(notifications.canceledIds, [taskReminderNotificationId(task.id)]);
-      expect(notifications.scheduledReminders, isEmpty);
+      final expectedId = taskReminderNotificationId(task.id);
+
+      expect(notifications.canceledIds, [expectedId]);
+      expect(notifications.scheduledReminders, hasLength(1));
+      expect(notifications.scheduledReminders.single.id, expectedId);
+      expect(notifications.scheduledReminders.single.title, 'Plan day');
+      expect(notifications.scheduledReminders.single.body, 'Task reminder');
+      expect(
+        notifications.scheduledReminders.single.scheduledAt,
+        DateTime(2026, 5, 20, 9, 15),
+      );
+      expect(notifications.scheduledReminders.single.payload, task.id);
     });
 
     test('cancels reminder by task id', () async {

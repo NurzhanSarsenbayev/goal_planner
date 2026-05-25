@@ -45,10 +45,6 @@ class TaskReminderScheduler {
       return null;
     }
 
-    if (task.recurringRuleId != null) {
-      return null;
-    }
-
     final scheduledDate = task.scheduledDate;
     final scheduledTimeMinutes = task.scheduledTimeMinutes;
     final reminderMinutesBefore = task.reminderMinutesBefore;
