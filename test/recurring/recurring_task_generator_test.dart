@@ -171,6 +171,28 @@ void main() {
       expect(generated.length, 1);
     });
 
+    test('generated occurrence copies rule time and reminder settings', () {
+      final rule = _weeklyRule(
+        id: 'rule-1',
+        weekdays: [DateTime.monday],
+        scheduledTimeMinutes: 570,
+        reminderMinutesBefore: 15,
+      );
+
+      final generated = generateRecurringTaskOccurrences(
+        rules: [rule],
+        exceptions: [],
+        existingTasks: [],
+        startDate: startDate,
+        endDate: startDate,
+      );
+
+      final task = generated.single;
+
+      expect(task.scheduledTimeMinutes, 570);
+      expect(task.reminderMinutesBefore, 15);
+    });
+
     test('generated occurrence copies rule placement and content', () {
       final rule = _weeklyRule(
         id: 'rule-1',
@@ -243,6 +265,8 @@ RecurringTaskRule _weeklyRule({
   DateTime? startDate,
   DateTime? endDate,
   bool isActive = true,
+  int? scheduledTimeMinutes,
+  int? reminderMinutesBefore,
 }) {
   return RecurringTaskRule(
     id: id,
@@ -257,6 +281,8 @@ RecurringTaskRule _weeklyRule({
     endDate: endDate,
     isActive: isActive,
     createdAt: DateTime(2026, 4, 1),
+    scheduledTimeMinutes: scheduledTimeMinutes,
+    reminderMinutesBefore: reminderMinutesBefore,
   );
 }
 

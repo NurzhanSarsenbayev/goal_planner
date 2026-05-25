@@ -85,6 +85,27 @@ void main() {
       expect(rule.matchesDate(DateTime(2026, 4, 27, 8, 15)), isTrue);
     });
   });
+
+  group('RecurringTaskRule reminder settings', () {
+    test('allows reminder when scheduled time is set', () {
+      final rule = _weeklyRule(
+        weekdays: [DateTime.monday],
+        scheduledTimeMinutes: 570,
+        reminderMinutesBefore: 15,
+      );
+
+      expect(rule.scheduledTimeMinutes, 570);
+      expect(rule.reminderMinutesBefore, 15);
+    });
+
+    test('does not allow reminder without scheduled time', () {
+      expect(
+        () =>
+            _weeklyRule(weekdays: [DateTime.monday], reminderMinutesBefore: 15),
+        throwsAssertionError,
+      );
+    });
+  });
 }
 
 RecurringTaskRule _weeklyRule({
@@ -92,6 +113,8 @@ RecurringTaskRule _weeklyRule({
   DateTime? startDate,
   DateTime? endDate,
   bool isActive = true,
+  int? scheduledTimeMinutes,
+  int? reminderMinutesBefore,
 }) {
   return RecurringTaskRule(
     id: 'rule-weekly',
@@ -104,6 +127,8 @@ RecurringTaskRule _weeklyRule({
     endDate: endDate,
     isActive: isActive,
     createdAt: DateTime(2026, 4, 1),
+    scheduledTimeMinutes: scheduledTimeMinutes,
+    reminderMinutesBefore: reminderMinutesBefore,
   );
 }
 

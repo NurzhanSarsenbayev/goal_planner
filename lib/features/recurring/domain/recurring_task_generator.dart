@@ -83,6 +83,8 @@ PlannerTask _createOccurrenceTask({
     recurringRuleId: rule.id,
     scheduledDate: scheduledDate,
     createdAt: scheduledDate,
+    scheduledTimeMinutes: rule.scheduledTimeMinutes,
+    reminderMinutesBefore: rule.reminderMinutesBefore,
   );
 }
 

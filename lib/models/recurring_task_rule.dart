@@ -18,7 +18,22 @@ class RecurringTaskRule {
     this.milestoneId,
     this.endDate,
     this.isActive = true,
-  });
+    this.scheduledTimeMinutes,
+    this.reminderMinutesBefore,
+  }) : assert(
+         scheduledTimeMinutes == null ||
+             (scheduledTimeMinutes >= 0 && scheduledTimeMinutes <= 1439),
+         'scheduledTimeMinutes must be between 0 and 1439.',
+       ),
+       assert(
+         reminderMinutesBefore == null ||
+             (reminderMinutesBefore >= 0 && reminderMinutesBefore <= 10080),
+         'reminderMinutesBefore must be between 0 and 10080.',
+       ),
+       assert(
+         reminderMinutesBefore == null || scheduledTimeMinutes != null,
+         'reminderMinutesBefore requires scheduledTimeMinutes.',
+       );
 
   final String id;
   final String title;
@@ -32,6 +47,8 @@ class RecurringTaskRule {
   final DateTime? endDate;
   final bool isActive;
   final DateTime createdAt;
+  final int? scheduledTimeMinutes;
+  final int? reminderMinutesBefore;
 
   bool matchesDate(DateTime date) {
     if (!isActive) {
@@ -88,6 +105,8 @@ class RecurringTaskRule {
     Object? endDate = _unset,
     bool? isActive,
     DateTime? createdAt,
+    Object? scheduledTimeMinutes = _unset,
+    Object? reminderMinutesBefore = _unset,
   }) {
     return RecurringTaskRule(
       id: id ?? this.id,
@@ -104,6 +123,12 @@ class RecurringTaskRule {
       endDate: identical(endDate, _unset) ? this.endDate : endDate as DateTime?,
       isActive: isActive ?? this.isActive,
       createdAt: createdAt ?? this.createdAt,
+      scheduledTimeMinutes: identical(scheduledTimeMinutes, _unset)
+          ? this.scheduledTimeMinutes
+          : scheduledTimeMinutes as int?,
+      reminderMinutesBefore: identical(reminderMinutesBefore, _unset)
+          ? this.reminderMinutesBefore
+          : reminderMinutesBefore as int?,
     );
   }
 }
