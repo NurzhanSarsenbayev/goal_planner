@@ -104,6 +104,75 @@ void main() {
       },
     );
 
+    test(
+      'updates occurrence time, detaches it from rule, and creates exception',
+      () {
+        final occurrence = _recurringOccurrence(
+          id: 'task-1',
+          ruleId: 'rule-1',
+          scheduledDate: occurrenceDate,
+          scheduledTimeMinutes: 9 * 60,
+          reminderMinutesBefore: 15,
+        );
+
+        final result = lifecycle.scheduleOccurrenceForDateAndTime(
+          task: occurrence,
+          scheduledDate: occurrenceDate,
+          scheduledTimeMinutes: 10 * 60,
+          tasks: [occurrence],
+          exceptions: [],
+          now: now,
+        );
+
+        final updatedTask = result.taskToPersist;
+
+        expect(updatedTask, isNotNull);
+        expect(updatedTask!.id, occurrence.id);
+        expect(updatedTask.scheduledDate, DateTime(2026, 4, 27));
+        expect(updatedTask.scheduledTimeMinutes, 10 * 60);
+        expect(updatedTask.reminderMinutesBefore, 15);
+        expect(updatedTask.recurringRuleId, isNull);
+
+        final exception = result.exceptionToPersist;
+
+        expect(exception, isNotNull);
+        expect(exception!.id, 'recurring_exception_rule-1_20260427');
+        expect(exception.date, DateTime(2026, 4, 27));
+        expect(result.exceptions, [exception]);
+      },
+    );
+
+    test(
+      'clears occurrence time and reminder when overriding time with null',
+      () {
+        final occurrence = _recurringOccurrence(
+          id: 'task-1',
+          ruleId: 'rule-1',
+          scheduledDate: occurrenceDate,
+          scheduledTimeMinutes: 9 * 60,
+          reminderMinutesBefore: 15,
+        );
+
+        final result = lifecycle.scheduleOccurrenceForDateAndTime(
+          task: occurrence,
+          scheduledDate: occurrenceDate,
+          scheduledTimeMinutes: null,
+          tasks: [occurrence],
+          exceptions: [],
+          now: now,
+        );
+
+        final updatedTask = result.taskToPersist;
+
+        expect(updatedTask, isNotNull);
+        expect(updatedTask!.scheduledDate, DateTime(2026, 4, 27));
+        expect(updatedTask.scheduledTimeMinutes, isNull);
+        expect(updatedTask.reminderMinutesBefore, isNull);
+        expect(updatedTask.recurringRuleId, isNull);
+        expect(result.exceptionToPersist, isNotNull);
+      },
+    );
+
     test('does nothing when rescheduling to the same date', () {
       final occurrence = _recurringOccurrence(
         id: 'task-1',
@@ -158,6 +227,40 @@ void main() {
       },
     );
 
+    test(
+      'updates occurrence reminder, detaches it from rule, and creates exception',
+      () {
+        final occurrence = _recurringOccurrence(
+          id: 'task-1',
+          ruleId: 'rule-1',
+          scheduledDate: occurrenceDate,
+          scheduledTimeMinutes: 9 * 60,
+          reminderMinutesBefore: 15,
+        );
+
+        final result = lifecycle.updateOccurrenceReminder(
+          task: occurrence,
+          reminderMinutesBefore: null,
+          tasks: [occurrence],
+          exceptions: [],
+          now: now,
+        );
+
+        final updatedTask = result.taskToPersist;
+
+        expect(updatedTask, isNotNull);
+        expect(updatedTask!.id, occurrence.id);
+        expect(updatedTask.reminderMinutesBefore, isNull);
+        expect(updatedTask.recurringRuleId, isNull);
+
+        final exception = result.exceptionToPersist;
+
+        expect(exception, isNotNull);
+        expect(exception!.id, 'recurring_exception_rule-1_20260427');
+        expect(exception.date, DateTime(2026, 4, 27));
+      },
+    );
+
     test('does nothing for task without recurring rule id', () {
       final task = _regularTask(id: 'task-1');
 
@@ -181,6 +284,8 @@ PlannerTask _recurringOccurrence({
   required String id,
   required String ruleId,
   required DateTime scheduledDate,
+  int? scheduledTimeMinutes,
+  int? reminderMinutesBefore,
 }) {
   return PlannerTask(
     id: id,
@@ -189,6 +294,8 @@ PlannerTask _recurringOccurrence({
     recurringRuleId: ruleId,
     scheduledDate: scheduledDate,
     createdAt: DateTime(2026, 4, 1),
+    scheduledTimeMinutes: scheduledTimeMinutes,
+    reminderMinutesBefore: reminderMinutesBefore,
   );
 }
 

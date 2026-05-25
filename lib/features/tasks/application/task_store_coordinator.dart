@@ -243,7 +243,16 @@ class TaskStoreCoordinator {
     }
 
     if (_isRecurringOccurrence(taskToUpdate)) {
-      return null;
+      return _recurringOccurrenceMutation(
+        _recurringOccurrenceStoreCoordinator.scheduleOccurrenceForDateAndTime(
+          task: taskToUpdate,
+          scheduledDate: scheduledDate,
+          scheduledTimeMinutes: scheduledTimeMinutes,
+          tasks: tasks,
+          exceptions: recurringExceptions,
+          now: DateTime.now(),
+        ),
+      );
     }
 
     final result = _taskApplicationService.scheduleTaskForDateAndTime(
@@ -272,7 +281,15 @@ class TaskStoreCoordinator {
     }
 
     if (_isRecurringOccurrence(taskToUpdate)) {
-      return null;
+      return _recurringOccurrenceMutation(
+        _recurringOccurrenceStoreCoordinator.updateOccurrenceReminder(
+          task: taskToUpdate,
+          reminderMinutesBefore: reminderMinutesBefore,
+          tasks: tasks,
+          exceptions: recurringExceptions,
+          now: DateTime.now(),
+        ),
+      );
     }
 
     final result = _taskApplicationService.updateTaskReminder(

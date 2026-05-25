@@ -106,7 +106,7 @@ class TaskScheduleDialogActions {
   }
 
   static bool canEditScheduleTime(PlannerTask task) {
-    return task.scheduledDate != null && task.recurringRuleId == null;
+    return task.scheduledDate != null;
   }
 
   static bool canEditReminder(PlannerTask task) {

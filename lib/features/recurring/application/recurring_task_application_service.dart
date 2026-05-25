@@ -131,6 +131,40 @@ class RecurringTaskApplicationService {
     );
   }
 
+  RecurringOccurrenceLifecycleResult scheduleOccurrenceForDateAndTime({
+    required PlannerTask task,
+    required DateTime scheduledDate,
+    required int? scheduledTimeMinutes,
+    required List<PlannerTask> tasks,
+    required List<RecurringTaskException> exceptions,
+    required DateTime now,
+  }) {
+    return _occurrenceLifecycle.scheduleOccurrenceForDateAndTime(
+      task: task,
+      scheduledDate: scheduledDate,
+      scheduledTimeMinutes: scheduledTimeMinutes,
+      tasks: tasks,
+      exceptions: exceptions,
+      now: now,
+    );
+  }
+
+  RecurringOccurrenceLifecycleResult updateOccurrenceReminder({
+    required PlannerTask task,
+    required int? reminderMinutesBefore,
+    required List<PlannerTask> tasks,
+    required List<RecurringTaskException> exceptions,
+    required DateTime now,
+  }) {
+    return _occurrenceLifecycle.updateOccurrenceReminder(
+      task: task,
+      reminderMinutesBefore: reminderMinutesBefore,
+      tasks: tasks,
+      exceptions: exceptions,
+      now: now,
+    );
+  }
+
   RecurringOccurrenceLifecycleResult unscheduleOccurrence({
     required PlannerTask task,
     required List<PlannerTask> tasks,

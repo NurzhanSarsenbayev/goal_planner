@@ -100,6 +100,104 @@ class RecurringOccurrenceLifecycle {
     );
   }
 
+  RecurringOccurrenceLifecycleResult scheduleOccurrenceForDateAndTime({
+    required PlannerTask task,
+    required DateTime scheduledDate,
+    required int? scheduledTimeMinutes,
+    required List<PlannerTask> tasks,
+    required List<RecurringTaskException> exceptions,
+    required DateTime now,
+  }) {
+    final recurringRuleId = task.recurringRuleId;
+    final oldScheduledDate = task.scheduledDate;
+
+    if (recurringRuleId == null || oldScheduledDate == null) {
+      return RecurringOccurrenceLifecycleResult(
+        tasks: tasks,
+        exceptions: exceptions,
+      );
+    }
+
+    final normalizedOldDate = dateOnly(oldScheduledDate);
+    final normalizedNewDate = dateOnly(scheduledDate);
+
+    if (normalizedOldDate == normalizedNewDate &&
+        task.scheduledTimeMinutes == scheduledTimeMinutes) {
+      return RecurringOccurrenceLifecycleResult(
+        tasks: tasks,
+        exceptions: exceptions,
+      );
+    }
+
+    final exception = _createException(
+      ruleId: recurringRuleId,
+      date: normalizedOldDate,
+      now: now,
+    );
+
+    final updatedTask = task
+        .scheduleForDateAndTime(
+          date: normalizedNewDate,
+          timeMinutes: scheduledTimeMinutes,
+        )
+        .copyWith(recurringRuleId: null);
+
+    return RecurringOccurrenceLifecycleResult(
+      tasks: _replaceTask(tasks: tasks, updatedTask: updatedTask),
+      exceptions: _addExceptionIfMissing(
+        exceptions: exceptions,
+        exception: exception,
+      ),
+      taskToPersist: updatedTask,
+      exceptionToPersist: exception,
+    );
+  }
+
+  RecurringOccurrenceLifecycleResult updateOccurrenceReminder({
+    required PlannerTask task,
+    required int? reminderMinutesBefore,
+    required List<PlannerTask> tasks,
+    required List<RecurringTaskException> exceptions,
+    required DateTime now,
+  }) {
+    final recurringRuleId = task.recurringRuleId;
+    final scheduledDate = task.scheduledDate;
+
+    if (recurringRuleId == null || scheduledDate == null) {
+      return RecurringOccurrenceLifecycleResult(
+        tasks: tasks,
+        exceptions: exceptions,
+      );
+    }
+
+    if (task.reminderMinutesBefore == reminderMinutesBefore) {
+      return RecurringOccurrenceLifecycleResult(
+        tasks: tasks,
+        exceptions: exceptions,
+      );
+    }
+
+    final exception = _createException(
+      ruleId: recurringRuleId,
+      date: scheduledDate,
+      now: now,
+    );
+
+    final updatedTask = task
+        .setReminder(reminderMinutesBefore)
+        .copyWith(recurringRuleId: null);
+
+    return RecurringOccurrenceLifecycleResult(
+      tasks: _replaceTask(tasks: tasks, updatedTask: updatedTask),
+      exceptions: _addExceptionIfMissing(
+        exceptions: exceptions,
+        exception: exception,
+      ),
+      taskToPersist: updatedTask,
+      exceptionToPersist: exception,
+    );
+  }
+
   RecurringOccurrenceLifecycleResult unscheduleOccurrence({
     required PlannerTask task,
     required List<PlannerTask> tasks,

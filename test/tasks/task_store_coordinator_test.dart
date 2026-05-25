@@ -58,6 +58,111 @@ void main() {
       );
     });
 
+    test('updates reminder for recurring occurrence override', () async {
+      final taskRepository = FakeTaskRepository();
+      final recurringRepository = FakeRecurringTaskRepository();
+      final notifications = FakeReminderNotificationClient();
+      final coordinator = _createCoordinator(
+        taskRepository: taskRepository,
+        notifications: notifications,
+        recurringTaskRepository: recurringRepository,
+      );
+
+      final task = PlannerTask(
+        id: 'task_recurring_rule_1_20260520',
+        title: 'Workout',
+        description: '',
+        recurringRuleId: 'rule_1',
+        scheduledDate: DateTime(2026, 5, 20),
+        scheduledTimeMinutes: 570,
+        reminderMinutesBefore: 15,
+        createdAt: DateTime(2026, 5, 20),
+      );
+
+      final mutation = coordinator.updateTaskReminder(
+        tasks: [task],
+        recurringExceptions: const [],
+        taskId: task.id,
+        reminderMinutesBefore: null,
+      );
+
+      expect(mutation, isNotNull);
+
+      await mutation!.persistOperation();
+
+      expect(recurringRepository.updatedTasks, hasLength(1));
+      expect(recurringRepository.updatedTasks.single.recurringRuleId, isNull);
+      expect(
+        recurringRepository.updatedTasks.single.reminderMinutesBefore,
+        isNull,
+      );
+      expect(recurringRepository.updatedExceptions, hasLength(1));
+      expect(recurringRepository.updatedExceptions.single.ruleId, 'rule_1');
+      expect(
+        recurringRepository.updatedExceptions.single.date,
+        DateTime(2026, 5, 20),
+      );
+      expect(notifications.canceledIds, [taskReminderNotificationId(task.id)]);
+      expect(notifications.scheduledReminders, isEmpty);
+    });
+
+    test(
+      'clears time and reminder for recurring occurrence override',
+      () async {
+        final taskRepository = FakeTaskRepository();
+        final recurringRepository = FakeRecurringTaskRepository();
+        final notifications = FakeReminderNotificationClient();
+        final coordinator = _createCoordinator(
+          taskRepository: taskRepository,
+          notifications: notifications,
+          recurringTaskRepository: recurringRepository,
+        );
+
+        final task = PlannerTask(
+          id: 'task_recurring_rule_1_20260520',
+          title: 'Workout',
+          description: '',
+          recurringRuleId: 'rule_1',
+          scheduledDate: DateTime(2026, 5, 20),
+          scheduledTimeMinutes: 570,
+          reminderMinutesBefore: 15,
+          createdAt: DateTime(2026, 5, 20),
+        );
+
+        final mutation = coordinator.scheduleTaskForDateAndTime(
+          tasks: [task],
+          recurringExceptions: const [],
+          taskId: task.id,
+          scheduledDate: DateTime(2026, 5, 20),
+          scheduledTimeMinutes: null,
+        );
+
+        expect(mutation, isNotNull);
+
+        await mutation!.persistOperation();
+
+        expect(recurringRepository.updatedTasks, hasLength(1));
+        expect(recurringRepository.updatedTasks.single.recurringRuleId, isNull);
+        expect(
+          recurringRepository.updatedTasks.single.scheduledDate,
+          DateTime(2026, 5, 20),
+        );
+        expect(
+          recurringRepository.updatedTasks.single.scheduledTimeMinutes,
+          isNull,
+        );
+        expect(
+          recurringRepository.updatedTasks.single.reminderMinutesBefore,
+          isNull,
+        );
+        expect(recurringRepository.updatedExceptions, hasLength(1));
+        expect(notifications.canceledIds, [
+          taskReminderNotificationId(task.id),
+        ]);
+        expect(notifications.scheduledReminders, isEmpty);
+      },
+    );
+
     test('passes reminder minutes when creating task for date', () async {
       final taskRepository = FakeTaskRepository();
       final notifications = FakeReminderNotificationClient();
@@ -236,16 +341,20 @@ void main() {
 TaskStoreCoordinator _createCoordinator({
   required FakeTaskRepository taskRepository,
   required FakeReminderNotificationClient notifications,
+  FakeRecurringTaskRepository? recurringTaskRepository,
 }) {
   final taskReminderScheduler = TaskReminderScheduler(
     notifications: notifications,
     now: () => DateTime(2026, 5, 20, 8),
   );
 
+  final recurringRepository =
+      recurringTaskRepository ?? FakeRecurringTaskRepository();
+
   return TaskStoreCoordinator(
     taskRepository: taskRepository,
     recurringOccurrenceStoreCoordinator: RecurringOccurrenceStoreCoordinator(
-      recurringTaskRepository: FakeRecurringTaskRepository(),
+      recurringTaskRepository: recurringRepository,
       taskReminderResyncService: TaskReminderResyncService(
         taskReminderScheduler: taskReminderScheduler,
       ),
@@ -329,6 +438,9 @@ class ScheduledTaskReminderCall {
 }
 
 class FakeRecurringTaskRepository implements RecurringTaskRepository {
+  final List<PlannerTask> updatedTasks = [];
+  final List<RecurringTaskException> updatedExceptions = [];
+
   @override
   Future<List<RecurringTaskRule>> loadRecurringTaskRules() async {
     return const [];
@@ -374,5 +486,8 @@ class FakeRecurringTaskRepository implements RecurringTaskRepository {
   Future<void> updateTaskWithRecurringException({
     required PlannerTask task,
     required RecurringTaskException exception,
-  }) async {}
+  }) async {
+    updatedTasks.add(task);
+    updatedExceptions.add(exception);
+  }
 }

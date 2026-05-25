@@ -139,6 +139,87 @@ class RecurringOccurrenceStoreCoordinator {
     );
   }
 
+  RecurringOccurrenceStoreMutation? scheduleOccurrenceForDateAndTime({
+    required PlannerTask task,
+    required DateTime scheduledDate,
+    required int? scheduledTimeMinutes,
+    required List<PlannerTask> tasks,
+    required List<RecurringTaskException> exceptions,
+    required DateTime now,
+  }) {
+    final result = _recurringTaskApplicationService
+        .scheduleOccurrenceForDateAndTime(
+          task: task,
+          scheduledDate: scheduledDate,
+          scheduledTimeMinutes: scheduledTimeMinutes,
+          tasks: tasks,
+          exceptions: exceptions,
+          now: now,
+        );
+
+    final taskToPersist = result.taskToPersist;
+    final exceptionToPersist = result.exceptionToPersist;
+
+    if (taskToPersist == null || exceptionToPersist == null) {
+      return null;
+    }
+
+    return RecurringOccurrenceStoreMutation(
+      tasks: result.tasks,
+      exceptions: result.exceptions,
+      persistOperation: () async {
+        await _recurringTaskRepository.updateTaskWithRecurringException(
+          task: taskToPersist,
+          exception: exceptionToPersist,
+        );
+
+        await _syncTaskRemindersAfterTaskSetReplacement(
+          previousTasks: tasks,
+          currentTasks: result.tasks,
+        );
+      },
+    );
+  }
+
+  RecurringOccurrenceStoreMutation? updateOccurrenceReminder({
+    required PlannerTask task,
+    required int? reminderMinutesBefore,
+    required List<PlannerTask> tasks,
+    required List<RecurringTaskException> exceptions,
+    required DateTime now,
+  }) {
+    final result = _recurringTaskApplicationService.updateOccurrenceReminder(
+      task: task,
+      reminderMinutesBefore: reminderMinutesBefore,
+      tasks: tasks,
+      exceptions: exceptions,
+      now: now,
+    );
+
+    final taskToPersist = result.taskToPersist;
+    final exceptionToPersist = result.exceptionToPersist;
+
+    if (taskToPersist == null || exceptionToPersist == null) {
+      return null;
+    }
+
+    return RecurringOccurrenceStoreMutation(
+      tasks: result.tasks,
+      exceptions: result.exceptions,
+      persistOperation: () async {
+        await _recurringTaskRepository.updateTaskWithRecurringException(
+          task: taskToPersist,
+          exception: exceptionToPersist,
+        );
+
+        await _syncTaskRemindersAfterTaskSetReplacement(
+          previousTasks: tasks,
+          currentTasks: result.tasks,
+        );
+      },
+    );
+  }
+
   RecurringOccurrenceStoreMutation? unscheduleOccurrence({
     required PlannerTask task,
     required List<PlannerTask> tasks,
