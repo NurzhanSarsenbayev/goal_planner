@@ -558,6 +558,10 @@
     "taskEditActionsOnlyThisTaskSection": "Только эта задача",
     "taskEditActionTitleAndDescription": "Название и описание",
 
+    "taskEditActionsWholeSeriesSection": "Вся серия",
+    "taskEditActionEditSeries": "Изменить правило повторения",
+    "taskEditActionDeleteThisTask": "Удалить эту задачу",
+
     "taskDialogAddTitle": "Добавить задачу",
     "taskDialogEditTitle": "Изменить задачу",
     "taskDialogAddForTodayTitle": "Добавить задачу на сегодня",

@@ -18,9 +18,12 @@ Future<void> showTaskEditActionsSheet(
   VoidCallback? onRemoveFromToday,
   VoidCallback? onUnschedule,
   VoidCallback? onEditReminder,
+      VoidCallback? onEditRecurringSeries,
 }) async {
   final l10n = AppLocalizations.of(context);
   final isRecurringOccurrence = task.recurringRuleId != null;
+  final shouldShowWholeSeries =
+      isRecurringOccurrence && onEditRecurringSeries != null;
 
   final shouldShowScheduleDate = onScheduleDate != null;
   final shouldShowRemoveFromToday = onRemoveFromToday != null;
@@ -145,11 +148,29 @@ Future<void> showTaskEditActionsSheet(
               const Divider(height: 1),
               _TaskEditActionTile(
                 icon: Icons.delete_outline,
-                title: l10n.commonDelete,
+                title: isRecurringOccurrence
+                    ? l10n.taskEditActionDeleteThisTask
+                    : l10n.commonDelete,
                 onTap: () {
                   _runAfterClosingSheet(sheetContext, onDelete);
                 },
               ),
+              if (shouldShowWholeSeries) ...[
+                const Divider(height: 1),
+                _TaskEditActionsSectionHeader(
+                  title: l10n.taskEditActionsWholeSeriesSection,
+                ),
+                _TaskEditActionTile(
+                  icon: Icons.repeat,
+                  title: l10n.taskEditActionEditSeries,
+                  onTap: () {
+                    _runAfterClosingSheet(
+                      sheetContext,
+                      onEditRecurringSeries,
+                    );
+                  },
+                ),
+              ],
             ],
           ),
         ),

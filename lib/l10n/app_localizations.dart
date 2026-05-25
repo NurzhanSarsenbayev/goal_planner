@@ -1208,6 +1208,24 @@ abstract class AppLocalizations {
   /// **'Title and description'**
   String get taskEditActionTitleAndDescription;
 
+  /// No description provided for @taskEditActionsWholeSeriesSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Whole series'**
+  String get taskEditActionsWholeSeriesSection;
+
+  /// No description provided for @taskEditActionEditSeries.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit repeat rule'**
+  String get taskEditActionEditSeries;
+
+  /// No description provided for @taskEditActionDeleteThisTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this task'**
+  String get taskEditActionDeleteThisTask;
+
   /// No description provided for @taskDialogAddTitle.
   ///
   /// In en, this message translates to:

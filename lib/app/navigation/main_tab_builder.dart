@@ -95,6 +95,14 @@ class MainTabBuilder {
         onAddRecurringTask: () {
           _recurringRuleDialogActions.showAddDialog(context);
         },
+        onEditRecurringTaskRule: (ruleId) {
+          for (final rule in _store.recurringRules) {
+            if (rule.id == ruleId) {
+              _recurringRuleDialogActions.showEditDialog(context, rule);
+              return;
+            }
+          }
+        },
       ),
       GoalsScreen(
         goals: _store.goals,
@@ -132,6 +140,14 @@ class MainTabBuilder {
             _store.ensureRecurringTaskOccurrencesForMonth,
         onAddRecurringTaskForDate: (date) {
           _recurringRuleDialogActions.showAddDialog(context, startDate: date);
+        },
+        onEditRecurringTaskRule: (ruleId) {
+          for (final rule in _store.recurringRules) {
+            if (rule.id == ruleId) {
+              _recurringRuleDialogActions.showEditDialog(context, rule);
+              return;
+            }
+          }
         },
       ),
       HabitsScreen(habitStore: _habitStore),

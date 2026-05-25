@@ -640,6 +640,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get taskEditActionTitleAndDescription => 'Title and description';
 
   @override
+  String get taskEditActionsWholeSeriesSection => 'Whole series';
+
+  @override
+  String get taskEditActionEditSeries => 'Edit repeat rule';
+
+  @override
+  String get taskEditActionDeleteThisTask => 'Delete this task';
+
+  @override
   String get taskDialogAddTitle => 'Add task';
 
   @override

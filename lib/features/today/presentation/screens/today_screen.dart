@@ -32,6 +32,7 @@ class TodayScreen extends StatelessWidget {
     required this.onScheduleTaskForDateAndTime,
     required this.onUpdateTaskReminder,
     required this.onAddRecurringTask,
+    required this.onEditRecurringTaskRule,
   });
 
   final List<Goal> goals;
@@ -61,6 +62,7 @@ class TodayScreen extends StatelessWidget {
   final void Function(String taskId) onDeleteTask;
   final VoidCallback onAddTask;
   final VoidCallback onAddRecurringTask;
+  final void Function(String ruleId) onEditRecurringTaskRule;
   final TodayTaskViewBuilder _viewBuilder = const TodayTaskViewBuilder();
   final TaskScheduleDialogActions _taskScheduleDialogActions =
       const TaskScheduleDialogActions();
@@ -191,6 +193,7 @@ class TodayScreen extends StatelessWidget {
       task,
     );
     final canEditReminder = TaskScheduleDialogActions.canEditReminder(task);
+    final recurringRuleId = task.recurringRuleId;
 
     return TaskCard(
       key: ValueKey(task.id),
@@ -249,6 +252,9 @@ class TodayScreen extends StatelessWidget {
               );
             }
           : null,
+      onEditRecurringSeries: recurringRuleId == null
+          ? null
+          : () => onEditRecurringTaskRule(recurringRuleId),
       onDelete: () => onDeleteTask(task.id),
     );
   }

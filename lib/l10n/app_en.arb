@@ -558,6 +558,10 @@
     "taskEditActionsOnlyThisTaskSection": "Only this task",
     "taskEditActionTitleAndDescription": "Title and description",
 
+    "taskEditActionsWholeSeriesSection": "Whole series",
+    "taskEditActionEditSeries": "Edit repeat rule",
+    "taskEditActionDeleteThisTask": "Delete this task",
+
     "taskDialogAddTitle": "Add task",
     "taskDialogEditTitle": "Edit task",
     "taskDialogAddForTodayTitle": "Add task for today",
