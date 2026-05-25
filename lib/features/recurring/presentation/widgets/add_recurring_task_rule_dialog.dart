@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../shared/planner_time.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/goal.dart';
 import '../../../../models/milestone.dart';
@@ -88,6 +89,19 @@ class _AddRecurringTaskRuleDialogState
     };
   }
 
+  TimeOfDay get _initialTime {
+    final scheduledTimeMinutes = _scheduledTimeMinutes;
+
+    if (scheduledTimeMinutes == null) {
+      return TimeOfDay.now();
+    }
+
+    return TimeOfDay(
+      hour: scheduledTimeMinutes ~/ 60,
+      minute: scheduledTimeMinutes % 60,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -134,6 +148,31 @@ class _AddRecurringTaskRuleDialogState
 
   void _onFormChanged() {
     setState(() {});
+  }
+
+  Future<void> _pickTime() async {
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: _initialTime,
+    );
+
+    if (!mounted || pickedTime == null) {
+      return;
+    }
+
+    setState(() {
+      _scheduledTimeMinutes = plannerTimeMinutes(
+        hour: pickedTime.hour,
+        minute: pickedTime.minute,
+      );
+    });
+  }
+
+  void _clearTime() {
+    setState(() {
+      _scheduledTimeMinutes = null;
+      _reminderMinutesBefore = null;
+    });
   }
 
   @override
@@ -203,6 +242,71 @@ class _AddRecurringTaskRuleDialogState
                 });
               },
             ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: _pickTime,
+                    icon: const Icon(Icons.schedule),
+                    label: Text(
+                      _scheduledTimeMinutes == null
+                          ? l10n.taskTimeNotSetButton
+                          : l10n.taskTimeSelectedButton(
+                              formatPlannerTime(_scheduledTimeMinutes!),
+                            ),
+                    ),
+                  ),
+                ),
+                if (_scheduledTimeMinutes != null) ...[
+                  const SizedBox(width: 8),
+                  TextButton(
+                    onPressed: _clearTime,
+                    child: Text(l10n.taskTimeClearButton),
+                  ),
+                ],
+              ],
+            ),
+            if (_scheduledTimeMinutes != null) ...[
+              const SizedBox(height: 12),
+              DropdownButtonFormField<int?>(
+                initialValue: _reminderMinutesBefore,
+                decoration: InputDecoration(
+                  labelText: l10n.taskReminderFieldLabel,
+                ),
+                items: [
+                  DropdownMenuItem<int?>(
+                    value: null,
+                    child: Text(l10n.taskReminderNoneOption),
+                  ),
+                  DropdownMenuItem<int?>(
+                    value: 0,
+                    child: Text(l10n.taskReminderAtTimeOption),
+                  ),
+                  DropdownMenuItem<int?>(
+                    value: 5,
+                    child: Text(l10n.taskReminderMinutesBeforeOption(5)),
+                  ),
+                  DropdownMenuItem<int?>(
+                    value: 15,
+                    child: Text(l10n.taskReminderMinutesBeforeOption(15)),
+                  ),
+                  DropdownMenuItem<int?>(
+                    value: 30,
+                    child: Text(l10n.taskReminderMinutesBeforeOption(30)),
+                  ),
+                  DropdownMenuItem<int?>(
+                    value: 60,
+                    child: Text(l10n.taskReminderHoursBeforeOption(1)),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    _reminderMinutesBefore = value;
+                  });
+                },
+              ),
+            ],
           ],
         ),
       ),
