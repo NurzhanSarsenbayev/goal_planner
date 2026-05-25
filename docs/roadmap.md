@@ -597,8 +597,9 @@ Not doing in recurring MVP:
 - complex RRULE support;
 - yearly recurrence;
 - every N days recurrence;
-- time-of-day scheduling;
-- reminders;
+- advanced recurrence rules;
+- edit this and following;
+- snooze / notification actions;
 - drag-and-drop recurring occurrences;
 - edit this and following;
 - advanced recurrence exceptions;
@@ -1396,6 +1397,12 @@ Completed scope:
 - Added task reminder lifecycle service.
 - Added startup task reminder resync.
 - Added restore-time task reminder resync.
+- Supported reminders for recurring task occurrences.
+- Added recurring rule default time and reminder settings.
+- Generated recurring occurrences inherit time and reminder settings from the rule.
+- Resynced recurring occurrence reminders after rule create/update/delete/activate/deactivate flows.
+- Resynced recurring occurrence reminders after restore, startup and language changes through the existing task reminder pipeline.
+- Allowed overriding time/reminder for a single recurring occurrence from Today/Calendar by detaching that occurrence through a recurring exception.
 
 Out of scope for this phase:
 
