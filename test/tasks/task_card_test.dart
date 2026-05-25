@@ -96,6 +96,34 @@ void main() {
       expect(didOpenReminder, isTrue);
     });
 
+    testWidgets('opens edit actions sheet from action button', (tester) async {
+      var didEdit = false;
+
+      await tester.pumpWidget(
+        _app(
+          task: PlannerTask(
+            id: 'task_1',
+            title: 'Plan day',
+            description: '',
+            createdAt: DateTime(2026, 5, 20),
+          ),
+          onEdit: () {
+            didEdit = true;
+          },
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Edit task'), findsOneWidget);
+
+      await tester.tap(find.text('Edit task'));
+      await tester.pumpAndSettle();
+
+      expect(didEdit, isTrue);
+    });
+
     testWidgets('shows clear time action when scheduled time exists', (
       tester,
     ) async {
@@ -122,8 +150,8 @@ void main() {
     });
 
     testWidgets('keeps scheduled date label without time for untimed tasks', (
-        tester,
-        ) async {
+      tester,
+    ) async {
       final scheduledDate = todayDate().add(const Duration(days: 1));
 
       await tester.pumpWidget(
@@ -151,6 +179,7 @@ Widget _app({
   VoidCallback? onScheduleTime,
   VoidCallback? onClearScheduledTime,
   VoidCallback? onEditReminder,
+  VoidCallback? onEdit,
 }) {
   return MaterialApp(
     locale: const Locale('en'),
@@ -161,7 +190,7 @@ Widget _app({
         task: task,
         goal: null,
         onToggleCompleted: () {},
-        onEdit: () {},
+        onEdit: onEdit ?? () {},
         onDelete: () {},
         onScheduleTime: onScheduleTime,
         onClearScheduledTime: onClearScheduledTime,
