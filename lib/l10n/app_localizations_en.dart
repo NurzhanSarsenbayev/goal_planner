@@ -628,6 +628,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get taskActionClearTime => 'Clear time';
 
   @override
+  String get taskEditActionsSheetTitle => 'Edit task';
+
+  @override
+  String get taskEditActionsRecurringSheetTitle => 'Edit recurring task';
+
+  @override
+  String get taskEditActionsOnlyThisTaskSection => 'Only this task';
+
+  @override
+  String get taskEditActionTitleAndDescription => 'Title and description';
+
+  @override
   String get taskDialogAddTitle => 'Add task';
 
   @override

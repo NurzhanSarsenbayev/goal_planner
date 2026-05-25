@@ -553,6 +553,11 @@
     "taskActionChangeTime": "Изменить время",
     "taskActionClearTime": "Убрать время",
 
+    "taskEditActionsSheetTitle": "Изменить задачу",
+    "taskEditActionsRecurringSheetTitle": "Изменить повторяющуюся задачу",
+    "taskEditActionsOnlyThisTaskSection": "Только эта задача",
+    "taskEditActionTitleAndDescription": "Название и описание",
+
     "taskDialogAddTitle": "Добавить задачу",
     "taskDialogEditTitle": "Изменить задачу",
     "taskDialogAddForTodayTitle": "Добавить задачу на сегодня",

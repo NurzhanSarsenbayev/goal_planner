@@ -1184,6 +1184,30 @@ abstract class AppLocalizations {
   /// **'Clear time'**
   String get taskActionClearTime;
 
+  /// No description provided for @taskEditActionsSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit task'**
+  String get taskEditActionsSheetTitle;
+
+  /// No description provided for @taskEditActionsRecurringSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit recurring task'**
+  String get taskEditActionsRecurringSheetTitle;
+
+  /// No description provided for @taskEditActionsOnlyThisTaskSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Only this task'**
+  String get taskEditActionsOnlyThisTaskSection;
+
+  /// No description provided for @taskEditActionTitleAndDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Title and description'**
+  String get taskEditActionTitleAndDescription;
+
   /// No description provided for @taskDialogAddTitle.
   ///
   /// In en, this message translates to:

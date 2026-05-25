@@ -20,6 +20,7 @@ Future<void> showTaskEditActionsSheet(
   VoidCallback? onEditReminder,
 }) async {
   final l10n = AppLocalizations.of(context);
+  final isRecurringOccurrence = task.recurringRuleId != null;
 
   final shouldShowScheduleDate = onScheduleDate != null;
   final shouldShowRemoveFromToday = onRemoveFromToday != null;
@@ -43,9 +44,18 @@ Future<void> showTaskEditActionsSheet(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              _TaskEditActionsHeader(
+                title: isRecurringOccurrence
+                    ? l10n.taskEditActionsRecurringSheetTitle
+                    : l10n.taskEditActionsSheetTitle,
+              ),
+              if (isRecurringOccurrence)
+                _TaskEditActionsSectionHeader(
+                  title: l10n.taskEditActionsOnlyThisTaskSection,
+                ),
               _TaskEditActionTile(
                 icon: Icons.edit_outlined,
-                title: l10n.taskDialogEditTitle,
+                title: l10n.taskEditActionTitleAndDescription,
                 onTap: () {
                   _runAfterClosingSheet(sheetContext, onEdit);
                 },
@@ -154,6 +164,51 @@ void _runAfterClosingSheet(BuildContext context, VoidCallback action) {
   WidgetsBinding.instance.addPostFrameCallback((_) {
     action();
   });
+}
+
+class _TaskEditActionsHeader extends StatelessWidget {
+  const _TaskEditActionsHeader({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 8),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          title,
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+        ),
+      ),
+    );
+  }
+}
+
+class _TaskEditActionsSectionHeader extends StatelessWidget {
+  const _TaskEditActionsSectionHeader({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          title,
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _TaskEditActionTile extends StatelessWidget {

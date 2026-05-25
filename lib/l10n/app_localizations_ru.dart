@@ -632,6 +632,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get taskActionClearTime => 'Убрать время';
 
   @override
+  String get taskEditActionsSheetTitle => 'Изменить задачу';
+
+  @override
+  String get taskEditActionsRecurringSheetTitle =>
+      'Изменить повторяющуюся задачу';
+
+  @override
+  String get taskEditActionsOnlyThisTaskSection => 'Только эта задача';
+
+  @override
+  String get taskEditActionTitleAndDescription => 'Название и описание';
+
+  @override
   String get taskDialogAddTitle => 'Добавить задачу';
 
   @override

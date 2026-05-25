@@ -117,11 +117,44 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Edit task'), findsOneWidget);
+      expect(find.text('Title and description'), findsOneWidget);
 
-      await tester.tap(find.text('Edit task'));
+      await tester.tap(find.text('Title and description'));
       await tester.pumpAndSettle();
 
       expect(didEdit, isTrue);
+    });
+
+    testWidgets('shows only this task section for recurring occurrence', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _app(
+          task: PlannerTask(
+            id: 'task_recurring_rule_1_20260520',
+            title: 'Workout',
+            description: '',
+            recurringRuleId: 'rule_1',
+            scheduledDate: todayDate(),
+            scheduledTimeMinutes: 9 * 60 + 30,
+            reminderMinutesBefore: 15,
+            createdAt: DateTime(2026, 5, 20),
+          ),
+          onScheduleTime: () {},
+          onClearScheduledTime: () {},
+          onEditReminder: () {},
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Edit recurring task'), findsOneWidget);
+      expect(find.text('Only this task'), findsOneWidget);
+      expect(find.text('Title and description'), findsOneWidget);
+      expect(find.text('Change time'), findsOneWidget);
+      expect(find.text('Reminder'), findsOneWidget);
+      expect(find.text('Clear time'), findsOneWidget);
     });
 
     testWidgets('shows clear time action when scheduled time exists', (
