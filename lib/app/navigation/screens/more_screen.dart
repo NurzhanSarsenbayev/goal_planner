@@ -59,167 +59,161 @@ class MoreScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        Text(
-          l10n.moreSettingsSection,
-          style: Theme.of(
-            context,
-          ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-        ),
-        const SizedBox(height: 8),
-        Card(
-          child: ListTile(
-            leading: const Icon(Icons.language),
-            title: Text(l10n.moreLanguageTitle),
-            subtitle: DropdownButtonHideUnderline(
-              child: DropdownButton<AppLanguage>(
-                value: selectedLanguage,
-                isExpanded: true,
-                items: [
-                  DropdownMenuItem(
-                    value: AppLanguage.system,
-                    child: Text(l10n.moreLanguageSystemOption),
-                  ),
-                  DropdownMenuItem(
-                    value: AppLanguage.english,
-                    child: Text(l10n.moreLanguageEnglishOption),
-                  ),
-                  DropdownMenuItem(
-                    value: AppLanguage.russian,
-                    child: Text(l10n.moreLanguageRussianOption),
-                  ),
-                ],
-                onChanged: (language) {
-                  if (language == null) {
-                    return;
-                  }
-
-                  onLanguageChanged(language);
-                },
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Card(
-          child: ListTile(
-            leading: const Icon(Icons.nightlight_outlined),
-            title: Text(l10n.moreDailyReviewReminderTitle),
-            subtitle: Text(l10n.moreDailyReviewReminderSubtitle),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: onOpenDailyReviewReminderSettings,
-          ),
-        ),
-        Text(
-          l10n.moreBackupSection,
-          style: Theme.of(
-            context,
-          ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-        ),
-        const SizedBox(height: 8),
-        Card(
-          child: ListTile(
-            leading: const Icon(Icons.backup_outlined),
-            title: Text(l10n.moreCreateBackupTitle),
-            subtitle: Text(_backupSubtitle(context, l10n)),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              onCreateBackup();
-            },
-          ),
-        ),
-        const SizedBox(height: 8),
-        Card(
-          child: ListTile(
-            leading: const Icon(Icons.ios_share_outlined),
-            title: Text(l10n.moreExportBackupTitle),
-            subtitle: Text(l10n.moreExportBackupSubtitle),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              onExportBackup();
-            },
-          ),
-        ),
-        const SizedBox(height: 8),
-        Card(
-          child: ListTile(
-            leading: const Icon(Icons.restore_outlined),
-            title: Text(l10n.moreRestoreBackupTitle),
-            subtitle: Text(l10n.moreRestoreBackupSubtitle),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              onRestoreLatestBackup();
-            },
-          ),
-        ),
-        const SizedBox(height: 8),
-        Card(
-          child: ListTile(
-            leading: const Icon(Icons.upload_file_outlined),
-            title: Text(l10n.moreRestoreExternalBackupTitle),
-            subtitle: Text(l10n.moreRestoreExternalBackupSubtitle),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              onRestoreExternalBackup();
-            },
-          ),
-        ),
-        if (kDebugMode) ...[
-          const SizedBox(height: 16),
-          Text(
-            l10n.moreNotificationsSection,
-            style: Theme.of(
-              context,
-            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 8),
-          Card(
-            child: ListTile(
-              leading: const Icon(Icons.notifications_active_outlined),
-              title: Text(l10n.moreTestNotificationTitle),
-              subtitle: Text(l10n.moreTestNotificationSubtitle),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {
-                onShowTestNotification();
-              },
-            ),
-          ),
-        ],
-        const SizedBox(height: 16),
-        Text(
-          l10n.moreToolsSection,
-          style: Theme.of(
-            context,
-          ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-        ),
-        const SizedBox(height: 8),
         _MoreNavigationCard(
-          icon: Icons.notifications_outlined,
-          title: l10n.moreStandaloneRemindersTitle,
-          subtitle: l10n.moreStandaloneRemindersSubtitle,
-          onTap: onOpenStandaloneReminders,
-        ),
-        const SizedBox(height: 8),
-        _MoreNavigationCard(
-          icon: Icons.task_alt,
-          title: l10n.allTasksTitle,
-          subtitle: l10n.moreAllTasksSubtitle,
-          onTap: onOpenAllTasks,
-        ),
-        const SizedBox(height: 8),
-        _MoreNavigationCard(
-          icon: Icons.analytics,
-          title: l10n.reportsTitle,
-          subtitle: l10n.moreReportsSubtitle,
+          icon: Icons.analytics_outlined,
+          title: l10n.moreProgressReportsTitle,
+          subtitle: l10n.moreProgressReportsSubtitle,
           onTap: onOpenReports,
         ),
         const SizedBox(height: 8),
-        _MoreNavigationCard(
-          icon: Icons.repeat,
-          title: l10n.moreRecurringTasksTitle,
-          subtitle: l10n.moreRecurringTasksSubtitle,
-          onTap: onOpenRecurringTasks,
+        _MoreSectionCard(
+          icon: Icons.notifications_none_outlined,
+          title: l10n.moreRemindersSection,
+          children: [
+            _MoreActionTile(
+              icon: Icons.notifications_outlined,
+              title: l10n.moreStandaloneRemindersTitle,
+              subtitle: l10n.moreStandaloneRemindersSubtitle,
+              onTap: onOpenStandaloneReminders,
+            ),
+            _MoreActionTile(
+              icon: Icons.nightlight_outlined,
+              title: l10n.moreDailyReviewReminderTitle,
+              subtitle: l10n.moreDailyReviewReminderSubtitle,
+              onTap: onOpenDailyReviewReminderSettings,
+            ),
+            if (kDebugMode)
+              _MoreActionTile(
+                icon: Icons.notifications_active_outlined,
+                title: l10n.moreTestNotificationTitle,
+                subtitle: l10n.moreTestNotificationSubtitle,
+                onTap: () {
+                  onShowTestNotification();
+                },
+              ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        _MoreSectionCard(
+          icon: Icons.event_note_outlined,
+          title: l10n.morePlanningSection,
+          children: [
+            _MoreActionTile(
+              icon: Icons.task_alt,
+              title: l10n.allTasksTitle,
+              subtitle: l10n.moreAllTasksSubtitle,
+              onTap: onOpenAllTasks,
+            ),
+            _MoreActionTile(
+              icon: Icons.repeat,
+              title: l10n.moreRecurringTasksTitle,
+              subtitle: l10n.moreRecurringTasksSubtitle,
+              onTap: onOpenRecurringTasks,
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        _MoreSectionCard(
+          icon: Icons.settings_outlined,
+          title: l10n.moreAppSection,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.language),
+              title: Text(l10n.moreLanguageTitle),
+              subtitle: DropdownButtonHideUnderline(
+                child: DropdownButton<AppLanguage>(
+                  value: selectedLanguage,
+                  isExpanded: true,
+                  items: [
+                    DropdownMenuItem(
+                      value: AppLanguage.system,
+                      child: Text(l10n.moreLanguageSystemOption),
+                    ),
+                    DropdownMenuItem(
+                      value: AppLanguage.english,
+                      child: Text(l10n.moreLanguageEnglishOption),
+                    ),
+                    DropdownMenuItem(
+                      value: AppLanguage.russian,
+                      child: Text(l10n.moreLanguageRussianOption),
+                    ),
+                  ],
+                  onChanged: (language) {
+                    if (language == null) {
+                      return;
+                    }
+
+                    onLanguageChanged(language);
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        _MoreSectionCard(
+          icon: Icons.backup_outlined,
+          title: l10n.moreBackupRestoreSection,
+          children: [
+            _MoreActionTile(
+              icon: Icons.backup_outlined,
+              title: l10n.moreCreateBackupTitle,
+              subtitle: _backupSubtitle(context, l10n),
+              onTap: () {
+                onCreateBackup();
+              },
+            ),
+            _MoreActionTile(
+              icon: Icons.ios_share_outlined,
+              title: l10n.moreExportBackupTitle,
+              subtitle: l10n.moreExportBackupSubtitle,
+              onTap: () {
+                onExportBackup();
+              },
+            ),
+            _MoreActionTile(
+              icon: Icons.restore_outlined,
+              title: l10n.moreRestoreBackupTitle,
+              subtitle: l10n.moreRestoreBackupSubtitle,
+              onTap: () {
+                onRestoreLatestBackup();
+              },
+            ),
+            _MoreActionTile(
+              icon: Icons.upload_file_outlined,
+              title: l10n.moreRestoreExternalBackupTitle,
+              subtitle: l10n.moreRestoreExternalBackupSubtitle,
+              onTap: () {
+                onRestoreExternalBackup();
+              },
+            ),
+          ],
         ),
       ],
+    );
+  }
+}
+
+class _MoreSectionCard extends StatelessWidget {
+  const _MoreSectionCard({
+    required this.icon,
+    required this.title,
+    required this.children,
+  });
+
+  final IconData icon;
+  final String title;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ExpansionTile(
+        leading: Icon(icon),
+        title: Text(title),
+        childrenPadding: const EdgeInsets.only(bottom: 8),
+        children: children,
+      ),
     );
   }
 }
@@ -247,6 +241,31 @@ class _MoreNavigationCard extends StatelessWidget {
         trailing: const Icon(Icons.chevron_right),
         onTap: onTap,
       ),
+    );
+  }
+}
+
+class _MoreActionTile extends StatelessWidget {
+  const _MoreActionTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      subtitle: Text(subtitle),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: onTap,
     );
   }
 }

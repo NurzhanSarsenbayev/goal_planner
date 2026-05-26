@@ -714,6 +714,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get moreLanguageRussianOption => 'Русский';
 
   @override
+  String get moreProgressReportsTitle => 'Progress & reports';
+
+  @override
+  String get moreProgressReportsSubtitle =>
+      'Review completed work, habits, and goal progress.';
+
+  @override
+  String get moreRemindersSection => 'Reminders';
+
+  @override
+  String get morePlanningSection => 'Planning';
+
+  @override
+  String get moreAppSection => 'App';
+
+  @override
+  String get moreBackupRestoreSection => 'Backup & restore';
+
+  @override
   String get moreBackupSection => 'Backup';
 
   @override

@@ -1352,6 +1352,42 @@ abstract class AppLocalizations {
   /// **'Русский'**
   String get moreLanguageRussianOption;
 
+  /// No description provided for @moreProgressReportsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress & reports'**
+  String get moreProgressReportsTitle;
+
+  /// No description provided for @moreProgressReportsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review completed work, habits, and goal progress.'**
+  String get moreProgressReportsSubtitle;
+
+  /// No description provided for @moreRemindersSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get moreRemindersSection;
+
+  /// No description provided for @morePlanningSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Planning'**
+  String get morePlanningSection;
+
+  /// No description provided for @moreAppSection.
+  ///
+  /// In en, this message translates to:
+  /// **'App'**
+  String get moreAppSection;
+
+  /// No description provided for @moreBackupRestoreSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup & restore'**
+  String get moreBackupRestoreSection;
+
   /// No description provided for @moreBackupSection.
   ///
   /// In en, this message translates to:

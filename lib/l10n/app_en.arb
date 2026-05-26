@@ -593,6 +593,13 @@
     "moreLanguageEnglishOption": "English",
     "moreLanguageRussianOption": "Русский",
 
+    "moreProgressReportsTitle": "Progress & reports",
+    "moreProgressReportsSubtitle": "Review completed work, habits, and goal progress.",
+    "moreRemindersSection": "Reminders",
+    "morePlanningSection": "Planning",
+    "moreAppSection": "App",
+    "moreBackupRestoreSection": "Backup & restore",
+
     "moreBackupSection": "Backup",
     "moreCreateBackupTitle": "Create backup",
     "moreCreateBackupSubtitle": "Save a local JSON backup of your planner data.",

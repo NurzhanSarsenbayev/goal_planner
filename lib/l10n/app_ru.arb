@@ -593,6 +593,13 @@
     "moreLanguageEnglishOption": "English",
     "moreLanguageRussianOption": "Русский",
 
+    "moreProgressReportsTitle": "Прогресс и отчёты",
+    "moreProgressReportsSubtitle": "Посмотреть выполненные задачи, привычки и прогресс по целям.",
+    "moreRemindersSection": "Напоминания",
+    "morePlanningSection": "Планирование",
+    "moreAppSection": "Приложение",
+    "moreBackupRestoreSection": "Бэкап и восстановление",
+
     "moreBackupSection": "Бэкап",
     "moreCreateBackupTitle": "Создать бэкап",
     "moreCreateBackupSubtitle": "Сохранить локальный JSON-бэкап данных планера.",
