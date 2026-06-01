@@ -46,6 +46,10 @@ void main() {
 
       expect(find.text('Weight progress'), findsOneWidget);
       expect(find.text('Week average'), findsOneWidget);
+
+      await tester.scrollUntilVisible(find.text('Measurements'), 300);
+      await tester.pumpAndSettle();
+
       expect(find.text('Measurements'), findsOneWidget);
       expect(find.text('Waist'), findsOneWidget);
       expect(find.text('74 cm'), findsOneWidget);
