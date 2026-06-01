@@ -217,6 +217,27 @@ class BodyWeightEntries extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+class BodyMeasurementEntries extends Table {
+  TextColumn get id => text()();
+
+  DateTimeColumn get date => dateTime()();
+
+  RealColumn get neckCm => real().nullable()();
+
+  RealColumn get waistCm => real().nullable()();
+
+  RealColumn get hipsCm => real().nullable()();
+
+  TextColumn get note => text().withDefault(const Constant(''))();
+
+  DateTimeColumn get createdAt => dateTime()();
+
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 @DriftDatabase(
   tables: [
     Goals,
@@ -229,6 +250,7 @@ class BodyWeightEntries extends Table {
     StandaloneReminders,
     DailyReviewReminderSettingsTable,
     BodyWeightEntries,
+    BodyMeasurementEntries,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -237,7 +259,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 11;
+  int get schemaVersion => 12;
 
   @override
   MigrationStrategy get migration {
@@ -320,6 +342,10 @@ class AppDatabase extends _$AppDatabase {
 
         if (from < 11) {
           await migrator.createTable(bodyWeightEntries);
+        }
+
+        if (from < 12) {
+          await migrator.createTable(bodyMeasurementEntries);
         }
       },
     );

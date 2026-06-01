@@ -47,12 +47,30 @@ class BodyMeasurementEntry {
     return BodyMeasurementEntry(
       id: id ?? this.id,
       date: identical(date, _unset) ? this.date : date as DateTime,
-      neckCm: identical(neckCm, _unset) ? this.neckCm : neckCm as double?,
-      waistCm: identical(waistCm, _unset) ? this.waistCm : waistCm as double?,
-      hipsCm: identical(hipsCm, _unset) ? this.hipsCm : hipsCm as double?,
+      neckCm: identical(neckCm, _unset)
+          ? this.neckCm
+          : _nullableDoubleFromObject(neckCm, 'neckCm'),
+      waistCm: identical(waistCm, _unset)
+          ? this.waistCm
+          : _nullableDoubleFromObject(waistCm, 'waistCm'),
+      hipsCm: identical(hipsCm, _unset)
+          ? this.hipsCm
+          : _nullableDoubleFromObject(hipsCm, 'hipsCm'),
       note: note ?? this.note,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
   }
+}
+
+double? _nullableDoubleFromObject(Object? value, String fieldName) {
+  if (value == null) {
+    return null;
+  }
+
+  if (value is num) {
+    return value.toDouble();
+  }
+
+  throw ArgumentError.value(value, fieldName, 'must be a number or null.');
 }
