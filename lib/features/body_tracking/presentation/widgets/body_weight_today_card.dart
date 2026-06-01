@@ -21,8 +21,6 @@ class BodyWeightTodayCard extends StatefulWidget {
 
 class _BodyWeightTodayCardState extends State<BodyWeightTodayCard> {
   late Future<_BodyWeightTodayState> _loadFuture;
-  final TextEditingController _weightController = TextEditingController();
-  bool _isSaving = false;
 
   @override
   void initState() {
@@ -31,47 +29,34 @@ class _BodyWeightTodayCardState extends State<BodyWeightTodayCard> {
     _loadFuture = _loadState();
   }
 
-  @override
-  void dispose() {
-    _weightController.dispose();
-
-    super.dispose();
-  }
-
   Future<_BodyWeightTodayState> _loadState() async {
     final today = DateTime.now();
     final entry = await widget.service.loadEntryForDate(today);
     final weeklyReport = await widget.service.loadWeeklyReport(today);
 
-    if (entry?.weightKg == null) {
-      _weightController.clear();
-    } else {
-      _weightController.text = _formatWeight(entry!.weightKg!);
-    }
-
     return _BodyWeightTodayState(entry: entry, weeklyReport: weeklyReport);
   }
 
   Future<void> _reload() async {
+    if (!mounted) {
+      return;
+    }
+
     setState(() {
       _loadFuture = _loadState();
     });
   }
 
-  Future<void> _saveWeight(BuildContext context) async {
+  Future<bool> _saveWeight(BuildContext context, String rawValue) async {
     final l10n = AppLocalizations.of(context);
-    final weight = _parseWeight(_weightController.text);
+    final weight = _parseWeight(rawValue);
 
     if (weight == null || weight <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.bodyWeightTodayInvalidWeight)),
       );
-      return;
+      return false;
     }
-
-    setState(() {
-      _isSaving = true;
-    });
 
     try {
       await widget.service.saveWeightForDate(
@@ -79,60 +64,65 @@ class _BodyWeightTodayCardState extends State<BodyWeightTodayCard> {
         weightKg: weight,
       );
 
-      if (!mounted) {
-        return;
-      }
-
       await _reload();
+
+      return true;
     } catch (_) {
       if (!mounted) {
-        return;
+        return false;
       }
 
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.bodyWeightTodaySaveError)));
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isSaving = false;
-        });
-      }
+
+      return false;
     }
   }
 
-  Future<void> _markSkipped(BuildContext context) async {
-    final l10n = AppLocalizations.of(context);
-
-    setState(() {
-      _isSaving = true;
-    });
-
+  Future<bool> _markSkipped(BuildContext context) async {
     try {
       await widget.service.markSkippedForDate(date: DateTime.now());
 
-      _weightController.clear();
-
-      if (!mounted) {
-        return;
-      }
-
       await _reload();
+
+      return true;
     } catch (_) {
       if (!mounted) {
-        return;
+        return false;
       }
+
+      final l10n = AppLocalizations.of(context);
 
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.bodyWeightTodaySaveError)));
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isSaving = false;
-        });
-      }
+
+      return false;
     }
+  }
+
+  Future<void> _openEntrySheet(
+    BuildContext context,
+    BodyWeightEntry? entry,
+  ) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheetContext) {
+        return _BodyWeightEntrySheet(
+          initialWeightText: entry?.weightKg == null
+              ? ''
+              : _formatWeight(entry!.weightKg!),
+          onSave: (rawValue) {
+            return _saveWeight(context, rawValue);
+          },
+          onSkip: () {
+            return _markSkipped(context);
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -143,84 +133,69 @@ class _BodyWeightTodayCardState extends State<BodyWeightTodayCard> {
       future: _loadFuture,
       builder: (context, snapshot) {
         final state = snapshot.data;
+        final entry = state?.entry;
+        final isLoading =
+            snapshot.connectionState == ConnectionState.waiting &&
+            state == null;
 
         return Card(
           child: Padding(
-            padding: const EdgeInsets.all(18),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  l10n.bodyWeightTodayTitle,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  l10n.bodyWeightTodaySubtitle,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                Row(
+                  children: [
+                    const Icon(Icons.monitor_weight_outlined),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        l10n.bodyWeightTodayTitle,
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w800),
+                      ),
+                    ),
+                    Text(
+                      _todayValue(l10n, entry),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                      textAlign: TextAlign.end,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 12),
-                Text(
-                  _statusText(l10n, state?.entry),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: _weightController,
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  decoration: InputDecoration(
-                    labelText: l10n.bodyWeightTodayWeightLabel,
-                    suffixText: l10n.bodyWeightKgSuffix,
-                    border: const OutlineInputBorder(),
-                  ),
-                  enabled: !_isSaving,
-                ),
+                if (isLoading)
+                  const LinearProgressIndicator()
+                else
+                  _BodyWeightWeeklyStats(report: state?.weeklyReport),
                 const SizedBox(height: 12),
                 Row(
                   children: [
                     Expanded(
-                      child: FilledButton(
-                        onPressed: _isSaving
+                      child: OutlinedButton.icon(
+                        onPressed: isLoading
                             ? null
                             : () {
-                                _saveWeight(context);
+                                _openEntrySheet(context, entry);
                               },
-                        child: Text(l10n.bodyWeightTodaySaveButton),
+                        icon: const Icon(Icons.edit_outlined),
+                        label: Text(
+                          entry == null
+                              ? l10n.bodyWeightTodayEnterButton
+                              : l10n.bodyWeightTodayChangeButton,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: OutlinedButton(
-                        onPressed: _isSaving
-                            ? null
-                            : () {
-                                _markSkipped(context);
-                              },
-                        child: Text(l10n.bodyWeightTodaySkipButton),
+                      child: TextButton.icon(
+                        onPressed: widget.onOpenProgress,
+                        icon: const Icon(Icons.insights_outlined),
+                        label: Text(l10n.bodyWeightTodayOpenProgressButton),
                       ),
                     ),
                   ],
-                ),
-                const SizedBox(height: 16),
-                if (snapshot.connectionState == ConnectionState.waiting &&
-                    state == null)
-                  const Center(child: CircularProgressIndicator())
-                else
-                  _BodyWeightWeeklyStats(report: state?.weeklyReport),
-                const SizedBox(height: 12),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton.icon(
-                    onPressed: widget.onOpenProgress,
-                    icon: const Icon(Icons.insights_outlined),
-                    label: Text(l10n.bodyWeightTodayOpenProgressButton),
-                  ),
                 ),
               ],
             ),
@@ -230,18 +205,16 @@ class _BodyWeightTodayCardState extends State<BodyWeightTodayCard> {
     );
   }
 
-  String _statusText(AppLocalizations l10n, BodyWeightEntry? entry) {
+  String _todayValue(AppLocalizations l10n, BodyWeightEntry? entry) {
     if (entry?.weightKg != null) {
-      return l10n.bodyWeightTodaySavedStatus(
-        l10n.bodyWeightKgValue(_formatWeight(entry!.weightKg!)),
-      );
+      return l10n.bodyWeightKgValue(_formatWeight(entry!.weightKg!));
     }
 
     if (entry?.isSkipped ?? false) {
-      return l10n.bodyWeightTodaySkippedStatus;
+      return l10n.bodyWeightTodaySkipButton;
     }
 
-    return l10n.bodyWeightTodayEmptyStatus;
+    return l10n.bodyWeightNoData;
   }
 
   double? _parseWeight(String rawValue) {
@@ -269,6 +242,140 @@ class _BodyWeightTodayCardState extends State<BodyWeightTodayCard> {
   }
 }
 
+class _BodyWeightEntrySheet extends StatefulWidget {
+  const _BodyWeightEntrySheet({
+    required this.initialWeightText,
+    required this.onSave,
+    required this.onSkip,
+  });
+
+  final String initialWeightText;
+  final Future<bool> Function(String rawValue) onSave;
+  final Future<bool> Function() onSkip;
+
+  @override
+  State<_BodyWeightEntrySheet> createState() => _BodyWeightEntrySheetState();
+}
+
+class _BodyWeightEntrySheetState extends State<_BodyWeightEntrySheet> {
+  late final TextEditingController _weightController;
+  bool _isSaving = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _weightController = TextEditingController(text: widget.initialWeightText);
+  }
+
+  @override
+  void dispose() {
+    _weightController.dispose();
+
+    super.dispose();
+  }
+
+  Future<void> _save() async {
+    setState(() {
+      _isSaving = true;
+    });
+
+    final shouldClose = await widget.onSave(_weightController.text);
+
+    if (!mounted) {
+      return;
+    }
+
+    if (shouldClose) {
+      Navigator.of(context).pop();
+      return;
+    }
+
+    setState(() {
+      _isSaving = false;
+    });
+  }
+
+  Future<void> _skip() async {
+    setState(() {
+      _isSaving = true;
+    });
+
+    final shouldClose = await widget.onSkip();
+
+    if (!mounted) {
+      return;
+    }
+
+    if (shouldClose) {
+      Navigator.of(context).pop();
+      return;
+    }
+
+    setState(() {
+      _isSaving = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
+
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + bottomPadding),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              l10n.bodyWeightTodaySheetTitle,
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _weightController,
+              autofocus: true,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              decoration: InputDecoration(
+                labelText: l10n.bodyWeightTodayWeightLabel,
+                suffixText: l10n.bodyWeightKgSuffix,
+                border: const OutlineInputBorder(),
+              ),
+              enabled: !_isSaving,
+              onSubmitted: (_) {
+                if (!_isSaving) {
+                  _save();
+                }
+              },
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: _isSaving ? null : _save,
+                child: Text(l10n.bodyWeightTodaySaveButton),
+              ),
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: _isSaving ? null : _skip,
+                child: Text(l10n.bodyWeightTodaySkipButton),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _BodyWeightWeeklyStats extends StatelessWidget {
   const _BodyWeightWeeklyStats({required this.report});
 
@@ -279,24 +386,30 @@ class _BodyWeightWeeklyStats extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final currentReport = report;
 
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
+    return Row(
       children: [
-        _BodyWeightStatChip(
-          label: l10n.bodyWeightWeeklyAverage,
-          value: _weightValue(l10n, currentReport?.averageWeightKg),
+        Expanded(
+          child: _BodyWeightStat(
+            label: l10n.bodyWeightWeeklyAverage,
+            value: _weightValue(l10n, currentReport?.averageWeightKg),
+          ),
         ),
-        _BodyWeightStatChip(
-          label: l10n.bodyWeightWeeklyMinimum,
-          value: _weightValue(l10n, currentReport?.minWeightKg),
+        const SizedBox(width: 8),
+        Expanded(
+          child: _BodyWeightStat(
+            label: l10n.bodyWeightWeeklyMinimum,
+            value: _weightValue(l10n, currentReport?.minWeightKg),
+          ),
         ),
-        _BodyWeightStatChip(
-          label: l10n.bodyWeightWeeklyDays,
-          value: currentReport == null
-              ? l10n.bodyWeightNoData
-              : '${currentReport.weighedDaysCount}/'
-                    '${BodyWeeklyWeightReport.totalDaysCount}',
+        const SizedBox(width: 8),
+        Expanded(
+          child: _BodyWeightStat(
+            label: l10n.bodyWeightWeeklyDays,
+            value: currentReport == null
+                ? l10n.bodyWeightNoData
+                : '${currentReport.weighedDaysCount}/'
+                      '${BodyWeeklyWeightReport.totalDaysCount}',
+          ),
         ),
       ],
     );
@@ -325,26 +438,44 @@ class _BodyWeightWeeklyStats extends StatelessWidget {
   }
 }
 
-class _BodyWeightStatChip extends StatelessWidget {
-  const _BodyWeightStatChip({required this.label, required this.value});
+class _BodyWeightStat extends StatelessWidget {
+  const _BodyWeightStat({required this.label, required this.value});
 
   final String label;
   final String value;
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
-      label: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(label, style: Theme.of(context).textTheme.labelSmall),
-          Text(
-            value,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
-          ),
-        ],
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        child: Column(
+          children: [
+            Text(
+              label,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 2),
+            Text(
+              value,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
       ),
     );
   }

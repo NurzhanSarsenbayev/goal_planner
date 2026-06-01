@@ -1294,7 +1294,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get bodyWeightTodaySubtitle =>
-      'Внеси сегодняшний вес или отметь, что не взвешивалась.';
+      'Введите сегодняшний вес или отметьте день без взвешивания.';
 
   @override
   String get bodyWeightTodayWeightLabel => 'Вес';
@@ -1306,14 +1306,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String get bodyWeightTodaySaveButton => 'Сохранить вес';
 
   @override
-  String get bodyWeightTodaySkipButton => 'Не взвешивалась';
+  String get bodyWeightTodaySkipButton => 'Без взвешивания';
 
   @override
   String get bodyWeightTodayEmptyStatus => 'Сегодня вес ещё не внесён.';
 
   @override
   String get bodyWeightTodaySkippedStatus =>
-      'Сегодня отмечено: не взвешивалась.';
+      'Сегодня отмечено: без взвешивания.';
 
   @override
   String bodyWeightTodaySavedStatus(String weight) {
@@ -1321,7 +1321,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get bodyWeightTodayInvalidWeight => 'Введи положительный вес.';
+  String get bodyWeightTodayInvalidWeight => 'Введите положительный вес.';
 
   @override
   String get bodyWeightTodaySaveError =>
@@ -1359,7 +1359,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get bodyWeightProgressEmptyBody =>
-      'Внеси вес в Сегодня, чтобы начать видеть недельный прогресс.';
+      'Введите вес в Сегодня, чтобы начать видеть недельный прогресс.';
 
   @override
   String get bodyWeightProgressLoadErrorTitle =>
@@ -1390,4 +1390,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get bodyWeightProgressDeltaSame => 'Без изменений';
+
+  @override
+  String get bodyWeightTodayEnterButton => 'Внести';
+
+  @override
+  String get bodyWeightTodayChangeButton => 'Изменить';
+
+  @override
+  String get bodyWeightTodaySheetTitle => 'Внести вес';
 }

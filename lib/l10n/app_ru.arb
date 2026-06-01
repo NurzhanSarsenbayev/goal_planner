@@ -974,13 +974,13 @@
     },
 
     "bodyWeightTodayTitle": "Вес сегодня",
-    "bodyWeightTodaySubtitle": "Внеси сегодняшний вес или отметь, что не взвешивалась.",
+    "bodyWeightTodaySubtitle": "Введите сегодняшний вес или отметьте день без взвешивания.",
     "bodyWeightTodayWeightLabel": "Вес",
     "bodyWeightKgSuffix": "кг",
     "bodyWeightTodaySaveButton": "Сохранить вес",
-    "bodyWeightTodaySkipButton": "Не взвешивалась",
+    "bodyWeightTodaySkipButton": "Без взвешивания",
     "bodyWeightTodayEmptyStatus": "Сегодня вес ещё не внесён.",
-    "bodyWeightTodaySkippedStatus": "Сегодня отмечено: не взвешивалась.",
+    "bodyWeightTodaySkippedStatus": "Сегодня отмечено: без взвешивания.",
     "bodyWeightTodaySavedStatus": "Сохранено: {weight}",
     "@bodyWeightTodaySavedStatus": {
       "placeholders": {
@@ -989,7 +989,7 @@
         }
       }
     },
-    "bodyWeightTodayInvalidWeight": "Введи положительный вес.",
+    "bodyWeightTodayInvalidWeight": "Введите положительный вес.",
     "bodyWeightTodaySaveError": "Не получилось сохранить вес. Попробуй ещё раз.",
     "bodyWeightWeeklyAverage": "Средний за неделю",
     "bodyWeightWeeklyMinimum": "Минимум недели",
@@ -1008,7 +1008,7 @@
     "bodyWeightProgressTitle": "Прогресс веса",
     "bodyWeightProgressSubtitle": "Средний и минимальный вес по неделям на основе дней, где вес был внесён.",
     "bodyWeightProgressEmptyTitle": "Отчётов по весу пока нет",
-    "bodyWeightProgressEmptyBody": "Внеси вес в Сегодня, чтобы начать видеть недельный прогресс.",
+    "bodyWeightProgressEmptyBody": "Введите вес в Сегодня, чтобы начать видеть недельный прогресс.",
     "bodyWeightProgressLoadErrorTitle": "Не получилось загрузить прогресс веса",
     "bodyWeightProgressLoadErrorBody": "Попробуй открыть этот экран ещё раз.",
     "bodyWeightProgressRetryButton": "Повторить",
@@ -1030,5 +1030,8 @@
         }
       }
     },
-    "bodyWeightProgressDeltaSame": "Без изменений"
+    "bodyWeightProgressDeltaSame": "Без изменений",
+    "bodyWeightTodayEnterButton": "Внести",
+    "bodyWeightTodayChangeButton": "Изменить",
+    "bodyWeightTodaySheetTitle": "Внести вес"
 }

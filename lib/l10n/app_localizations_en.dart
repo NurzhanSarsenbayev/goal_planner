@@ -1377,4 +1377,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bodyWeightProgressDeltaSame => 'No change';
+
+  @override
+  String get bodyWeightTodayEnterButton => 'Enter';
+
+  @override
+  String get bodyWeightTodayChangeButton => 'Change';
+
+  @override
+  String get bodyWeightTodaySheetTitle => 'Log weight';
 }

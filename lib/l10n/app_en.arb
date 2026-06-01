@@ -1030,5 +1030,8 @@
         }
       }
     },
-    "bodyWeightProgressDeltaSame": "No change"
+    "bodyWeightProgressDeltaSame": "No change",
+        "bodyWeightTodayEnterButton": "Enter",
+        "bodyWeightTodayChangeButton": "Change",
+        "bodyWeightTodaySheetTitle": "Log weight"
 }

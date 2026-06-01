@@ -2479,6 +2479,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No change'**
   String get bodyWeightProgressDeltaSame;
+
+  /// No description provided for @bodyWeightTodayEnterButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter'**
+  String get bodyWeightTodayEnterButton;
+
+  /// No description provided for @bodyWeightTodayChangeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get bodyWeightTodayChangeButton;
+
+  /// No description provided for @bodyWeightTodaySheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log weight'**
+  String get bodyWeightTodaySheetTitle;
 }
 
 class _AppLocalizationsDelegate
