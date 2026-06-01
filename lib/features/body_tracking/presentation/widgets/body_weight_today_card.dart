@@ -49,6 +49,8 @@ class _BodyWeightTodayCardState extends State<BodyWeightTodayCard> {
 
   Future<bool> _saveWeight(BuildContext context, String rawValue) async {
     final l10n = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final saveErrorMessage = l10n.bodyWeightTodaySaveError;
     final weight = _parseWeight(rawValue);
 
     if (weight == null || weight <= 0) {
@@ -72,15 +74,18 @@ class _BodyWeightTodayCardState extends State<BodyWeightTodayCard> {
         return false;
       }
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.bodyWeightTodaySaveError)));
+      messenger.showSnackBar(SnackBar(content: Text(saveErrorMessage)));
 
       return false;
     }
   }
 
   Future<bool> _markSkipped(BuildContext context) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final saveErrorMessage = AppLocalizations.of(
+      context,
+    ).bodyWeightTodaySaveError;
+
     try {
       await widget.service.markSkippedForDate(date: DateTime.now());
 
@@ -92,11 +97,7 @@ class _BodyWeightTodayCardState extends State<BodyWeightTodayCard> {
         return false;
       }
 
-      final l10n = AppLocalizations.of(context);
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.bodyWeightTodaySaveError)));
+      messenger.showSnackBar(SnackBar(content: Text(saveErrorMessage)));
 
       return false;
     }
