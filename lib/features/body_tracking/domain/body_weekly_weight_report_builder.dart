@@ -1,6 +1,7 @@
 import '../../../shared/planner_dates.dart';
 import 'body_weight_entry.dart';
 import 'body_weekly_weight_report.dart';
+import 'body_tracking_dates.dart';
 
 class BodyWeeklyWeightReportBuilder {
   const BodyWeeklyWeightReportBuilder();
@@ -96,12 +97,4 @@ class BodyWeeklyWeightReportBuilder {
 
     return current - previous;
   }
-}
-
-DateTime bodyTrackingWeekStart(DateTime date) {
-  final normalizedDate = dateOnly(date);
-
-  return normalizedDate.subtract(
-    Duration(days: normalizedDate.weekday - DateTime.monday),
-  );
 }
