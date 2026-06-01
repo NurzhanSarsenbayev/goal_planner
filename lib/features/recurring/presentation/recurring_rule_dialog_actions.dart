@@ -47,6 +47,10 @@ class RecurringRuleDialogActions {
       return;
     }
 
+    if (!context.mounted) {
+      return;
+    }
+
     final startDate = dateOnly(task.scheduledDate ?? todayDate());
     final result = await showAddRecurringTaskRuleDialog(
       context,
