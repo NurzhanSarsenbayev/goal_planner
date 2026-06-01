@@ -1049,6 +1049,34 @@
         "bodyWeightKgShortSuffix": "kg",
         "bodyCompositionPercentSuffix": "%",
 
+    "bodyCompositionTrendLatestTitle": "Latest",
+    "bodyCompositionTrendMissingValue": "No data",
+    "bodyCompositionTrendPercentValue": "{value}%",
+    "@bodyCompositionTrendPercentValue": {
+      "placeholders": {
+        "value": {
+          "type": "String"
+        }
+      }
+    },
+    "bodyCompositionTrendDeltaUp": "+{value}",
+    "@bodyCompositionTrendDeltaUp": {
+      "placeholders": {
+        "value": {
+          "type": "String"
+        }
+      }
+    },
+    "bodyCompositionTrendDeltaDown": "-{value}",
+    "@bodyCompositionTrendDeltaDown": {
+      "placeholders": {
+        "value": {
+          "type": "String"
+        }
+      }
+    },
+    "bodyCompositionTrendDeltaSame": "No change",
+
     "bodyMeasurementsTodayTitle": "Measurements this week",
     "bodyMeasurementsTodayEmptyStatus": "No measurements entered this week.",
     "bodyMeasurementsTodayEnterButton": "Enter",

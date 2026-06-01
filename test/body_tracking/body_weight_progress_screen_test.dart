@@ -66,10 +66,11 @@ void main() {
       expect(find.text('BMI'), findsOneWidget);
       expect(find.text('21.3'), findsOneWidget);
       expect(find.text('Estimated body fat'), findsWidgets);
-      expect(find.text('28.1%'), findsOneWidget);
+      expect(find.text('28.1%'), findsWidgets);
 
       expect(find.text('Body composition trend'), findsOneWidget);
-      expect(find.text('Weekly average weight'), findsOneWidget);
+      expect(find.text('Latest'), findsOneWidget);
+      expect(find.text('Weekly average weight'), findsWidgets);
       expect(find.text('Estimated body fat'), findsWidgets);
 
       await tester.scrollUntilVisible(

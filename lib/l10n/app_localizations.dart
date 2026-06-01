@@ -2558,6 +2558,42 @@ abstract class AppLocalizations {
   /// **'%'**
   String get bodyCompositionPercentSuffix;
 
+  /// No description provided for @bodyCompositionTrendLatestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest'**
+  String get bodyCompositionTrendLatestTitle;
+
+  /// No description provided for @bodyCompositionTrendMissingValue.
+  ///
+  /// In en, this message translates to:
+  /// **'No data'**
+  String get bodyCompositionTrendMissingValue;
+
+  /// No description provided for @bodyCompositionTrendPercentValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{value}%'**
+  String bodyCompositionTrendPercentValue(String value);
+
+  /// No description provided for @bodyCompositionTrendDeltaUp.
+  ///
+  /// In en, this message translates to:
+  /// **'+{value}'**
+  String bodyCompositionTrendDeltaUp(String value);
+
+  /// No description provided for @bodyCompositionTrendDeltaDown.
+  ///
+  /// In en, this message translates to:
+  /// **'-{value}'**
+  String bodyCompositionTrendDeltaDown(String value);
+
+  /// No description provided for @bodyCompositionTrendDeltaSame.
+  ///
+  /// In en, this message translates to:
+  /// **'No change'**
+  String get bodyCompositionTrendDeltaSame;
+
   /// No description provided for @bodyMeasurementsTodayTitle.
   ///
   /// In en, this message translates to:

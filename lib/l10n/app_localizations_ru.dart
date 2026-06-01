@@ -1434,6 +1434,30 @@ class AppLocalizationsRu extends AppLocalizations {
   String get bodyCompositionPercentSuffix => '%';
 
   @override
+  String get bodyCompositionTrendLatestTitle => 'Последние данные';
+
+  @override
+  String get bodyCompositionTrendMissingValue => 'Нет данных';
+
+  @override
+  String bodyCompositionTrendPercentValue(String value) {
+    return '$value%';
+  }
+
+  @override
+  String bodyCompositionTrendDeltaUp(String value) {
+    return '+$value';
+  }
+
+  @override
+  String bodyCompositionTrendDeltaDown(String value) {
+    return '-$value';
+  }
+
+  @override
+  String get bodyCompositionTrendDeltaSame => 'Без изменений';
+
+  @override
   String get bodyMeasurementsTodayTitle => 'Замеры за неделю';
 
   @override

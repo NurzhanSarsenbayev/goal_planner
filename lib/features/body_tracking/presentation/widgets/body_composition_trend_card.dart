@@ -13,6 +13,7 @@ class BodyCompositionTrendCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final chartReports = reports.reversed.toList(growable: false);
     final colorScheme = Theme.of(context).colorScheme;
+    final latestReport = reports.isEmpty ? null : reports.first;
 
     return Card(
       child: Padding(
@@ -34,6 +35,11 @@ class BodyCompositionTrendCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
+            if (latestReport != null) ...[
+              _BodyCompositionLatestSummary(report: latestReport),
+              const SizedBox(height: 18),
+            ],
+            const SizedBox(height: 16),
             _BodyCompositionMetricChart(
               title: l10n.bodyCompositionTrendWeightTitle,
               unit: l10n.bodyWeightKgShortSuffix,
@@ -54,6 +60,155 @@ class BodyCompositionTrendCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _BodyCompositionLatestSummary extends StatelessWidget {
+  const _BodyCompositionLatestSummary({required this.report});
+
+  final BodyWeeklyCompositionReport report;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.bodyCompositionTrendLatestTitle,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 10),
+            _BodyCompositionSummaryRow(
+              label: l10n.bodyCompositionTrendWeightTitle,
+              value: _weightValue(l10n, report.averageWeightKg),
+              delta: _weightDelta(l10n, report.averageWeightDeltaKg),
+            ),
+            const SizedBox(height: 8),
+            _BodyCompositionSummaryRow(
+              label: l10n.bodyCompositionTrendBodyFatTitle,
+              value: _bodyFatValue(l10n, report.estimatedBodyFatPercent),
+              delta: _percentDelta(l10n, report.estimatedBodyFatDeltaPercent),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _weightValue(AppLocalizations l10n, double? value) {
+    if (value == null) {
+      return l10n.bodyCompositionTrendMissingValue;
+    }
+
+    return l10n.bodyWeightKgValue(_formatValue(value));
+  }
+
+  String _bodyFatValue(AppLocalizations l10n, double? value) {
+    if (value == null) {
+      return l10n.bodyCompositionTrendMissingValue;
+    }
+
+    return l10n.bodyCompositionTrendPercentValue(_formatValue(value));
+  }
+
+  String? _weightDelta(AppLocalizations l10n, double? value) {
+    if (value == null) {
+      return null;
+    }
+
+    return _deltaValue(
+      l10n,
+      l10n.bodyWeightKgValue(_formatValue(value.abs())),
+      value,
+    );
+  }
+
+  String? _percentDelta(AppLocalizations l10n, double? value) {
+    if (value == null) {
+      return null;
+    }
+
+    return _deltaValue(
+      l10n,
+      l10n.bodyCompositionTrendPercentValue(_formatValue(value.abs())),
+      value,
+    );
+  }
+
+  String _deltaValue(AppLocalizations l10n, String value, double rawValue) {
+    if (rawValue > 0) {
+      return l10n.bodyCompositionTrendDeltaUp(value);
+    }
+
+    if (rawValue < 0) {
+      return l10n.bodyCompositionTrendDeltaDown(value);
+    }
+
+    return l10n.bodyCompositionTrendDeltaSame;
+  }
+
+  String _formatValue(double value) {
+    final fixed = value.toStringAsFixed(1);
+
+    if (fixed.endsWith('.0')) {
+      return value.toStringAsFixed(0);
+    }
+
+    return fixed;
+  }
+}
+
+class _BodyCompositionSummaryRow extends StatelessWidget {
+  const _BodyCompositionSummaryRow({
+    required this.label,
+    required this.value,
+    required this.delta,
+  });
+
+  final String label;
+  final String value;
+  final String? delta;
+
+  @override
+  Widget build(BuildContext context) {
+    final deltaText = delta;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(child: Text(label)),
+        const SizedBox(width: 12),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              value,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800),
+            ),
+            if (deltaText != null)
+              Text(
+                deltaText,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+          ],
+        ),
+      ],
     );
   }
 }
