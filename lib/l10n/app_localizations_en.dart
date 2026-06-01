@@ -1399,6 +1399,28 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enter weight on at least one day to see the chart.';
 
   @override
+  String get bodyCompositionTrendTitle => 'Body composition trend';
+
+  @override
+  String get bodyCompositionTrendSubtitle =>
+      'Compare weekly average weight with estimated body fat.';
+
+  @override
+  String get bodyCompositionTrendWeightTitle => 'Weekly average weight';
+
+  @override
+  String get bodyCompositionTrendBodyFatTitle => 'Estimated body fat';
+
+  @override
+  String get bodyCompositionTrendMissingData => 'Not enough data yet.';
+
+  @override
+  String get bodyWeightKgShortSuffix => 'kg';
+
+  @override
+  String get bodyCompositionPercentSuffix => '%';
+
+  @override
   String get bodyMeasurementsTodayTitle => 'Measurements this week';
 
   @override

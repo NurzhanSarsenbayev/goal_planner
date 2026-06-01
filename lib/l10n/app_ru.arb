@@ -1041,6 +1041,14 @@
 
     "bodyWeightProgressAverageChartEmpty": "Внесите вес хотя бы за один день, чтобы увидеть график.",
 
+    "bodyCompositionTrendTitle": "Динамика состава тела",
+    "bodyCompositionTrendSubtitle": "Сравнение среднего веса за неделю и оценочного процента жира.",
+    "bodyCompositionTrendWeightTitle": "Средний вес за неделю",
+    "bodyCompositionTrendBodyFatTitle": "Оценочный процент жира",
+    "bodyCompositionTrendMissingData": "Пока недостаточно данных.",
+    "bodyWeightKgShortSuffix": "кг",
+    "bodyCompositionPercentSuffix": "%",
+
     "bodyMeasurementsTodayTitle": "Замеры за неделю",
     "bodyMeasurementsTodayEmptyStatus": "За эту неделю замеры ещё не внесены.",
     "bodyMeasurementsTodayEnterButton": "Внести",

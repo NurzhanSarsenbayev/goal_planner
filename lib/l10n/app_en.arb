@@ -1041,6 +1041,14 @@
 
     "bodyWeightProgressAverageChartEmpty": "Enter weight on at least one day to see the chart.",
 
+        "bodyCompositionTrendTitle": "Body composition trend",
+        "bodyCompositionTrendSubtitle": "Compare weekly average weight with estimated body fat.",
+        "bodyCompositionTrendWeightTitle": "Weekly average weight",
+        "bodyCompositionTrendBodyFatTitle": "Estimated body fat",
+        "bodyCompositionTrendMissingData": "Not enough data yet.",
+        "bodyWeightKgShortSuffix": "kg",
+        "bodyCompositionPercentSuffix": "%",
+
     "bodyMeasurementsTodayTitle": "Measurements this week",
     "bodyMeasurementsTodayEmptyStatus": "No measurements entered this week.",
     "bodyMeasurementsTodayEnterButton": "Enter",

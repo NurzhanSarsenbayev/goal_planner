@@ -2516,6 +2516,48 @@ abstract class AppLocalizations {
   /// **'Enter weight on at least one day to see the chart.'**
   String get bodyWeightProgressAverageChartEmpty;
 
+  /// No description provided for @bodyCompositionTrendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Body composition trend'**
+  String get bodyCompositionTrendTitle;
+
+  /// No description provided for @bodyCompositionTrendSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare weekly average weight with estimated body fat.'**
+  String get bodyCompositionTrendSubtitle;
+
+  /// No description provided for @bodyCompositionTrendWeightTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly average weight'**
+  String get bodyCompositionTrendWeightTitle;
+
+  /// No description provided for @bodyCompositionTrendBodyFatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated body fat'**
+  String get bodyCompositionTrendBodyFatTitle;
+
+  /// No description provided for @bodyCompositionTrendMissingData.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough data yet.'**
+  String get bodyCompositionTrendMissingData;
+
+  /// No description provided for @bodyWeightKgShortSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'kg'**
+  String get bodyWeightKgShortSuffix;
+
+  /// No description provided for @bodyCompositionPercentSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'%'**
+  String get bodyCompositionPercentSuffix;
+
   /// No description provided for @bodyMeasurementsTodayTitle.
   ///
   /// In en, this message translates to:

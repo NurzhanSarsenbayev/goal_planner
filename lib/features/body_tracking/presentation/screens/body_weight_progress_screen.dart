@@ -5,10 +5,12 @@ import '../../application/body_weight_tracking_service.dart';
 import '../../domain/body_weekly_weight_report.dart';
 import '../../application/body_measurement_tracking_service.dart';
 import '../../domain/body_weekly_measurement_report.dart';
-import '../widgets/body_weight_weekly_average_chart.dart';
 import '../../application/body_profile_tracking_service.dart';
 import '../widgets/body_profile_progress_card.dart';
 import '../../domain/body_metrics.dart';
+import '../../domain/body_weekly_composition_report.dart';
+import '../../domain/body_weekly_composition_report_builder.dart';
+import '../widgets/body_composition_trend_card.dart';
 
 class BodyWeightProgressScreen extends StatefulWidget {
   const BodyWeightProgressScreen({
@@ -45,11 +47,22 @@ class _BodyWeightProgressScreenState extends State<BodyWeightProgressScreen> {
     final measurementReportsFuture = widget.measurementService
         .loadWeeklyReports(anchorDate: anchorDate);
     final currentMetricsFuture = widget.profileService.loadCurrentMetrics();
+    final bodyProfileFuture = widget.profileService.loadProfile();
+
+    final weightReports = await weightReportsFuture;
+    final measurementReports = await measurementReportsFuture;
+    final bodyProfile = await bodyProfileFuture;
+    final compositionReports = const BodyWeeklyCompositionReportBuilder().build(
+      profile: bodyProfile,
+      weightReports: weightReports,
+      measurementReports: measurementReports,
+    );
 
     return _BodyProgressData(
-      weightReports: await weightReportsFuture,
-      measurementReports: await measurementReportsFuture,
+      weightReports: weightReports,
+      measurementReports: measurementReports,
       currentMetrics: await currentMetricsFuture,
+      compositionReports: compositionReports,
     );
   }
 
@@ -86,6 +99,7 @@ class _BodyWeightProgressScreenState extends State<BodyWeightProgressScreen> {
           final weightReports = progressData.weightReports;
           final measurementReports = progressData.measurementReports;
           final currentMetrics = progressData.currentMetrics;
+          final compositionReports = progressData.compositionReports;
 
           return RefreshIndicator(
             onRefresh: _reload,
@@ -98,6 +112,10 @@ class _BodyWeightProgressScreenState extends State<BodyWeightProgressScreen> {
                 ),
                 const SizedBox(height: 16),
                 _BodyCurrentMetricsCard(metrics: currentMetrics),
+                if (compositionReports.isNotEmpty) ...[
+                  const SizedBox(height: 16),
+                  BodyCompositionTrendCard(reports: compositionReports),
+                ],
                 if (progressData.hasNoReports) ...[
                   const SizedBox(height: 16),
                   _BodyProgressEmptyCard(
@@ -113,8 +131,6 @@ class _BodyWeightProgressScreenState extends State<BodyWeightProgressScreen> {
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  BodyWeightWeeklyAverageChart(reports: weightReports),
                   const SizedBox(height: 16),
                   for (final report in weightReports) ...[
                     _BodyWeightWeeklyReportCard(report: report),
@@ -156,6 +172,7 @@ class _BodyProgressData {
     required this.weightReports,
     required this.measurementReports,
     required this.currentMetrics,
+    required this.compositionReports,
   });
 
   const _BodyProgressData.empty()
@@ -164,11 +181,13 @@ class _BodyProgressData {
       currentMetrics = const BodyMetrics(
         bmi: null,
         estimatedBodyFatPercent: null,
-      );
+      ),
+      compositionReports = const [];
 
   final List<BodyWeeklyWeightReport> weightReports;
   final List<BodyWeeklyMeasurementReport> measurementReports;
   final BodyMetrics currentMetrics;
+  final List<BodyWeeklyCompositionReport> compositionReports;
 
   bool get hasNoReports => weightReports.isEmpty && measurementReports.isEmpty;
 }

@@ -1412,6 +1412,28 @@ class AppLocalizationsRu extends AppLocalizations {
       'Внесите вес хотя бы за один день, чтобы увидеть график.';
 
   @override
+  String get bodyCompositionTrendTitle => 'Динамика состава тела';
+
+  @override
+  String get bodyCompositionTrendSubtitle =>
+      'Сравнение среднего веса за неделю и оценочного процента жира.';
+
+  @override
+  String get bodyCompositionTrendWeightTitle => 'Средний вес за неделю';
+
+  @override
+  String get bodyCompositionTrendBodyFatTitle => 'Оценочный процент жира';
+
+  @override
+  String get bodyCompositionTrendMissingData => 'Пока недостаточно данных.';
+
+  @override
+  String get bodyWeightKgShortSuffix => 'кг';
+
+  @override
+  String get bodyCompositionPercentSuffix => '%';
+
+  @override
   String get bodyMeasurementsTodayTitle => 'Замеры за неделю';
 
   @override
