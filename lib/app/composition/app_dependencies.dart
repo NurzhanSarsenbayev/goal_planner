@@ -10,6 +10,7 @@ import '../../data/repositories/drift_habit_repository.dart';
 import '../../data/repositories/drift_planner_backup_restore_repository.dart';
 import '../../data/repositories/drift_standalone_reminder_repository.dart';
 import '../../data/repositories/drift_daily_review_reminder_settings_repository.dart';
+import '../../data/repositories/drift_body_weight_repository.dart';
 import '../../features/backup/application/planner_backup_restore_service.dart';
 import '../../features/backup/application/planner_backup_validator.dart';
 import '../../features/planner/application/planner_initialization_service.dart';
@@ -38,6 +39,7 @@ import '../../features/reminders/habit/application/habit_reminder_pending_checke
 import '../../features/reminders/habit/application/habit_reminder_scheduler.dart';
 import '../../features/reminders/habit/application/habit_reminder_resync_service.dart';
 import '../../features/reminders/common/application/reminder_notification_texts.dart';
+import '../../features/body_tracking/application/body_weight_tracking_service.dart';
 import '../../state/planner_store.dart';
 
 class AppDependencies {
@@ -57,6 +59,7 @@ class AppDependencies {
     required this.habitReminderScheduler,
     required this.habitReminderResyncService,
     required this.reminderNotificationTexts,
+    required this.bodyWeightTrackingService,
   }) : _database = database;
 
   factory AppDependencies.create() {
@@ -73,6 +76,9 @@ class AppDependencies {
     );
     final dailyReviewReminderSettingsRepository =
         DriftDailyReviewReminderSettingsRepository(database);
+
+    final bodyWeightRepository = DriftBodyWeightRepository(database);
+
     final backupRestoreRepository = DriftPlannerBackupRestoreRepository(
       database,
     );
@@ -108,6 +114,10 @@ class AppDependencies {
       fileStorage: backupFileStorage,
       validator: const PlannerBackupValidator(),
       restoreRepository: backupRestoreRepository,
+    );
+
+    final bodyWeightTrackingService = BodyWeightTrackingService(
+      repository: bodyWeightRepository,
     );
 
     final goalStoreCoordinator = GoalStoreCoordinator(
@@ -244,6 +254,7 @@ class AppDependencies {
       habitReminderScheduler: habitReminderScheduler,
       habitReminderResyncService: habitReminderResyncService,
       reminderNotificationTexts: reminderNotificationTexts,
+      bodyWeightTrackingService: bodyWeightTrackingService,
     );
   }
 
@@ -263,6 +274,7 @@ class AppDependencies {
   final HabitReminderScheduler habitReminderScheduler;
   final HabitReminderResyncService habitReminderResyncService;
   final ReminderNotificationTexts reminderNotificationTexts;
+  final BodyWeightTrackingService bodyWeightTrackingService;
 
   Future<void> dispose() async {
     store.dispose();

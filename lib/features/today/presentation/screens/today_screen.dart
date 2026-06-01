@@ -7,6 +7,8 @@ import '../../../tasks/presentation/task_date_dialogs.dart';
 import '../../../tasks/presentation/task_schedule_dialog_actions.dart';
 import '../../../tasks/presentation/widgets/task_card.dart';
 import '../../../habits/application/habit_today_summary.dart';
+import '../../../body_tracking/application/body_weight_tracking_service.dart';
+import '../../../body_tracking/presentation/widgets/body_weight_today_card.dart';
 import '../../application/today_task_view_builder.dart';
 import '../widgets/today_empty_panel.dart';
 import '../widgets/today_summary_card.dart';
@@ -19,6 +21,7 @@ class TodayScreen extends StatelessWidget {
     required this.goals,
     required this.tasks,
     required this.habitSummary,
+    required this.bodyWeightTrackingService,
     required this.onOpenHabits,
     required this.onToggleTaskCompleted,
     required this.onCompleteTaskOnDate,
@@ -38,6 +41,7 @@ class TodayScreen extends StatelessWidget {
   final List<Goal> goals;
   final List<PlannerTask> tasks;
   final HabitTodaySummary habitSummary;
+  final BodyWeightTrackingService bodyWeightTrackingService;
   final VoidCallback onOpenHabits;
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function({required String taskId, required DateTime completedAt})
@@ -119,6 +123,8 @@ class TodayScreen extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
           children: [
             TodaySummaryCard(view: view),
+            const SizedBox(height: 16),
+            BodyWeightTodayCard(service: bodyWeightTrackingService),
             const SizedBox(height: 16),
             TodayHabitsSummaryCard(
               summary: habitSummary,

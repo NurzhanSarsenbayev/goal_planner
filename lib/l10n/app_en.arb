@@ -971,5 +971,36 @@
           "type": "int"
         }
       }
+    },
+
+    "bodyWeightTodayTitle": "Weight today",
+    "bodyWeightTodaySubtitle": "Log today's weight or mark the day as not weighed.",
+    "bodyWeightTodayWeightLabel": "Weight",
+    "bodyWeightKgSuffix": "kg",
+    "bodyWeightTodaySaveButton": "Save weight",
+    "bodyWeightTodaySkipButton": "Not weighed",
+    "bodyWeightTodayEmptyStatus": "No weight entered today yet.",
+    "bodyWeightTodaySkippedStatus": "Marked as not weighed today.",
+    "bodyWeightTodaySavedStatus": "Saved: {weight}",
+    "@bodyWeightTodaySavedStatus": {
+      "placeholders": {
+        "weight": {
+          "type": "String"
+        }
+      }
+    },
+    "bodyWeightTodayInvalidWeight": "Enter a positive weight.",
+    "bodyWeightTodaySaveError": "Could not save weight. Try again.",
+    "bodyWeightWeeklyAverage": "Week average",
+    "bodyWeightWeeklyMinimum": "Week minimum",
+    "bodyWeightWeeklyDays": "Days with weight",
+    "bodyWeightNoData": "No data",
+    "bodyWeightKgValue": "{weight} kg",
+    "@bodyWeightKgValue": {
+      "placeholders": {
+        "weight": {
+          "type": "String"
+        }
+      }
     }
 }

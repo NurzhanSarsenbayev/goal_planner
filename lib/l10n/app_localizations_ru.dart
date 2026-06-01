@@ -1288,4 +1288,59 @@ class AppLocalizationsRu extends AppLocalizations {
   String taskReminderHoursBeforeOption(int hours) {
     return 'За $hours ч';
   }
+
+  @override
+  String get bodyWeightTodayTitle => 'Вес сегодня';
+
+  @override
+  String get bodyWeightTodaySubtitle =>
+      'Внеси сегодняшний вес или отметь, что не взвешивалась.';
+
+  @override
+  String get bodyWeightTodayWeightLabel => 'Вес';
+
+  @override
+  String get bodyWeightKgSuffix => 'кг';
+
+  @override
+  String get bodyWeightTodaySaveButton => 'Сохранить вес';
+
+  @override
+  String get bodyWeightTodaySkipButton => 'Не взвешивалась';
+
+  @override
+  String get bodyWeightTodayEmptyStatus => 'Сегодня вес ещё не внесён.';
+
+  @override
+  String get bodyWeightTodaySkippedStatus =>
+      'Сегодня отмечено: не взвешивалась.';
+
+  @override
+  String bodyWeightTodaySavedStatus(String weight) {
+    return 'Сохранено: $weight';
+  }
+
+  @override
+  String get bodyWeightTodayInvalidWeight => 'Введи положительный вес.';
+
+  @override
+  String get bodyWeightTodaySaveError =>
+      'Не получилось сохранить вес. Попробуй ещё раз.';
+
+  @override
+  String get bodyWeightWeeklyAverage => 'Средний за неделю';
+
+  @override
+  String get bodyWeightWeeklyMinimum => 'Минимум недели';
+
+  @override
+  String get bodyWeightWeeklyDays => 'Дней с весом';
+
+  @override
+  String get bodyWeightNoData => 'Нет данных';
+
+  @override
+  String bodyWeightKgValue(String weight) {
+    return '$weight кг';
+  }
 }

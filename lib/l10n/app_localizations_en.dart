@@ -1277,4 +1277,57 @@ class AppLocalizationsEn extends AppLocalizations {
   String taskReminderHoursBeforeOption(int hours) {
     return '$hours h before';
   }
+
+  @override
+  String get bodyWeightTodayTitle => 'Weight today';
+
+  @override
+  String get bodyWeightTodaySubtitle =>
+      'Log today\'s weight or mark the day as not weighed.';
+
+  @override
+  String get bodyWeightTodayWeightLabel => 'Weight';
+
+  @override
+  String get bodyWeightKgSuffix => 'kg';
+
+  @override
+  String get bodyWeightTodaySaveButton => 'Save weight';
+
+  @override
+  String get bodyWeightTodaySkipButton => 'Not weighed';
+
+  @override
+  String get bodyWeightTodayEmptyStatus => 'No weight entered today yet.';
+
+  @override
+  String get bodyWeightTodaySkippedStatus => 'Marked as not weighed today.';
+
+  @override
+  String bodyWeightTodaySavedStatus(String weight) {
+    return 'Saved: $weight';
+  }
+
+  @override
+  String get bodyWeightTodayInvalidWeight => 'Enter a positive weight.';
+
+  @override
+  String get bodyWeightTodaySaveError => 'Could not save weight. Try again.';
+
+  @override
+  String get bodyWeightWeeklyAverage => 'Week average';
+
+  @override
+  String get bodyWeightWeeklyMinimum => 'Week minimum';
+
+  @override
+  String get bodyWeightWeeklyDays => 'Days with weight';
+
+  @override
+  String get bodyWeightNoData => 'No data';
+
+  @override
+  String bodyWeightKgValue(String weight) {
+    return '$weight kg';
+  }
 }

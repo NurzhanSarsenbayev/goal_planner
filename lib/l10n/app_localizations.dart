@@ -2305,6 +2305,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{hours} h before'**
   String taskReminderHoursBeforeOption(int hours);
+
+  /// No description provided for @bodyWeightTodayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight today'**
+  String get bodyWeightTodayTitle;
+
+  /// No description provided for @bodyWeightTodaySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log today\'s weight or mark the day as not weighed.'**
+  String get bodyWeightTodaySubtitle;
+
+  /// No description provided for @bodyWeightTodayWeightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get bodyWeightTodayWeightLabel;
+
+  /// No description provided for @bodyWeightKgSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'kg'**
+  String get bodyWeightKgSuffix;
+
+  /// No description provided for @bodyWeightTodaySaveButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save weight'**
+  String get bodyWeightTodaySaveButton;
+
+  /// No description provided for @bodyWeightTodaySkipButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Not weighed'**
+  String get bodyWeightTodaySkipButton;
+
+  /// No description provided for @bodyWeightTodayEmptyStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'No weight entered today yet.'**
+  String get bodyWeightTodayEmptyStatus;
+
+  /// No description provided for @bodyWeightTodaySkippedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Marked as not weighed today.'**
+  String get bodyWeightTodaySkippedStatus;
+
+  /// No description provided for @bodyWeightTodaySavedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved: {weight}'**
+  String bodyWeightTodaySavedStatus(String weight);
+
+  /// No description provided for @bodyWeightTodayInvalidWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a positive weight.'**
+  String get bodyWeightTodayInvalidWeight;
+
+  /// No description provided for @bodyWeightTodaySaveError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save weight. Try again.'**
+  String get bodyWeightTodaySaveError;
+
+  /// No description provided for @bodyWeightWeeklyAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Week average'**
+  String get bodyWeightWeeklyAverage;
+
+  /// No description provided for @bodyWeightWeeklyMinimum.
+  ///
+  /// In en, this message translates to:
+  /// **'Week minimum'**
+  String get bodyWeightWeeklyMinimum;
+
+  /// No description provided for @bodyWeightWeeklyDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Days with weight'**
+  String get bodyWeightWeeklyDays;
+
+  /// No description provided for @bodyWeightNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No data'**
+  String get bodyWeightNoData;
+
+  /// No description provided for @bodyWeightKgValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{weight} kg'**
+  String bodyWeightKgValue(String weight);
 }
 
 class _AppLocalizationsDelegate

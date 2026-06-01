@@ -971,5 +971,36 @@
           "type": "int"
         }
       }
+    },
+
+    "bodyWeightTodayTitle": "Вес сегодня",
+    "bodyWeightTodaySubtitle": "Внеси сегодняшний вес или отметь, что не взвешивалась.",
+    "bodyWeightTodayWeightLabel": "Вес",
+    "bodyWeightKgSuffix": "кг",
+    "bodyWeightTodaySaveButton": "Сохранить вес",
+    "bodyWeightTodaySkipButton": "Не взвешивалась",
+    "bodyWeightTodayEmptyStatus": "Сегодня вес ещё не внесён.",
+    "bodyWeightTodaySkippedStatus": "Сегодня отмечено: не взвешивалась.",
+    "bodyWeightTodaySavedStatus": "Сохранено: {weight}",
+    "@bodyWeightTodaySavedStatus": {
+      "placeholders": {
+        "weight": {
+          "type": "String"
+        }
+      }
+    },
+    "bodyWeightTodayInvalidWeight": "Введи положительный вес.",
+    "bodyWeightTodaySaveError": "Не получилось сохранить вес. Попробуй ещё раз.",
+    "bodyWeightWeeklyAverage": "Средний за неделю",
+    "bodyWeightWeeklyMinimum": "Минимум недели",
+    "bodyWeightWeeklyDays": "Дней с весом",
+    "bodyWeightNoData": "Нет данных",
+    "bodyWeightKgValue": "{weight} кг",
+    "@bodyWeightKgValue": {
+      "placeholders": {
+        "weight": {
+          "type": "String"
+        }
+      }
     }
 }

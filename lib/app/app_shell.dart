@@ -304,6 +304,7 @@ class _AppShellState extends State<AppShell> {
     return MainTabBuilder(
       store: _store,
       habitStore: _habitStore,
+      bodyWeightTrackingService: _dependencies.bodyWeightTrackingService,
       goalDialogActions: _goalDialogActions,
       taskDialogActions: _taskDialogActions,
       recurringRuleDialogActions: _recurringRuleDialogActions,
