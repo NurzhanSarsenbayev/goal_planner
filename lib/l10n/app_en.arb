@@ -1033,5 +1033,9 @@
     "bodyWeightProgressDeltaSame": "No change",
         "bodyWeightTodayEnterButton": "Enter",
         "bodyWeightTodayChangeButton": "Change",
-        "bodyWeightTodaySheetTitle": "Log weight"
+        "bodyWeightTodaySheetTitle": "Log weight",
+
+    "bodyWeightProgressAverageChartTitle": "Weekly average trend",
+    "bodyWeightProgressAverageChartSubtitle": "Shows how the weekly average changes over time.",
+    "bodyWeightProgressAverageChartEmpty": "Enter weight on at least one day to see the chart."
 }

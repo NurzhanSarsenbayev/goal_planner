@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/body_weight_tracking_service.dart';
 import '../../domain/body_weekly_weight_report.dart';
+import '../widgets/body_weight_weekly_average_chart.dart';
 
 class BodyWeightProgressScreen extends StatefulWidget {
   const BodyWeightProgressScreen({super.key, required this.service});
@@ -75,6 +76,8 @@ class _BodyWeightProgressScreenState extends State<BodyWeightProgressScreen> {
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
+                const SizedBox(height: 16),
+                BodyWeightWeeklyAverageChart(reports: reports),
                 const SizedBox(height: 16),
                 for (final report in reports) ...[
                   _BodyWeightWeeklyReportCard(report: report),

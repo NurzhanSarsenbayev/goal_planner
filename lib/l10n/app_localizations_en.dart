@@ -1386,4 +1386,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bodyWeightTodaySheetTitle => 'Log weight';
+
+  @override
+  String get bodyWeightProgressAverageChartTitle => 'Weekly average trend';
+
+  @override
+  String get bodyWeightProgressAverageChartSubtitle =>
+      'Shows how the weekly average changes over time.';
+
+  @override
+  String get bodyWeightProgressAverageChartEmpty =>
+      'Enter weight on at least one day to see the chart.';
 }

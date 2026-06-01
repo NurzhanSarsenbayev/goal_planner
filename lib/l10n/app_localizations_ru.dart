@@ -1399,4 +1399,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get bodyWeightTodaySheetTitle => 'Внести вес';
+
+  @override
+  String get bodyWeightProgressAverageChartTitle => 'Динамика среднего веса';
+
+  @override
+  String get bodyWeightProgressAverageChartSubtitle =>
+      'Показывает, как меняется средний вес по неделям.';
+
+  @override
+  String get bodyWeightProgressAverageChartEmpty =>
+      'Внесите вес хотя бы за один день, чтобы увидеть график.';
 }

@@ -1033,5 +1033,9 @@
     "bodyWeightProgressDeltaSame": "Без изменений",
     "bodyWeightTodayEnterButton": "Внести",
     "bodyWeightTodayChangeButton": "Изменить",
-    "bodyWeightTodaySheetTitle": "Внести вес"
+    "bodyWeightTodaySheetTitle": "Внести вес",
+
+    "bodyWeightProgressAverageChartTitle": "Динамика среднего веса",
+    "bodyWeightProgressAverageChartSubtitle": "Показывает, как меняется средний вес по неделям.",
+    "bodyWeightProgressAverageChartEmpty": "Внесите вес хотя бы за один день, чтобы увидеть график."
 }

@@ -2497,6 +2497,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log weight'**
   String get bodyWeightTodaySheetTitle;
+
+  /// No description provided for @bodyWeightProgressAverageChartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly average trend'**
+  String get bodyWeightProgressAverageChartTitle;
+
+  /// No description provided for @bodyWeightProgressAverageChartSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows how the weekly average changes over time.'**
+  String get bodyWeightProgressAverageChartSubtitle;
+
+  /// No description provided for @bodyWeightProgressAverageChartEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter weight on at least one day to see the chart.'**
+  String get bodyWeightProgressAverageChartEmpty;
 }
 
 class _AppLocalizationsDelegate
