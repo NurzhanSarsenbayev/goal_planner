@@ -1232,6 +1232,30 @@ abstract class AppLocalizations {
   /// **'Delete whole series'**
   String get taskEditActionDeleteSeries;
 
+  /// No description provided for @taskEditActionMakeRecurring.
+  ///
+  /// In en, this message translates to:
+  /// **'Make recurring'**
+  String get taskEditActionMakeRecurring;
+
+  /// No description provided for @taskConvertToRecurringConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Make task recurring?'**
+  String get taskConvertToRecurringConfirmTitle;
+
+  /// No description provided for @taskConvertToRecurringConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A recurring task will be created from this task. The current one-time task will be removed after saving to avoid duplicates.'**
+  String get taskConvertToRecurringConfirmBody;
+
+  /// No description provided for @commonContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get commonContinue;
+
   /// No description provided for @taskDialogAddTitle.
   ///
   /// In en, this message translates to:

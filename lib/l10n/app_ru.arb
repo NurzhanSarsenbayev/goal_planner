@@ -563,6 +563,12 @@
     "taskEditActionDeleteThisTask": "Удалить эту задачу",
     "taskEditActionDeleteSeries": "Удалить всю серию",
 
+    "taskEditActionMakeRecurring": "Сделать повторяющейся",
+    "taskConvertToRecurringConfirmTitle": "Сделать задачу повторяющейся?",
+    "taskConvertToRecurringConfirmBody": "Мы создадим повторяющуюся задачу на основе этой задачи. Текущая разовая задача будет удалена после сохранения, чтобы не было дубля.",
+
+    "commonContinue": "Продолжить",
+
     "taskDialogAddTitle": "Добавить задачу",
     "taskDialogEditTitle": "Изменить задачу",
     "taskDialogAddForTodayTitle": "Добавить задачу на сегодня",

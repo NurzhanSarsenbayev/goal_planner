@@ -30,6 +30,34 @@ void main() {
       expect(find.text('15 min before'), findsOneWidget);
     });
 
+    testWidgets('prefills task data when converting one-time task', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(
+            body: AddRecurringTaskRuleDialog(
+              goals: const [],
+              milestones: const [],
+              initialDate: DateTime(2026, 6, 2),
+              initialTitle: 'Morning walk',
+              initialDescription: 'With dog',
+              initialScheduledTimeMinutes: 8 * 60 + 30,
+              initialReminderMinutesBefore: 15,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.widgetWithText(TextField, 'Morning walk'), findsOneWidget);
+      expect(find.widgetWithText(TextField, 'With dog'), findsOneWidget);
+      expect(find.text('Time: 08:30'), findsOneWidget);
+      expect(find.text('15 min before'), findsOneWidget);
+    });
+
     testWidgets('hides reminder selector when time is not set', (tester) async {
       await tester.pumpWidget(
         _app(

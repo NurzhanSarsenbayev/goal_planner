@@ -563,6 +563,12 @@
     "taskEditActionDeleteThisTask": "Delete this task",
     "taskEditActionDeleteSeries": "Delete whole series",
 
+    "taskEditActionMakeRecurring": "Make recurring",
+    "taskConvertToRecurringConfirmTitle": "Make task recurring?",
+    "taskConvertToRecurringConfirmBody": "A recurring task will be created from this task. The current one-time task will be removed after saving to avoid duplicates.",
+
+    "commonContinue": "Continue","commonContinue": "Continue",
+
     "taskDialogAddTitle": "Add task",
     "taskDialogEditTitle": "Edit task",
     "taskDialogAddForTodayTitle": "Add task for today",

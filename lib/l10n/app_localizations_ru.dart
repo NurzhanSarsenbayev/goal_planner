@@ -657,6 +657,20 @@ class AppLocalizationsRu extends AppLocalizations {
   String get taskEditActionDeleteSeries => 'Удалить всю серию';
 
   @override
+  String get taskEditActionMakeRecurring => 'Сделать повторяющейся';
+
+  @override
+  String get taskConvertToRecurringConfirmTitle =>
+      'Сделать задачу повторяющейся?';
+
+  @override
+  String get taskConvertToRecurringConfirmBody =>
+      'Мы создадим повторяющуюся задачу на основе этой задачи. Текущая разовая задача будет удалена после сохранения, чтобы не было дубля.';
+
+  @override
+  String get commonContinue => 'Продолжить';
+
+  @override
   String get taskDialogAddTitle => 'Добавить задачу';
 
   @override

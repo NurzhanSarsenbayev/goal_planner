@@ -20,9 +20,12 @@ Future<void> showTaskEditActionsSheet(
   VoidCallback? onEditReminder,
   VoidCallback? onEditRecurringSeries,
   VoidCallback? onDeleteRecurringSeries,
+  VoidCallback? onConvertToRecurring,
 }) async {
   final l10n = AppLocalizations.of(context);
   final isRecurringOccurrence = task.recurringRuleId != null;
+  final shouldShowConvertToRecurring =
+      !isRecurringOccurrence && onConvertToRecurring != null;
   final shouldShowWholeSeries =
       isRecurringOccurrence &&
       (onEditRecurringSeries != null || onDeleteRecurringSeries != null);
@@ -65,6 +68,14 @@ Future<void> showTaskEditActionsSheet(
                   _runAfterClosingSheet(sheetContext, onEdit);
                 },
               ),
+              if (shouldShowConvertToRecurring)
+                _TaskEditActionTile(
+                  icon: Icons.repeat,
+                  title: l10n.taskEditActionMakeRecurring,
+                  onTap: () {
+                    _runAfterClosingSheet(sheetContext, onConvertToRecurring);
+                  },
+                ),
               if (shouldShowScheduleDate)
                 _TaskEditActionTile(
                   icon: Icons.event_outlined,

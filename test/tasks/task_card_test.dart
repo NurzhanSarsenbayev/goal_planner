@@ -255,6 +255,61 @@ void main() {
       expect(find.text('Clear time'), findsOneWidget);
     });
 
+    testWidgets('runs make recurring action for one-time task', (tester) async {
+      var didConvert = false;
+
+      await tester.pumpWidget(
+        _app(
+          task: PlannerTask(
+            id: 'task_1',
+            title: 'Morning walk',
+            description: '',
+            scheduledDate: todayDate(),
+            createdAt: DateTime(2026, 5, 20),
+          ),
+          onConvertToRecurring: () {
+            didConvert = true;
+          },
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Make recurring'), findsOneWidget);
+
+      await tester.tap(find.text('Make recurring'));
+      await tester.pumpAndSettle();
+
+      expect(didConvert, isTrue);
+    });
+
+    testWidgets(
+      'does not show make recurring action for recurring occurrence',
+      (tester) async {
+        await tester.pumpWidget(
+          _app(
+            task: PlannerTask(
+              id: 'task_recurring_rule_1_20260520',
+              title: 'Workout',
+              description: '',
+              recurringRuleId: 'rule_1',
+              scheduledDate: todayDate(),
+              createdAt: DateTime(2026, 5, 20),
+            ),
+            onConvertToRecurring: () {},
+            onEditRecurringSeries: () {},
+          ),
+        );
+
+        await tester.tap(find.byIcon(Icons.more_vert));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Make recurring'), findsNothing);
+        expect(find.text('Edit repeat rule'), findsOneWidget);
+      },
+    );
+
     testWidgets('keeps scheduled date label without time for untimed tasks', (
       tester,
     ) async {
@@ -288,6 +343,7 @@ Widget _app({
   VoidCallback? onEdit,
   VoidCallback? onEditRecurringSeries,
   VoidCallback? onDeleteRecurringSeries,
+  VoidCallback? onConvertToRecurring,
 }) {
   return MaterialApp(
     locale: const Locale('en'),
@@ -305,6 +361,7 @@ Widget _app({
         onEditReminder: onEditReminder,
         onEditRecurringSeries: onEditRecurringSeries,
         onDeleteRecurringSeries: onDeleteRecurringSeries,
+        onConvertToRecurring: onConvertToRecurring,
       ),
     ),
   );

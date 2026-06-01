@@ -82,6 +82,12 @@ class AppNavigationActions {
                     ruleId,
                   );
                 },
+                onConvertTaskToRecurring: (task) {
+                  _recurringRuleDialogActions.showConvertTaskToRecurringDialog(
+                    context,
+                    task,
+                  );
+                },
               );
             },
           );

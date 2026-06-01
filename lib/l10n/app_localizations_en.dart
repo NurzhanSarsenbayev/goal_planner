@@ -652,6 +652,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get taskEditActionDeleteSeries => 'Delete whole series';
 
   @override
+  String get taskEditActionMakeRecurring => 'Make recurring';
+
+  @override
+  String get taskConvertToRecurringConfirmTitle => 'Make task recurring?';
+
+  @override
+  String get taskConvertToRecurringConfirmBody =>
+      'A recurring task will be created from this task. The current one-time task will be removed after saving to avoid duplicates.';
+
+  @override
+  String get commonContinue => 'Continue';
+
+  @override
   String get taskDialogAddTitle => 'Add task';
 
   @override

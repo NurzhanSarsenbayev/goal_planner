@@ -114,6 +114,12 @@ class MainTabBuilder {
         onDeleteRecurringTaskRule: (ruleId) {
           _recurringRuleDialogActions.showDeleteDialogById(context, ruleId);
         },
+        onConvertTaskToRecurring: (task) {
+          _recurringRuleDialogActions.showConvertTaskToRecurringDialog(
+            context,
+            task,
+          );
+        },
       ),
       GoalsScreen(
         goals: _store.goals,
@@ -157,6 +163,12 @@ class MainTabBuilder {
         },
         onDeleteRecurringTaskRule: (ruleId) {
           _recurringRuleDialogActions.showDeleteDialogById(context, ruleId);
+        },
+        onConvertTaskToRecurring: (task) {
+          _recurringRuleDialogActions.showConvertTaskToRecurringDialog(
+            context,
+            task,
+          );
         },
       ),
       HabitsScreen(habitStore: _habitStore),

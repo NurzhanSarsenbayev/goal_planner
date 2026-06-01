@@ -43,6 +43,10 @@ class AddRecurringTaskRuleDialog extends StatefulWidget {
     this.initialDate,
     this.initialGoalId,
     this.initialMilestoneId,
+    this.initialTitle,
+    this.initialDescription,
+    this.initialScheduledTimeMinutes,
+    this.initialReminderMinutesBefore,
   }) : assert(
          initialMilestoneId == null || initialGoalId != null,
          'initialGoalId is required when initialMilestoneId is set.',
@@ -56,6 +60,10 @@ class AddRecurringTaskRuleDialog extends StatefulWidget {
   final String? initialMilestoneId;
   final String? dialogTitle;
   final String? submitLabel;
+  final String? initialTitle;
+  final String? initialDescription;
+  final int? initialScheduledTimeMinutes;
+  final int? initialReminderMinutesBefore;
 
   @override
   State<AddRecurringTaskRuleDialog> createState() =>
@@ -121,6 +129,12 @@ class _AddRecurringTaskRuleDialogState
       _selectedGoalId = initialRule.goalId;
       _selectedMilestoneId = initialRule.milestoneId;
     } else {
+      _titleController.text = widget.initialTitle ?? '';
+      _descriptionController.text = widget.initialDescription ?? '';
+      _scheduledTimeMinutes = widget.initialScheduledTimeMinutes;
+      _reminderMinutesBefore = widget.initialScheduledTimeMinutes == null
+          ? null
+          : widget.initialReminderMinutesBefore;
       _selectedGoalId = widget.initialGoalId;
       _selectedMilestoneId = widget.initialMilestoneId;
 

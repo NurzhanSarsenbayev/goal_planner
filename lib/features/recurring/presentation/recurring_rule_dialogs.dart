@@ -13,6 +13,10 @@ Future<AddRecurringTaskRuleDraft?> showAddRecurringTaskRuleDialog(
   DateTime? initialDate,
   String? initialGoalId,
   String? initialMilestoneId,
+  String? initialTitle,
+  String? initialDescription,
+  int? initialScheduledTimeMinutes,
+  int? initialReminderMinutesBefore,
 }) {
   return showDialog<AddRecurringTaskRuleDraft>(
     context: context,
@@ -23,6 +27,10 @@ Future<AddRecurringTaskRuleDraft?> showAddRecurringTaskRuleDialog(
         initialDate: initialDate,
         initialGoalId: initialGoalId,
         initialMilestoneId: initialMilestoneId,
+        initialTitle: initialTitle,
+        initialDescription: initialDescription,
+        initialScheduledTimeMinutes: initialScheduledTimeMinutes,
+        initialReminderMinutesBefore: initialReminderMinutesBefore,
       );
     },
   );
