@@ -1,5 +1,3 @@
-import 'package:drift/drift.dart' as drift;
-
 import '../../features/body_tracking/application/body_profile_repository.dart';
 import '../../features/body_tracking/domain/body_profile.dart' as domain;
 import '../local/app_database.dart' as local;
