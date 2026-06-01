@@ -1343,4 +1343,51 @@ class AppLocalizationsRu extends AppLocalizations {
   String bodyWeightKgValue(String weight) {
     return '$weight кг';
   }
+
+  @override
+  String get bodyWeightTodayOpenProgressButton => 'Посмотреть прогресс';
+
+  @override
+  String get bodyWeightProgressTitle => 'Прогресс веса';
+
+  @override
+  String get bodyWeightProgressSubtitle =>
+      'Средний и минимальный вес по неделям на основе дней, где вес был внесён.';
+
+  @override
+  String get bodyWeightProgressEmptyTitle => 'Отчётов по весу пока нет';
+
+  @override
+  String get bodyWeightProgressEmptyBody =>
+      'Внеси вес в Сегодня, чтобы начать видеть недельный прогресс.';
+
+  @override
+  String get bodyWeightProgressLoadErrorTitle =>
+      'Не получилось загрузить прогресс веса';
+
+  @override
+  String get bodyWeightProgressLoadErrorBody =>
+      'Попробуй открыть этот экран ещё раз.';
+
+  @override
+  String get bodyWeightProgressRetryButton => 'Повторить';
+
+  @override
+  String get bodyWeightProgressSkippedDays => 'Без взвешивания';
+
+  @override
+  String get bodyWeightProgressMissingDays => 'Без данных';
+
+  @override
+  String bodyWeightProgressDeltaUp(String delta) {
+    return '↑ $delta';
+  }
+
+  @override
+  String bodyWeightProgressDeltaDown(String delta) {
+    return '↓ $delta';
+  }
+
+  @override
+  String get bodyWeightProgressDeltaSame => 'Без изменений';
 }

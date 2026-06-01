@@ -2401,6 +2401,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{weight} kg'**
   String bodyWeightKgValue(String weight);
+
+  /// No description provided for @bodyWeightTodayOpenProgressButton.
+  ///
+  /// In en, this message translates to:
+  /// **'View progress'**
+  String get bodyWeightTodayOpenProgressButton;
+
+  /// No description provided for @bodyWeightProgressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight progress'**
+  String get bodyWeightProgressTitle;
+
+  /// No description provided for @bodyWeightProgressSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly average and minimum weight based on the days with entered weight.'**
+  String get bodyWeightProgressSubtitle;
+
+  /// No description provided for @bodyWeightProgressEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No weight reports yet'**
+  String get bodyWeightProgressEmptyTitle;
+
+  /// No description provided for @bodyWeightProgressEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your weight in Today to start seeing weekly progress.'**
+  String get bodyWeightProgressEmptyBody;
+
+  /// No description provided for @bodyWeightProgressLoadErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load weight progress'**
+  String get bodyWeightProgressLoadErrorTitle;
+
+  /// No description provided for @bodyWeightProgressLoadErrorBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Try opening this screen again.'**
+  String get bodyWeightProgressLoadErrorBody;
+
+  /// No description provided for @bodyWeightProgressRetryButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get bodyWeightProgressRetryButton;
+
+  /// No description provided for @bodyWeightProgressSkippedDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped days'**
+  String get bodyWeightProgressSkippedDays;
+
+  /// No description provided for @bodyWeightProgressMissingDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing days'**
+  String get bodyWeightProgressMissingDays;
+
+  /// No description provided for @bodyWeightProgressDeltaUp.
+  ///
+  /// In en, this message translates to:
+  /// **'↑ {delta}'**
+  String bodyWeightProgressDeltaUp(String delta);
+
+  /// No description provided for @bodyWeightProgressDeltaDown.
+  ///
+  /// In en, this message translates to:
+  /// **'↓ {delta}'**
+  String bodyWeightProgressDeltaDown(String delta);
+
+  /// No description provided for @bodyWeightProgressDeltaSame.
+  ///
+  /// In en, this message translates to:
+  /// **'No change'**
+  String get bodyWeightProgressDeltaSame;
 }
 
 class _AppLocalizationsDelegate

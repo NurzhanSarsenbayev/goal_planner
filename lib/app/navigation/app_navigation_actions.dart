@@ -13,6 +13,8 @@ import '../../features/reports/application/habit_report_loader.dart';
 import '../../features/reminders/standalone/application/standalone_reminder_store.dart';
 import '../../features/reminders/daily_review/application/daily_review_reminder_settings_store.dart';
 import '../../features/reminders/daily_review/presentation/screens/daily_review_reminder_settings_screen.dart';
+import '../../features/body_tracking/application/body_weight_tracking_service.dart';
+import '../../features/body_tracking/presentation/screens/body_weight_progress_screen.dart';
 
 class AppNavigationActions {
   const AppNavigationActions({
@@ -22,12 +24,14 @@ class AppNavigationActions {
     required HabitReportLoader habitReportLoader,
     required StandaloneReminderStore standaloneReminderStore,
     required DailyReviewReminderSettingsStore dailyReviewReminderSettingsStore,
+    required BodyWeightTrackingService bodyWeightTrackingService,
   }) : _store = store,
        _taskDialogActions = taskDialogActions,
        _habitReportLoader = habitReportLoader,
        _standaloneReminderStore = standaloneReminderStore,
        _dailyReviewReminderSettingsStore = dailyReviewReminderSettingsStore,
-       _recurringRuleDialogActions = recurringRuleDialogActions;
+       _recurringRuleDialogActions = recurringRuleDialogActions,
+       _bodyWeightTrackingService = bodyWeightTrackingService;
 
   final PlannerStore _store;
   final HabitReportLoader _habitReportLoader;
@@ -35,6 +39,7 @@ class AppNavigationActions {
   final DailyReviewReminderSettingsStore _dailyReviewReminderSettingsStore;
   final TaskDialogActions _taskDialogActions;
   final RecurringRuleDialogActions _recurringRuleDialogActions;
+  final BodyWeightTrackingService _bodyWeightTrackingService;
 
   void openAllTasks(BuildContext context) {
     Navigator.of(context).push(
@@ -116,6 +121,16 @@ class AppNavigationActions {
               );
             },
           );
+        },
+      ),
+    );
+  }
+
+  void openBodyWeightProgress(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return BodyWeightProgressScreen(service: _bodyWeightTrackingService);
         },
       ),
     );

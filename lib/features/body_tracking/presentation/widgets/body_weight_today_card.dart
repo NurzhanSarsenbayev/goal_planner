@@ -6,9 +6,14 @@ import '../../domain/body_weekly_weight_report.dart';
 import '../../domain/body_weight_entry.dart';
 
 class BodyWeightTodayCard extends StatefulWidget {
-  const BodyWeightTodayCard({super.key, required this.service});
+  const BodyWeightTodayCard({
+    super.key,
+    required this.service,
+    required this.onOpenProgress,
+  });
 
   final BodyWeightTrackingService service;
+  final VoidCallback onOpenProgress;
 
   @override
   State<BodyWeightTodayCard> createState() => _BodyWeightTodayCardState();
@@ -208,6 +213,15 @@ class _BodyWeightTodayCardState extends State<BodyWeightTodayCard> {
                   const Center(child: CircularProgressIndicator())
                 else
                   _BodyWeightWeeklyStats(report: state?.weeklyReport),
+                const SizedBox(height: 12),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton.icon(
+                    onPressed: widget.onOpenProgress,
+                    icon: const Icon(Icons.insights_outlined),
+                    label: Text(l10n.bodyWeightTodayOpenProgressButton),
+                  ),
+                ),
               ],
             ),
           ),

@@ -22,6 +22,7 @@ class TodayScreen extends StatelessWidget {
     required this.tasks,
     required this.habitSummary,
     required this.bodyWeightTrackingService,
+    required this.onOpenBodyWeightProgress,
     required this.onOpenHabits,
     required this.onToggleTaskCompleted,
     required this.onCompleteTaskOnDate,
@@ -42,6 +43,7 @@ class TodayScreen extends StatelessWidget {
   final List<PlannerTask> tasks;
   final HabitTodaySummary habitSummary;
   final BodyWeightTrackingService bodyWeightTrackingService;
+  final VoidCallback onOpenBodyWeightProgress;
   final VoidCallback onOpenHabits;
   final void Function(String taskId) onToggleTaskCompleted;
   final void Function({required String taskId, required DateTime completedAt})
@@ -124,7 +126,10 @@ class TodayScreen extends StatelessWidget {
           children: [
             TodaySummaryCard(view: view),
             const SizedBox(height: 16),
-            BodyWeightTodayCard(service: bodyWeightTrackingService),
+            BodyWeightTodayCard(
+              service: bodyWeightTrackingService,
+              onOpenProgress: onOpenBodyWeightProgress,
+            ),
             const SizedBox(height: 16),
             TodayHabitsSummaryCard(
               summary: habitSummary,

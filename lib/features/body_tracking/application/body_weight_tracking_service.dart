@@ -117,6 +117,50 @@ class BodyWeightTrackingService {
       previousReport: previousReport,
     );
   }
+
+  Future<List<BodyWeeklyWeightReport>> loadWeeklyReports({
+    required DateTime anchorDate,
+    int weeksCount = 12,
+  }) async {
+    if (weeksCount <= 0) {
+      throw ArgumentError.value(weeksCount, 'weeksCount', 'must be positive.');
+    }
+
+    final newestWeekStartDate = bodyTrackingWeekStart(anchorDate);
+    final oldestPreviousWeekStartDate = newestWeekStartDate.subtract(
+      Duration(days: 7 * weeksCount),
+    );
+    final newestWeekEndDate = newestWeekStartDate.add(const Duration(days: 6));
+    final entries = await _repository.loadEntriesForRange(
+      startDate: oldestPreviousWeekStartDate,
+      endDate: newestWeekEndDate,
+    );
+    final reports = <BodyWeeklyWeightReport>[];
+    BodyWeeklyWeightReport? previousReport;
+
+    for (var index = 0; index <= weeksCount; index += 1) {
+      final weekStartDate = oldestPreviousWeekStartDate.add(
+        Duration(days: 7 * index),
+      );
+      final report = _reportBuilder.build(
+        entries: entries,
+        weekDate: weekStartDate,
+        previousReport: previousReport,
+      );
+
+      previousReport = report;
+
+      if (index == 0) {
+        continue;
+      }
+
+      if (report.hasWeightData || report.skippedDaysCount > 0) {
+        reports.add(report);
+      }
+    }
+
+    return reports.reversed.toList(growable: false);
+  }
 }
 
 String bodyWeightEntryIdForDate(DateTime date) {

@@ -246,6 +246,7 @@ class _AppShellState extends State<AppShell> {
       standaloneReminderStore: _dependencies.standaloneReminderStore,
       dailyReviewReminderSettingsStore:
           _dependencies.dailyReviewReminderSettingsStore,
+      bodyWeightTrackingService: _dependencies.bodyWeightTrackingService,
     );
 
     _store.addListener(_onStoreChanged);

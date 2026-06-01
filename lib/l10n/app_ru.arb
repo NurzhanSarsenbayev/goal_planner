@@ -1002,5 +1002,33 @@
           "type": "String"
         }
       }
-    }
+    },
+
+    "bodyWeightTodayOpenProgressButton": "Посмотреть прогресс",
+    "bodyWeightProgressTitle": "Прогресс веса",
+    "bodyWeightProgressSubtitle": "Средний и минимальный вес по неделям на основе дней, где вес был внесён.",
+    "bodyWeightProgressEmptyTitle": "Отчётов по весу пока нет",
+    "bodyWeightProgressEmptyBody": "Внеси вес в Сегодня, чтобы начать видеть недельный прогресс.",
+    "bodyWeightProgressLoadErrorTitle": "Не получилось загрузить прогресс веса",
+    "bodyWeightProgressLoadErrorBody": "Попробуй открыть этот экран ещё раз.",
+    "bodyWeightProgressRetryButton": "Повторить",
+    "bodyWeightProgressSkippedDays": "Без взвешивания",
+    "bodyWeightProgressMissingDays": "Без данных",
+    "bodyWeightProgressDeltaUp": "↑ {delta}",
+    "@bodyWeightProgressDeltaUp": {
+      "placeholders": {
+        "delta": {
+          "type": "String"
+        }
+      }
+    },
+    "bodyWeightProgressDeltaDown": "↓ {delta}",
+    "@bodyWeightProgressDeltaDown": {
+      "placeholders": {
+        "delta": {
+          "type": "String"
+        }
+      }
+    },
+    "bodyWeightProgressDeltaSame": "Без изменений"
 }

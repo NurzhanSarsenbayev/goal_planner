@@ -1330,4 +1330,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String bodyWeightKgValue(String weight) {
     return '$weight kg';
   }
+
+  @override
+  String get bodyWeightTodayOpenProgressButton => 'View progress';
+
+  @override
+  String get bodyWeightProgressTitle => 'Weight progress';
+
+  @override
+  String get bodyWeightProgressSubtitle =>
+      'Weekly average and minimum weight based on the days with entered weight.';
+
+  @override
+  String get bodyWeightProgressEmptyTitle => 'No weight reports yet';
+
+  @override
+  String get bodyWeightProgressEmptyBody =>
+      'Enter your weight in Today to start seeing weekly progress.';
+
+  @override
+  String get bodyWeightProgressLoadErrorTitle =>
+      'Could not load weight progress';
+
+  @override
+  String get bodyWeightProgressLoadErrorBody =>
+      'Try opening this screen again.';
+
+  @override
+  String get bodyWeightProgressRetryButton => 'Retry';
+
+  @override
+  String get bodyWeightProgressSkippedDays => 'Skipped days';
+
+  @override
+  String get bodyWeightProgressMissingDays => 'Missing days';
+
+  @override
+  String bodyWeightProgressDeltaUp(String delta) {
+    return '↑ $delta';
+  }
+
+  @override
+  String bodyWeightProgressDeltaDown(String delta) {
+    return '↓ $delta';
+  }
+
+  @override
+  String get bodyWeightProgressDeltaSame => 'No change';
 }

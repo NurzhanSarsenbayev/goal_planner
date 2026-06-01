@@ -147,6 +147,69 @@ void main() {
       expect(report.averageWeightDeltaKg, closeTo(-1, 0.000001));
       expect(report.minWeightDeltaKg, closeTo(-1, 0.000001));
     });
+
+    test('loads weekly reports newest first and skips empty weeks', () async {
+      await service.saveWeightForDate(
+        date: DateTime(2026, 5, 18),
+        weightKg: 81,
+      );
+      await service.saveWeightForDate(
+        date: DateTime(2026, 5, 19),
+        weightKg: 80,
+      );
+
+      await service.saveWeightForDate(
+        date: DateTime(2026, 5, 25),
+        weightKg: 80,
+      );
+      await service.saveWeightForDate(
+        date: DateTime(2026, 5, 26),
+        weightKg: 79,
+      );
+      await service.markSkippedForDate(date: DateTime(2026, 5, 27));
+
+      final reports = await service.loadWeeklyReports(
+        anchorDate: DateTime(2026, 5, 28),
+        weeksCount: 4,
+      );
+
+      expect(reports, hasLength(2));
+      expect(reports.first.weekStartDate, DateTime(2026, 5, 25));
+      expect(reports.first.averageWeightKg, closeTo(79.5, 0.000001));
+      expect(reports.first.minWeightKg, 79);
+      expect(reports.first.averageWeightDeltaKg, closeTo(-1, 0.000001));
+      expect(reports.first.minWeightDeltaKg, closeTo(-1, 0.000001));
+
+      expect(reports.last.weekStartDate, DateTime(2026, 5, 18));
+      expect(reports.last.averageWeightKg, closeTo(80.5, 0.000001));
+      expect(reports.last.minWeightKg, 80);
+      expect(reports.last.averageWeightDeltaKg, isNull);
+      expect(reports.last.minWeightDeltaKg, isNull);
+    });
+
+    test('loads skipped-only weekly report', () async {
+      await service.markSkippedForDate(date: DateTime(2026, 5, 25));
+
+      final reports = await service.loadWeeklyReports(
+        anchorDate: DateTime(2026, 5, 28),
+        weeksCount: 4,
+      );
+
+      expect(reports, hasLength(1));
+      expect(reports.single.weekStartDate, DateTime(2026, 5, 25));
+      expect(reports.single.hasWeightData, isFalse);
+      expect(reports.single.skippedDaysCount, 1);
+    });
+
+    test('throws when loading non-positive number of weekly reports', () {
+      expect(
+        service.loadWeeklyReports(
+          anchorDate: DateTime(2026, 5, 28),
+          weeksCount: 0,
+        ),
+        throwsArgumentError,
+      );
+    });
   });
 }
 

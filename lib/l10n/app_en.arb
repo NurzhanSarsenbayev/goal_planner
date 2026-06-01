@@ -1002,5 +1002,33 @@
           "type": "String"
         }
       }
-    }
+    },
+
+    "bodyWeightTodayOpenProgressButton": "View progress",
+    "bodyWeightProgressTitle": "Weight progress",
+    "bodyWeightProgressSubtitle": "Weekly average and minimum weight based on the days with entered weight.",
+    "bodyWeightProgressEmptyTitle": "No weight reports yet",
+    "bodyWeightProgressEmptyBody": "Enter your weight in Today to start seeing weekly progress.",
+    "bodyWeightProgressLoadErrorTitle": "Could not load weight progress",
+    "bodyWeightProgressLoadErrorBody": "Try opening this screen again.",
+    "bodyWeightProgressRetryButton": "Retry",
+    "bodyWeightProgressSkippedDays": "Skipped days",
+    "bodyWeightProgressMissingDays": "Missing days",
+    "bodyWeightProgressDeltaUp": "↑ {delta}",
+    "@bodyWeightProgressDeltaUp": {
+      "placeholders": {
+        "delta": {
+          "type": "String"
+        }
+      }
+    },
+    "bodyWeightProgressDeltaDown": "↓ {delta}",
+    "@bodyWeightProgressDeltaDown": {
+      "placeholders": {
+        "delta": {
+          "type": "String"
+        }
+      }
+    },
+    "bodyWeightProgressDeltaSame": "No change"
 }

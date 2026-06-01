@@ -79,6 +79,9 @@ class MainTabBuilder {
         tasks: _store.tasks,
         habitSummary: _habitStore.todaySummary,
         bodyWeightTrackingService: _bodyWeightTrackingService,
+        onOpenBodyWeightProgress: () {
+          _navigationActions.openBodyWeightProgress(context);
+        },
         onOpenHabits: _onOpenHabits,
         onToggleTaskCompleted: _store.toggleTaskCompleted,
         onCompleteTaskOnDate: _store.completeTaskOnDate,
