@@ -22,6 +22,7 @@ class DriftPlannerBackupRestoreRepository
   }
 
   Future<void> _deleteExistingData() async {
+    await _database.delete(_database.bodyMeasurementEntries).go();
     await _database.delete(_database.bodyWeightEntries).go();
     await _database.delete(_database.dailyReviewReminderSettingsTable).go();
     await _database.delete(_database.standaloneReminders).go();
@@ -180,6 +181,23 @@ class DriftPlannerBackupRestoreRepository
               date: entry.date,
               weightKg: drift.Value(entry.weightKg),
               isSkipped: drift.Value(entry.isSkipped),
+              note: drift.Value(entry.note),
+              createdAt: entry.createdAt,
+              updatedAt: entry.updatedAt,
+            ),
+          );
+    }
+
+    for (final entry in data.bodyMeasurementEntries) {
+      await _database
+          .into(_database.bodyMeasurementEntries)
+          .insert(
+            local.BodyMeasurementEntriesCompanion.insert(
+              id: entry.id,
+              date: entry.date,
+              neckCm: drift.Value(entry.neckCm),
+              waistCm: drift.Value(entry.waistCm),
+              hipsCm: drift.Value(entry.hipsCm),
               note: drift.Value(entry.note),
               createdAt: entry.createdAt,
               updatedAt: entry.updatedAt,

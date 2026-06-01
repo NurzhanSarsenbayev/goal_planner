@@ -240,6 +240,32 @@ BodyWeightEntry _bodyWeightEntryFromJson(Map<String, dynamic> json) {
   );
 }
 
+Map<String, Object?> _bodyMeasurementEntryToJson(BodyMeasurementEntry entry) {
+  return {
+    'id': entry.id,
+    'date': _dateToJson(entry.date),
+    'neckCm': entry.neckCm,
+    'waistCm': entry.waistCm,
+    'hipsCm': entry.hipsCm,
+    'note': entry.note,
+    'createdAt': _dateToJson(entry.createdAt),
+    'updatedAt': _dateToJson(entry.updatedAt),
+  };
+}
+
+BodyMeasurementEntry _bodyMeasurementEntryFromJson(Map<String, dynamic> json) {
+  return BodyMeasurementEntry(
+    id: _stringFromJson(json, 'id'),
+    date: _dateFromJson(json, 'date'),
+    neckCm: _nullableDoubleFromJson(json, 'neckCm'),
+    waistCm: _nullableDoubleFromJson(json, 'waistCm'),
+    hipsCm: _nullableDoubleFromJson(json, 'hipsCm'),
+    note: _stringFromJson(json, 'note'),
+    createdAt: _dateFromJson(json, 'createdAt'),
+    updatedAt: _dateFromJson(json, 'updatedAt'),
+  );
+}
+
 Map<String, Object?> _standaloneReminderToJson(StandaloneReminder reminder) {
   return {
     'id': reminder.id,

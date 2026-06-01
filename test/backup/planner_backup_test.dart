@@ -14,6 +14,7 @@ import 'package:goal_planner/models/recurring_task_rule.dart';
 import 'package:goal_planner/features/reminders/standalone/domain/standalone_reminder.dart';
 import 'package:goal_planner/features/reminders/daily_review/domain/daily_review_reminder_settings.dart';
 import 'package:goal_planner/features/body_tracking/domain/body_weight_entry.dart';
+import 'package:goal_planner/features/body_tracking/domain/body_measurement_entry.dart';
 
 void main() {
   group('PlannerBackup', () {
@@ -23,6 +24,7 @@ void main() {
       final completedAt = DateTime(2026, 5, 15);
       final habitDate = DateTime(2026, 5, 16);
       final bodyWeightDate = DateTime(2026, 5, 18);
+      final bodyMeasurementDate = DateTime(2026, 5, 18);
       final reminderDate = DateTime(2026, 5, 17);
 
       final backup = PlannerBackup.create(
@@ -135,6 +137,18 @@ void main() {
               updatedAt: now,
             ),
           ],
+          bodyMeasurementEntries: [
+            BodyMeasurementEntry(
+              id: 'body-measurement-2026-05-18',
+              date: bodyMeasurementDate,
+              neckCm: 34,
+              waistCm: 74.5,
+              hipsCm: 101,
+              note: 'Weekly measurements',
+              createdAt: now,
+              updatedAt: now,
+            ),
+          ],
           standaloneReminders: [
             StandaloneReminder(
               id: 'standalone-reminder-1',
@@ -221,6 +235,23 @@ void main() {
       expect(restored.data.bodyWeightEntries.last.weightKg, isNull);
       expect(restored.data.bodyWeightEntries.last.isSkipped, isTrue);
 
+      expect(restored.data.bodyMeasurementEntries, hasLength(1));
+      expect(
+        restored.data.bodyMeasurementEntries.single.id,
+        'body-measurement-2026-05-18',
+      );
+      expect(
+        restored.data.bodyMeasurementEntries.single.date,
+        bodyMeasurementDate,
+      );
+      expect(restored.data.bodyMeasurementEntries.single.neckCm, 34);
+      expect(restored.data.bodyMeasurementEntries.single.waistCm, 74.5);
+      expect(restored.data.bodyMeasurementEntries.single.hipsCm, 101);
+      expect(
+        restored.data.bodyMeasurementEntries.single.note,
+        'Weekly measurements',
+      );
+
       expect(
         restored.data.standaloneReminders.single.id,
         'standalone-reminder-1',
@@ -253,6 +284,7 @@ void main() {
 
         expect(restored.data.dailyReviewReminderSettings.isEnabled, isTrue);
         expect(restored.data.bodyWeightEntries, isEmpty);
+        expect(restored.data.bodyMeasurementEntries, isEmpty);
         expect(
           restored.data.dailyReviewReminderSettings.timeMinutes,
           defaultDailyReviewReminderTimeMinutes,
@@ -318,6 +350,8 @@ void main() {
       expect(restored.data.recurringExceptions, isEmpty);
       expect(restored.data.habits, isEmpty);
       expect(restored.data.habitEntries, isEmpty);
+      expect(restored.data.bodyWeightEntries, isEmpty);
+      expect(restored.data.bodyMeasurementEntries, isEmpty);
       expect(restored.data.standaloneReminders, isEmpty);
       expect(restored.data.dailyReviewReminderSettings.isEnabled, isTrue);
       expect(

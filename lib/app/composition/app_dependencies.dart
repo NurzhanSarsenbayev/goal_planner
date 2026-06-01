@@ -103,6 +103,7 @@ class AppDependencies {
       recurringTaskRepository: recurringTaskRepository,
       habitRepository: habitRepository,
       bodyWeightRepository: bodyWeightRepository,
+      bodyMeasurementRepository: bodyMeasurementRepository,
       standaloneReminderRepository: standaloneReminderRepository,
       dailyReviewReminderSettingsRepository:
           dailyReviewReminderSettingsRepository,

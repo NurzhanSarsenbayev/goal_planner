@@ -6,6 +6,7 @@ import '../../tasks/application/task_repository.dart';
 import '../../reminders/standalone/application/standalone_reminder_repository.dart';
 import '../../reminders/daily_review/application/daily_review_reminder_settings_repository.dart';
 import '../../body_tracking/application/body_weight_repository.dart';
+import '../../body_tracking/application/body_measurement_repository.dart';
 import '../domain/planner_backup.dart';
 
 class PlannerBackupExportService {
@@ -16,6 +17,7 @@ class PlannerBackupExportService {
     required RecurringTaskRepository recurringTaskRepository,
     required HabitRepository habitRepository,
     required BodyWeightRepository bodyWeightRepository,
+    required BodyMeasurementRepository bodyMeasurementRepository,
     required StandaloneReminderRepository standaloneReminderRepository,
     required DailyReviewReminderSettingsRepository
     dailyReviewReminderSettingsRepository,
@@ -26,6 +28,7 @@ class PlannerBackupExportService {
        _recurringTaskRepository = recurringTaskRepository,
        _habitRepository = habitRepository,
        _bodyWeightRepository = bodyWeightRepository,
+       _bodyMeasurementRepository = bodyMeasurementRepository,
        _standaloneReminderRepository = standaloneReminderRepository,
        _dailyReviewReminderSettingsRepository =
            dailyReviewReminderSettingsRepository,
@@ -37,6 +40,7 @@ class PlannerBackupExportService {
   final RecurringTaskRepository _recurringTaskRepository;
   final HabitRepository _habitRepository;
   final BodyWeightRepository _bodyWeightRepository;
+  final BodyMeasurementRepository _bodyMeasurementRepository;
   final StandaloneReminderRepository _standaloneReminderRepository;
   final DailyReviewReminderSettingsRepository
   _dailyReviewReminderSettingsRepository;
@@ -53,6 +57,8 @@ class PlannerBackupExportService {
     final habits = await _habitRepository.loadHabits();
     final habitEntries = await _habitRepository.loadAllEntries();
     final bodyWeightEntries = await _bodyWeightRepository.loadAllEntries();
+    final bodyMeasurementEntries = await _bodyMeasurementRepository
+        .loadAllEntries();
     final standaloneReminders = await _standaloneReminderRepository
         .loadStandaloneReminders();
     final dailyReviewReminderSettings =
@@ -69,6 +75,7 @@ class PlannerBackupExportService {
         habits: habits,
         habitEntries: habitEntries,
         bodyWeightEntries: bodyWeightEntries,
+        bodyMeasurementEntries: bodyMeasurementEntries,
         standaloneReminders: standaloneReminders,
         dailyReviewReminderSettings: dailyReviewReminderSettings,
       ),

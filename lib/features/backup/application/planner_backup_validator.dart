@@ -57,6 +57,11 @@ class PlannerBackupValidator {
       errors: errors,
     );
     _validateUniqueIds(
+      collectionName: 'bodyMeasurementEntries',
+      ids: data.bodyMeasurementEntries.map((entry) => entry.id),
+      errors: errors,
+    );
+    _validateUniqueIds(
       collectionName: 'standaloneReminders',
       ids: data.standaloneReminders.map((reminder) => reminder.id),
       errors: errors,

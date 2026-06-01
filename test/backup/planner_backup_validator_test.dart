@@ -7,6 +7,7 @@ import 'package:goal_planner/features/habits/domain/habit_entry_status.dart';
 import 'package:goal_planner/features/habits/domain/habit_tracking_type.dart';
 import 'package:goal_planner/features/reminders/standalone/domain/standalone_reminder.dart';
 import 'package:goal_planner/features/body_tracking/domain/body_weight_entry.dart';
+import 'package:goal_planner/features/body_tracking/domain/body_measurement_entry.dart';
 import 'package:goal_planner/models/goal.dart';
 import 'package:goal_planner/models/milestone.dart';
 import 'package:goal_planner/models/planner_task.dart';
@@ -104,6 +105,42 @@ void main() {
       expect(result.isValid, isFalse);
       expect(_errorCodes(result), contains('duplicate_id'));
       expect(result.errors.single.message, contains('bodyWeightEntries'));
+    });
+
+    test('reports duplicate body measurement entry ids', () {
+      final now = DateTime(2026, 5, 13);
+
+      final result = validator.validateData(
+        PlannerBackupData(
+          goals: const [],
+          milestones: const [],
+          tasks: const [],
+          recurringRules: const [],
+          recurringExceptions: const [],
+          habits: const [],
+          habitEntries: const [],
+          bodyMeasurementEntries: [
+            BodyMeasurementEntry(
+              id: 'body-measurement-1',
+              date: now,
+              waistCm: 74,
+              createdAt: now,
+              updatedAt: now,
+            ),
+            BodyMeasurementEntry(
+              id: 'body-measurement-1',
+              date: now.add(const Duration(days: 7)),
+              waistCm: 73,
+              createdAt: now,
+              updatedAt: now,
+            ),
+          ],
+        ),
+      );
+
+      expect(result.isValid, isFalse);
+      expect(_errorCodes(result), contains('duplicate_id'));
+      expect(result.errors.single.message, contains('bodyMeasurementEntries'));
     });
 
     test('throws when invalid result is requested to throw', () {
@@ -497,6 +534,15 @@ PlannerBackupData _validBackupData() {
         weightKg: 80.5,
         isSkipped: false,
         note: '',
+        createdAt: now,
+        updatedAt: now,
+      ),
+    ],
+    bodyMeasurementEntries: [
+      BodyMeasurementEntry(
+        id: 'body-measurement-valid',
+        date: now,
+        waistCm: 74,
         createdAt: now,
         updatedAt: now,
       ),
