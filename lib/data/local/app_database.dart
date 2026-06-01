@@ -238,6 +238,21 @@ class BodyMeasurementEntries extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+class BodyProfiles extends Table {
+  TextColumn get id => text()();
+
+  RealColumn get heightCm => real()();
+
+  TextColumn get bodyFatFormula => text()();
+
+  DateTimeColumn get createdAt => dateTime()();
+
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 @DriftDatabase(
   tables: [
     Goals,
@@ -251,6 +266,7 @@ class BodyMeasurementEntries extends Table {
     DailyReviewReminderSettingsTable,
     BodyWeightEntries,
     BodyMeasurementEntries,
+    BodyProfiles,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -259,7 +275,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 12;
+  int get schemaVersion => 13;
 
   @override
   MigrationStrategy get migration {
@@ -346,6 +362,10 @@ class AppDatabase extends _$AppDatabase {
 
         if (from < 12) {
           await migrator.createTable(bodyMeasurementEntries);
+        }
+
+        if (from < 13) {
+          await migrator.createTable(bodyProfiles);
         }
       },
     );
