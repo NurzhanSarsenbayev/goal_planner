@@ -1410,4 +1410,43 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get bodyWeightProgressAverageChartEmpty =>
       'Внесите вес хотя бы за один день, чтобы увидеть график.';
+
+  @override
+  String get bodyMeasurementsTodayTitle => 'Замеры за неделю';
+
+  @override
+  String get bodyMeasurementsTodayEmptyStatus =>
+      'За эту неделю замеры ещё не внесены.';
+
+  @override
+  String get bodyMeasurementsTodayEnterButton => 'Внести';
+
+  @override
+  String get bodyMeasurementsTodayChangeButton => 'Изменить';
+
+  @override
+  String get bodyMeasurementsTodaySheetTitle => 'Внести замеры';
+
+  @override
+  String get bodyMeasurementsNeckLabel => 'Шея';
+
+  @override
+  String get bodyMeasurementsWaistLabel => 'Талия';
+
+  @override
+  String get bodyMeasurementsHipsLabel => 'Бёдра';
+
+  @override
+  String get bodyMeasurementsCmSuffix => 'см';
+
+  @override
+  String get bodyMeasurementsTodaySaveButton => 'Сохранить замеры';
+
+  @override
+  String get bodyMeasurementsTodayInvalidMeasurements =>
+      'Введите хотя бы один положительный замер.';
+
+  @override
+  String get bodyMeasurementsTodaySaveError =>
+      'Не получилось сохранить замеры. Попробуй ещё раз.';
 }

@@ -2515,6 +2515,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter weight on at least one day to see the chart.'**
   String get bodyWeightProgressAverageChartEmpty;
+
+  /// No description provided for @bodyMeasurementsTodayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Measurements this week'**
+  String get bodyMeasurementsTodayTitle;
+
+  /// No description provided for @bodyMeasurementsTodayEmptyStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'No measurements entered this week.'**
+  String get bodyMeasurementsTodayEmptyStatus;
+
+  /// No description provided for @bodyMeasurementsTodayEnterButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter'**
+  String get bodyMeasurementsTodayEnterButton;
+
+  /// No description provided for @bodyMeasurementsTodayChangeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get bodyMeasurementsTodayChangeButton;
+
+  /// No description provided for @bodyMeasurementsTodaySheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log measurements'**
+  String get bodyMeasurementsTodaySheetTitle;
+
+  /// No description provided for @bodyMeasurementsNeckLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Neck'**
+  String get bodyMeasurementsNeckLabel;
+
+  /// No description provided for @bodyMeasurementsWaistLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Waist'**
+  String get bodyMeasurementsWaistLabel;
+
+  /// No description provided for @bodyMeasurementsHipsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hips'**
+  String get bodyMeasurementsHipsLabel;
+
+  /// No description provided for @bodyMeasurementsCmSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'cm'**
+  String get bodyMeasurementsCmSuffix;
+
+  /// No description provided for @bodyMeasurementsTodaySaveButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save measurements'**
+  String get bodyMeasurementsTodaySaveButton;
+
+  /// No description provided for @bodyMeasurementsTodayInvalidMeasurements.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter at least one positive measurement.'**
+  String get bodyMeasurementsTodayInvalidMeasurements;
+
+  /// No description provided for @bodyMeasurementsTodaySaveError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save measurements. Try again.'**
+  String get bodyMeasurementsTodaySaveError;
 }
 
 class _AppLocalizationsDelegate

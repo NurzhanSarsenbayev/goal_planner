@@ -1037,5 +1037,20 @@
 
     "bodyWeightProgressAverageChartTitle": "Weekly average trend",
     "bodyWeightProgressAverageChartSubtitle": "Shows how the weekly average changes over time.",
-    "bodyWeightProgressAverageChartEmpty": "Enter weight on at least one day to see the chart."
+    "bodyWeightProgressAverageChartEmpty": "Enter weight on at least one day to see the chart.",
+
+    "bodyWeightProgressAverageChartEmpty": "Enter weight on at least one day to see the chart.",
+
+    "bodyMeasurementsTodayTitle": "Measurements this week",
+    "bodyMeasurementsTodayEmptyStatus": "No measurements entered this week.",
+    "bodyMeasurementsTodayEnterButton": "Enter",
+    "bodyMeasurementsTodayChangeButton": "Change",
+    "bodyMeasurementsTodaySheetTitle": "Log measurements",
+    "bodyMeasurementsNeckLabel": "Neck",
+    "bodyMeasurementsWaistLabel": "Waist",
+    "bodyMeasurementsHipsLabel": "Hips",
+    "bodyMeasurementsCmSuffix": "cm",
+    "bodyMeasurementsTodaySaveButton": "Save measurements",
+    "bodyMeasurementsTodayInvalidMeasurements": "Enter at least one positive measurement.",
+    "bodyMeasurementsTodaySaveError": "Could not save measurements. Try again."
 }

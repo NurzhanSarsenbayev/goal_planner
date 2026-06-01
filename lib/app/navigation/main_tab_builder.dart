@@ -12,6 +12,7 @@ import '../../features/tasks/presentation/task_dialog_actions.dart';
 import '../../features/habits/application/habit_store.dart';
 import '../../features/habits/presentation/screens/habits_screen.dart';
 import '../../features/body_tracking/application/body_weight_tracking_service.dart';
+import '../../features/body_tracking/application/body_measurement_tracking_service.dart';
 import 'app_navigation_actions.dart';
 
 class MainTabBuilder {
@@ -19,6 +20,7 @@ class MainTabBuilder {
     required PlannerStore store,
     required HabitStore habitStore,
     required BodyWeightTrackingService bodyWeightTrackingService,
+    required BodyMeasurementTrackingService bodyMeasurementTrackingService,
     required Future<void> Function() onCreateBackup,
     required Future<void> Function() onExportBackup,
     required Future<void> Function() onRestoreLatestBackup,
@@ -37,6 +39,7 @@ class MainTabBuilder {
   }) : _store = store,
        _habitStore = habitStore,
        _bodyWeightTrackingService = bodyWeightTrackingService,
+       _bodyMeasurementTrackingService = bodyMeasurementTrackingService,
        _onCreateBackup = onCreateBackup,
        _onExportBackup = onExportBackup,
        _onRestoreLatestBackup = onRestoreLatestBackup,
@@ -56,6 +59,7 @@ class MainTabBuilder {
   final PlannerStore _store;
   final HabitStore _habitStore;
   final BodyWeightTrackingService _bodyWeightTrackingService;
+  final BodyMeasurementTrackingService _bodyMeasurementTrackingService;
   final Future<void> Function() _onCreateBackup;
   final Future<void> Function() _onExportBackup;
   final Future<void> Function() _onRestoreLatestBackup;
@@ -79,6 +83,7 @@ class MainTabBuilder {
         tasks: _store.tasks,
         habitSummary: _habitStore.todaySummary,
         bodyWeightTrackingService: _bodyWeightTrackingService,
+        bodyMeasurementTrackingService: _bodyMeasurementTrackingService,
         onOpenBodyWeightProgress: () {
           _navigationActions.openBodyWeightProgress(context);
         },

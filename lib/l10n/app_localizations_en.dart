@@ -1397,4 +1397,43 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get bodyWeightProgressAverageChartEmpty =>
       'Enter weight on at least one day to see the chart.';
+
+  @override
+  String get bodyMeasurementsTodayTitle => 'Measurements this week';
+
+  @override
+  String get bodyMeasurementsTodayEmptyStatus =>
+      'No measurements entered this week.';
+
+  @override
+  String get bodyMeasurementsTodayEnterButton => 'Enter';
+
+  @override
+  String get bodyMeasurementsTodayChangeButton => 'Change';
+
+  @override
+  String get bodyMeasurementsTodaySheetTitle => 'Log measurements';
+
+  @override
+  String get bodyMeasurementsNeckLabel => 'Neck';
+
+  @override
+  String get bodyMeasurementsWaistLabel => 'Waist';
+
+  @override
+  String get bodyMeasurementsHipsLabel => 'Hips';
+
+  @override
+  String get bodyMeasurementsCmSuffix => 'cm';
+
+  @override
+  String get bodyMeasurementsTodaySaveButton => 'Save measurements';
+
+  @override
+  String get bodyMeasurementsTodayInvalidMeasurements =>
+      'Enter at least one positive measurement.';
+
+  @override
+  String get bodyMeasurementsTodaySaveError =>
+      'Could not save measurements. Try again.';
 }

@@ -1037,5 +1037,20 @@
 
     "bodyWeightProgressAverageChartTitle": "Динамика среднего веса",
     "bodyWeightProgressAverageChartSubtitle": "Показывает, как меняется средний вес по неделям.",
-    "bodyWeightProgressAverageChartEmpty": "Внесите вес хотя бы за один день, чтобы увидеть график."
+    "bodyWeightProgressAverageChartEmpty": "Внесите вес хотя бы за один день, чтобы увидеть график.",
+
+    "bodyWeightProgressAverageChartEmpty": "Внесите вес хотя бы за один день, чтобы увидеть график.",
+
+    "bodyMeasurementsTodayTitle": "Замеры за неделю",
+    "bodyMeasurementsTodayEmptyStatus": "За эту неделю замеры ещё не внесены.",
+    "bodyMeasurementsTodayEnterButton": "Внести",
+    "bodyMeasurementsTodayChangeButton": "Изменить",
+    "bodyMeasurementsTodaySheetTitle": "Внести замеры",
+    "bodyMeasurementsNeckLabel": "Шея",
+    "bodyMeasurementsWaistLabel": "Талия",
+    "bodyMeasurementsHipsLabel": "Бёдра",
+    "bodyMeasurementsCmSuffix": "см",
+    "bodyMeasurementsTodaySaveButton": "Сохранить замеры",
+    "bodyMeasurementsTodayInvalidMeasurements": "Введите хотя бы один положительный замер.",
+    "bodyMeasurementsTodaySaveError": "Не получилось сохранить замеры. Попробуй ещё раз."
 }

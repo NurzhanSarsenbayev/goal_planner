@@ -9,6 +9,8 @@ import '../../../tasks/presentation/widgets/task_card.dart';
 import '../../../habits/application/habit_today_summary.dart';
 import '../../../body_tracking/application/body_weight_tracking_service.dart';
 import '../../../body_tracking/presentation/widgets/body_weight_today_card.dart';
+import '../../../body_tracking/application/body_measurement_tracking_service.dart';
+import '../../../body_tracking/presentation/widgets/body_measurements_today_card.dart';
 import '../../application/today_task_view_builder.dart';
 import '../widgets/today_empty_panel.dart';
 import '../widgets/today_summary_card.dart';
@@ -22,6 +24,7 @@ class TodayScreen extends StatelessWidget {
     required this.tasks,
     required this.habitSummary,
     required this.bodyWeightTrackingService,
+    required this.bodyMeasurementTrackingService,
     required this.onOpenBodyWeightProgress,
     required this.onOpenHabits,
     required this.onToggleTaskCompleted,
@@ -43,6 +46,7 @@ class TodayScreen extends StatelessWidget {
   final List<PlannerTask> tasks;
   final HabitTodaySummary habitSummary;
   final BodyWeightTrackingService bodyWeightTrackingService;
+  final BodyMeasurementTrackingService bodyMeasurementTrackingService;
   final VoidCallback onOpenBodyWeightProgress;
   final VoidCallback onOpenHabits;
   final void Function(String taskId) onToggleTaskCompleted;
@@ -130,6 +134,8 @@ class TodayScreen extends StatelessWidget {
               service: bodyWeightTrackingService,
               onOpenProgress: onOpenBodyWeightProgress,
             ),
+            const SizedBox(height: 16),
+            BodyMeasurementsTodayCard(service: bodyMeasurementTrackingService),
             const SizedBox(height: 16),
             TodayHabitsSummaryCard(
               summary: habitSummary,
