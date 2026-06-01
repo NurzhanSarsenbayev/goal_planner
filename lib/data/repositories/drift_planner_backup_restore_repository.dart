@@ -3,6 +3,7 @@ import 'package:drift/drift.dart' as drift;
 import '../../features/backup/application/planner_backup_restore_repository.dart';
 import '../../features/backup/domain/planner_backup.dart';
 import '../../features/reminders/standalone/domain/standalone_reminder.dart';
+import '../../features/body_tracking/domain/body_profile.dart' as body;
 import '../local/app_database.dart' as local;
 import 'habit_mappers.dart';
 import 'planner_mappers.dart';
@@ -22,6 +23,7 @@ class DriftPlannerBackupRestoreRepository
   }
 
   Future<void> _deleteExistingData() async {
+    await _database.delete(_database.bodyProfiles).go();
     await _database.delete(_database.bodyMeasurementEntries).go();
     await _database.delete(_database.bodyWeightEntries).go();
     await _database.delete(_database.dailyReviewReminderSettingsTable).go();
@@ -201,6 +203,23 @@ class DriftPlannerBackupRestoreRepository
               note: drift.Value(entry.note),
               createdAt: entry.createdAt,
               updatedAt: entry.updatedAt,
+            ),
+          );
+    }
+
+    final bodyProfile = data.bodyProfile;
+    if (bodyProfile != null) {
+      await _database
+          .into(_database.bodyProfiles)
+          .insert(
+            local.BodyProfilesCompanion.insert(
+              id: bodyProfile.id,
+              heightCm: bodyProfile.heightCm,
+              bodyFatFormula: body.bodyFatFormulaToStorage(
+                bodyProfile.bodyFatFormula,
+              ),
+              createdAt: bodyProfile.createdAt,
+              updatedAt: bodyProfile.updatedAt,
             ),
           );
     }

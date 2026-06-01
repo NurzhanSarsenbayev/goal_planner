@@ -17,6 +17,8 @@ import 'package:goal_planner/features/body_tracking/application/body_weight_repo
 import 'package:goal_planner/features/body_tracking/domain/body_weight_entry.dart';
 import 'package:goal_planner/features/body_tracking/application/body_measurement_repository.dart';
 import 'package:goal_planner/features/body_tracking/domain/body_measurement_entry.dart';
+import 'package:goal_planner/features/body_tracking/application/body_profile_repository.dart';
+import 'package:goal_planner/features/body_tracking/domain/body_profile.dart';
 import 'package:goal_planner/models/goal.dart';
 import 'package:goal_planner/models/milestone.dart';
 import 'package:goal_planner/models/planner_task.dart';
@@ -109,6 +111,13 @@ void main() {
         createdAt: now,
         updatedAt: now,
       );
+      final bodyProfile = BodyProfile(
+        id: defaultBodyProfileId,
+        heightCm: 168,
+        bodyFatFormula: BodyFatFormula.usNavyFemale,
+        createdAt: now,
+        updatedAt: now,
+      );
       final standaloneReminder = StandaloneReminder(
         id: 'standalone-reminder-1',
         title: 'Plan your day',
@@ -140,6 +149,7 @@ void main() {
         bodyMeasurementRepository: _FakeBodyMeasurementRepository([
           bodyMeasurementEntry,
         ]),
+        bodyProfileRepository: _FakeBodyProfileRepository(bodyProfile),
         standaloneReminderRepository: _FakeStandaloneReminderRepository([
           standaloneReminder,
         ]),
@@ -169,6 +179,12 @@ void main() {
       );
       expect(backup.data.bodyMeasurementEntries.single.waistCm, 74);
       expect(backup.data.bodyMeasurementEntries.single.hipsCm, 101);
+      expect(backup.data.bodyProfile, isNotNull);
+      expect(backup.data.bodyProfile!.heightCm, 168);
+      expect(
+        backup.data.bodyProfile!.bodyFatFormula,
+        BodyFatFormula.usNavyFemale,
+      );
       expect(backup.data.standaloneReminders.single.id, standaloneReminder.id);
       expect(backup.data.dailyReviewReminderSettings.isEnabled, isFalse);
       expect(backup.data.dailyReviewReminderSettings.timeMinutes, 1200);
@@ -185,6 +201,7 @@ void main() {
         habitRepository: _FakeHabitRepository(),
         bodyWeightRepository: const _FakeBodyWeightRepository(),
         bodyMeasurementRepository: const _FakeBodyMeasurementRepository(),
+        bodyProfileRepository: const _FakeBodyProfileRepository(),
         standaloneReminderRepository: _FakeStandaloneReminderRepository(),
         dailyReviewReminderSettingsRepository:
             const _FakeDailyReviewReminderSettingsRepository(
@@ -205,6 +222,7 @@ void main() {
       expect(backup.data.habitEntries, isEmpty);
       expect(backup.data.bodyWeightEntries, isEmpty);
       expect(backup.data.bodyMeasurementEntries, isEmpty);
+      expect(backup.data.bodyProfile, isNull);
       expect(backup.data.standaloneReminders, isEmpty);
       expect(backup.data.dailyReviewReminderSettings.isEnabled, isTrue);
       expect(
@@ -405,6 +423,23 @@ class _FakeBodyMeasurementRepository implements BodyMeasurementRepository {
 
   @override
   Future<void> saveEntry(BodyMeasurementEntry entry) async {}
+}
+
+class _FakeBodyProfileRepository implements BodyProfileRepository {
+  const _FakeBodyProfileRepository([this.profile]);
+
+  final BodyProfile? profile;
+
+  @override
+  Future<BodyProfile?> loadProfile() async {
+    return profile;
+  }
+
+  @override
+  Future<void> saveProfile(BodyProfile profile) async {}
+
+  @override
+  Future<void> deleteProfile() async {}
 }
 
 class _FakeStandaloneReminderRepository

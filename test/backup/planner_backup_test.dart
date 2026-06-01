@@ -15,6 +15,7 @@ import 'package:goal_planner/features/reminders/standalone/domain/standalone_rem
 import 'package:goal_planner/features/reminders/daily_review/domain/daily_review_reminder_settings.dart';
 import 'package:goal_planner/features/body_tracking/domain/body_weight_entry.dart';
 import 'package:goal_planner/features/body_tracking/domain/body_measurement_entry.dart';
+import 'package:goal_planner/features/body_tracking/domain/body_profile.dart';
 
 void main() {
   group('PlannerBackup', () {
@@ -149,6 +150,13 @@ void main() {
               updatedAt: now,
             ),
           ],
+          bodyProfile: BodyProfile(
+            id: defaultBodyProfileId,
+            heightCm: 168,
+            bodyFatFormula: BodyFatFormula.usNavyFemale,
+            createdAt: now,
+            updatedAt: now,
+          ),
           standaloneReminders: [
             StandaloneReminder(
               id: 'standalone-reminder-1',
@@ -252,6 +260,16 @@ void main() {
         'Weekly measurements',
       );
 
+      expect(restored.data.bodyProfile, isNotNull);
+      expect(restored.data.bodyProfile!.id, defaultBodyProfileId);
+      expect(restored.data.bodyProfile!.heightCm, 168);
+      expect(
+        restored.data.bodyProfile!.bodyFatFormula,
+        BodyFatFormula.usNavyFemale,
+      );
+      expect(restored.data.bodyProfile!.createdAt, now);
+      expect(restored.data.bodyProfile!.updatedAt, now);
+
       expect(
         restored.data.standaloneReminders.single.id,
         'standalone-reminder-1',
@@ -285,6 +303,7 @@ void main() {
         expect(restored.data.dailyReviewReminderSettings.isEnabled, isTrue);
         expect(restored.data.bodyWeightEntries, isEmpty);
         expect(restored.data.bodyMeasurementEntries, isEmpty);
+        expect(restored.data.bodyProfile, isNull);
         expect(
           restored.data.dailyReviewReminderSettings.timeMinutes,
           defaultDailyReviewReminderTimeMinutes,
@@ -352,6 +371,7 @@ void main() {
       expect(restored.data.habitEntries, isEmpty);
       expect(restored.data.bodyWeightEntries, isEmpty);
       expect(restored.data.bodyMeasurementEntries, isEmpty);
+      expect(restored.data.bodyProfile, isNull);
       expect(restored.data.standaloneReminders, isEmpty);
       expect(restored.data.dailyReviewReminderSettings.isEnabled, isTrue);
       expect(

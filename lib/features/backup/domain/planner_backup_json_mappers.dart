@@ -266,6 +266,42 @@ BodyMeasurementEntry _bodyMeasurementEntryFromJson(Map<String, dynamic> json) {
   );
 }
 
+Map<String, Object?>? _nullableBodyProfileToJson(BodyProfile? profile) {
+  if (profile == null) {
+    return null;
+  }
+
+  return {
+    'id': profile.id,
+    'heightCm': profile.heightCm,
+    'bodyFatFormula': bodyFatFormulaToStorage(profile.bodyFatFormula),
+    'createdAt': _dateToJson(profile.createdAt),
+    'updatedAt': _dateToJson(profile.updatedAt),
+  };
+}
+
+BodyProfile? _bodyProfileFromJson(Map<String, dynamic> json) {
+  final value = json['bodyProfile'];
+
+  if (value == null) {
+    return null;
+  }
+
+  final profileJson = value is Map<String, dynamic>
+      ? value
+      : Map<String, dynamic>.from(value as Map);
+
+  return BodyProfile(
+    id: _stringFromJson(profileJson, 'id'),
+    heightCm: _doubleFromJson(profileJson, 'heightCm'),
+    bodyFatFormula: bodyFatFormulaFromStorage(
+      _stringFromJson(profileJson, 'bodyFatFormula'),
+    ),
+    createdAt: _dateFromJson(profileJson, 'createdAt'),
+    updatedAt: _dateFromJson(profileJson, 'updatedAt'),
+  );
+}
+
 Map<String, Object?> _standaloneReminderToJson(StandaloneReminder reminder) {
   return {
     'id': reminder.id,
@@ -401,6 +437,16 @@ double? _nullableDoubleFromJson(Map<String, dynamic> json, String field) {
   }
 
   throw FormatException('$field must be a number or null.');
+}
+
+double _doubleFromJson(Map<String, dynamic> json, String field) {
+  final value = json[field];
+
+  if (value is num) {
+    return value.toDouble();
+  }
+
+  throw FormatException('$field must be a number.');
 }
 
 bool _boolFromJson(Map<String, dynamic> json, String field) {

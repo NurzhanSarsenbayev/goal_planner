@@ -10,8 +10,9 @@ import 'package:goal_planner/data/repositories/drift_task_repository.dart';
 import 'package:goal_planner/data/repositories/drift_standalone_reminder_repository.dart';
 import 'package:goal_planner/data/repositories/drift_body_weight_repository.dart';
 import 'package:goal_planner/data/repositories/drift_body_measurement_repository.dart';
-import 'package:goal_planner/features/reminders/standalone/domain/standalone_reminder.dart';
+import 'package:goal_planner/data/repositories/drift_body_profile_repository.dart';
 import 'package:goal_planner/data/repositories/drift_daily_review_reminder_settings_repository.dart';
+import 'package:goal_planner/features/reminders/standalone/domain/standalone_reminder.dart';
 import 'package:goal_planner/features/reminders/daily_review/domain/daily_review_reminder_settings.dart';
 import 'package:goal_planner/features/backup/domain/planner_backup.dart';
 import 'package:goal_planner/features/habits/domain/habit.dart';
@@ -20,6 +21,7 @@ import 'package:goal_planner/features/habits/domain/habit_entry_status.dart';
 import 'package:goal_planner/features/habits/domain/habit_tracking_type.dart';
 import 'package:goal_planner/features/body_tracking/domain/body_weight_entry.dart';
 import 'package:goal_planner/features/body_tracking/domain/body_measurement_entry.dart';
+import 'package:goal_planner/features/body_tracking/domain/body_profile.dart';
 import 'package:goal_planner/models/goal.dart';
 import 'package:goal_planner/models/milestone.dart';
 import 'package:goal_planner/models/planner_task.dart';
@@ -68,6 +70,9 @@ void main() {
       final bodyMeasurementEntries = await DriftBodyMeasurementRepository(
         database,
       ).loadAllEntries();
+      final bodyProfile = await DriftBodyProfileRepository(
+        database,
+      ).loadProfile();
       final standaloneReminders = await DriftStandaloneReminderRepository(
         database,
       ).loadStandaloneReminders();
@@ -103,6 +108,11 @@ void main() {
       expect(bodyMeasurementEntries.single.neckCm, 34);
       expect(bodyMeasurementEntries.single.waistCm, 74);
       expect(bodyMeasurementEntries.single.hipsCm, 101);
+
+      expect(bodyProfile, isNotNull);
+      expect(bodyProfile!.id, defaultBodyProfileId);
+      expect(bodyProfile.heightCm, 168);
+      expect(bodyProfile.bodyFatFormula, BodyFatFormula.usNavyFemale);
 
       expect(standaloneReminders.map((reminder) => reminder.id), [
         'new-standalone-reminder',
@@ -152,6 +162,7 @@ void main() {
         await DriftBodyMeasurementRepository(database).loadAllEntries(),
         isEmpty,
       );
+      expect(await DriftBodyProfileRepository(database).loadProfile(), isNull);
       expect(
         await DriftStandaloneReminderRepository(
           database,
@@ -326,6 +337,13 @@ PlannerBackupData _backupData({required String idPrefix}) {
         updatedAt: now,
       ),
     ],
+    bodyProfile: BodyProfile(
+      id: defaultBodyProfileId,
+      heightCm: 168,
+      bodyFatFormula: BodyFatFormula.usNavyFemale,
+      createdAt: now,
+      updatedAt: now,
+    ),
     standaloneReminders: [
       StandaloneReminder(
         id: '$idPrefix-standalone-reminder',

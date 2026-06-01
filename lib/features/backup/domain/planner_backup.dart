@@ -11,6 +11,7 @@ import '../../reminders/standalone/domain/standalone_reminder.dart';
 import '../../reminders/daily_review/domain/daily_review_reminder_settings.dart';
 import '../../body_tracking/domain/body_weight_entry.dart';
 import '../../body_tracking/domain/body_measurement_entry.dart';
+import '../../body_tracking/domain/body_profile.dart';
 
 part 'planner_backup_json_mappers.dart';
 
@@ -75,6 +76,7 @@ class PlannerBackupData {
     this.standaloneReminders = const [],
     this.bodyWeightEntries = const [],
     this.bodyMeasurementEntries = const [],
+    this.bodyProfile,
     this.dailyReviewReminderSettings =
         const DailyReviewReminderSettings.defaults(),
   });
@@ -89,6 +91,7 @@ class PlannerBackupData {
       habitEntries = const [],
       bodyWeightEntries = const [],
       bodyMeasurementEntries = const [],
+      bodyProfile = null,
       standaloneReminders = const [],
       dailyReviewReminderSettings =
           const DailyReviewReminderSettings.defaults();
@@ -102,6 +105,7 @@ class PlannerBackupData {
   final List<HabitEntry> habitEntries;
   final List<BodyWeightEntry> bodyWeightEntries;
   final List<BodyMeasurementEntry> bodyMeasurementEntries;
+  final BodyProfile? bodyProfile;
   final List<StandaloneReminder> standaloneReminders;
   final DailyReviewReminderSettings dailyReviewReminderSettings;
 
@@ -143,6 +147,7 @@ class PlannerBackupData {
         json,
         'bodyMeasurementEntries',
       ).map(_bodyMeasurementEntryFromJson).toList(growable: false),
+      bodyProfile: _bodyProfileFromJson(json),
       standaloneReminders: _mapListFromJson(
         json,
         'standaloneReminders',
@@ -172,6 +177,7 @@ class PlannerBackupData {
       'bodyMeasurementEntries': bodyMeasurementEntries
           .map(_bodyMeasurementEntryToJson)
           .toList(growable: false),
+      'bodyProfile': _nullableBodyProfileToJson(bodyProfile),
       'standaloneReminders': standaloneReminders
           .map(_standaloneReminderToJson)
           .toList(growable: false),

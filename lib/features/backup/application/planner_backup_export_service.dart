@@ -7,6 +7,7 @@ import '../../reminders/standalone/application/standalone_reminder_repository.da
 import '../../reminders/daily_review/application/daily_review_reminder_settings_repository.dart';
 import '../../body_tracking/application/body_weight_repository.dart';
 import '../../body_tracking/application/body_measurement_repository.dart';
+import '../../body_tracking/application/body_profile_repository.dart';
 import '../domain/planner_backup.dart';
 
 class PlannerBackupExportService {
@@ -18,6 +19,7 @@ class PlannerBackupExportService {
     required HabitRepository habitRepository,
     required BodyWeightRepository bodyWeightRepository,
     required BodyMeasurementRepository bodyMeasurementRepository,
+    required BodyProfileRepository bodyProfileRepository,
     required StandaloneReminderRepository standaloneReminderRepository,
     required DailyReviewReminderSettingsRepository
     dailyReviewReminderSettingsRepository,
@@ -29,6 +31,7 @@ class PlannerBackupExportService {
        _habitRepository = habitRepository,
        _bodyWeightRepository = bodyWeightRepository,
        _bodyMeasurementRepository = bodyMeasurementRepository,
+       _bodyProfileRepository = bodyProfileRepository,
        _standaloneReminderRepository = standaloneReminderRepository,
        _dailyReviewReminderSettingsRepository =
            dailyReviewReminderSettingsRepository,
@@ -41,6 +44,7 @@ class PlannerBackupExportService {
   final HabitRepository _habitRepository;
   final BodyWeightRepository _bodyWeightRepository;
   final BodyMeasurementRepository _bodyMeasurementRepository;
+  final BodyProfileRepository _bodyProfileRepository;
   final StandaloneReminderRepository _standaloneReminderRepository;
   final DailyReviewReminderSettingsRepository
   _dailyReviewReminderSettingsRepository;
@@ -59,6 +63,7 @@ class PlannerBackupExportService {
     final bodyWeightEntries = await _bodyWeightRepository.loadAllEntries();
     final bodyMeasurementEntries = await _bodyMeasurementRepository
         .loadAllEntries();
+    final bodyProfile = await _bodyProfileRepository.loadProfile();
     final standaloneReminders = await _standaloneReminderRepository
         .loadStandaloneReminders();
     final dailyReviewReminderSettings =
@@ -76,6 +81,7 @@ class PlannerBackupExportService {
         habitEntries: habitEntries,
         bodyWeightEntries: bodyWeightEntries,
         bodyMeasurementEntries: bodyMeasurementEntries,
+        bodyProfile: bodyProfile,
         standaloneReminders: standaloneReminders,
         dailyReviewReminderSettings: dailyReviewReminderSettings,
       ),
