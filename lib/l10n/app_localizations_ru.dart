@@ -1458,6 +1458,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get bodyCompositionTrendDeltaSame => 'Без изменений';
 
   @override
+  String get bodyWeightTodayDateLabel => 'Дата';
+
+  @override
+  String get bodyWeightTodayDatePickerTitle => 'Выберите дату веса';
+
+  @override
   String get bodyMeasurementsTodayTitle => 'Замеры за неделю';
 
   @override

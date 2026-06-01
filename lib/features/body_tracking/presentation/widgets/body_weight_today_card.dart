@@ -4,16 +4,19 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/body_weight_tracking_service.dart';
 import '../../domain/body_weekly_weight_report.dart';
 import '../../domain/body_weight_entry.dart';
+import '../../../../shared/planner_dates.dart';
 
 class BodyWeightTodayCard extends StatefulWidget {
   const BodyWeightTodayCard({
     super.key,
     required this.service,
     required this.onOpenProgress,
-  });
+    DateTime Function()? now,
+  }) : now = now ?? DateTime.now;
 
   final BodyWeightTrackingService service;
   final VoidCallback onOpenProgress;
+  final DateTime Function() now;
 
   @override
   State<BodyWeightTodayCard> createState() => _BodyWeightTodayCardState();
@@ -30,7 +33,7 @@ class _BodyWeightTodayCardState extends State<BodyWeightTodayCard> {
   }
 
   Future<_BodyWeightTodayState> _loadState() async {
-    final today = DateTime.now();
+    final today = widget.now();
     final entry = await widget.service.loadEntryForDate(today);
     final weeklyReport = await widget.service.loadWeeklyReport(today);
 
@@ -47,7 +50,11 @@ class _BodyWeightTodayCardState extends State<BodyWeightTodayCard> {
     });
   }
 
-  Future<bool> _saveWeight(BuildContext context, String rawValue) async {
+  Future<bool> _saveWeight(
+    BuildContext context, {
+    required DateTime date,
+    required String rawValue,
+  }) async {
     final l10n = AppLocalizations.of(context);
     final messenger = ScaffoldMessenger.of(context);
     final saveErrorMessage = l10n.bodyWeightTodaySaveError;
@@ -61,10 +68,7 @@ class _BodyWeightTodayCardState extends State<BodyWeightTodayCard> {
     }
 
     try {
-      await widget.service.saveWeightForDate(
-        date: DateTime.now(),
-        weightKg: weight,
-      );
+      await widget.service.saveWeightForDate(date: date, weightKg: weight);
 
       await _reload();
 
@@ -80,14 +84,17 @@ class _BodyWeightTodayCardState extends State<BodyWeightTodayCard> {
     }
   }
 
-  Future<bool> _markSkipped(BuildContext context) async {
+  Future<bool> _markSkipped(
+    BuildContext context, {
+    required DateTime date,
+  }) async {
     final messenger = ScaffoldMessenger.of(context);
     final saveErrorMessage = AppLocalizations.of(
       context,
     ).bodyWeightTodaySaveError;
 
     try {
-      await widget.service.markSkippedForDate(date: DateTime.now());
+      await widget.service.markSkippedForDate(date: date);
 
       await _reload();
 
@@ -107,20 +114,25 @@ class _BodyWeightTodayCardState extends State<BodyWeightTodayCard> {
     BuildContext context,
     BodyWeightEntry? entry,
   ) async {
+    final today = dateOnly(widget.now());
+
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       builder: (sheetContext) {
         return _BodyWeightEntrySheet(
+          initialDate: today,
           initialWeightText: entry?.weightKg == null
               ? ''
               : _formatWeight(entry!.weightKg!),
-          onSave: (rawValue) {
-            return _saveWeight(context, rawValue);
+          onLoadEntryForDate: widget.service.loadEntryForDate,
+          onSave: ({required date, required rawValue}) {
+            return _saveWeight(context, date: date, rawValue: rawValue);
           },
-          onSkip: () {
-            return _markSkipped(context);
+          onSkip: (date) {
+            return _markSkipped(context, date: date);
           },
+          now: widget.now,
         );
       },
     );
@@ -245,14 +257,24 @@ class _BodyWeightTodayCardState extends State<BodyWeightTodayCard> {
 
 class _BodyWeightEntrySheet extends StatefulWidget {
   const _BodyWeightEntrySheet({
+    required this.initialDate,
     required this.initialWeightText,
+    required this.onLoadEntryForDate,
     required this.onSave,
     required this.onSkip,
+    required this.now,
   });
 
+  final DateTime initialDate;
   final String initialWeightText;
-  final Future<bool> Function(String rawValue) onSave;
-  final Future<bool> Function() onSkip;
+  final Future<BodyWeightEntry?> Function(DateTime date) onLoadEntryForDate;
+  final Future<bool> Function({
+    required DateTime date,
+    required String rawValue,
+  })
+  onSave;
+  final Future<bool> Function(DateTime date) onSkip;
+  final DateTime Function() now;
 
   @override
   State<_BodyWeightEntrySheet> createState() => _BodyWeightEntrySheetState();
@@ -260,12 +282,15 @@ class _BodyWeightEntrySheet extends StatefulWidget {
 
 class _BodyWeightEntrySheetState extends State<_BodyWeightEntrySheet> {
   late final TextEditingController _weightController;
+  late DateTime _selectedDate;
   bool _isSaving = false;
+  bool _isLoadingDate = false;
 
   @override
   void initState() {
     super.initState();
 
+    _selectedDate = dateOnly(widget.initialDate);
     _weightController = TextEditingController(text: widget.initialWeightText);
   }
 
@@ -276,12 +301,62 @@ class _BodyWeightEntrySheetState extends State<_BodyWeightEntrySheet> {
     super.dispose();
   }
 
+  String _formatWeight(double weight) {
+    final fixed = weight.toStringAsFixed(2);
+
+    if (fixed.endsWith('00')) {
+      return weight.toStringAsFixed(0);
+    }
+
+    if (fixed.endsWith('0')) {
+      return weight.toStringAsFixed(1);
+    }
+
+    return fixed;
+  }
+
+  Future<void> _pickDate() async {
+    final today = dateOnly(widget.now());
+    final selectedDate = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(today.year - 2, today.month, today.day),
+      lastDate: today,
+      helpText: AppLocalizations.of(context).bodyWeightTodayDatePickerTitle,
+    );
+
+    if (!mounted || selectedDate == null) {
+      return;
+    }
+
+    setState(() {
+      _isLoadingDate = true;
+    });
+
+    final entry = await widget.onLoadEntryForDate(selectedDate);
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _selectedDate = dateOnly(selectedDate);
+      _weightController.text = entry?.weightKg == null
+          ? ''
+          : _formatWeight(entry!.weightKg!);
+      _isLoadingDate = false;
+    });
+  }
+
   Future<void> _save() async {
     setState(() {
       _isSaving = true;
     });
 
-    final shouldClose = await widget.onSave(_weightController.text);
+    final shouldClose = await widget.onSave(
+      date: _selectedDate,
+      rawValue: _weightController.text,
+    );
 
     if (!mounted) {
       return;
@@ -302,7 +377,7 @@ class _BodyWeightEntrySheetState extends State<_BodyWeightEntrySheet> {
       _isSaving = true;
     });
 
-    final shouldClose = await widget.onSkip();
+    final shouldClose = await widget.onSkip(_selectedDate);
 
     if (!mounted) {
       return;
@@ -322,6 +397,8 @@ class _BodyWeightEntrySheetState extends State<_BodyWeightEntrySheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
+    final materialL10n = MaterialLocalizations.of(context);
+    final isBusy = _isSaving || _isLoadingDate;
 
     return SafeArea(
       child: Padding(
@@ -336,6 +413,18 @@ class _BodyWeightEntrySheetState extends State<_BodyWeightEntrySheet> {
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: isBusy ? null : _pickDate,
+                icon: const Icon(Icons.calendar_today_outlined),
+                label: Text(
+                  '${l10n.bodyWeightTodayDateLabel}: '
+                  '${materialL10n.formatMediumDate(_selectedDate)}',
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
             TextField(
               controller: _weightController,
               autofocus: true,
@@ -347,9 +436,9 @@ class _BodyWeightEntrySheetState extends State<_BodyWeightEntrySheet> {
                 suffixText: l10n.bodyWeightKgSuffix,
                 border: const OutlineInputBorder(),
               ),
-              enabled: !_isSaving,
+              enabled: !isBusy,
               onSubmitted: (_) {
-                if (!_isSaving) {
+                if (!isBusy) {
                   _save();
                 }
               },
@@ -358,7 +447,7 @@ class _BodyWeightEntrySheetState extends State<_BodyWeightEntrySheet> {
             SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: _isSaving ? null : _save,
+                onPressed: isBusy ? null : _save,
                 child: Text(l10n.bodyWeightTodaySaveButton),
               ),
             ),
@@ -366,7 +455,7 @@ class _BodyWeightEntrySheetState extends State<_BodyWeightEntrySheet> {
             SizedBox(
               width: double.infinity,
               child: OutlinedButton(
-                onPressed: _isSaving ? null : _skip,
+                onPressed: isBusy ? null : _skip,
                 child: Text(l10n.bodyWeightTodaySkipButton),
               ),
             ),

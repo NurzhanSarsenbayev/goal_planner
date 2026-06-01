@@ -1077,6 +1077,9 @@
     },
     "bodyCompositionTrendDeltaSame": "Без изменений",
 
+    "bodyWeightTodayDateLabel": "Дата",
+    "bodyWeightTodayDatePickerTitle": "Выберите дату веса",
+
     "bodyMeasurementsTodayTitle": "Замеры за неделю",
     "bodyMeasurementsTodayEmptyStatus": "За эту неделю замеры ещё не внесены.",
     "bodyMeasurementsTodayEnterButton": "Внести",

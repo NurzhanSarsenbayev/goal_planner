@@ -1077,6 +1077,9 @@
     },
     "bodyCompositionTrendDeltaSame": "No change",
 
+    "bodyWeightTodayDateLabel": "Date",
+    "bodyWeightTodayDatePickerTitle": "Select weight date",
+
     "bodyMeasurementsTodayTitle": "Measurements this week",
     "bodyMeasurementsTodayEmptyStatus": "No measurements entered this week.",
     "bodyMeasurementsTodayEnterButton": "Enter",

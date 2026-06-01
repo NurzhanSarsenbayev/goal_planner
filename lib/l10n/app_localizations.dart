@@ -2594,6 +2594,18 @@ abstract class AppLocalizations {
   /// **'No change'**
   String get bodyCompositionTrendDeltaSame;
 
+  /// No description provided for @bodyWeightTodayDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get bodyWeightTodayDateLabel;
+
+  /// No description provided for @bodyWeightTodayDatePickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select weight date'**
+  String get bodyWeightTodayDatePickerTitle;
+
   /// No description provided for @bodyMeasurementsTodayTitle.
   ///
   /// In en, this message translates to:

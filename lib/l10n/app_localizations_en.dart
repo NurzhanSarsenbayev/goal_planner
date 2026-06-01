@@ -1445,6 +1445,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bodyCompositionTrendDeltaSame => 'No change';
 
   @override
+  String get bodyWeightTodayDateLabel => 'Date';
+
+  @override
+  String get bodyWeightTodayDatePickerTitle => 'Select weight date';
+
+  @override
   String get bodyMeasurementsTodayTitle => 'Measurements this week';
 
   @override
