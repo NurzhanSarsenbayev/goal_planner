@@ -198,6 +198,25 @@ class DailyReviewReminderSettingsTable extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+class BodyWeightEntries extends Table {
+  TextColumn get id => text()();
+
+  DateTimeColumn get date => dateTime()();
+
+  RealColumn get weightKg => real().nullable()();
+
+  BoolColumn get isSkipped => boolean().withDefault(const Constant(false))();
+
+  TextColumn get note => text().withDefault(const Constant(''))();
+
+  DateTimeColumn get createdAt => dateTime()();
+
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 @DriftDatabase(
   tables: [
     Goals,
@@ -209,6 +228,7 @@ class DailyReviewReminderSettingsTable extends Table {
     HabitEntries,
     StandaloneReminders,
     DailyReviewReminderSettingsTable,
+    BodyWeightEntries,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -217,7 +237,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.executor);
 
   @override
-  int get schemaVersion => 10;
+  int get schemaVersion => 11;
 
   @override
   MigrationStrategy get migration {
@@ -296,6 +316,10 @@ class AppDatabase extends _$AppDatabase {
               recurringTaskRules.reminderMinutesBefore,
             );
           }
+        }
+
+        if (from < 11) {
+          await migrator.createTable(bodyWeightEntries);
         }
       },
     );
