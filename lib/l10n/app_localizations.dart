@@ -2645,13 +2645,13 @@ abstract class AppLocalizations {
   /// No description provided for @bodyProfileFormulaUsNavyWithHips.
   ///
   /// In en, this message translates to:
-  /// **'US Navy — waist + hips'**
+  /// **'US Navy — neck + waist + hips'**
   String get bodyProfileFormulaUsNavyWithHips;
 
   /// No description provided for @bodyProfileFormulaUsNavyWaistOnly.
   ///
   /// In en, this message translates to:
-  /// **'US Navy — waist only'**
+  /// **'US Navy — neck + waist'**
   String get bodyProfileFormulaUsNavyWaistOnly;
 
   /// No description provided for @bodyProfileSaveButton.

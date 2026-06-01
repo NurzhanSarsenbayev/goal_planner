@@ -41,7 +41,10 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.textContaining('Height: 168 cm'), findsOneWidget);
-    expect(find.textContaining('US Navy — waist + hips'), findsOneWidget);
+    expect(
+      find.textContaining('US Navy — neck + waist + hips'),
+      findsOneWidget,
+    );
 
     final profile = await profileRepository.loadProfile();
 

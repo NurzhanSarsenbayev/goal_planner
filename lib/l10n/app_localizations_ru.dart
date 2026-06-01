@@ -1480,10 +1480,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get bodyProfileFormulaLabel => 'Формула';
 
   @override
-  String get bodyProfileFormulaUsNavyWithHips => 'US Navy — талия + бёдра';
+  String get bodyProfileFormulaUsNavyWithHips =>
+      'US Navy — шея + талия + бёдра';
 
   @override
-  String get bodyProfileFormulaUsNavyWaistOnly => 'US Navy — только талия';
+  String get bodyProfileFormulaUsNavyWaistOnly => 'US Navy — шея + талия';
 
   @override
   String get bodyProfileSaveButton => 'Сохранить профиль';

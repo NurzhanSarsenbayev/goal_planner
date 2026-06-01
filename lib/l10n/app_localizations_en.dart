@@ -1467,10 +1467,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bodyProfileFormulaLabel => 'Formula';
 
   @override
-  String get bodyProfileFormulaUsNavyWithHips => 'US Navy — waist + hips';
+  String get bodyProfileFormulaUsNavyWithHips =>
+      'US Navy — neck + waist + hips';
 
   @override
-  String get bodyProfileFormulaUsNavyWaistOnly => 'US Navy — waist only';
+  String get bodyProfileFormulaUsNavyWaistOnly => 'US Navy — neck + waist';
 
   @override
   String get bodyProfileSaveButton => 'Save profile';
