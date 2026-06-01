@@ -16,6 +16,7 @@ import '../../features/reminders/daily_review/presentation/screens/daily_review_
 import '../../features/body_tracking/application/body_weight_tracking_service.dart';
 import '../../features/body_tracking/presentation/screens/body_weight_progress_screen.dart';
 import '../../features/body_tracking/application/body_measurement_tracking_service.dart';
+import '../../features/body_tracking/application/body_profile_tracking_service.dart';
 
 class AppNavigationActions {
   const AppNavigationActions({
@@ -27,6 +28,7 @@ class AppNavigationActions {
     required DailyReviewReminderSettingsStore dailyReviewReminderSettingsStore,
     required BodyWeightTrackingService bodyWeightTrackingService,
     required BodyMeasurementTrackingService bodyMeasurementTrackingService,
+    required BodyProfileTrackingService bodyProfileTrackingService,
   }) : _store = store,
        _taskDialogActions = taskDialogActions,
        _habitReportLoader = habitReportLoader,
@@ -34,7 +36,8 @@ class AppNavigationActions {
        _dailyReviewReminderSettingsStore = dailyReviewReminderSettingsStore,
        _recurringRuleDialogActions = recurringRuleDialogActions,
        _bodyWeightTrackingService = bodyWeightTrackingService,
-       _bodyMeasurementTrackingService = bodyMeasurementTrackingService;
+       _bodyMeasurementTrackingService = bodyMeasurementTrackingService,
+       _bodyProfileTrackingService = bodyProfileTrackingService;
 
   final PlannerStore _store;
   final HabitReportLoader _habitReportLoader;
@@ -44,6 +47,7 @@ class AppNavigationActions {
   final RecurringRuleDialogActions _recurringRuleDialogActions;
   final BodyWeightTrackingService _bodyWeightTrackingService;
   final BodyMeasurementTrackingService _bodyMeasurementTrackingService;
+  final BodyProfileTrackingService _bodyProfileTrackingService;
 
   void openAllTasks(BuildContext context) {
     Navigator.of(context).push(
@@ -137,6 +141,7 @@ class AppNavigationActions {
           return BodyWeightProgressScreen(
             service: _bodyWeightTrackingService,
             measurementService: _bodyMeasurementTrackingService,
+            profileService: _bodyProfileTrackingService,
           );
         },
       ),

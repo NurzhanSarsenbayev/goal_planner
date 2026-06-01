@@ -1443,4 +1443,41 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get bodyMeasurementsProgressSectionSubtitle =>
       'Weekly neck, waist, and hips measurements.';
+
+  @override
+  String get bodyProfileTitle => 'Body profile';
+
+  @override
+  String get bodyProfileEmptyStatus =>
+      'Add height and formula to calculate body metrics later.';
+
+  @override
+  String get bodyProfileSetUpButton => 'Set up profile';
+
+  @override
+  String get bodyProfileChangeButton => 'Change profile';
+
+  @override
+  String get bodyProfileSheetTitle => 'Body profile';
+
+  @override
+  String get bodyProfileHeightLabel => 'Height';
+
+  @override
+  String get bodyProfileFormulaLabel => 'Formula';
+
+  @override
+  String get bodyProfileFormulaUsNavyWithHips => 'US Navy — waist + hips';
+
+  @override
+  String get bodyProfileFormulaUsNavyWaistOnly => 'US Navy — waist only';
+
+  @override
+  String get bodyProfileSaveButton => 'Save profile';
+
+  @override
+  String get bodyProfileInvalidHeight => 'Enter a positive height.';
+
+  @override
+  String get bodyProfileSaveError => 'Could not save body profile. Try again.';
 }

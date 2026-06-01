@@ -249,6 +249,7 @@ class _AppShellState extends State<AppShell> {
       bodyWeightTrackingService: _dependencies.bodyWeightTrackingService,
       bodyMeasurementTrackingService:
           _dependencies.bodyMeasurementTrackingService,
+      bodyProfileTrackingService: _dependencies.bodyProfileTrackingService,
     );
 
     _store.addListener(_onStoreChanged);

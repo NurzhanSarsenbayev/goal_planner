@@ -1456,4 +1456,42 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get bodyMeasurementsProgressSectionSubtitle =>
       'Недельные замеры шеи, талии и бёдер.';
+
+  @override
+  String get bodyProfileTitle => 'Профиль тела';
+
+  @override
+  String get bodyProfileEmptyStatus =>
+      'Добавьте рост и формулу, чтобы позже рассчитывать метрики тела.';
+
+  @override
+  String get bodyProfileSetUpButton => 'Заполнить профиль';
+
+  @override
+  String get bodyProfileChangeButton => 'Изменить профиль';
+
+  @override
+  String get bodyProfileSheetTitle => 'Профиль тела';
+
+  @override
+  String get bodyProfileHeightLabel => 'Рост';
+
+  @override
+  String get bodyProfileFormulaLabel => 'Формула';
+
+  @override
+  String get bodyProfileFormulaUsNavyWithHips => 'US Navy — талия + бёдра';
+
+  @override
+  String get bodyProfileFormulaUsNavyWaistOnly => 'US Navy — только талия';
+
+  @override
+  String get bodyProfileSaveButton => 'Сохранить профиль';
+
+  @override
+  String get bodyProfileInvalidHeight => 'Введите положительный рост.';
+
+  @override
+  String get bodyProfileSaveError =>
+      'Не получилось сохранить профиль тела. Попробуй ещё раз.';
 }

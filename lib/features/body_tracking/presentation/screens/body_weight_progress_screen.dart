@@ -6,16 +6,20 @@ import '../../domain/body_weekly_weight_report.dart';
 import '../../application/body_measurement_tracking_service.dart';
 import '../../domain/body_weekly_measurement_report.dart';
 import '../widgets/body_weight_weekly_average_chart.dart';
+import '../../application/body_profile_tracking_service.dart';
+import '../widgets/body_profile_progress_card.dart';
 
 class BodyWeightProgressScreen extends StatefulWidget {
   const BodyWeightProgressScreen({
     super.key,
     required this.service,
     required this.measurementService,
+    required this.profileService,
   });
 
   final BodyWeightTrackingService service;
   final BodyMeasurementTrackingService measurementService;
+  final BodyProfileTrackingService profileService;
 
   @override
   State<BodyWeightProgressScreen> createState() =>
@@ -91,6 +95,8 @@ class _BodyWeightProgressScreenState extends State<BodyWeightProgressScreen> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                BodyProfileProgressCard(service: widget.profileService),
+                const SizedBox(height: 16),
                 if (weightReports.isNotEmpty) ...[
                   Text(
                     l10n.bodyWeightProgressSubtitle,

@@ -1055,5 +1055,18 @@
     "bodyMeasurementsTodaySaveError": "Не получилось сохранить замеры. Попробуй ещё раз.",
 
     "bodyMeasurementsProgressSectionTitle": "Замеры",
-    "bodyMeasurementsProgressSectionSubtitle": "Недельные замеры шеи, талии и бёдер."
+    "bodyMeasurementsProgressSectionSubtitle": "Недельные замеры шеи, талии и бёдер.",
+
+    "bodyProfileTitle": "Профиль тела",
+    "bodyProfileEmptyStatus": "Добавьте рост и формулу, чтобы позже рассчитывать метрики тела.",
+    "bodyProfileSetUpButton": "Заполнить профиль",
+    "bodyProfileChangeButton": "Изменить профиль",
+    "bodyProfileSheetTitle": "Профиль тела",
+    "bodyProfileHeightLabel": "Рост",
+    "bodyProfileFormulaLabel": "Формула",
+    "bodyProfileFormulaUsNavyWithHips": "US Navy — талия + бёдра",
+    "bodyProfileFormulaUsNavyWaistOnly": "US Navy — только талия",
+    "bodyProfileSaveButton": "Сохранить профиль",
+    "bodyProfileInvalidHeight": "Введите положительный рост.",
+    "bodyProfileSaveError": "Не получилось сохранить профиль тела. Попробуй ещё раз."
 }

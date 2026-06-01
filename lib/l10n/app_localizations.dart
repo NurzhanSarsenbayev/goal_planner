@@ -2599,6 +2599,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Weekly neck, waist, and hips measurements.'**
   String get bodyMeasurementsProgressSectionSubtitle;
+
+  /// No description provided for @bodyProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Body profile'**
+  String get bodyProfileTitle;
+
+  /// No description provided for @bodyProfileEmptyStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Add height and formula to calculate body metrics later.'**
+  String get bodyProfileEmptyStatus;
+
+  /// No description provided for @bodyProfileSetUpButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up profile'**
+  String get bodyProfileSetUpButton;
+
+  /// No description provided for @bodyProfileChangeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Change profile'**
+  String get bodyProfileChangeButton;
+
+  /// No description provided for @bodyProfileSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Body profile'**
+  String get bodyProfileSheetTitle;
+
+  /// No description provided for @bodyProfileHeightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get bodyProfileHeightLabel;
+
+  /// No description provided for @bodyProfileFormulaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Formula'**
+  String get bodyProfileFormulaLabel;
+
+  /// No description provided for @bodyProfileFormulaUsNavyWithHips.
+  ///
+  /// In en, this message translates to:
+  /// **'US Navy — waist + hips'**
+  String get bodyProfileFormulaUsNavyWithHips;
+
+  /// No description provided for @bodyProfileFormulaUsNavyWaistOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'US Navy — waist only'**
+  String get bodyProfileFormulaUsNavyWaistOnly;
+
+  /// No description provided for @bodyProfileSaveButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save profile'**
+  String get bodyProfileSaveButton;
+
+  /// No description provided for @bodyProfileInvalidHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a positive height.'**
+  String get bodyProfileInvalidHeight;
+
+  /// No description provided for @bodyProfileSaveError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save body profile. Try again.'**
+  String get bodyProfileSaveError;
 }
 
 class _AppLocalizationsDelegate

@@ -7,6 +7,9 @@ import 'package:goal_planner/features/body_tracking/application/body_weight_trac
 import 'package:goal_planner/features/body_tracking/domain/body_measurement_entry.dart';
 import 'package:goal_planner/features/body_tracking/domain/body_weight_entry.dart';
 import 'package:goal_planner/features/body_tracking/presentation/screens/body_weight_progress_screen.dart';
+import 'package:goal_planner/features/body_tracking/application/body_profile_repository.dart';
+import 'package:goal_planner/features/body_tracking/application/body_profile_tracking_service.dart';
+import 'package:goal_planner/features/body_tracking/domain/body_profile.dart';
 import 'package:goal_planner/l10n/app_localizations.dart';
 import 'package:goal_planner/shared/planner_dates.dart';
 
@@ -21,6 +24,11 @@ void main() {
       );
       final measurementService = BodyMeasurementTrackingService(
         repository: measurementRepository,
+      );
+      final profileService = BodyProfileTrackingService(
+        profileRepository: _FakeBodyProfileRepository(),
+        weightRepository: weightRepository,
+        measurementRepository: measurementRepository,
       );
       final today = DateTime.now();
 
@@ -38,13 +46,23 @@ void main() {
           home: BodyWeightProgressScreen(
             service: weightService,
             measurementService: measurementService,
+            profileService: profileService,
           ),
         ),
       );
 
       await tester.pumpAndSettle();
 
+      expect(find.text('Body profile'), findsOneWidget);
       expect(find.text('Weight progress'), findsOneWidget);
+
+      await tester.scrollUntilVisible(
+        find.text('Week average'),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
+
       expect(find.text('Week average'), findsOneWidget);
 
       await tester.scrollUntilVisible(find.text('Measurements'), 300);
@@ -152,5 +170,24 @@ class _FakeBodyMeasurementRepository implements BodyMeasurementRepository {
 
       return firstEntry.updatedAt.compareTo(secondEntry.updatedAt);
     });
+  }
+}
+
+class _FakeBodyProfileRepository implements BodyProfileRepository {
+  BodyProfile? _profile;
+
+  @override
+  Future<void> deleteProfile() async {
+    _profile = null;
+  }
+
+  @override
+  Future<BodyProfile?> loadProfile() async {
+    return _profile;
+  }
+
+  @override
+  Future<void> saveProfile(BodyProfile profile) async {
+    _profile = profile;
   }
 }
