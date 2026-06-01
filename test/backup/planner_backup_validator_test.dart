@@ -6,6 +6,7 @@ import 'package:goal_planner/features/habits/domain/habit_entry.dart';
 import 'package:goal_planner/features/habits/domain/habit_entry_status.dart';
 import 'package:goal_planner/features/habits/domain/habit_tracking_type.dart';
 import 'package:goal_planner/features/reminders/standalone/domain/standalone_reminder.dart';
+import 'package:goal_planner/features/body_tracking/domain/body_weight_entry.dart';
 import 'package:goal_planner/models/goal.dart';
 import 'package:goal_planner/models/milestone.dart';
 import 'package:goal_planner/models/planner_task.dart';
@@ -63,6 +64,46 @@ void main() {
       expect(result.isValid, isFalse);
       expect(_errorCodes(result), contains('duplicate_id'));
       expect(result.errors.single.message, contains('standaloneReminders'));
+    });
+
+    test('reports duplicate body weight entry ids', () {
+      final now = DateTime(2026, 5, 13);
+
+      final result = validator.validateData(
+        PlannerBackupData(
+          goals: const [],
+          milestones: const [],
+          tasks: const [],
+          recurringRules: const [],
+          recurringExceptions: const [],
+          habits: const [],
+          habitEntries: const [],
+          bodyWeightEntries: [
+            BodyWeightEntry(
+              id: 'body-weight-1',
+              date: now,
+              weightKg: 80,
+              isSkipped: false,
+              note: '',
+              createdAt: now,
+              updatedAt: now,
+            ),
+            BodyWeightEntry(
+              id: 'body-weight-1',
+              date: now.add(const Duration(days: 1)),
+              weightKg: 79.8,
+              isSkipped: false,
+              note: '',
+              createdAt: now,
+              updatedAt: now,
+            ),
+          ],
+        ),
+      );
+
+      expect(result.isValid, isFalse);
+      expect(_errorCodes(result), contains('duplicate_id'));
+      expect(result.errors.single.message, contains('bodyWeightEntries'));
     });
 
     test('throws when invalid result is requested to throw', () {
@@ -445,6 +486,17 @@ PlannerBackupData _validBackupData() {
         date: scheduledDate,
         status: HabitEntryStatus.done,
         completedCount: 3,
+        createdAt: now,
+        updatedAt: now,
+      ),
+    ],
+    bodyWeightEntries: [
+      BodyWeightEntry(
+        id: 'body-weight-2026-05-14',
+        date: scheduledDate,
+        weightKg: 80.5,
+        isSkipped: false,
+        note: '',
         createdAt: now,
         updatedAt: now,
       ),

@@ -216,6 +216,30 @@ HabitEntry _habitEntryFromJson(Map<String, dynamic> json) {
   );
 }
 
+Map<String, Object?> _bodyWeightEntryToJson(BodyWeightEntry entry) {
+  return {
+    'id': entry.id,
+    'date': _dateToJson(entry.date),
+    'weightKg': entry.weightKg,
+    'isSkipped': entry.isSkipped,
+    'note': entry.note,
+    'createdAt': _dateToJson(entry.createdAt),
+    'updatedAt': _dateToJson(entry.updatedAt),
+  };
+}
+
+BodyWeightEntry _bodyWeightEntryFromJson(Map<String, dynamic> json) {
+  return BodyWeightEntry(
+    id: _stringFromJson(json, 'id'),
+    date: _dateFromJson(json, 'date'),
+    weightKg: _nullableDoubleFromJson(json, 'weightKg'),
+    isSkipped: _boolFromJson(json, 'isSkipped'),
+    note: _stringFromJson(json, 'note'),
+    createdAt: _dateFromJson(json, 'createdAt'),
+    updatedAt: _dateFromJson(json, 'updatedAt'),
+  );
+}
+
 Map<String, Object?> _standaloneReminderToJson(StandaloneReminder reminder) {
   return {
     'id': reminder.id,
@@ -337,6 +361,20 @@ int? _nullableIntFromJson(Map<String, dynamic> json, String field) {
   }
 
   throw FormatException('$field must be an int or null.');
+}
+
+double? _nullableDoubleFromJson(Map<String, dynamic> json, String field) {
+  final value = json[field];
+
+  if (value == null) {
+    return null;
+  }
+
+  if (value is num) {
+    return value.toDouble();
+  }
+
+  throw FormatException('$field must be a number or null.');
 }
 
 bool _boolFromJson(Map<String, dynamic> json, String field) {

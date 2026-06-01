@@ -9,6 +9,7 @@ import '../../habits/domain/habit_entry_status.dart';
 import '../../habits/domain/habit_tracking_type.dart';
 import '../../reminders/standalone/domain/standalone_reminder.dart';
 import '../../reminders/daily_review/domain/daily_review_reminder_settings.dart';
+import '../../body_tracking/domain/body_weight_entry.dart';
 
 part 'planner_backup_json_mappers.dart';
 
@@ -71,6 +72,7 @@ class PlannerBackupData {
     required this.habits,
     required this.habitEntries,
     this.standaloneReminders = const [],
+    this.bodyWeightEntries = const [],
     this.dailyReviewReminderSettings =
         const DailyReviewReminderSettings.defaults(),
   });
@@ -83,6 +85,7 @@ class PlannerBackupData {
       recurringExceptions = const [],
       habits = const [],
       habitEntries = const [],
+      bodyWeightEntries = const [],
       standaloneReminders = const [],
       dailyReviewReminderSettings =
           const DailyReviewReminderSettings.defaults();
@@ -94,6 +97,7 @@ class PlannerBackupData {
   final List<RecurringTaskException> recurringExceptions;
   final List<Habit> habits;
   final List<HabitEntry> habitEntries;
+  final List<BodyWeightEntry> bodyWeightEntries;
   final List<StandaloneReminder> standaloneReminders;
   final DailyReviewReminderSettings dailyReviewReminderSettings;
 
@@ -127,6 +131,10 @@ class PlannerBackupData {
         json,
         'habitEntries',
       ).map(_habitEntryFromJson).toList(growable: false),
+      bodyWeightEntries: _mapListFromJson(
+        json,
+        'bodyWeightEntries',
+      ).map(_bodyWeightEntryFromJson).toList(growable: false),
       standaloneReminders: _mapListFromJson(
         json,
         'standaloneReminders',
@@ -149,6 +157,9 @@ class PlannerBackupData {
       'habits': habits.map(_habitToJson).toList(growable: false),
       'habitEntries': habitEntries
           .map(_habitEntryToJson)
+          .toList(growable: false),
+      'bodyWeightEntries': bodyWeightEntries
+          .map(_bodyWeightEntryToJson)
           .toList(growable: false),
       'standaloneReminders': standaloneReminders
           .map(_standaloneReminderToJson)
