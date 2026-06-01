@@ -1057,6 +1057,10 @@
     "bodyMeasurementsProgressSectionTitle": "Measurements",
     "bodyMeasurementsProgressSectionSubtitle": "Weekly neck, waist, and hips measurements.",
 
+    "bodyMeasurementsProgressChartTitle": "Measurements trend",
+    "bodyMeasurementsProgressChartSubtitle": "Shows how neck, waist, and hips change over time.",
+    "bodyMeasurementsProgressChartEmpty": "Enter measurements for at least one week to see the chart.",
+
     "bodyProfileTitle": "Body profile",
     "bodyProfileEmptyStatus": "Add height and formula to calculate body metrics later.",
     "bodyProfileSetUpButton": "Set up profile",

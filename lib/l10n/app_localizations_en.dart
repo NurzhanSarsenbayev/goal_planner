@@ -1445,6 +1445,17 @@ class AppLocalizationsEn extends AppLocalizations {
       'Weekly neck, waist, and hips measurements.';
 
   @override
+  String get bodyMeasurementsProgressChartTitle => 'Measurements trend';
+
+  @override
+  String get bodyMeasurementsProgressChartSubtitle =>
+      'Shows how neck, waist, and hips change over time.';
+
+  @override
+  String get bodyMeasurementsProgressChartEmpty =>
+      'Enter measurements for at least one week to see the chart.';
+
+  @override
   String get bodyProfileTitle => 'Body profile';
 
   @override
