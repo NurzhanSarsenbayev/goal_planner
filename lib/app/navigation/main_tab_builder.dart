@@ -109,12 +109,10 @@ class MainTabBuilder {
           _recurringRuleDialogActions.showAddDialog(context);
         },
         onEditRecurringTaskRule: (ruleId) {
-          for (final rule in _store.recurringRules) {
-            if (rule.id == ruleId) {
-              _recurringRuleDialogActions.showEditDialog(context, rule);
-              return;
-            }
-          }
+          _recurringRuleDialogActions.showEditDialogById(context, ruleId);
+        },
+        onDeleteRecurringTaskRule: (ruleId) {
+          _recurringRuleDialogActions.showDeleteDialogById(context, ruleId);
         },
       ),
       GoalsScreen(
@@ -155,12 +153,10 @@ class MainTabBuilder {
           _recurringRuleDialogActions.showAddDialog(context, startDate: date);
         },
         onEditRecurringTaskRule: (ruleId) {
-          for (final rule in _store.recurringRules) {
-            if (rule.id == ruleId) {
-              _recurringRuleDialogActions.showEditDialog(context, rule);
-              return;
-            }
-          }
+          _recurringRuleDialogActions.showEditDialogById(context, ruleId);
+        },
+        onDeleteRecurringTaskRule: (ruleId) {
+          _recurringRuleDialogActions.showDeleteDialogById(context, ruleId);
         },
       ),
       HabitsScreen(habitStore: _habitStore),

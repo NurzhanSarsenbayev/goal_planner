@@ -21,6 +21,7 @@ class TaskCardActionMenu extends StatelessWidget {
     this.onUnschedule,
     this.onEditReminder,
     this.onEditRecurringSeries,
+    this.onDeleteRecurringSeries,
   });
 
   final PlannerTask task;
@@ -37,6 +38,7 @@ class TaskCardActionMenu extends StatelessWidget {
   final VoidCallback? onUnschedule;
   final VoidCallback? onEditReminder;
   final VoidCallback? onEditRecurringSeries;
+  final VoidCallback? onDeleteRecurringSeries;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +64,7 @@ class TaskCardActionMenu extends StatelessWidget {
           onUnschedule: onUnschedule,
           onEditReminder: onEditReminder,
           onEditRecurringSeries: onEditRecurringSeries,
+          onDeleteRecurringSeries: onDeleteRecurringSeries,
         );
       },
     );

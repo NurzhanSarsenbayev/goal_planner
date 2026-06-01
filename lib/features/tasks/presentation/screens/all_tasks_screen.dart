@@ -29,6 +29,8 @@ class AllTasksScreen extends StatelessWidget {
     required this.onScheduleTaskForDate,
     required this.onUpdateTaskReminder,
     required this.onCompleteTaskOnDate,
+    required this.onEditRecurringTaskRule,
+    required this.onDeleteRecurringTaskRule,
   });
 
   final List<Goal> goals;
@@ -66,6 +68,8 @@ class AllTasksScreen extends StatelessWidget {
 
   final void Function(String taskId) onTaskDetachedFromGoal;
   final void Function(String taskId) onDeleteTask;
+  final void Function(String ruleId) onEditRecurringTaskRule;
+  final void Function(String ruleId) onDeleteRecurringTaskRule;
 
   Future<void> _showEditTaskDialog(
     BuildContext context,
@@ -167,6 +171,7 @@ class AllTasksScreen extends StatelessWidget {
     final goal = view.findGoalById(task.goalId);
     final isStandaloneTask = task.goalId == null;
     final isGoalLinkedTask = task.goalId != null;
+    final recurringRuleId = task.recurringRuleId;
 
     return TaskCard(
       task: task,
@@ -216,6 +221,16 @@ class AllTasksScreen extends StatelessWidget {
       onDelete: () {
         onDeleteTask(task.id);
       },
+      onEditRecurringSeries: recurringRuleId == null
+          ? null
+          : () {
+              onEditRecurringTaskRule(recurringRuleId);
+            },
+      onDeleteRecurringSeries: recurringRuleId == null
+          ? null
+          : () {
+              onDeleteRecurringTaskRule(recurringRuleId);
+            },
     );
   }
 }

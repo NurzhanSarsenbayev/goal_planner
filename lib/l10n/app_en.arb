@@ -561,6 +561,7 @@
     "taskEditActionsWholeSeriesSection": "Whole series",
     "taskEditActionEditSeries": "Edit repeat rule",
     "taskEditActionDeleteThisTask": "Delete this task",
+    "taskEditActionDeleteSeries": "Delete whole series",
 
     "taskDialogAddTitle": "Add task",
     "taskDialogEditTitle": "Edit task",

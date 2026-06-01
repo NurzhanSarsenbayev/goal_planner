@@ -158,8 +158,8 @@ void main() {
     });
 
     testWidgets('shows whole series action for recurring occurrence', (
-        tester,
-        ) async {
+      tester,
+    ) async {
       var didEditSeries = false;
 
       await tester.pumpWidget(
@@ -193,6 +193,41 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(didEditSeries, isTrue);
+    });
+
+    testWidgets('runs delete whole series action for recurring occurrence', (
+      tester,
+    ) async {
+      var didDeleteSeries = false;
+
+      await tester.pumpWidget(
+        _app(
+          task: PlannerTask(
+            id: 'task_recurring_rule_1_20260520',
+            title: 'Workout',
+            description: '',
+            recurringRuleId: 'rule_1',
+            scheduledDate: todayDate(),
+            createdAt: DateTime(2026, 5, 20),
+          ),
+          onEditRecurringSeries: () {},
+          onDeleteRecurringSeries: () {
+            didDeleteSeries = true;
+          },
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.more_vert));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Whole series'), findsOneWidget);
+      expect(find.text('Edit repeat rule'), findsOneWidget);
+      expect(find.text('Delete whole series'), findsOneWidget);
+
+      await tester.tap(find.text('Delete whole series'));
+      await tester.pumpAndSettle();
+
+      expect(didDeleteSeries, isTrue);
     });
 
     testWidgets('shows clear time action when scheduled time exists', (
@@ -252,6 +287,7 @@ Widget _app({
   VoidCallback? onEditReminder,
   VoidCallback? onEdit,
   VoidCallback? onEditRecurringSeries,
+  VoidCallback? onDeleteRecurringSeries,
 }) {
   return MaterialApp(
     locale: const Locale('en'),
@@ -268,6 +304,7 @@ Widget _app({
         onClearScheduledTime: onClearScheduledTime,
         onEditReminder: onEditReminder,
         onEditRecurringSeries: onEditRecurringSeries,
+        onDeleteRecurringSeries: onDeleteRecurringSeries,
       ),
     ),
   );

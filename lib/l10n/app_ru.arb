@@ -561,6 +561,7 @@
     "taskEditActionsWholeSeriesSection": "Вся серия",
     "taskEditActionEditSeries": "Изменить правило повторения",
     "taskEditActionDeleteThisTask": "Удалить эту задачу",
+    "taskEditActionDeleteSeries": "Удалить всю серию",
 
     "taskDialogAddTitle": "Добавить задачу",
     "taskDialogEditTitle": "Изменить задачу",

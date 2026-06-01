@@ -1226,6 +1226,12 @@ abstract class AppLocalizations {
   /// **'Delete this task'**
   String get taskEditActionDeleteThisTask;
 
+  /// No description provided for @taskEditActionDeleteSeries.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete whole series'**
+  String get taskEditActionDeleteSeries;
+
   /// No description provided for @taskDialogAddTitle.
   ///
   /// In en, this message translates to:

@@ -18,12 +18,14 @@ Future<void> showTaskEditActionsSheet(
   VoidCallback? onRemoveFromToday,
   VoidCallback? onUnschedule,
   VoidCallback? onEditReminder,
-      VoidCallback? onEditRecurringSeries,
+  VoidCallback? onEditRecurringSeries,
+  VoidCallback? onDeleteRecurringSeries,
 }) async {
   final l10n = AppLocalizations.of(context);
   final isRecurringOccurrence = task.recurringRuleId != null;
   final shouldShowWholeSeries =
-      isRecurringOccurrence && onEditRecurringSeries != null;
+      isRecurringOccurrence &&
+      (onEditRecurringSeries != null || onDeleteRecurringSeries != null);
 
   final shouldShowScheduleDate = onScheduleDate != null;
   final shouldShowRemoveFromToday = onRemoveFromToday != null;
@@ -160,16 +162,28 @@ Future<void> showTaskEditActionsSheet(
                 _TaskEditActionsSectionHeader(
                   title: l10n.taskEditActionsWholeSeriesSection,
                 ),
-                _TaskEditActionTile(
-                  icon: Icons.repeat,
-                  title: l10n.taskEditActionEditSeries,
-                  onTap: () {
-                    _runAfterClosingSheet(
-                      sheetContext,
-                      onEditRecurringSeries,
-                    );
-                  },
-                ),
+                if (onEditRecurringSeries != null)
+                  _TaskEditActionTile(
+                    icon: Icons.repeat,
+                    title: l10n.taskEditActionEditSeries,
+                    onTap: () {
+                      _runAfterClosingSheet(
+                        sheetContext,
+                        onEditRecurringSeries,
+                      );
+                    },
+                  ),
+                if (onDeleteRecurringSeries != null)
+                  _TaskEditActionTile(
+                    icon: Icons.delete_forever_outlined,
+                    title: l10n.taskEditActionDeleteSeries,
+                    onTap: () {
+                      _runAfterClosingSheet(
+                        sheetContext,
+                        onDeleteRecurringSeries,
+                      );
+                    },
+                  ),
               ],
             ],
           ),

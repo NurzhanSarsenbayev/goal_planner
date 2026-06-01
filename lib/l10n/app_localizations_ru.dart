@@ -654,6 +654,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get taskEditActionDeleteThisTask => 'Удалить эту задачу';
 
   @override
+  String get taskEditActionDeleteSeries => 'Удалить всю серию';
+
+  @override
   String get taskDialogAddTitle => 'Добавить задачу';
 
   @override

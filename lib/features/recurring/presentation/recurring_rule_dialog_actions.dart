@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'recurring_rule_dialogs.dart';
+import 'recurring_rule_delete_dialog.dart';
 import '../../../models/recurring_task_rule.dart';
 import '../../../shared/planner_dates.dart';
 import '../../../state/planner_store.dart';
@@ -10,6 +11,26 @@ class RecurringRuleDialogActions {
     : _store = store;
 
   final PlannerStore _store;
+
+  Future<void> showEditDialogById(BuildContext context, String ruleId) async {
+    final rule = _findRuleById(ruleId);
+
+    if (rule == null) {
+      return;
+    }
+
+    await showEditDialog(context, rule);
+  }
+
+  Future<void> showDeleteDialogById(BuildContext context, String ruleId) async {
+    final rule = _findRuleById(ruleId);
+
+    if (rule == null) {
+      return;
+    }
+
+    await showDeleteDialog(context, rule);
+  }
 
   Future<void> showAddDialog(
     BuildContext context, {
@@ -56,6 +77,22 @@ class RecurringRuleDialogActions {
     }
   }
 
+  Future<void> showDeleteDialog(
+    BuildContext context,
+    RecurringTaskRule rule,
+  ) async {
+    final shouldDelete = await showDeleteRecurringTaskRuleDialog(
+      context,
+      rule: rule,
+    );
+
+    if (!shouldDelete) {
+      return;
+    }
+
+    _store.deleteRecurringTaskRule(rule.id);
+  }
+
   Future<void> showEditDialog(
     BuildContext context,
     RecurringTaskRule rule,
@@ -84,5 +121,15 @@ class RecurringRuleDialogActions {
     );
 
     _store.updateRecurringTaskRule(updatedRule);
+  }
+
+  RecurringTaskRule? _findRuleById(String ruleId) {
+    for (final rule in _store.recurringRules) {
+      if (rule.id == ruleId) {
+        return rule;
+      }
+    }
+
+    return null;
   }
 }

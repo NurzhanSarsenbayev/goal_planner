@@ -27,6 +27,7 @@ class CalendarScreen extends StatefulWidget {
     required this.onEnsureRecurringTasksForMonth,
     required this.onAddRecurringTaskForDate,
     required this.onEditRecurringTaskRule,
+    required this.onDeleteRecurringTaskRule,
   });
 
   final List<Goal> goals;
@@ -54,6 +55,7 @@ class CalendarScreen extends StatefulWidget {
   final void Function(DateTime visibleMonth) onEnsureRecurringTasksForMonth;
   final void Function(DateTime date) onAddRecurringTaskForDate;
   final void Function(String ruleId) onEditRecurringTaskRule;
+  final void Function(String ruleId) onDeleteRecurringTaskRule;
 
   @override
   State<CalendarScreen> createState() => _CalendarScreenState();
@@ -143,6 +145,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       ? null
                       : () {
                           widget.onEditRecurringTaskRule(task.recurringRuleId!);
+                        },
+                  onDeleteRecurringSeries: task.recurringRuleId == null
+                      ? null
+                      : () {
+                          widget.onDeleteRecurringTaskRule(
+                            task.recurringRuleId!,
+                          );
                         },
                   onScheduleDate: () {
                     _taskScheduleDialogActions.showScheduleDatePicker(

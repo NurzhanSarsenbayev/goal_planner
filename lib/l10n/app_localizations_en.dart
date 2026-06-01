@@ -649,6 +649,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get taskEditActionDeleteThisTask => 'Delete this task';
 
   @override
+  String get taskEditActionDeleteSeries => 'Delete whole series';
+
+  @override
   String get taskDialogAddTitle => 'Add task';
 
   @override

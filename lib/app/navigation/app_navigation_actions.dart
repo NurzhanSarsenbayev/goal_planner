@@ -70,6 +70,18 @@ class AppNavigationActions {
                 onScheduleTaskForDate: _store.scheduleTaskForDate,
                 onUpdateTaskReminder: _store.updateTaskReminder,
                 onCompleteTaskOnDate: _store.completeTaskOnDate,
+                onEditRecurringTaskRule: (ruleId) {
+                  _recurringRuleDialogActions.showEditDialogById(
+                    context,
+                    ruleId,
+                  );
+                },
+                onDeleteRecurringTaskRule: (ruleId) {
+                  _recurringRuleDialogActions.showDeleteDialogById(
+                    context,
+                    ruleId,
+                  );
+                },
               );
             },
           );
