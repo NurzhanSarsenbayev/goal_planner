@@ -9,7 +9,6 @@ import '../widgets/body_weight_weekly_average_chart.dart';
 import '../../application/body_profile_tracking_service.dart';
 import '../widgets/body_profile_progress_card.dart';
 import '../../domain/body_metrics.dart';
-import '../widgets/body_measurements_weekly_chart.dart';
 
 class BodyWeightProgressScreen extends StatefulWidget {
   const BodyWeightProgressScreen({
@@ -137,8 +136,6 @@ class _BodyWeightProgressScreenState extends State<BodyWeightProgressScreen> {
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  BodyMeasurementsWeeklyChart(reports: measurementReports),
                   const SizedBox(height: 16),
                   for (final report in measurementReports) ...[
                     _BodyMeasurementsWeeklyReportCard(report: report),

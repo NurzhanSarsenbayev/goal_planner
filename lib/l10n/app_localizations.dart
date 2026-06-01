@@ -2600,24 +2600,6 @@ abstract class AppLocalizations {
   /// **'Weekly neck, waist, and hips measurements.'**
   String get bodyMeasurementsProgressSectionSubtitle;
 
-  /// No description provided for @bodyMeasurementsProgressChartTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Measurements trend'**
-  String get bodyMeasurementsProgressChartTitle;
-
-  /// No description provided for @bodyMeasurementsProgressChartSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Shows how neck, waist, and hips change over time.'**
-  String get bodyMeasurementsProgressChartSubtitle;
-
-  /// No description provided for @bodyMeasurementsProgressChartEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter measurements for at least one week to see the chart.'**
-  String get bodyMeasurementsProgressChartEmpty;
-
   /// No description provided for @bodyProfileTitle.
   ///
   /// In en, this message translates to:

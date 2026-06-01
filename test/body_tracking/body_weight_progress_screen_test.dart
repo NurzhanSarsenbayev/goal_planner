@@ -81,10 +81,9 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Measurements'), findsOneWidget);
-      expect(find.text('Measurements trend'), findsOneWidget);
-      expect(find.text('Waist'), findsWidgets);
+      expect(find.text('Waist'), findsOneWidget);
       expect(find.text('74 cm'), findsOneWidget);
-      expect(find.text('Hips'), findsWidgets);
+      expect(find.text('Hips'), findsOneWidget);
       expect(find.text('101 cm'), findsOneWidget);
     },
   );

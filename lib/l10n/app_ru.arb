@@ -1057,10 +1057,6 @@
     "bodyMeasurementsProgressSectionTitle": "Замеры",
     "bodyMeasurementsProgressSectionSubtitle": "Недельные замеры шеи, талии и бёдер.",
 
-    "bodyMeasurementsProgressChartTitle": "Динамика замеров",
-    "bodyMeasurementsProgressChartSubtitle": "Показывает, как меняются шея, талия и бёдра со временем.",
-    "bodyMeasurementsProgressChartEmpty": "Внесите замеры хотя бы за одну неделю, чтобы увидеть график.",
-
     "bodyProfileTitle": "Профиль тела",
     "bodyProfileEmptyStatus": "Добавьте рост и формулу, чтобы позже рассчитывать метрики тела.",
     "bodyProfileSetUpButton": "Заполнить профиль",

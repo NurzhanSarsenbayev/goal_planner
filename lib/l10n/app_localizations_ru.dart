@@ -1458,17 +1458,6 @@ class AppLocalizationsRu extends AppLocalizations {
       'Недельные замеры шеи, талии и бёдер.';
 
   @override
-  String get bodyMeasurementsProgressChartTitle => 'Динамика замеров';
-
-  @override
-  String get bodyMeasurementsProgressChartSubtitle =>
-      'Показывает, как меняются шея, талия и бёдра со временем.';
-
-  @override
-  String get bodyMeasurementsProgressChartEmpty =>
-      'Внесите замеры хотя бы за одну неделю, чтобы увидеть график.';
-
-  @override
   String get bodyProfileTitle => 'Профиль тела';
 
   @override
