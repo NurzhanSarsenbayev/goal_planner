@@ -3,12 +3,19 @@ import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/body_weight_tracking_service.dart';
 import '../../domain/body_weekly_weight_report.dart';
+import '../../application/body_measurement_tracking_service.dart';
+import '../../domain/body_weekly_measurement_report.dart';
 import '../widgets/body_weight_weekly_average_chart.dart';
 
 class BodyWeightProgressScreen extends StatefulWidget {
-  const BodyWeightProgressScreen({super.key, required this.service});
+  const BodyWeightProgressScreen({
+    super.key,
+    required this.service,
+    required this.measurementService,
+  });
 
   final BodyWeightTrackingService service;
+  final BodyMeasurementTrackingService measurementService;
 
   @override
   State<BodyWeightProgressScreen> createState() =>
@@ -16,20 +23,32 @@ class BodyWeightProgressScreen extends StatefulWidget {
 }
 
 class _BodyWeightProgressScreenState extends State<BodyWeightProgressScreen> {
-  late Future<List<BodyWeeklyWeightReport>> _loadFuture;
+  late Future<_BodyProgressData> _loadFuture;
 
   @override
   void initState() {
     super.initState();
 
-    _loadFuture = widget.service.loadWeeklyReports(anchorDate: DateTime.now());
+    _loadFuture = _loadProgressData();
+  }
+
+  Future<_BodyProgressData> _loadProgressData() async {
+    final anchorDate = DateTime.now();
+    final weightReportsFuture = widget.service.loadWeeklyReports(
+      anchorDate: anchorDate,
+    );
+    final measurementReportsFuture = widget.measurementService
+        .loadWeeklyReports(anchorDate: anchorDate);
+
+    return _BodyProgressData(
+      weightReports: await weightReportsFuture,
+      measurementReports: await measurementReportsFuture,
+    );
   }
 
   Future<void> _reload() async {
     setState(() {
-      _loadFuture = widget.service.loadWeeklyReports(
-        anchorDate: DateTime.now(),
-      );
+      _loadFuture = _loadProgressData();
     });
   }
 
@@ -39,7 +58,7 @@ class _BodyWeightProgressScreenState extends State<BodyWeightProgressScreen> {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.bodyWeightProgressTitle)),
-      body: FutureBuilder<List<BodyWeeklyWeightReport>>(
+      body: FutureBuilder<_BodyProgressData>(
         future: _loadFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting &&
@@ -56,9 +75,11 @@ class _BodyWeightProgressScreenState extends State<BodyWeightProgressScreen> {
             );
           }
 
-          final reports = snapshot.data ?? [];
+          final progressData = snapshot.data ?? const _BodyProgressData.empty();
+          final weightReports = progressData.weightReports;
+          final measurementReports = progressData.measurementReports;
 
-          if (reports.isEmpty) {
+          if (progressData.isEmpty) {
             return _BodyWeightProgressMessage(
               title: l10n.bodyWeightProgressEmptyTitle,
               body: l10n.bodyWeightProgressEmptyBody,
@@ -70,18 +91,41 @@ class _BodyWeightProgressScreenState extends State<BodyWeightProgressScreen> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                Text(
-                  l10n.bodyWeightProgressSubtitle,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                if (weightReports.isNotEmpty) ...[
+                  Text(
+                    l10n.bodyWeightProgressSubtitle,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                BodyWeightWeeklyAverageChart(reports: reports),
-                const SizedBox(height: 16),
-                for (final report in reports) ...[
-                  _BodyWeightWeeklyReportCard(report: report),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 16),
+                  BodyWeightWeeklyAverageChart(reports: weightReports),
+                  const SizedBox(height: 16),
+                  for (final report in weightReports) ...[
+                    _BodyWeightWeeklyReportCard(report: report),
+                    const SizedBox(height: 12),
+                  ],
+                ],
+                if (measurementReports.isNotEmpty) ...[
+                  if (weightReports.isNotEmpty) const SizedBox(height: 8),
+                  Text(
+                    l10n.bodyMeasurementsProgressSectionTitle,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n.bodyMeasurementsProgressSectionSubtitle,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  for (final report in measurementReports) ...[
+                    _BodyMeasurementsWeeklyReportCard(report: report),
+                    const SizedBox(height: 12),
+                  ],
                 ],
               ],
             ),
@@ -90,6 +134,22 @@ class _BodyWeightProgressScreenState extends State<BodyWeightProgressScreen> {
       ),
     );
   }
+}
+
+class _BodyProgressData {
+  const _BodyProgressData({
+    required this.weightReports,
+    required this.measurementReports,
+  });
+
+  const _BodyProgressData.empty()
+    : weightReports = const [],
+      measurementReports = const [];
+
+  final List<BodyWeeklyWeightReport> weightReports;
+  final List<BodyWeeklyMeasurementReport> measurementReports;
+
+  bool get isEmpty => weightReports.isEmpty && measurementReports.isEmpty;
 }
 
 class _BodyWeightWeeklyReportCard extends StatelessWidget {
@@ -198,6 +258,99 @@ class _BodyWeightWeeklyReportCard extends StatelessWidget {
 
     if (fixed.endsWith('0')) {
       return weight.toStringAsFixed(1);
+    }
+
+    return fixed;
+  }
+}
+
+class _BodyMeasurementsWeeklyReportCard extends StatelessWidget {
+  const _BodyMeasurementsWeeklyReportCard({required this.report});
+
+  final BodyWeeklyMeasurementReport report;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final materialL10n = MaterialLocalizations.of(context);
+    final weekRange =
+        '${materialL10n.formatMediumDate(report.weekStartDate)}'
+        ' – ${materialL10n.formatMediumDate(report.weekEndDate)}';
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              weekRange,
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+            ),
+            if (report.neckCm != null) ...[
+              const SizedBox(height: 12),
+              _BodyWeightReportRow(
+                label: l10n.bodyMeasurementsNeckLabel,
+                value: _measurementValue(l10n, report.neckCm),
+                delta: _deltaValue(l10n, report.neckDeltaCm),
+              ),
+            ],
+            if (report.waistCm != null) ...[
+              const SizedBox(height: 12),
+              _BodyWeightReportRow(
+                label: l10n.bodyMeasurementsWaistLabel,
+                value: _measurementValue(l10n, report.waistCm),
+                delta: _deltaValue(l10n, report.waistDeltaCm),
+              ),
+            ],
+            if (report.hipsCm != null) ...[
+              const SizedBox(height: 12),
+              _BodyWeightReportRow(
+                label: l10n.bodyMeasurementsHipsLabel,
+                value: _measurementValue(l10n, report.hipsCm),
+                delta: _deltaValue(l10n, report.hipsDeltaCm),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _measurementValue(AppLocalizations l10n, double? value) {
+    if (value == null) {
+      return l10n.bodyWeightNoData;
+    }
+
+    return '${_formatMeasurement(value)} ${l10n.bodyMeasurementsCmSuffix}';
+  }
+
+  String? _deltaValue(AppLocalizations l10n, double? delta) {
+    if (delta == null) {
+      return null;
+    }
+
+    final formattedDelta =
+        '${_formatMeasurement(delta.abs())} ${l10n.bodyMeasurementsCmSuffix}';
+
+    if (delta > 0) {
+      return l10n.bodyWeightProgressDeltaUp(formattedDelta);
+    }
+
+    if (delta < 0) {
+      return l10n.bodyWeightProgressDeltaDown(formattedDelta);
+    }
+
+    return l10n.bodyWeightProgressDeltaSame;
+  }
+
+  String _formatMeasurement(double value) {
+    final fixed = value.toStringAsFixed(1);
+
+    if (fixed.endsWith('.0')) {
+      return value.toStringAsFixed(0);
     }
 
     return fixed;

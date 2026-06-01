@@ -1052,5 +1052,8 @@
     "bodyMeasurementsCmSuffix": "см",
     "bodyMeasurementsTodaySaveButton": "Сохранить замеры",
     "bodyMeasurementsTodayInvalidMeasurements": "Введите хотя бы один положительный замер.",
-    "bodyMeasurementsTodaySaveError": "Не получилось сохранить замеры. Попробуй ещё раз."
+    "bodyMeasurementsTodaySaveError": "Не получилось сохранить замеры. Попробуй ещё раз.",
+
+    "bodyMeasurementsProgressSectionTitle": "Замеры",
+    "bodyMeasurementsProgressSectionSubtitle": "Недельные замеры шеи, талии и бёдер."
 }

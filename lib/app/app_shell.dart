@@ -247,6 +247,8 @@ class _AppShellState extends State<AppShell> {
       dailyReviewReminderSettingsStore:
           _dependencies.dailyReviewReminderSettingsStore,
       bodyWeightTrackingService: _dependencies.bodyWeightTrackingService,
+      bodyMeasurementTrackingService:
+          _dependencies.bodyMeasurementTrackingService,
     );
 
     _store.addListener(_onStoreChanged);
@@ -306,6 +308,8 @@ class _AppShellState extends State<AppShell> {
       store: _store,
       habitStore: _habitStore,
       bodyWeightTrackingService: _dependencies.bodyWeightTrackingService,
+      bodyMeasurementTrackingService:
+          _dependencies.bodyMeasurementTrackingService,
       goalDialogActions: _goalDialogActions,
       taskDialogActions: _taskDialogActions,
       recurringRuleDialogActions: _recurringRuleDialogActions,

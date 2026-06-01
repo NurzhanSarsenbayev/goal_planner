@@ -2587,6 +2587,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not save measurements. Try again.'**
   String get bodyMeasurementsTodaySaveError;
+
+  /// No description provided for @bodyMeasurementsProgressSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Measurements'**
+  String get bodyMeasurementsProgressSectionTitle;
+
+  /// No description provided for @bodyMeasurementsProgressSectionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly neck, waist, and hips measurements.'**
+  String get bodyMeasurementsProgressSectionSubtitle;
 }
 
 class _AppLocalizationsDelegate

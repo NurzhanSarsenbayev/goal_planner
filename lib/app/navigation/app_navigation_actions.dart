@@ -15,6 +15,7 @@ import '../../features/reminders/daily_review/application/daily_review_reminder_
 import '../../features/reminders/daily_review/presentation/screens/daily_review_reminder_settings_screen.dart';
 import '../../features/body_tracking/application/body_weight_tracking_service.dart';
 import '../../features/body_tracking/presentation/screens/body_weight_progress_screen.dart';
+import '../../features/body_tracking/application/body_measurement_tracking_service.dart';
 
 class AppNavigationActions {
   const AppNavigationActions({
@@ -25,13 +26,15 @@ class AppNavigationActions {
     required StandaloneReminderStore standaloneReminderStore,
     required DailyReviewReminderSettingsStore dailyReviewReminderSettingsStore,
     required BodyWeightTrackingService bodyWeightTrackingService,
+    required BodyMeasurementTrackingService bodyMeasurementTrackingService,
   }) : _store = store,
        _taskDialogActions = taskDialogActions,
        _habitReportLoader = habitReportLoader,
        _standaloneReminderStore = standaloneReminderStore,
        _dailyReviewReminderSettingsStore = dailyReviewReminderSettingsStore,
        _recurringRuleDialogActions = recurringRuleDialogActions,
-       _bodyWeightTrackingService = bodyWeightTrackingService;
+       _bodyWeightTrackingService = bodyWeightTrackingService,
+       _bodyMeasurementTrackingService = bodyMeasurementTrackingService;
 
   final PlannerStore _store;
   final HabitReportLoader _habitReportLoader;
@@ -40,6 +43,7 @@ class AppNavigationActions {
   final TaskDialogActions _taskDialogActions;
   final RecurringRuleDialogActions _recurringRuleDialogActions;
   final BodyWeightTrackingService _bodyWeightTrackingService;
+  final BodyMeasurementTrackingService _bodyMeasurementTrackingService;
 
   void openAllTasks(BuildContext context) {
     Navigator.of(context).push(
@@ -130,7 +134,10 @@ class AppNavigationActions {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          return BodyWeightProgressScreen(service: _bodyWeightTrackingService);
+          return BodyWeightProgressScreen(
+            service: _bodyWeightTrackingService,
+            measurementService: _bodyMeasurementTrackingService,
+          );
         },
       ),
     );

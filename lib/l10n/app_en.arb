@@ -1052,5 +1052,8 @@
     "bodyMeasurementsCmSuffix": "cm",
     "bodyMeasurementsTodaySaveButton": "Save measurements",
     "bodyMeasurementsTodayInvalidMeasurements": "Enter at least one positive measurement.",
-    "bodyMeasurementsTodaySaveError": "Could not save measurements. Try again."
+    "bodyMeasurementsTodaySaveError": "Could not save measurements. Try again.",
+
+    "bodyMeasurementsProgressSectionTitle": "Measurements",
+    "bodyMeasurementsProgressSectionSubtitle": "Weekly neck, waist, and hips measurements."
 }

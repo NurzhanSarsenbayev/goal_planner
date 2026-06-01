@@ -1449,4 +1449,11 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get bodyMeasurementsTodaySaveError =>
       'Не получилось сохранить замеры. Попробуй ещё раз.';
+
+  @override
+  String get bodyMeasurementsProgressSectionTitle => 'Замеры';
+
+  @override
+  String get bodyMeasurementsProgressSectionSubtitle =>
+      'Недельные замеры шеи, талии и бёдер.';
 }

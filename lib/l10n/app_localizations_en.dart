@@ -1436,4 +1436,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get bodyMeasurementsTodaySaveError =>
       'Could not save measurements. Try again.';
+
+  @override
+  String get bodyMeasurementsProgressSectionTitle => 'Measurements';
+
+  @override
+  String get bodyMeasurementsProgressSectionSubtitle =>
+      'Weekly neck, waist, and hips measurements.';
 }
