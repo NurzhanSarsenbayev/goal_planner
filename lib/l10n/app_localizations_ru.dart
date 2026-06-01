@@ -1494,4 +1494,30 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get bodyProfileSaveError =>
       'Не получилось сохранить профиль тела. Попробуй ещё раз.';
+
+  @override
+  String get bodyCurrentMetricsTitle => 'Текущие метрики тела';
+
+  @override
+  String get bodyCurrentMetricsSubtitle =>
+      'На основе последнего сохранённого веса и замеров.';
+
+  @override
+  String get bodyCurrentMetricsBmiLabel => 'ИМТ';
+
+  @override
+  String get bodyCurrentMetricsBodyFatLabel => 'Оценочный процент жира';
+
+  @override
+  String get bodyCurrentMetricsBmiMissing =>
+      'Добавьте рост и вес, чтобы рассчитать ИМТ.';
+
+  @override
+  String get bodyCurrentMetricsBodyFatMissing =>
+      'Добавьте рост, формулу и нужные замеры, чтобы рассчитать оценочный процент жира.';
+
+  @override
+  String bodyCurrentMetricsBodyFatValue(String value) {
+    return '$value%';
+  }
 }

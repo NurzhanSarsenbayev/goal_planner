@@ -32,9 +32,15 @@ void main() {
       );
       final today = DateTime.now();
 
+      await profileService.saveProfile(
+        heightCm: 168,
+        bodyFatFormula: BodyFatFormula.usNavyFemale,
+      );
+
       await weightService.saveWeightForDate(date: today, weightKg: 60);
       await measurementService.saveMeasurementsForWeek(
         weekDate: today,
+        neckCm: 34,
         waistCm: 74,
         hipsCm: 101,
       );
@@ -56,6 +62,12 @@ void main() {
       expect(find.text('Body profile'), findsOneWidget);
       expect(find.text('Weight progress'), findsOneWidget);
 
+      expect(find.text('Current body metrics'), findsOneWidget);
+      expect(find.text('BMI'), findsOneWidget);
+      expect(find.text('21.3'), findsOneWidget);
+      expect(find.text('Estimated body fat'), findsOneWidget);
+      expect(find.text('28.1%'), findsOneWidget);
+
       await tester.scrollUntilVisible(
         find.text('Week average'),
         300,
@@ -75,6 +87,51 @@ void main() {
       expect(find.text('101 cm'), findsOneWidget);
     },
   );
+
+  testWidgets('BodyWeightProgressScreen shows neutral missing metrics', (
+    tester,
+  ) async {
+    final weightRepository = _FakeBodyWeightRepository();
+    final measurementRepository = _FakeBodyMeasurementRepository();
+    final weightService = BodyWeightTrackingService(
+      repository: weightRepository,
+    );
+    final measurementService = BodyMeasurementTrackingService(
+      repository: measurementRepository,
+    );
+    final profileService = BodyProfileTrackingService(
+      profileRepository: _FakeBodyProfileRepository(),
+      weightRepository: weightRepository,
+      measurementRepository: measurementRepository,
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: BodyWeightProgressScreen(
+          service: weightService,
+          measurementService: measurementService,
+          profileService: profileService,
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    expect(find.text('Current body metrics'), findsOneWidget);
+    expect(
+      find.text('Add height and weight to calculate BMI.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Add height, formula, and required measurements to estimate body fat.',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('No weight reports yet'), findsOneWidget);
+  });
 }
 
 class _FakeBodyWeightRepository implements BodyWeightRepository {

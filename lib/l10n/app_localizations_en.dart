@@ -1480,4 +1480,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bodyProfileSaveError => 'Could not save body profile. Try again.';
+
+  @override
+  String get bodyCurrentMetricsTitle => 'Current body metrics';
+
+  @override
+  String get bodyCurrentMetricsSubtitle =>
+      'Based on the latest saved weight and measurements.';
+
+  @override
+  String get bodyCurrentMetricsBmiLabel => 'BMI';
+
+  @override
+  String get bodyCurrentMetricsBodyFatLabel => 'Estimated body fat';
+
+  @override
+  String get bodyCurrentMetricsBmiMissing =>
+      'Add height and weight to calculate BMI.';
+
+  @override
+  String get bodyCurrentMetricsBodyFatMissing =>
+      'Add height, formula, and required measurements to estimate body fat.';
+
+  @override
+  String bodyCurrentMetricsBodyFatValue(String value) {
+    return '$value%';
+  }
 }

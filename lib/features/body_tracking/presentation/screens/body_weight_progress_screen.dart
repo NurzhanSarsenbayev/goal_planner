@@ -8,6 +8,7 @@ import '../../domain/body_weekly_measurement_report.dart';
 import '../widgets/body_weight_weekly_average_chart.dart';
 import '../../application/body_profile_tracking_service.dart';
 import '../widgets/body_profile_progress_card.dart';
+import '../../domain/body_metrics.dart';
 
 class BodyWeightProgressScreen extends StatefulWidget {
   const BodyWeightProgressScreen({
@@ -43,10 +44,12 @@ class _BodyWeightProgressScreenState extends State<BodyWeightProgressScreen> {
     );
     final measurementReportsFuture = widget.measurementService
         .loadWeeklyReports(anchorDate: anchorDate);
+    final currentMetricsFuture = widget.profileService.loadCurrentMetrics();
 
     return _BodyProgressData(
       weightReports: await weightReportsFuture,
       measurementReports: await measurementReportsFuture,
+      currentMetrics: await currentMetricsFuture,
     );
   }
 
@@ -82,22 +85,28 @@ class _BodyWeightProgressScreenState extends State<BodyWeightProgressScreen> {
           final progressData = snapshot.data ?? const _BodyProgressData.empty();
           final weightReports = progressData.weightReports;
           final measurementReports = progressData.measurementReports;
-
-          if (progressData.isEmpty) {
-            return _BodyWeightProgressMessage(
-              title: l10n.bodyWeightProgressEmptyTitle,
-              body: l10n.bodyWeightProgressEmptyBody,
-            );
-          }
+          final currentMetrics = progressData.currentMetrics;
 
           return RefreshIndicator(
             onRefresh: _reload,
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                BodyProfileProgressCard(service: widget.profileService),
+                BodyProfileProgressCard(
+                  service: widget.profileService,
+                  onProfileChanged: _reload,
+                ),
                 const SizedBox(height: 16),
+                _BodyCurrentMetricsCard(metrics: currentMetrics),
+                if (progressData.hasNoReports) ...[
+                  const SizedBox(height: 16),
+                  _BodyProgressEmptyCard(
+                    title: l10n.bodyWeightProgressEmptyTitle,
+                    body: l10n.bodyWeightProgressEmptyBody,
+                  ),
+                ],
                 if (weightReports.isNotEmpty) ...[
+                  const SizedBox(height: 16),
                   Text(
                     l10n.bodyWeightProgressSubtitle,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -146,16 +155,132 @@ class _BodyProgressData {
   const _BodyProgressData({
     required this.weightReports,
     required this.measurementReports,
+    required this.currentMetrics,
   });
 
   const _BodyProgressData.empty()
     : weightReports = const [],
-      measurementReports = const [];
+      measurementReports = const [],
+      currentMetrics = const BodyMetrics(
+        bmi: null,
+        estimatedBodyFatPercent: null,
+      );
 
   final List<BodyWeeklyWeightReport> weightReports;
   final List<BodyWeeklyMeasurementReport> measurementReports;
+  final BodyMetrics currentMetrics;
 
-  bool get isEmpty => weightReports.isEmpty && measurementReports.isEmpty;
+  bool get hasNoReports => weightReports.isEmpty && measurementReports.isEmpty;
+}
+
+class _BodyCurrentMetricsCard extends StatelessWidget {
+  const _BodyCurrentMetricsCard({required this.metrics});
+
+  final BodyMetrics metrics;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.monitor_weight_outlined),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    l10n.bodyCurrentMetricsTitle,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.bodyCurrentMetricsSubtitle,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 12),
+            _BodyCurrentMetricRow(
+              label: l10n.bodyCurrentMetricsBmiLabel,
+              value: _bmiValue(l10n, metrics.bmi),
+              isMissing: metrics.bmi == null,
+            ),
+            const SizedBox(height: 8),
+            _BodyCurrentMetricRow(
+              label: l10n.bodyCurrentMetricsBodyFatLabel,
+              value: _bodyFatValue(l10n, metrics.estimatedBodyFatPercent),
+              isMissing: metrics.estimatedBodyFatPercent == null,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _bmiValue(AppLocalizations l10n, double? value) {
+    if (value == null) {
+      return l10n.bodyCurrentMetricsBmiMissing;
+    }
+
+    return _formatMetric(value);
+  }
+
+  String _bodyFatValue(AppLocalizations l10n, double? value) {
+    if (value == null) {
+      return l10n.bodyCurrentMetricsBodyFatMissing;
+    }
+
+    return l10n.bodyCurrentMetricsBodyFatValue(_formatMetric(value));
+  }
+
+  String _formatMetric(double value) {
+    return value.toStringAsFixed(1);
+  }
+}
+
+class _BodyCurrentMetricRow extends StatelessWidget {
+  const _BodyCurrentMetricRow({
+    required this.label,
+    required this.value,
+    required this.isMissing,
+  });
+
+  final String label;
+  final String value;
+  final bool isMissing;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(child: Text(label)),
+        const SizedBox(width: 12),
+        Flexible(
+          child: Text(
+            value,
+            textAlign: TextAlign.end,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: isMissing ? colorScheme.onSurfaceVariant : null,
+              fontWeight: isMissing ? null : FontWeight.w700,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class _BodyWeightWeeklyReportCard extends StatelessWidget {
@@ -453,6 +578,35 @@ class _BodyWeightProgressMessage extends StatelessWidget {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BodyProgressEmptyCard extends StatelessWidget {
+  const _BodyProgressEmptyCard({required this.title, required this.body});
+
+  final String title;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 8),
+            Text(body),
+          ],
         ),
       ),
     );

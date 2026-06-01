@@ -2671,6 +2671,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not save body profile. Try again.'**
   String get bodyProfileSaveError;
+
+  /// No description provided for @bodyCurrentMetricsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Current body metrics'**
+  String get bodyCurrentMetricsTitle;
+
+  /// No description provided for @bodyCurrentMetricsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Based on the latest saved weight and measurements.'**
+  String get bodyCurrentMetricsSubtitle;
+
+  /// No description provided for @bodyCurrentMetricsBmiLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'BMI'**
+  String get bodyCurrentMetricsBmiLabel;
+
+  /// No description provided for @bodyCurrentMetricsBodyFatLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated body fat'**
+  String get bodyCurrentMetricsBodyFatLabel;
+
+  /// No description provided for @bodyCurrentMetricsBmiMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Add height and weight to calculate BMI.'**
+  String get bodyCurrentMetricsBmiMissing;
+
+  /// No description provided for @bodyCurrentMetricsBodyFatMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Add height, formula, and required measurements to estimate body fat.'**
+  String get bodyCurrentMetricsBodyFatMissing;
+
+  /// No description provided for @bodyCurrentMetricsBodyFatValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{value}%'**
+  String bodyCurrentMetricsBodyFatValue(String value);
 }
 
 class _AppLocalizationsDelegate

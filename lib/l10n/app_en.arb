@@ -1068,5 +1068,22 @@
     "bodyProfileFormulaUsNavyWaistOnly": "US Navy — waist only",
     "bodyProfileSaveButton": "Save profile",
     "bodyProfileInvalidHeight": "Enter a positive height.",
-    "bodyProfileSaveError": "Could not save body profile. Try again."
+    "bodyProfileSaveError": "Could not save body profile. Try again.",
+
+        "bodyProfileSaveError": "Could not save body profile. Try again.",
+
+        "bodyCurrentMetricsTitle": "Current body metrics",
+        "bodyCurrentMetricsSubtitle": "Based on the latest saved weight and measurements.",
+        "bodyCurrentMetricsBmiLabel": "BMI",
+        "bodyCurrentMetricsBodyFatLabel": "Estimated body fat",
+        "bodyCurrentMetricsBmiMissing": "Add height and weight to calculate BMI.",
+        "bodyCurrentMetricsBodyFatMissing": "Add height, formula, and required measurements to estimate body fat.",
+        "bodyCurrentMetricsBodyFatValue": "{value}%",
+        "@bodyCurrentMetricsBodyFatValue": {
+          "placeholders": {
+            "value": {
+              "type": "String"
+            }
+          }
+        }
 }

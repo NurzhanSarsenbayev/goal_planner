@@ -1068,5 +1068,22 @@
     "bodyProfileFormulaUsNavyWaistOnly": "US Navy — только талия",
     "bodyProfileSaveButton": "Сохранить профиль",
     "bodyProfileInvalidHeight": "Введите положительный рост.",
-    "bodyProfileSaveError": "Не получилось сохранить профиль тела. Попробуй ещё раз."
+    "bodyProfileSaveError": "Не получилось сохранить профиль тела. Попробуй ещё раз.",
+
+        "bodyProfileSaveError": "Не получилось сохранить профиль тела. Попробуй ещё раз.",
+
+        "bodyCurrentMetricsTitle": "Текущие метрики тела",
+        "bodyCurrentMetricsSubtitle": "На основе последнего сохранённого веса и замеров.",
+        "bodyCurrentMetricsBmiLabel": "ИМТ",
+        "bodyCurrentMetricsBodyFatLabel": "Оценочный процент жира",
+        "bodyCurrentMetricsBmiMissing": "Добавьте рост и вес, чтобы рассчитать ИМТ.",
+        "bodyCurrentMetricsBodyFatMissing": "Добавьте рост, формулу и нужные замеры, чтобы рассчитать оценочный процент жира.",
+        "bodyCurrentMetricsBodyFatValue": "{value}%",
+        "@bodyCurrentMetricsBodyFatValue": {
+          "placeholders": {
+            "value": {
+              "type": "String"
+            }
+          }
+        }
 }

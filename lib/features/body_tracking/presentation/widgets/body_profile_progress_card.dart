@@ -5,9 +5,14 @@ import '../../application/body_profile_tracking_service.dart';
 import '../../domain/body_profile.dart';
 
 class BodyProfileProgressCard extends StatefulWidget {
-  const BodyProfileProgressCard({super.key, required this.service});
+  const BodyProfileProgressCard({
+    super.key,
+    required this.service,
+    this.onProfileChanged,
+  });
 
   final BodyProfileTrackingService service;
+  final Future<void> Function()? onProfileChanged;
 
   @override
   State<BodyProfileProgressCard> createState() =>
@@ -59,6 +64,11 @@ class _BodyProfileProgressCardState extends State<BodyProfileProgressCard> {
       );
 
       await _reload();
+
+      final onProfileChanged = widget.onProfileChanged;
+      if (onProfileChanged != null) {
+        await onProfileChanged();
+      }
 
       return true;
     } catch (_) {
