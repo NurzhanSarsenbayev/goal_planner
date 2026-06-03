@@ -1134,5 +1134,8 @@
         },
 
 "bodyWeightProgressWeeklyReportsTitle": "История веса по неделям",
-"bodyWeightProgressWeeklyReportsSubtitle": "Средний вес, минимум, пропуски и незаполненные дни по неделям."
+"bodyWeightProgressWeeklyReportsSubtitle": "Средний вес, минимум, пропуски и незаполненные дни по неделям.",
+
+"todayBodyTrackingPanelTitle": "Отслеживание тела",
+"todayBodyTrackingPanelSubtitle": "Вес и замеры"
 }

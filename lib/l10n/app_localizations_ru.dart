@@ -1597,4 +1597,10 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get bodyWeightProgressWeeklyReportsSubtitle =>
       'Средний вес, минимум, пропуски и незаполненные дни по неделям.';
+
+  @override
+  String get todayBodyTrackingPanelTitle => 'Отслеживание тела';
+
+  @override
+  String get todayBodyTrackingPanelSubtitle => 'Вес и замеры';
 }

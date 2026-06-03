@@ -1134,5 +1134,8 @@
         },
 
 "bodyWeightProgressWeeklyReportsTitle": "Weekly weight history",
-"bodyWeightProgressWeeklyReportsSubtitle": "Average, minimum, skipped, and missing days by week."
+"bodyWeightProgressWeeklyReportsSubtitle": "Average, minimum, skipped, and missing days by week.",
+
+"todayBodyTrackingPanelTitle": "Body tracking",
+"todayBodyTrackingPanelSubtitle": "Weight and measurements"
 }

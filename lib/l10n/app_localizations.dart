@@ -2845,6 +2845,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Average, minimum, skipped, and missing days by week.'**
   String get bodyWeightProgressWeeklyReportsSubtitle;
+
+  /// No description provided for @todayBodyTrackingPanelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Body tracking'**
+  String get todayBodyTrackingPanelTitle;
+
+  /// No description provided for @todayBodyTrackingPanelSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight and measurements'**
+  String get todayBodyTrackingPanelSubtitle;
 }
 
 class _AppLocalizationsDelegate

@@ -8,14 +8,13 @@ import '../../../tasks/presentation/task_schedule_dialog_actions.dart';
 import '../../../tasks/presentation/widgets/task_card.dart';
 import '../../../habits/application/habit_today_summary.dart';
 import '../../../body_tracking/application/body_weight_tracking_service.dart';
-import '../../../body_tracking/presentation/widgets/body_weight_today_card.dart';
 import '../../../body_tracking/application/body_measurement_tracking_service.dart';
-import '../../../body_tracking/presentation/widgets/body_measurements_today_card.dart';
 import '../../application/today_task_view_builder.dart';
 import '../widgets/today_empty_panel.dart';
 import '../widgets/today_summary_card.dart';
 import '../widgets/today_task_section.dart';
 import '../widgets/today_habits_summary_card.dart';
+import '../widgets/today_body_tracking_panel.dart';
 
 class TodayScreen extends StatelessWidget {
   const TodayScreen({
@@ -135,12 +134,11 @@ class TodayScreen extends StatelessWidget {
           children: [
             TodaySummaryCard(view: view),
             const SizedBox(height: 16),
-            BodyWeightTodayCard(
-              service: bodyWeightTrackingService,
-              onOpenProgress: onOpenBodyWeightProgress,
+            TodayBodyTrackingPanel(
+              bodyWeightTrackingService: bodyWeightTrackingService,
+              bodyMeasurementTrackingService: bodyMeasurementTrackingService,
+              onOpenBodyWeightProgress: onOpenBodyWeightProgress,
             ),
-            const SizedBox(height: 16),
-            BodyMeasurementsTodayCard(service: bodyMeasurementTrackingService),
             const SizedBox(height: 16),
             TodayHabitsSummaryCard(
               summary: habitSummary,

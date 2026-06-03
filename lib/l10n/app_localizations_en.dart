@@ -1582,4 +1582,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get bodyWeightProgressWeeklyReportsSubtitle =>
       'Average, minimum, skipped, and missing days by week.';
+
+  @override
+  String get todayBodyTrackingPanelTitle => 'Body tracking';
+
+  @override
+  String get todayBodyTrackingPanelSubtitle => 'Weight and measurements';
 }
