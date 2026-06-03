@@ -1264,11 +1264,11 @@ This is enough for first-user testing without prematurely building a backend or 
 
 ## Phase 8: Product validation
 
-Status: not started.
+Status: tester release in progress.
 
 Prerequisite:
 
-Phase 7.6 must be completed before giving the app to a real user.
+Phase 7.6, Phase 8.1-8.5, Phase 8.7 and the pre-test UX fixes must be completed before giving the app back to the first tester.
 
 At minimum:
 
@@ -1278,6 +1278,13 @@ At minimum:
 - restore from selected external backup file works;
 - one external backup/restore roundtrip was tested on a real Android device;
 - the first tester is told that the app is local-first and backups are manual.
+- tester APK build was created and installed on the real Android device;
+- body tracking MVP is available but still treated as first-user validation scope, not as a finished health product;
+- task UX fixes from first tester feedback are included:
+  - delete recurring series from a task menu;
+  - convert one-time task to recurring;
+  - compact body tracking UI on Today;
+  - collapsed weekly body history on Progress.
 
 Goal:
 
@@ -1307,6 +1314,12 @@ Success signals:
 - User uses Habits for routines instead of forcing routines into tasks.
 - User understands skipped vs missed habit marks.
 - User checks habit consistency or habit streak in Reports.
+- User can enter daily weight without cluttering Today.
+- User can enter weight for a past date when they forgot to log it on time.
+- User understands body profile, BMI and estimated body fat as approximate progress helpers.
+- User checks body composition trend instead of only raw weekly lists.
+- User understands how to delete a whole recurring series from a task.
+- User understands how to convert a one-time task into a recurring task.
 
 Failure signals:
 
@@ -1319,6 +1332,11 @@ Failure signals:
 - User confuses habits with recurring tasks.
 - Habit reports feel confusing or demotivating.
 - User returns to previous planner.
+- Body tracking makes Today feel cluttered again.
+- Estimated body fat feels confusing, too medical or not trustworthy.
+- User ignores body composition trend and only wants simple weight logging.
+- User still cannot understand the difference between deleting one recurring occurrence and deleting the whole series.
+- User expects more history editing than the current MVP supports.
 
 ## Phase 8.1: Time-aware daily planning MVP
 
@@ -1518,6 +1536,121 @@ Out of scope for this phase:
 - Backend push notifications.
 - Cross-device reminder sync.
 
+
+## Phase 8.7: Body Tracking / Weight Tracker MVP
+
+Status: tester release done.
+
+Reason:
+
+The first tester needed a lightweight way to track weight, body measurements and body composition progress without turning the app into a full health tracker.
+
+Goal:
+
+Add a narrow body tracking MVP focused on daily weight, weekly measurements, body profile, estimated body fat and progress visibility.
+
+Completed scope:
+
+- Added body weight domain model.
+- Added weekly body weight report calculator:
+  - average weight;
+  - minimum weight;
+  - weighed days;
+  - skipped days;
+  - missing days;
+  - week-over-week deltas.
+- Added Drift persistence for body weight entries.
+- Added BodyWeightTrackingService.
+- Added Today body weight card.
+- Added compact bottom-sheet weight entry flow.
+- Added support for entering weight for a selected current/past date.
+- Prevented future date selection for weight entry.
+- Added Body Weight Progress screen.
+- Added weekly average weight chart.
+- Added body weight entries to backup/restore.
+
+- Added body measurements domain model.
+- Added weekly measurement report calculator.
+- Added Drift persistence for body measurement entries.
+- Added BodyMeasurementTrackingService.
+- Added Today weekly measurements card.
+- Added measurements section on Progress screen.
+- Added body measurement entries to backup/restore.
+
+- Added body profile domain model.
+- Added Drift persistence for singleton body profile.
+- Added BodyProfileTrackingService.
+- Added height and body fat formula settings.
+- Added BMI calculation.
+- Added estimated body fat calculation using US Navy formulas.
+- Clarified US Navy labels so neck is visible in both formulas.
+- Added current BMI/body fat metrics on Progress screen.
+- Added body profile to backup/restore.
+
+- Added weekly body composition report builder.
+- Added Body composition trend card:
+  - weekly average weight;
+  - estimated body fat;
+  - latest summary.
+- Removed low-value raw measurements trend chart.
+- Collapsed weekly weight and measurement history on Progress screen.
+- Collapsed body tracking cards on Today into a single expandable panel.
+
+Out of scope for this phase:
+
+- Medical-grade accuracy.
+- Health advice.
+- Diagnosis.
+- Cloud sync.
+- Custom body metrics.
+- Daily body fat history.
+- Full measurement history editor.
+- Backdating body measurements through date picker.
+- Advanced charts and analytics.
+- Automatic interpretations such as "fat loss" or "muscle gain".
+
+## Phase 8.8: Pre-test task UX fixes
+
+Status: tester release done.
+
+Reason:
+
+The first tester quickly found two recurring-task UX problems before the next test handoff.
+
+Goal:
+
+Fix the highest-impact task UX friction without changing data format, backup format or recurring task architecture.
+
+Completed scope:
+
+- Added `Delete whole series` action from a recurring occurrence task menu.
+- Kept `Delete this task` for deleting only one occurrence.
+- Reused existing recurring rule delete confirmation flow.
+- Moved recurring rule id lookup into `RecurringRuleDialogActions` to avoid duplicated lookup logic in navigation classes.
+- Added `Make recurring` action for one-time tasks.
+- Implemented one-time task conversion as:
+  - open recurring rule dialog prefilled from the task;
+  - create recurring task rule;
+  - delete the source one-time task only after successful recurring rule creation.
+- Prefilled recurring dialog from one-time task:
+  - title;
+  - description;
+  - scheduled date as recurrence start date;
+  - scheduled time;
+  - reminder;
+  - goal;
+  - milestone.
+- Did not transfer completed status or completion history.
+- Kept backup format unchanged.
+
+Out of scope for this phase:
+
+- Editing `this and following` recurring occurrences.
+- Recurrence rule migration.
+- Linking converted recurring task back to original one-time task.
+- Preserving completed status as a generated occurrence.
+- Advanced recurring patterns.
+
 ## Phase 9: Backend and sync
 
 Status: later.
@@ -1593,12 +1726,18 @@ Main differentiator:
 - No serious design polish yet.
 - No automatic local checkpoints yet.
 - State management is still custom ChangeNotifier-based; Riverpod is not introduced yet.
+- Body Tracking MVP exists, but it is a lightweight tester feature, not a full health product.
+- Body fat is estimated from profile and measurements; it is approximate and not medical-grade.
+- Weight can be entered for selected current/past dates, but body measurements are still weekly and do not have a dedicated history editor.
+- Body tracking analytics are limited to current metrics, weekly reports and basic body composition trend.
+- Custom body metrics are not implemented yet.
 
 ## Not doing now
 
 - AI decomposition.
 - Gamification.
-- Weight tracker.
+- Full health tracker beyond the current lightweight Body Tracking MVP.
+- Custom body metrics.
 - Expense tracker.
 - Complex calendar.
 - Cloud backend.
