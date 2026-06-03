@@ -2833,6 +2833,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{value}%'**
   String bodyCurrentMetricsBodyFatValue(String value);
+
+  /// No description provided for @bodyWeightProgressWeeklyReportsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly weight history'**
+  String get bodyWeightProgressWeeklyReportsTitle;
+
+  /// No description provided for @bodyWeightProgressWeeklyReportsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Average, minimum, skipped, and missing days by week.'**
+  String get bodyWeightProgressWeeklyReportsSubtitle;
 }
 
 class _AppLocalizationsDelegate

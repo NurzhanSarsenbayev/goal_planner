@@ -125,38 +125,29 @@ class _BodyWeightProgressScreenState extends State<BodyWeightProgressScreen> {
                 ],
                 if (weightReports.isNotEmpty) ...[
                   const SizedBox(height: 16),
-                  Text(
-                    l10n.bodyWeightProgressSubtitle,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                  _BodyProgressReportSection(
+                    title: l10n.bodyWeightProgressWeeklyReportsTitle,
+                    subtitle: l10n.bodyWeightProgressWeeklyReportsSubtitle,
+                    children: [
+                      for (final report in weightReports) ...[
+                        _BodyWeightWeeklyReportCard(report: report),
+                        const SizedBox(height: 12),
+                      ],
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  for (final report in weightReports) ...[
-                    _BodyWeightWeeklyReportCard(report: report),
-                    const SizedBox(height: 12),
-                  ],
                 ],
                 if (measurementReports.isNotEmpty) ...[
-                  if (weightReports.isNotEmpty) const SizedBox(height: 8),
-                  Text(
-                    l10n.bodyMeasurementsProgressSectionTitle,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    l10n.bodyMeasurementsProgressSectionSubtitle,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
                   const SizedBox(height: 16),
-                  for (final report in measurementReports) ...[
-                    _BodyMeasurementsWeeklyReportCard(report: report),
-                    const SizedBox(height: 12),
-                  ],
+                  _BodyProgressReportSection(
+                    title: l10n.bodyMeasurementsProgressSectionTitle,
+                    subtitle: l10n.bodyMeasurementsProgressSectionSubtitle,
+                    children: [
+                      for (final report in measurementReports) ...[
+                        _BodyMeasurementsWeeklyReportCard(report: report),
+                        const SizedBox(height: 12),
+                      ],
+                    ],
+                  ),
                 ],
               ],
             ),
@@ -190,6 +181,37 @@ class _BodyProgressData {
   final List<BodyWeeklyCompositionReport> compositionReports;
 
   bool get hasNoReports => weightReports.isEmpty && measurementReports.isEmpty;
+}
+
+class _BodyProgressReportSection extends StatelessWidget {
+  const _BodyProgressReportSection({
+    required this.title,
+    required this.subtitle,
+    required this.children,
+  });
+
+  final String title;
+  final String subtitle;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: ExpansionTile(
+        initiallyExpanded: false,
+        title: Text(
+          title,
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+        ),
+        subtitle: Text(subtitle),
+        childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        children: children,
+      ),
+    );
+  }
 }
 
 class _BodyCurrentMetricsCard extends StatelessWidget {

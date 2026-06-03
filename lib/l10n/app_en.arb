@@ -1131,5 +1131,8 @@
               "type": "String"
             }
           }
-        }
+        },
+
+"bodyWeightProgressWeeklyReportsTitle": "Weekly weight history",
+"bodyWeightProgressWeeklyReportsSubtitle": "Average, minimum, skipped, and missing days by week."
 }

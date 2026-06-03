@@ -74,18 +74,33 @@ void main() {
       expect(find.text('Estimated body fat'), findsWidgets);
 
       await tester.scrollUntilVisible(
-        find.text('Week average'),
+        find.text('Weekly weight history'),
         300,
         scrollable: find.byType(Scrollable).first,
       );
       await tester.pumpAndSettle();
 
+      expect(find.text('Weekly weight history'), findsOneWidget);
+      expect(find.text('Week average'), findsNothing);
+
+      await tester.tap(find.text('Weekly weight history'));
+      await tester.pumpAndSettle();
+
       expect(find.text('Week average'), findsOneWidget);
 
-      await tester.scrollUntilVisible(find.text('Measurements'), 300);
+      await tester.scrollUntilVisible(
+        find.text('Measurements'),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('Measurements'), findsOneWidget);
+      expect(find.text('Waist'), findsNothing);
+
+      await tester.tap(find.text('Measurements'));
+      await tester.pumpAndSettle();
+
       expect(find.text('Waist'), findsOneWidget);
       expect(find.text('74 cm'), findsOneWidget);
       expect(find.text('Hips'), findsOneWidget);

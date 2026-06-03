@@ -1131,5 +1131,8 @@
               "type": "String"
             }
           }
-        }
+        },
+
+"bodyWeightProgressWeeklyReportsTitle": "История веса по неделям",
+"bodyWeightProgressWeeklyReportsSubtitle": "Средний вес, минимум, пропуски и незаполненные дни по неделям."
 }

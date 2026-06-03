@@ -1575,4 +1575,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String bodyCurrentMetricsBodyFatValue(String value) {
     return '$value%';
   }
+
+  @override
+  String get bodyWeightProgressWeeklyReportsTitle => 'Weekly weight history';
+
+  @override
+  String get bodyWeightProgressWeeklyReportsSubtitle =>
+      'Average, minimum, skipped, and missing days by week.';
 }

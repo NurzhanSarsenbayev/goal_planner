@@ -1590,4 +1590,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String bodyCurrentMetricsBodyFatValue(String value) {
     return '$value%';
   }
+
+  @override
+  String get bodyWeightProgressWeeklyReportsTitle => 'История веса по неделям';
+
+  @override
+  String get bodyWeightProgressWeeklyReportsSubtitle =>
+      'Средний вес, минимум, пропуски и незаполненные дни по неделям.';
 }
