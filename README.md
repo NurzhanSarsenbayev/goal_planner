@@ -142,4 +142,3 @@ Scheduled notifications require notification permissions. On some Android device
 
 - [GitHub](https://github.com/NurzhanSarsenbayev)
 - [LinkedIn](https://www.linkedin.com/in/nurzhan-sarsenbayev/)
-- 
